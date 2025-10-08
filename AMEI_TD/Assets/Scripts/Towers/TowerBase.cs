@@ -4,10 +4,10 @@ using Random = UnityEngine.Random;
 
 public class TowerBase : MonoBehaviour
 {
-    public EnemyBase currentEnemy;
+    private EnemyBase currentEnemy;
     
-    // Placeholder to check enemies distance to castle.
-    // Needs to be refactored once waypoints are implemented.
+    // TODO: Placeholder to check enemies distance to castle.
+    // TODO: Needs to be refactored once waypoints are implemented.
     [SerializeField] GameObject playerCastle;
 
     [SerializeField] private int damage;
@@ -15,8 +15,8 @@ public class TowerBase : MonoBehaviour
     protected float lastTimeAttacked;
 
     [Header("Tower Setup")] 
-    [SerializeField] protected Transform towerHead;
     [SerializeField] protected Transform towerBody;
+    [SerializeField] protected Transform towerHead;
     [SerializeField] protected Transform gunPoint;
     [SerializeField] protected float rotationSpeed = 10f;
     
@@ -60,20 +60,17 @@ public class TowerBase : MonoBehaviour
         if (Vector3.Distance(currentEnemy.transform.position, transform.position) > attackRange) currentEnemy = null;
     }
 
+    // Checks for a new target every interval.
+    // If no current target is found, then it checks for a new target.
     private void UpdateTarget()
     {
-        if (currentEnemy == null)
-        {
-            currentEnemy = FindEnemyWithinRange();
-        }
-        
-        if (Time.time > lastTimeCheckedTarget + targetCheckInterval)
+        if (Time.time > lastTimeCheckedTarget + targetCheckInterval || currentEnemy == null)
         {
             lastTimeCheckedTarget = Time.time;
             currentEnemy = FindEnemyWithinRange();
-        } 
+        }
     }
-    
+
     protected virtual EnemyBase FindEnemyWithinRange()
     {
         List<EnemyBase> possibleTargets = new List<EnemyBase>();
@@ -154,8 +151,8 @@ public class TowerBase : MonoBehaviour
         if (Physics.Raycast(gunPoint.position, directionToEnemy, out RaycastHit hitInfo, Mathf.Infinity,
                 whatIsTargetable))
         {
-           // Check if hit info has a damageable component.
-           // if null then return.
+           // TODO: Check if hit info has a damageable component.
+           // TODO: if null then return.
             
             Vector3 spawnPosition = gunPoint.position + directionToEnemy * 0.1f;
             GameObject newProjectile = Instantiate(projectilePrefab, spawnPosition, gunPoint.rotation);
