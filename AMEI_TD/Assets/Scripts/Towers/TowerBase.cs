@@ -1,9 +1,14 @@
+using System.Collections.Generic;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 public class TowerBase : MonoBehaviour
 {
     public EnemyBase currentEnemy;
+    
+    // Placeholder to check enemies distance to castle.
+    // Needs to be refactored once waypoints are implemented.
+    [SerializeField] GameObject playerCastle;
 
     [SerializeField] private int damage;
     [SerializeField] protected float attackCooldown = 1f;
@@ -21,7 +26,12 @@ public class TowerBase : MonoBehaviour
     
     [SerializeField] protected GameObject projectilePrefab;
     [SerializeField] protected float projectileSpeed;
+
+    [Header("Targeting Setup")] 
+    [SerializeField] protected bool targetMostAdvancedEnemy = true;
     
+    private float targetCheckInterval = .1f;
+    private float lastTimeCheckedTarget;
     private Collider[] allocatedColliders = new Collider[100];
 
     protected virtual void Awake()
@@ -56,17 +66,68 @@ public class TowerBase : MonoBehaviour
         {
             currentEnemy = FindEnemyWithinRange();
         }
+        
+        if (Time.time > lastTimeCheckedTarget + targetCheckInterval)
+        {
+            lastTimeCheckedTarget = Time.time;
+            currentEnemy = FindEnemyWithinRange();
+        } 
     }
     
     protected virtual EnemyBase FindEnemyWithinRange()
     {
+        List<EnemyBase> possibleTargets = new List<EnemyBase>();
+    
         int enemiesAround =
             Physics.OverlapSphereNonAlloc(transform.position, attackRange, allocatedColliders, whatIsEnemy);
 
         if (enemiesAround == 0) return null;
+
+        for (int i = 0; i < enemiesAround; i++)
+        {
+            EnemyBase newEnemy = allocatedColliders[i].GetComponent<EnemyBase>();
+
+            if (newEnemy == null) continue;
         
-        int randomIndex = Random.Range(0, enemiesAround);
-        return allocatedColliders[randomIndex].GetComponent<EnemyBase>();
+            float distanceToEnemy = Vector3.Distance(transform.position, newEnemy.transform.position);
+
+            if (distanceToEnemy > attackRange) continue;
+        
+            possibleTargets.Add(newEnemy);
+        }
+    
+        if (possibleTargets.Count > 0) return ChooseEnemyToTarget(possibleTargets);
+
+        return null;
+    }
+
+    private EnemyBase ChooseEnemyToTarget(List<EnemyBase> targets)
+    {
+        EnemyBase enemyToTarget = null;
+        float bestDistance = targetMostAdvancedEnemy ? float.MaxValue : float.MinValue;
+
+        foreach (EnemyBase enemy in targets)
+        {
+            float remainingDistance = DistanceToFinishLine(enemy);
+            
+            // Chooses which enemy to target based on towers setting, either most or least advanced.
+            bool shouldTarget = targetMostAdvancedEnemy 
+                ? remainingDistance < bestDistance 
+                : remainingDistance > bestDistance;
+
+            if (shouldTarget)
+            {
+                bestDistance = remainingDistance;
+                enemyToTarget = enemy;
+            }
+        }
+        
+        return enemyToTarget;
+    }
+
+    private float DistanceToFinishLine(EnemyBase enemy)
+    {
+        return Vector3.Distance(playerCastle.transform.position, enemy.transform.position);
     }
 
     protected void AttemptToAttack()
