@@ -47,7 +47,7 @@ public class TowerProjectileBase : MonoBehaviour
     {
         if (other.GetComponent<EnemyBase>())
         {
-            Debug.Log("Enemy Hit");
+            
             // Check has damageable component.
             // Deal Damage using TakeDamage(damage).
         }

@@ -122,6 +122,7 @@ public class TowerBase : MonoBehaviour
         return enemyToTarget;
     }
 
+    // TODO: Refactor to Enemy class once nav agent setup.
     private float DistanceToFinishLine(EnemyBase enemy)
     {
         return Vector3.Distance(playerCastle.transform.position, enemy.transform.position);
