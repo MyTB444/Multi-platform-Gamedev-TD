@@ -18,7 +18,10 @@ public class EnemyBase : MonoBehaviour, IDamageable
     // Update is called once per frame
     void Update()
     {
-
+        if (enemyHp <= 0)
+        {
+            Die();
+        }
     }
     
 
@@ -31,5 +34,10 @@ public class EnemyBase : MonoBehaviour, IDamageable
     Vector3 GetCeterPoint()
     {
         return centerPoint.position;
+    }
+
+    void Die()
+    {
+        Destroy(gameObject);
     }
 }
