@@ -395,9 +395,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerCastle: {fileID: 0}
-  damage: 0
+  damage: 5
   attackCooldown: 1
-  towerBody: {fileID: 5133425465546153557}
+  towerBody: {fileID: 0}
   towerHead: {fileID: 7203727007857929107}
   gunPoint: {fileID: 4450622232958331389}
   rotationSpeed: 10
@@ -409,7 +409,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   projectilePrefab: {fileID: 5912905722827363994, guid: 5618c7aeeb600764c8e36219980829d8, type: 3}
-  projectileSpeed: 2
+  projectileSpeed: 5
   targetMostAdvancedEnemy: 1
 --- !u!1 &7918923473205958736
 GameObject:

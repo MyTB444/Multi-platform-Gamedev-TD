@@ -6,7 +6,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
 {
     [SerializeField] float enemyHp;
     [SerializeField] float enemySpeed;
-    [SerializeField] Transform centerPoint;
+    [SerializeField] private Transform centerPoint;
 
 
     // Start is called before the first frame update
@@ -31,7 +31,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         enemyHp -= damage;
     }
 
-    Vector3 GetCeterPoint()
+    public Vector3 GetCeterPoint()
     {
         return centerPoint.position;
     }
