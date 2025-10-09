@@ -152,6 +152,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 876c495df8b9546a0b225effedc2584c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyHp: 0
+  enemySpeed: 0
+  centerPoint: {fileID: 0}
 --- !u!136 &365684629
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -378,6 +381,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 876c495df8b9546a0b225effedc2584c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyHp: 0
+  enemySpeed: 0
+  centerPoint: {fileID: 0}
 --- !u!136 &758361878
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -478,7 +484,7 @@ GameObject:
   - component: {fileID: 1189172538}
   - component: {fileID: 1189172537}
   - component: {fileID: 1189172536}
-  - component: {fileID: 1189172535}
+  - component: {fileID: 1189172540}
   m_Layer: 6
   m_Name: Enemy1
   m_TagString: Untagged
@@ -486,18 +492,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1189172535
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1189172534}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 876c495df8b9546a0b225effedc2584c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!136 &1189172536
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -586,6 +580,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1189172540
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1189172534}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 876c495df8b9546a0b225effedc2584c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyHp: 10
+  enemySpeed: 0
+  centerPoint: {fileID: 0}
 --- !u!1 &1402811164
 GameObject:
   m_ObjectHideFlags: 0
@@ -885,6 +894,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1857829304943670034, guid: 8382c8f8d664f814a89dfe66a4f5811a, type: 3}
+      propertyPath: damage
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 1857829304943670034, guid: 8382c8f8d664f814a89dfe66a4f5811a, type: 3}
       propertyPath: towerBody
       value: 

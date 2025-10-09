@@ -7,16 +7,18 @@ public class TowerProjectileBase : MonoBehaviour
     private float speed;
     private float threshold = .01f;
     private bool isActive = true;
+    private IDamageable damageable;
 
     [SerializeField] protected float maxLifeTime = 10f;
     protected float spawnTime;
 
-    public void SetupProjectile(Vector3 targetPosition, float newDamage, float newSpeed)
+    public void SetupProjectile(Vector3 targetPosition, IDamageable newDamageable, float newDamage, float newSpeed)
     {
         direction = (targetPosition - transform.position).normalized;
         damage = newDamage;
         speed = newSpeed;
         spawnTime = Time.time;
+        damageable = newDamageable;
     }
 
     protected virtual void Update()
@@ -47,9 +49,9 @@ public class TowerProjectileBase : MonoBehaviour
     {
         if (other.GetComponent<EnemyBase>())
         {
-            
-            // Check has damageable component.
-            // Deal Damage using TakeDamage(damage).
+            if (damageable == null) return;
+
+            damageable.TakeDamage(damage);
         }
     }
 

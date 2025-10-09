@@ -152,12 +152,13 @@ public class TowerBase : MonoBehaviour
         if (Physics.Raycast(gunPoint.position, directionToEnemy, out RaycastHit hitInfo, Mathf.Infinity,
                 whatIsTargetable))
         {
-           // TODO: Check if hit info has a damageable component.
-           // TODO: if null then return.
+           IDamageable damageable = hitInfo.transform.GetComponent<IDamageable>();
+           
+           if (damageable == null) return;
             
             Vector3 spawnPosition = gunPoint.position + directionToEnemy * 0.1f;
             GameObject newProjectile = Instantiate(projectilePrefab, spawnPosition, gunPoint.rotation);
-            newProjectile.GetComponent<TowerProjectileBase>().SetupProjectile(hitInfo.point, damage, projectileSpeed);
+            newProjectile.GetComponent<TowerProjectileBase>().SetupProjectile(hitInfo.point, damageable,damage, projectileSpeed);
         }
     }
 
