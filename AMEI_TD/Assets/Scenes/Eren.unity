@@ -274,7 +274,7 @@ Transform:
   m_GameObject: {fileID: 1582557277}
   serializedVersion: 2
   m_LocalRotation: {x: 0.2588191, y: 0, z: 0, w: 0.9659258}
-  m_LocalPosition: {x: 0, y: 0.32, z: -0.39}
+  m_LocalPosition: {x: 0, y: 0.85, z: -1.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -584,6 +584,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84fe194583df74e02a46abeea20d6a9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  towerButtons:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!95 &2071627475
 Animator:
   serializedVersion: 7

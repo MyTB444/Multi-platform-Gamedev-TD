@@ -4,18 +4,14 @@ using UnityEngine;
 
 public class TileButton : MonoBehaviour
 {
+    [SerializeField] private TowerButton[] towerButtons;
     private MeshRenderer mr;
     private Animator anim;
     void Start()
     {
         mr = GetComponent<MeshRenderer>();
         anim = GetComponent<Animator>();
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
+        towerButtons = GetComponentsInChildren<TowerButton>();
     }
     private void OnMouseEnter()
     {
@@ -28,6 +24,27 @@ public class TileButton : MonoBehaviour
     }
     private void OnMouseDown()
     {
-        anim.SetTrigger("TilePopup");
+        ActivateButtons();
+        ActivateTileButtons(true);
+    }
+    public void DeactivateButtons()
+    {
+        for (int i = 0; i < towerButtons.Length; i++)
+        {
+            if (towerButtons[i].GetActive() == true)
+                towerButtons[i].DeActivate();
+        }
+    }
+    private void ActivateButtons()
+    {
+        for (int i = 0; i < towerButtons.Length; i++)
+        {
+            if (towerButtons[i].GetActive() == false)
+                towerButtons[i].Activate();
+        }
+    }
+    public void ActivateTileButtons(bool a)
+    {
+        anim.SetBool("TowerButtonPopup", a);
     }
 }
