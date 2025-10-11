@@ -14,20 +14,9 @@ public class EnemyPath : MonoBehaviour
             waypoints[i] = transform.GetChild(i);
         }
     }
-
-    public Transform GetWaypoint(int index)
-    {
-        if (index >= 0 && index < waypoints.Length)
-        {
-            return waypoints[index];
-        }
-        return null;
-    }
-
-    public int WaypointCount
-    {
-        get { return waypoints.Length; }
-    }
+    
+    public Transform[] GetWaypoints() => waypoints;
+    public int GetWaypointCount() => waypoints.Length;
 
     void OnDrawGizmos()
     {
