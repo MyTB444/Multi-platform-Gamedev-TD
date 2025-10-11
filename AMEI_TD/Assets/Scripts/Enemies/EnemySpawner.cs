@@ -16,7 +16,7 @@ public class EnemySpawner : MonoBehaviour
 
     public Vector3[] currentWaypoints { get; private set; }
     
-    public List<GameObject> enemiesToCreate = new List<GameObject>();
+    private List<GameObject> enemiesToCreate = new List<GameObject>();
     private List<GameObject> activeEnemies = new List<GameObject>();
 
     private void Start()
@@ -84,14 +84,17 @@ public class EnemySpawner : MonoBehaviour
             currentWaypoints[i] = waypointList[i].transform.position;
         }
     }
+
+    public void AddEnemy(GameObject enemyToAdd) => enemiesToCreate.Add(enemyToAdd);
+    public List<GameObject> GetActiveEnemies() => activeEnemies;
     
     public void RemoveActiveEnemy(GameObject enemyToRemove)
     {
-        if (activeEnemies.Contains(enemyToRemove))
+        if (activeEnemies != null && activeEnemies.Contains(enemyToRemove))
         {
             activeEnemies.Remove(enemyToRemove);
         }
         
-        //myWaveManager.CheckIfWaveCompleted();
+        myWaveManager.CheckIfWaveCompleted();
     }
 }

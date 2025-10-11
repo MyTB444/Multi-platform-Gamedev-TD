@@ -18,12 +18,12 @@ public class EnemyBase : MonoBehaviour, IDamageable
     [SerializeField] private float enemySpeed;
     [SerializeField] private Transform centerPoint;
     [SerializeField] private Transform bottomPoint;
-    //[SerializeField] private EnemyPath path;
-    [SerializeField] private float enemyCurrentHp;
+    
+    private float enemyCurrentHp;
     public float enemyMaxHp = 100;
     protected bool isDead;
 
-    [SerializeField] protected Vector3[] myWaypoints;
+    protected Vector3[] myWaypoints;
     private int currentWaypointIndex = 0;
     private float waypointReachDistance = 0.1f;
 
@@ -36,16 +36,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     protected virtual void Start()
     {
-        /*if (myWaypoints != null && myWaypoints.Length > 0)
-        {
-            Vector3 firstWaypoint = myWaypoints[0];
-            if (bottomPoint != null)
-            {
-                Vector3 offset = transform.position - bottomPoint.position;
-                transform.position = firstWaypoint + offset;
-            }
-        }*/
-        
         Renderer renderer = GetComponent<Renderer>();
         switch (enemyType)
         {
@@ -125,7 +115,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     private void ReachedEnd()
     {
-        Destroy(gameObject);
+        Die();
     }
 
     // Get Main Damage
