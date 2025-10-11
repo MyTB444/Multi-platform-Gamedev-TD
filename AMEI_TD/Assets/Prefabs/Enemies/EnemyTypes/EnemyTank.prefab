@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6686336692866349630}
   - component: {fileID: 5682379300573794083}
   - component: {fileID: 28957993585037212}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: EnemyTank
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -137,7 +137,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 139848545377927323}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: CenterPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -168,7 +168,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7492274713208157147}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: WalkingPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}

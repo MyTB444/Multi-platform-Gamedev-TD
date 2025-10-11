@@ -12,8 +12,8 @@ public enum EnemyType
 public class EnemyBase : MonoBehaviour, IDamageable
 {
     [SerializeField] private EnemyType enemyType;
-    [SerializeField] float enemyHp;
-    [SerializeField] float enemySpeed;
+    [SerializeField] private float enemyHp;
+    [SerializeField] private float enemySpeed;
     [SerializeField] private Transform centerPoint;
     [SerializeField] private Transform bottomPoint;
     [SerializeField] private EnemyPath path;
@@ -103,16 +103,10 @@ public class EnemyBase : MonoBehaviour, IDamageable
         enemyHp -= damage;
     }
 
-    public Vector3 GetCenterPoint()
-    {
-        return centerPoint.position;
-    }
-
-    public EnemyType GetEnemyType()
-    {
-        return enemyType;
-    }
-
+    public Vector3 GetCenterPoint() => centerPoint.position;
+    public EnemyType GetEnemyType() => enemyType;
+    public float GetEnemyHp() => enemyHp;
+    
     void Die()
     {
         Destroy(gameObject);
