@@ -21,7 +21,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private int currentWaypointIndex = 0;
     private float waypointReachDistance = 0.1f;
 
-    void Start()
+    protected virtual void Start()
     {
         if (path != null && path.WaypointCount > 0)
         {
@@ -50,7 +50,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
     }
 
-    void Update()
+    protected virtual void Update()
     {
         if (enemyHp <= 0)
         {
@@ -61,7 +61,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         FollowPath();
     }
 
-    void FollowPath()
+    private void FollowPath()
     {
         if (!path || currentWaypointIndex >= path.WaypointCount)
         {
@@ -92,7 +92,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
     }
 
-    void ReachedEnd()
+    private void ReachedEnd()
     {
         Destroy(gameObject);
     }
@@ -103,7 +103,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         enemyHp -= damage;
     }
 
-    public Vector3 GetCeterPoint()
+    public Vector3 GetCenterPoint()
     {
         return centerPoint.position;
     }

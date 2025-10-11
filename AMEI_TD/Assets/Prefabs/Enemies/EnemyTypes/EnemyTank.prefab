@@ -9,12 +9,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8649867905011547274}
+  - component: {fileID: 631023140104744202}
   - component: {fileID: 6686336692866349630}
   - component: {fileID: 5682379300573794083}
   - component: {fileID: 28957993585037212}
-  - component: {fileID: 6426177409790984351}
   m_Layer: 0
-  m_Name: TankEnemy
+  m_Name: EnemyTank
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -37,6 +37,24 @@ Transform:
   - {fileID: 7492274713208157147}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &631023140104744202
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3334151365564345151}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a61c805d5ec79e040b56de8f4488d39e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemyType: 2
+  enemyHp: 250
+  enemySpeed: 1
+  centerPoint: {fileID: 139848545377927323}
+  bottomPoint: {fileID: 7492274713208157147}
+  path: {fileID: 0}
 --- !u!33 &6686336692866349630
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -110,24 +128,6 @@ CapsuleCollider:
   m_Height: 2
   m_Direction: 1
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6426177409790984351
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3334151365564345151}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 876c495df8b9546a0b225effedc2584c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  enemyType: 2
-  enemyHp: 250
-  enemySpeed: 1
-  centerPoint: {fileID: 139848545377927323}
-  bottomPoint: {fileID: 7492274713208157147}
-  path: {fileID: 0}
 --- !u!1 &4135430072922747042
 GameObject:
   m_ObjectHideFlags: 0

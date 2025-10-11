@@ -199,7 +199,7 @@ public class TowerBase : MonoBehaviour
 
     protected Vector3 DirectionToEnemyFrom(Transform startPosition)
     {
-        return (currentEnemy.GetCeterPoint() - startPosition.position).normalized;
+        return (currentEnemy.GetCenterPoint() - startPosition.position).normalized;
     }
     
     protected virtual void OnDrawGizmos()
