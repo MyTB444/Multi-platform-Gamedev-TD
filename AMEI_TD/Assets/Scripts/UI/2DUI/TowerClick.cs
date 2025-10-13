@@ -4,23 +4,18 @@ using UnityEngine.EventSystems;
 public class TowerClick : MonoBehaviour
 {
 
-    public GameObject destroyButton; // Assign in Inspector or dynamically
+    [SerializeField] private GameObject destroyButton;
 
-    void OnMouseEnter()
+    private void OnMouseDown()
     {
-        if (EventSystem.current.IsPointerOverGameObject())
-            return; // Ignore UI clicks
-                    // Instantiate UI above the tower
-        destroyButton.SetActive(true);
-
-    }
-    void OnMouseExit()
-    {
-        if (EventSystem.current.IsPointerOverGameObject())
-            return; // Ignore UI clicks
-                    // Instantiate UI above the tower
-        destroyButton.SetActive(false);
-
+        if (destroyButton.activeSelf == false)
+        {
+            destroyButton.SetActive(true);
+        }
+        else if (destroyButton.activeSelf == true)
+        {
+            destroyButton.SetActive(false);
+        }
     }
     public void DestoryTower()
     {
