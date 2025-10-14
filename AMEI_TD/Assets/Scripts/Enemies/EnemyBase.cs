@@ -1,43 +1,151 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum EnemyType
+{
+    Basic,
+    Fast,
+    Tank,
+}
+
 public class EnemyBase : MonoBehaviour, IDamageable
 {
-    [SerializeField] float enemyHp;
-    [SerializeField] float enemySpeed;
-    [SerializeField] Transform centerPoint;
+    protected EnemySpawner mySpawner;
+    
+    [SerializeField] private EnemyType enemyType;
+    [SerializeField] private float enemySpeed;
+    [SerializeField] private Transform centerPoint;
+    [SerializeField] private Transform bottomPoint;
+    
+    private float enemyCurrentHp;
+    public float enemyMaxHp = 100;
+    protected bool isDead;
 
+    protected Vector3[] myWaypoints;
+    private int currentWaypointIndex = 0;
+    private float waypointReachDistance = 0.1f;
 
-    // Start is called before the first frame update
-    void Start()
+    private int originalLayerIndex;
+
+    private void Awake()
     {
-
+        originalLayerIndex = gameObject.layer;
     }
 
-    // Update is called once per frame
-    void Update()
+    protected virtual void Start()
     {
-        if (enemyHp <= 0)
+        Renderer renderer = GetComponent<Renderer>();
+        switch (enemyType)
         {
-            Die();
+            case EnemyType.Basic:
+                renderer.material.color = Color.green;
+                break;
+            case EnemyType.Fast:
+                renderer.material.color = Color.magenta;
+                break;
+            case EnemyType.Tank:
+                renderer.material.color = Color.red;
+                break;
+            default:
+                break;
         }
     }
-    
+
+    protected virtual void Update()
+    {
+        FollowPath();
+    }
+
+    public void SetupEnemy(EnemySpawner myNewSpawner)
+    {
+        mySpawner = myNewSpawner;
+        
+        UpdateWaypoints(myNewSpawner.currentWaypoints);
+        ResetEnemy();
+        BeginMovement();
+    }
+
+    private void UpdateWaypoints(Vector3[] newWaypoints)
+    {
+        myWaypoints = new Vector3[newWaypoints.Length];
+
+        for (int i = 0; i < myWaypoints.Length; i++)
+        {
+            myWaypoints[i] = newWaypoints[i];
+        }
+    }
+
+    private void BeginMovement()
+    {
+        currentWaypointIndex = 0;
+    }
+
+    private void FollowPath()
+    {
+        if (myWaypoints == null || currentWaypointIndex >= myWaypoints.Length)
+        {
+            ReachedEnd();
+            return;
+        }
+
+        Vector3 targetWaypoint = myWaypoints[currentWaypointIndex];
+        if (!bottomPoint)
+        {
+            return;
+        }
+
+        Vector3 direction = (targetWaypoint - bottomPoint.position).normalized;
+
+        if (direction != Vector3.zero)
+        {
+            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
+        }
+
+        transform.position += direction * (enemySpeed * Time.deltaTime);
+
+        float distanceToWaypoint = Vector3.Distance(bottomPoint.position, targetWaypoint);
+        if (distanceToWaypoint <= waypointReachDistance)
+        {
+            currentWaypointIndex++;
+        }
+    }
+
+    private void ReachedEnd()
+    {
+        Die();
+    }
 
     // Get Main Damage
     public virtual void TakeDamage(float damage)
     {
-        enemyHp -= damage;
+        enemyCurrentHp -= damage;
+
+        if (enemyCurrentHp <= 0 && isDead == false)
+        {
+            isDead = true;
+            Die();
+        }
     }
 
-    Vector3 GetCeterPoint()
+    public Vector3 GetCenterPoint() => centerPoint.position;
+    public EnemyType GetEnemyType() => enemyType;
+    public float GetEnemyHp() => enemyCurrentHp;
+    
+    private void ResetEnemy()
     {
-        return centerPoint.position;
-    }
+        gameObject.layer = originalLayerIndex;
 
+        enemyCurrentHp = enemyMaxHp;
+        isDead = false;
+
+    }
+    
     void Die()
     {
         Destroy(gameObject);
+        if (mySpawner != null) mySpawner.RemoveActiveEnemy(gameObject);
     }
 }

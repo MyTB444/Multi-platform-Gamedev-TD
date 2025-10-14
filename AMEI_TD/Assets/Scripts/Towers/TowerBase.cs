@@ -29,6 +29,10 @@ public class TowerBase : MonoBehaviour
 
     [Header("Targeting Setup")] 
     [SerializeField] protected bool targetMostAdvancedEnemy = true;
+    [SerializeField] protected bool targetPriorityEnemy = true;
+    [SerializeField] protected EnemyType enemyPriorityType;
+    [SerializeField] protected bool useHpTargeting = true;
+    [SerializeField] protected bool targetHighestHpEnemy = true;
     
     private float targetCheckInterval = .1f;
     private float lastTimeCheckedTarget;
@@ -73,13 +77,15 @@ public class TowerBase : MonoBehaviour
 
     protected virtual EnemyBase FindEnemyWithinRange()
     {
-        List<EnemyBase> possibleTargets = new List<EnemyBase>();
-    
+        List<EnemyBase> priorityTargets = new List<EnemyBase>();
+        List<EnemyBase> allTargets = new List<EnemyBase>();
+
         int enemiesAround =
             Physics.OverlapSphereNonAlloc(transform.position, attackRange, allocatedColliders, whatIsEnemy);
 
         if (enemiesAround == 0) return null;
 
+        // Collect valid enemies within range
         for (int i = 0; i < enemiesAround; i++)
         {
             EnemyBase newEnemy = allocatedColliders[i].GetComponent<EnemyBase>();
@@ -89,11 +95,29 @@ public class TowerBase : MonoBehaviour
             float distanceToEnemy = Vector3.Distance(transform.position, newEnemy.transform.position);
 
             if (distanceToEnemy > attackRange) continue;
-        
-            possibleTargets.Add(newEnemy);
+
+            EnemyType newEnemyType = newEnemy.GetEnemyType();
+            
+            allTargets.Add(newEnemy);
+            
+            // Track priority enemies separately
+            if (newEnemyType == enemyPriorityType)
+            {
+                priorityTargets.Add(newEnemy);
+            }
         }
-    
-        if (possibleTargets.Count > 0) return ChooseEnemyToTarget(possibleTargets);
+
+        // Priority targeting: only shoot priority enemies if they exist
+        if (targetPriorityEnemy && priorityTargets.Count > 0)
+        {
+            return ChooseEnemyToTarget(priorityTargets);
+        }
+        
+        // No priority targeting or no priority enemies: target anyone
+        if (allTargets.Count > 0)
+        {
+            return ChooseEnemyToTarget(allTargets);
+        }
 
         return null;
     }
@@ -101,21 +125,65 @@ public class TowerBase : MonoBehaviour
     private EnemyBase ChooseEnemyToTarget(List<EnemyBase> targets)
     {
         EnemyBase enemyToTarget = null;
-        float bestDistance = targetMostAdvancedEnemy ? float.MaxValue : float.MinValue;
-
-        foreach (EnemyBase enemy in targets)
+        
+        // HP-based targeting takes priority over distance
+        if (useHpTargeting)
         {
-            float remainingDistance = DistanceToFinishLine(enemy);
+            float bestHp = targetHighestHpEnemy ? float.MinValue : float.MaxValue;
+            float bestDistance = targetMostAdvancedEnemy ? float.MaxValue : float.MinValue;
             
-            // Chooses which enemy to target based on towers setting, either most or least advanced.
-            bool shouldTarget = targetMostAdvancedEnemy 
-                ? remainingDistance < bestDistance 
-                : remainingDistance > bestDistance;
-
-            if (shouldTarget)
+            foreach (EnemyBase enemy in targets)
             {
-                bestDistance = remainingDistance;
-                enemyToTarget = enemy;
+                float enemyHp = enemy.GetEnemyHp();
+                float remainingDistance = DistanceToFinishLine(enemy);
+                
+                bool isBetterHp = targetHighestHpEnemy 
+                    ? enemyHp > bestHp 
+                    : enemyHp < bestHp;
+                
+                bool shouldTarget = false;
+                
+                // Primary criteria: HP
+                if (isBetterHp)
+                {
+                    shouldTarget = true;
+                }
+                else if (Mathf.Approximately(enemyHp, bestHp))
+                {
+                    // HP tied: use distance as tiebreaker
+                    bool isBetterDistance = targetMostAdvancedEnemy 
+                        ? remainingDistance < bestDistance 
+                        : remainingDistance > bestDistance;
+                        
+                    shouldTarget = isBetterDistance;
+                }
+                
+                if (shouldTarget)
+                {
+                    bestHp = enemyHp;
+                    bestDistance = remainingDistance;
+                    enemyToTarget = enemy;
+                }
+            }
+        }
+        else
+        {
+            // Distance-only targeting (HP ignored)
+            float bestDistance = targetMostAdvancedEnemy ? float.MaxValue : float.MinValue;
+            
+            foreach (EnemyBase enemy in targets)
+            {
+                float remainingDistance = DistanceToFinishLine(enemy);
+                
+                bool isBetterDistance = targetMostAdvancedEnemy 
+                    ? remainingDistance < bestDistance 
+                    : remainingDistance > bestDistance;
+                
+                if (isBetterDistance)
+                {
+                    bestDistance = remainingDistance;
+                    enemyToTarget = enemy;
+                }
             }
         }
         
@@ -199,7 +267,7 @@ public class TowerBase : MonoBehaviour
 
     protected Vector3 DirectionToEnemyFrom(Transform startPosition)
     {
-        return (currentEnemy.transform.position - startPosition.position).normalized;
+        return (currentEnemy.GetCenterPoint() - startPosition.position).normalized;
     }
     
     protected virtual void OnDrawGizmos()
