@@ -8,7 +8,7 @@ public class TowerBase : MonoBehaviour
     
     // TODO: Placeholder to check enemies distance to castle.
     // TODO: Needs to be refactored once waypoints are implemented.
-    [SerializeField] GameObject playerCastle;
+    [SerializeField] PlayerCastle playerCastle;
 
     [SerializeField] private int damage;
     [SerializeField] protected float attackCooldown = 1f;
@@ -40,7 +40,7 @@ public class TowerBase : MonoBehaviour
 
     protected virtual void Awake()
     {
-        
+        playerCastle = FindFirstObjectByType<PlayerCastle>();
     }
     
     protected virtual void Start()
