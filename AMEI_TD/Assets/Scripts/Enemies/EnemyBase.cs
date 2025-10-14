@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,28 +12,30 @@ public enum EnemyType
 
 public class EnemyBase : MonoBehaviour, IDamageable
 {
+    protected EnemySpawner mySpawner;
+    
     [SerializeField] private EnemyType enemyType;
-    [SerializeField] private float enemyHp;
     [SerializeField] private float enemySpeed;
     [SerializeField] private Transform centerPoint;
     [SerializeField] private Transform bottomPoint;
-    [SerializeField] private EnemyPath path;
+    
+    private float enemyCurrentHp;
+    public float enemyMaxHp = 100;
+    protected bool isDead;
 
+    protected Vector3[] myWaypoints;
     private int currentWaypointIndex = 0;
     private float waypointReachDistance = 0.1f;
 
+    private int originalLayerIndex;
+
+    private void Awake()
+    {
+        originalLayerIndex = gameObject.layer;
+    }
+
     protected virtual void Start()
     {
-        if (path != null && path.WaypointCount > 0)
-        {
-            Transform firstWaypoint = path.GetWaypoint(0);
-            if (firstWaypoint != null && bottomPoint != null)
-            {
-                Vector3 offset = transform.position - bottomPoint.position;
-                transform.position = firstWaypoint.position + offset;
-            }
-        }
-        
         Renderer renderer = GetComponent<Renderer>();
         switch (enemyType)
         {
@@ -52,40 +55,58 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     protected virtual void Update()
     {
-        if (enemyHp <= 0)
-        {
-            Die();
-            return;
-        }
-
         FollowPath();
+    }
+
+    public void SetupEnemy(EnemySpawner myNewSpawner)
+    {
+        mySpawner = myNewSpawner;
+        
+        UpdateWaypoints(myNewSpawner.currentWaypoints);
+        ResetEnemy();
+        BeginMovement();
+    }
+
+    private void UpdateWaypoints(Vector3[] newWaypoints)
+    {
+        myWaypoints = new Vector3[newWaypoints.Length];
+
+        for (int i = 0; i < myWaypoints.Length; i++)
+        {
+            myWaypoints[i] = newWaypoints[i];
+        }
+    }
+
+    private void BeginMovement()
+    {
+        currentWaypointIndex = 0;
     }
 
     private void FollowPath()
     {
-        if (!path || currentWaypointIndex >= path.WaypointCount)
+        if (myWaypoints == null || currentWaypointIndex >= myWaypoints.Length)
         {
             ReachedEnd();
             return;
         }
 
-        Transform targetWaypoint = path.GetWaypoint(currentWaypointIndex);
-        if (!targetWaypoint || !bottomPoint)
+        Vector3 targetWaypoint = myWaypoints[currentWaypointIndex];
+        if (!bottomPoint)
         {
             return;
         }
 
-        Vector3 direction = (targetWaypoint.position - bottomPoint.position).normalized;
-    
+        Vector3 direction = (targetWaypoint - bottomPoint.position).normalized;
+
         if (direction != Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
         }
-    
+
         transform.position += direction * (enemySpeed * Time.deltaTime);
 
-        float distanceToWaypoint = Vector3.Distance(bottomPoint.position, targetWaypoint.position);
+        float distanceToWaypoint = Vector3.Distance(bottomPoint.position, targetWaypoint);
         if (distanceToWaypoint <= waypointReachDistance)
         {
             currentWaypointIndex++;
@@ -94,21 +115,37 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     private void ReachedEnd()
     {
-        Destroy(gameObject);
+        Die();
     }
 
     // Get Main Damage
     public virtual void TakeDamage(float damage)
     {
-        enemyHp -= damage;
+        enemyCurrentHp -= damage;
+
+        if (enemyCurrentHp <= 0 && isDead == false)
+        {
+            isDead = true;
+            Die();
+        }
     }
 
     public Vector3 GetCenterPoint() => centerPoint.position;
     public EnemyType GetEnemyType() => enemyType;
-    public float GetEnemyHp() => enemyHp;
+    public float GetEnemyHp() => enemyCurrentHp;
+    
+    private void ResetEnemy()
+    {
+        gameObject.layer = originalLayerIndex;
+
+        enemyCurrentHp = enemyMaxHp;
+        isDead = false;
+
+    }
     
     void Die()
     {
         Destroy(gameObject);
+        if (mySpawner != null) mySpawner.RemoveActiveEnemy(gameObject);
     }
 }
