@@ -4,5 +4,12 @@
 EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
-  m_Scenes: []
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Scenes/MainMenu.unity
+    guid: ebd4efabfff784f91bd5fd575c27a6b2
+  - enabled: 1
+    path: Assets/Scenes/Eren.unity
+    guid: 19cdd86147aed403297f7c0fbb5268aa
   m_configObjects: {}
+  m_UseUCBPForAssetBundles: 0
