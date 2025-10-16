@@ -22,6 +22,7 @@ public class TowerBase : MonoBehaviour
     
     [SerializeField] protected GameObject projectilePrefab;
     [SerializeField] protected float projectileSpeed;
+    [SerializeField] protected int towerPrice;
 
     [Header("Targeting Setup")] 
     [SerializeField] protected bool targetMostAdvancedEnemy = true;
@@ -258,6 +259,8 @@ public class TowerBase : MonoBehaviour
     {
         return (currentEnemy.GetCenterPoint() - startPosition.position).normalized;
     }
+
+    public int GetTowerPrice() => towerPrice;
     
     protected virtual void OnDrawGizmos()
     {
