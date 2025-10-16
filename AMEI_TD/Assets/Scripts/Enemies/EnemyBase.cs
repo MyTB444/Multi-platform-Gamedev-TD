@@ -18,6 +18,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
     [SerializeField] private float enemySpeed;
     [SerializeField] private Transform centerPoint;
     [SerializeField] private Transform bottomPoint;
+    [SerializeField] private float damage;
+    [SerializeField] private float reward;
     
     private float enemyCurrentHp;
     public float enemyMaxHp = 100;
@@ -28,10 +30,13 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private float waypointReachDistance = 0.1f;
 
     private int originalLayerIndex;
+    private PlayerCastle playerCastle;
+    private float totalDistance;
 
     private void Awake()
     {
         originalLayerIndex = gameObject.layer;
+        playerCastle = FindFirstObjectByType<PlayerCastle>();
     }
 
     protected virtual void Start()
@@ -63,6 +68,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         mySpawner = myNewSpawner;
         
         UpdateWaypoints(myNewSpawner.currentWaypoints);
+        CollectTotalDistance();
         ResetEnemy();
         BeginMovement();
     }
@@ -80,6 +86,34 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private void BeginMovement()
     {
         currentWaypointIndex = 0;
+    }
+    
+    private void CollectTotalDistance()
+    {
+        for (int i = 0; i < myWaypoints.Length; i++)
+        {
+            if(i == myWaypoints.Length - 1) break;
+            float distance = Vector3.Distance(myWaypoints[i], myWaypoints[i + 1]);
+            totalDistance += distance;
+        }
+    }
+
+    public float GetRemainingDistance()
+    {
+        if(myWaypoints == null || currentWaypointIndex >= myWaypoints.Length) return 0;
+
+        float remainingDistance = 0;
+    
+        // Distance from current position to the next waypoint
+        remainingDistance += Vector3.Distance(transform.position, myWaypoints[currentWaypointIndex]);
+    
+        // Distance for all remaining waypoint segments
+        for (int i = currentWaypointIndex; i < myWaypoints.Length - 1; i++)
+        {
+            remainingDistance += Vector3.Distance(myWaypoints[i], myWaypoints[i + 1]);
+        }
+    
+        return remainingDistance;
     }
 
     private void FollowPath()
@@ -115,7 +149,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     private void ReachedEnd()
     {
-        Die();
+        Destroy(gameObject);
+        playerCastle.RemovePoints(damage);
     }
 
     // Get Main Damage
@@ -146,6 +181,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     void Die()
     {
         Destroy(gameObject);
+        playerCastle.AddPoints(reward);
         if (mySpawner != null) mySpawner.RemoveActiveEnemy(gameObject);
     }
 }

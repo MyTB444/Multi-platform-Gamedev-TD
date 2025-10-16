@@ -112,11 +112,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyType: 1
-  enemyHp: 60
   enemySpeed: 5
   centerPoint: {fileID: 6884134845494354579}
   bottomPoint: {fileID: 331970158621564899}
-  path: {fileID: 0}
+  damage: 30
+  enemyMaxHp: 100
 --- !u!33 &1133182221447099925
 MeshFilter:
   m_ObjectHideFlags: 0
