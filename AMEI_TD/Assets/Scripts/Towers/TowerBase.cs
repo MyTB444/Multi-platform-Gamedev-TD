@@ -5,10 +5,6 @@ using Random = UnityEngine.Random;
 public class TowerBase : MonoBehaviour
 {
     private EnemyBase currentEnemy;
-    
-    // TODO: Placeholder to check enemies distance to castle.
-    // TODO: Needs to be refactored once waypoints are implemented.
-    [SerializeField] PlayerCastle playerCastle;
 
     [SerializeField] private int damage;
     [SerializeField] protected float attackCooldown = 1f;
@@ -40,7 +36,6 @@ public class TowerBase : MonoBehaviour
 
     protected virtual void Awake()
     {
-        playerCastle = FindFirstObjectByType<PlayerCastle>();
     }
     
     protected virtual void Start()
@@ -135,7 +130,7 @@ public class TowerBase : MonoBehaviour
             foreach (EnemyBase enemy in targets)
             {
                 float enemyHp = enemy.GetEnemyHp();
-                float remainingDistance = DistanceToFinishLine(enemy);
+                float remainingDistance = enemy.GetRemainingDistance();
                 
                 bool isBetterHp = targetHighestHpEnemy 
                     ? enemyHp > bestHp 
@@ -173,7 +168,8 @@ public class TowerBase : MonoBehaviour
             
             foreach (EnemyBase enemy in targets)
             {
-                float remainingDistance = DistanceToFinishLine(enemy);
+                float remainingDistance = enemy.GetRemainingDistance();
+                
                 
                 bool isBetterDistance = targetMostAdvancedEnemy 
                     ? remainingDistance < bestDistance 
@@ -186,14 +182,7 @@ public class TowerBase : MonoBehaviour
                 }
             }
         }
-        
         return enemyToTarget;
-    }
-
-    // TODO: Refactor to Enemy class once nav agent setup.
-    private float DistanceToFinishLine(EnemyBase enemy)
-    {
-        return Vector3.Distance(playerCastle.transform.position, enemy.transform.position);
     }
 
     protected void AttemptToAttack()
