@@ -19,6 +19,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     [SerializeField] private Transform centerPoint;
     [SerializeField] private Transform bottomPoint;
     [SerializeField] private float damage;
+    [SerializeField] private float reward;
     
     private float enemyCurrentHp;
     public float enemyMaxHp = 100;
@@ -148,7 +149,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     private void ReachedEnd()
     {
-        Die();
+        Destroy(gameObject);
+        playerCastle.RemovePoints(damage);
     }
 
     // Get Main Damage
@@ -179,7 +181,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     void Die()
     {
         Destroy(gameObject);
-        
+        playerCastle.AddPoints(reward);
         if (mySpawner != null) mySpawner.RemoveActiveEnemy(gameObject);
     }
 }
