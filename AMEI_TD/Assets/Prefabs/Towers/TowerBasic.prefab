@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4450622232958331389}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: gunPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 6461548156310494810}
   - component: {fileID: 4884951111475294558}
   - component: {fileID: 4145972603062532152}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -177,7 +177,7 @@ GameObject:
   - component: {fileID: 527566832045923292}
   - component: {fileID: 3927493625801255188}
   - component: {fileID: 4818881723256100382}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: tower_head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -283,7 +283,7 @@ GameObject:
   - component: {fileID: 4010094812447702226}
   - component: {fileID: 4846839504983506529}
   - component: {fileID: 2577295874343988791}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: tower_neck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -388,7 +388,7 @@ GameObject:
   - component: {fileID: 9108284829472164271}
   - component: {fileID: 5109488649881682533}
   - component: {fileID: 6895179068328704892}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: tower_body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -494,7 +494,7 @@ GameObject:
   - component: {fileID: 4884243535106346625}
   - component: {fileID: 1727297287074957907}
   - component: {fileID: 2331927134579805907}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: DestroyButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -648,7 +648,7 @@ GameObject:
   - component: {fileID: 1857829304943670034}
   - component: {fileID: 5853422119608799548}
   - component: {fileID: 1550047318200621956}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: TowerBasic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -664,7 +664,7 @@ Transform:
   m_GameObject: {fileID: 4798492463783598083}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.6822937, y: 0.598, z: -0.25849652}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -703,6 +703,10 @@ MonoBehaviour:
   projectilePrefab: {fileID: 5912905722827363994, guid: 5618c7aeeb600764c8e36219980829d8, type: 3}
   projectileSpeed: 5
   targetMostAdvancedEnemy: 1
+  targetPriorityEnemy: 1
+  enemyPriorityType: 0
+  useHpTargeting: 1
+  targetHighestHpEnemy: 1
 --- !u!114 &5853422119608799548
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -749,7 +753,7 @@ GameObject:
   - component: {fileID: 8555807862944460916}
   - component: {fileID: 8953851486296833358}
   - component: {fileID: 2942104150232362652}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: tower_barrel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -855,7 +859,7 @@ GameObject:
   - component: {fileID: 4288729856763864951}
   - component: {fileID: 1766064121075551331}
   - component: {fileID: 1573946596885195717}
-  m_Layer: 5
+  m_Layer: 7
   m_Name: TowerUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}

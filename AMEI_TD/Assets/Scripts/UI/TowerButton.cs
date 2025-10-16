@@ -27,7 +27,7 @@ public class TowerButton : MonoBehaviour
     }
     private void BuildTower(GameObject tower, Transform pos)
     {
-        Instantiate(tower.gameObject, pos.position, Quaternion.identity);
+        Instantiate(tower.gameObject, new Vector3(pos.position.x, pos.position.y, pos.position.z), Quaternion.identity);
         tb.DeactivateButtons();
         tb.ActivateTileButtons(false);
     }

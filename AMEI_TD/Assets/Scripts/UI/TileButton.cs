@@ -6,26 +6,50 @@ public class TileButton : MonoBehaviour
 {
     [SerializeField] private TowerButton[] towerButtons;
     private MeshRenderer mr;
+    private Material mrMat;
     private Animator anim;
+    private Color originalColour;
+    private bool buttonControl;
+    private bool towerBuilt;
     void Start()
     {
         mr = GetComponent<MeshRenderer>();
+        mrMat = mr.material;
+        originalColour = mrMat.color;
         anim = GetComponent<Animator>();
         towerButtons = GetComponentsInChildren<TowerButton>();
     }
+    void Update()
+    {
+        DetectTowerAbove();
+    }
     private void OnMouseEnter()
     {
-        mr.enabled = true;
+        if (towerBuilt == false)
+            mrMat.color = Color.magenta;
     }
 
     private void OnMouseExit()
     {
-        mr.enabled = false;
+        if (towerBuilt == false)
+            mrMat.color = originalColour;
     }
     private void OnMouseDown()
     {
-        ActivateButtons();
-        ActivateTileButtons(true);
+        if (towerBuilt == false)
+        {
+            if (buttonControl == false)
+            {
+                buttonControl = true;
+                ActivateButtons();
+                ActivateTileButtons(true);
+            }
+            else if (buttonControl)
+            {
+                buttonControl = false;
+                DeactivateButtons();
+            }
+        }
     }
     public void DeactivateButtons()
     {
@@ -34,6 +58,7 @@ public class TileButton : MonoBehaviour
             if (towerButtons[i].GetActive() == true)
                 towerButtons[i].DeActivate();
         }
+        ActivateTileButtons(false);
     }
     private void ActivateButtons()
     {
@@ -46,5 +71,27 @@ public class TileButton : MonoBehaviour
     public void ActivateTileButtons(bool a)
     {
         anim.SetBool("TowerButtonPopup", a);
+    }
+    private void DetectTowerAbove()
+    {
+        int layerMask = 1 << 7;
+
+        Vector3 origin = transform.position;
+        Vector3 direction = Vector3.up;
+
+        Debug.DrawRay(origin, direction * 10.0f, Color.green);
+        RaycastHit hit;
+
+        bool isHit = Physics.Raycast(origin, direction, out hit, 10.0f, layerMask);
+
+        if (isHit)
+        {
+            towerBuilt = true;
+        }
+        else if (isHit == false)
+        {
+            towerBuilt = false;
+        }
+
     }
 }
