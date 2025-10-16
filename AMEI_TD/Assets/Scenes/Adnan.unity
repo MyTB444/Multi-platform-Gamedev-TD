@@ -273,6 +273,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pointsUI: {fileID: 0}
+  points: 40
 --- !u!54 &97172827
 Rigidbody:
   m_ObjectHideFlags: 0

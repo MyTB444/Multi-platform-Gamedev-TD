@@ -312,6 +312,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   towerPrefab: {fileID: 4798492463783598083, guid: 8382c8f8d664f814a89dfe66a4f5811a, type: 3}
   buildPosition: {fileID: 7317233419623092574}
+  towerPrice: 30
 --- !u!1 &5318518007462215859
 GameObject:
   m_ObjectHideFlags: 0

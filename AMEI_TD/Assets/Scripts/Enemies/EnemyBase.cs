@@ -18,8 +18,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
     [SerializeField] private float enemySpeed;
     [SerializeField] private Transform centerPoint;
     [SerializeField] private Transform bottomPoint;
-    [SerializeField] private float damage;
-    [SerializeField] private float reward;
+    [SerializeField] private int damage;
+    [SerializeField] private int reward;
     
     private float enemyCurrentHp;
     public float enemyMaxHp = 100;

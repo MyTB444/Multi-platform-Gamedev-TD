@@ -6,10 +6,11 @@ using UnityEngine.UI;
 
 public class PlayerCastle : MonoBehaviour
 {
-   
+
     [SerializeField] private TextMeshProUGUI pointsUI;
     public static PlayerCastle instance;
-    
+    [SerializeField] private int points;
+
 
     private void Awake()
     {
@@ -18,13 +19,13 @@ public class PlayerCastle : MonoBehaviour
 
     private void Start()
     {
-   
+
         points += 200;
     }
     private void Update()
     {
-        points = Mathf.Clamp(points, 0, float.MaxValue);
-        pointsUI.text = "Points: "+points.ToString();
+        points = Mathf.Clamp(points, 0, int.MaxValue);
+        pointsUI.text = "Points: " + points.ToString();
         if (points <= 0)
         {
             Debug.Log("YouDied");
@@ -37,31 +38,22 @@ public class PlayerCastle : MonoBehaviour
         {
             if (other.gameObject.GetComponent<EnemyBase>() != null)
             {
-            
-               points -= 30f;
-               
-                
+
+                points -= 30;
+
+
             }
         }
     }
-    public void AddPoints(float newPoints)
+    public void AddPoints(int newPoints)
     {
         points += newPoints;
     }
-    public void RemovePoints(float newPoints)
+    public void RemovePoints(int newPoints)
     {
         points -= newPoints;
     }
 
-   
-
-    #region Properties
-    public float points
-    {
-        get;
-       internal set;
-        
-    }
-    #endregion
+    public int GetPoints() => points;
 
 }

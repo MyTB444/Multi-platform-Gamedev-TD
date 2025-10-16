@@ -6,6 +6,11 @@ public class TowerClick : MonoBehaviour
     private bool onTower = false;
     [SerializeField] private GameObject destroyButton;
 
+    private PlayerCastle playerCastle;
+    void Start()
+    {
+        playerCastle = PlayerCastle.instance;
+    }
     void FixedUpdate()
     {
         if (onTower == true)
@@ -40,6 +45,7 @@ public class TowerClick : MonoBehaviour
     }
     public void DestoryTower()
     {
+        playerCastle.AddPoints(15);
         Destroy(this.gameObject);
     }
 }

@@ -5,32 +5,32 @@ using Random = UnityEngine.Random;
 public class TowerBase : MonoBehaviour
 {
     private EnemyBase currentEnemy;
+    private PlayerCastle playerCastle;
 
     [SerializeField] private int damage;
     [SerializeField] protected float attackCooldown = 1f;
     protected float lastTimeAttacked;
 
-    [Header("Tower Setup")] 
+    [Header("Tower Setup")]
     [SerializeField] protected Transform towerBody;
     [SerializeField] protected Transform towerHead;
     [SerializeField] protected Transform gunPoint;
     [SerializeField] protected float rotationSpeed = 10f;
-    
+
     [SerializeField] protected float attackRange = 2.5f;
     [SerializeField] protected LayerMask whatIsEnemy;
     [SerializeField] protected LayerMask whatIsTargetable;
-    
+
     [SerializeField] protected GameObject projectilePrefab;
     [SerializeField] protected float projectileSpeed;
-    [SerializeField] protected int towerPrice;
 
-    [Header("Targeting Setup")] 
+    [Header("Targeting Setup")]
     [SerializeField] protected bool targetMostAdvancedEnemy = true;
     [SerializeField] protected bool targetPriorityEnemy = true;
     [SerializeField] protected EnemyType enemyPriorityType;
     [SerializeField] protected bool useHpTargeting = true;
     [SerializeField] protected bool targetHighestHpEnemy = true;
-    
+
     private float targetCheckInterval = .1f;
     private float lastTimeCheckedTarget;
     private Collider[] allocatedColliders = new Collider[100];
@@ -38,12 +38,12 @@ public class TowerBase : MonoBehaviour
     protected virtual void Awake()
     {
     }
-    
+
     protected virtual void Start()
     {
-        
+
     }
-    
+
     protected virtual void FixedUpdate()
     {
         ClearTargetOutOfRange();
@@ -56,7 +56,7 @@ public class TowerBase : MonoBehaviour
     protected virtual void ClearTargetOutOfRange()
     {
         if (currentEnemy == null) return;
-        
+
         if (Vector3.Distance(currentEnemy.transform.position, transform.position) > attackRange) currentEnemy = null;
     }
 
@@ -87,15 +87,15 @@ public class TowerBase : MonoBehaviour
             EnemyBase newEnemy = allocatedColliders[i].GetComponent<EnemyBase>();
 
             if (newEnemy == null) continue;
-        
+
             float distanceToEnemy = Vector3.Distance(transform.position, newEnemy.transform.position);
 
             if (distanceToEnemy > attackRange) continue;
 
             EnemyType newEnemyType = newEnemy.GetEnemyType();
-            
+
             allTargets.Add(newEnemy);
-            
+
             // Track priority enemies separately
             if (newEnemyType == enemyPriorityType)
             {
@@ -108,7 +108,7 @@ public class TowerBase : MonoBehaviour
         {
             return ChooseEnemyToTarget(priorityTargets);
         }
-        
+
         // No priority targeting or no priority enemies: target anyone
         if (allTargets.Count > 0)
         {
@@ -121,24 +121,24 @@ public class TowerBase : MonoBehaviour
     private EnemyBase ChooseEnemyToTarget(List<EnemyBase> targets)
     {
         EnemyBase enemyToTarget = null;
-        
+
         // HP-based targeting takes priority over distance
         if (useHpTargeting)
         {
             float bestHp = targetHighestHpEnemy ? float.MinValue : float.MaxValue;
             float bestDistance = targetMostAdvancedEnemy ? float.MaxValue : float.MinValue;
-            
+
             foreach (EnemyBase enemy in targets)
             {
                 float enemyHp = enemy.GetEnemyHp();
                 float remainingDistance = enemy.GetRemainingDistance();
-                
-                bool isBetterHp = targetHighestHpEnemy 
-                    ? enemyHp > bestHp 
+
+                bool isBetterHp = targetHighestHpEnemy
+                    ? enemyHp > bestHp
                     : enemyHp < bestHp;
-                
+
                 bool shouldTarget = false;
-                
+
                 // Primary criteria: HP
                 if (isBetterHp)
                 {
@@ -147,13 +147,13 @@ public class TowerBase : MonoBehaviour
                 else if (Mathf.Approximately(enemyHp, bestHp))
                 {
                     // HP tied: use distance as tiebreaker
-                    bool isBetterDistance = targetMostAdvancedEnemy 
-                        ? remainingDistance < bestDistance 
+                    bool isBetterDistance = targetMostAdvancedEnemy
+                        ? remainingDistance < bestDistance
                         : remainingDistance > bestDistance;
-                        
+
                     shouldTarget = isBetterDistance;
                 }
-                
+
                 if (shouldTarget)
                 {
                     bestHp = enemyHp;
@@ -166,16 +166,16 @@ public class TowerBase : MonoBehaviour
         {
             // Distance-only targeting (HP ignored)
             float bestDistance = targetMostAdvancedEnemy ? float.MaxValue : float.MinValue;
-            
+
             foreach (EnemyBase enemy in targets)
             {
                 float remainingDistance = enemy.GetRemainingDistance();
-                
-                
-                bool isBetterDistance = targetMostAdvancedEnemy 
-                    ? remainingDistance < bestDistance 
+
+
+                bool isBetterDistance = targetMostAdvancedEnemy
+                    ? remainingDistance < bestDistance
                     : remainingDistance > bestDistance;
-                
+
                 if (isBetterDistance)
                 {
                     bestDistance = remainingDistance;
@@ -202,7 +202,7 @@ public class TowerBase : MonoBehaviour
         lastTimeAttacked = Time.time;
         FireProjectile();
     }
-    
+
     protected virtual void FireProjectile()
     {
         Vector3 directionToEnemy = DirectionToEnemyFrom(gunPoint);
@@ -210,13 +210,13 @@ public class TowerBase : MonoBehaviour
         if (Physics.Raycast(gunPoint.position, directionToEnemy, out RaycastHit hitInfo, Mathf.Infinity,
                 whatIsTargetable))
         {
-           IDamageable damageable = hitInfo.transform.GetComponent<IDamageable>();
-           
-           if (damageable == null) return;
-            
+            IDamageable damageable = hitInfo.transform.GetComponent<IDamageable>();
+
+            if (damageable == null) return;
+
             Vector3 spawnPosition = gunPoint.position + directionToEnemy * 0.1f;
             GameObject newProjectile = Instantiate(projectilePrefab, spawnPosition, gunPoint.rotation);
-            newProjectile.GetComponent<TowerProjectileBase>().SetupProjectile(hitInfo.point, damageable,damage, projectileSpeed);
+            newProjectile.GetComponent<TowerProjectileBase>().SetupProjectile(hitInfo.point, damageable, damage, projectileSpeed);
         }
     }
 
@@ -234,11 +234,11 @@ public class TowerBase : MonoBehaviour
     protected virtual void RotateTowardsEnemy()
     {
         if (currentEnemy == null || towerHead == null) return;
-        
+
         Vector3 directionToEnemy = DirectionToEnemyFrom(towerHead);
 
         Quaternion lookRotation = Quaternion.LookRotation(directionToEnemy);
-        
+
         Vector3 rotation = Quaternion.Lerp(towerHead.rotation, lookRotation, rotationSpeed * Time.deltaTime).eulerAngles;
 
         towerHead.rotation = Quaternion.Euler(rotation);
@@ -260,11 +260,9 @@ public class TowerBase : MonoBehaviour
         return (currentEnemy.GetCenterPoint() - startPosition.position).normalized;
     }
 
-    public int GetTowerPrice() => towerPrice;
-    
     protected virtual void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
-    
+
 }
