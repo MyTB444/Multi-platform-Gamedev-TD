@@ -686,7 +686,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 151f12c0b15a246d9ab2bcc3898e6cfb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerCastle: {fileID: 0}
   damage: 5
   attackCooldown: 1
   towerBody: {fileID: 0}
@@ -739,7 +738,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.5704026, y: 1.6532671, z: 0.61040276}
+  m_Size: {x: 0.82, y: 1.93, z: 1.01}
   m_Center: {x: 0.033272266, y: 0.32663357, z: 0.0063872635}
 --- !u!1 &7918923473205958736
 GameObject:
