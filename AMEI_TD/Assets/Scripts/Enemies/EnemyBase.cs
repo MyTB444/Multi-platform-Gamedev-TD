@@ -31,12 +31,14 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     private int originalLayerIndex;
     private PlayerCastle playerCastle;
+    private GameManager gameManager;
     private float totalDistance;
 
     private void Awake()
     {
         originalLayerIndex = gameObject.layer;
         playerCastle = FindFirstObjectByType<PlayerCastle>();
+        gameManager = FindFirstObjectByType<GameManager>();
     }
 
     protected virtual void Start()
@@ -150,7 +152,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private void ReachedEnd()
     {
         Destroy(gameObject);
-        playerCastle.RemovePoints(damage);
+        gameManager.RemovePoints(damage);
     }
 
     // Get Main Damage
