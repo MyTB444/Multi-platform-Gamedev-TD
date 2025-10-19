@@ -13,7 +13,7 @@ public class TowerButton : MonoBehaviour
     private TileButton tb;
     private void Start()
     {
-        playerCastle = PlayerCastle.instance;
+        //playerCastle = PlayerCastle.instance;
         tb = GetComponentInParent<TileButton>();
     }
     public void Activate()

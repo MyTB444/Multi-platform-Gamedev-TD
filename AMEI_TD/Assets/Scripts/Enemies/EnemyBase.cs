@@ -152,7 +152,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private void ReachedEnd()
     {
         Destroy(gameObject);
-        gameManager.RemovePoints(damage);
+        //gameManager.RemovePoints(damage);
     }
 
     // Get Main Damage

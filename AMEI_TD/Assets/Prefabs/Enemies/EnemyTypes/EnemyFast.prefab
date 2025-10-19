@@ -92,7 +92,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.6727, z: 0}
-  m_LocalScale: {x: 1, y: 0.6927, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.34635, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6884134845494354579}
@@ -116,6 +116,7 @@ MonoBehaviour:
   centerPoint: {fileID: 6884134845494354579}
   bottomPoint: {fileID: 331970158621564899}
   damage: 30
+  reward: 0
   enemyMaxHp: 100
 --- !u!33 &1133182221447099925
 MeshFilter:
