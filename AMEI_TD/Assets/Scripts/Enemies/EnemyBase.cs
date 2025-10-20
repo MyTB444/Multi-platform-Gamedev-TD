@@ -30,15 +30,13 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private float waypointReachDistance = 0.1f;
 
     private int originalLayerIndex;
-    private PlayerCastle playerCastle;
     private GameManager gameManager;
     private float totalDistance;
 
     private void Awake()
     {
         originalLayerIndex = gameObject.layer;
-        playerCastle = FindFirstObjectByType<PlayerCastle>();
-        gameManager = FindFirstObjectByType<GameManager>();
+        gameManager = GameManager.instance;
     }
 
     protected virtual void Start()
@@ -183,7 +181,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     void Die()
     {
         Destroy(gameObject);
-        playerCastle.AddPoints(reward);
+        gameManager.UpdateSkillPoints(reward);
         if (mySpawner != null) mySpawner.RemoveActiveEnemy(gameObject);
     }
 }

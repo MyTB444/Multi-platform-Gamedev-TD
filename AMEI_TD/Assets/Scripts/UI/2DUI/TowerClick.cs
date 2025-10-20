@@ -5,11 +5,11 @@ public class TowerClick : MonoBehaviour
 {
     private bool onTower = false;
     [SerializeField] private GameObject destroyButton;
-
-    private PlayerCastle playerCastle;
+    [SerializeField] private int sellPrice;
+    private GameManager gameManager;
     void Start()
     {
-        playerCastle = PlayerCastle.instance;
+        gameManager = GameManager.instance;
     }
     void FixedUpdate()
     {
@@ -45,7 +45,7 @@ public class TowerClick : MonoBehaviour
     }
     public void DestoryTower()
     {
-        playerCastle.AddPoints(15);
+        gameManager.UpdateSkillPoints(sellPrice);
         Destroy(this.gameObject);
     }
 }

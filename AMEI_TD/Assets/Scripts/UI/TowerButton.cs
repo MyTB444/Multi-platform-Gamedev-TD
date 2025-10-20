@@ -8,12 +8,12 @@ public class TowerButton : MonoBehaviour
 {
     [SerializeField] private GameObject towerPrefab;
     [SerializeField] private Transform buildPosition;
-    [SerializeField] private int towerPrice;
-    private PlayerCastle playerCastle;
+    private GameManager gameManager;
+    [SerializeField] private int buyPrice;
     private TileButton tb;
     private void Start()
     {
-        //playerCastle = PlayerCastle.instance;
+        gameManager = GameManager.instance;
         tb = GetComponentInParent<TileButton>();
     }
     public void Activate()
@@ -26,7 +26,7 @@ public class TowerButton : MonoBehaviour
     }
     private void OnMouseDown()
     {
-        if (playerCastle.GetPoints() >= towerPrice)
+        if (gameManager.GetPoints() >= buyPrice)
         {
             BuildTower(towerPrefab, buildPosition);
         }
@@ -38,7 +38,7 @@ public class TowerButton : MonoBehaviour
     private void BuildTower(GameObject tower, Transform pos)
     {
         Instantiate(tower.gameObject, new Vector3(pos.position.x, pos.position.y, pos.position.z), Quaternion.identity);
-        playerCastle.RemovePoints(towerPrice);
+        gameManager.UpdateSkillPoints(-buyPrice);
         tb.DeactivateButtons();
         tb.ActivateTileButtons(false);
     }
@@ -46,7 +46,7 @@ public class TowerButton : MonoBehaviour
     {
         return this.gameObject.activeSelf;
     }
-    public int GetPrice() => towerPrice;
+
 }
 
 

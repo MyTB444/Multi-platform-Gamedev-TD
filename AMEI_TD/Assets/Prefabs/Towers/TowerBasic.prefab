@@ -719,6 +719,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   destroyButton: {fileID: 3513089777329403045}
+  sellPrice: 10
 --- !u!65 &1550047318200621956
 BoxCollider:
   m_ObjectHideFlags: 0
