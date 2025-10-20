@@ -2,9 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 
-public class TowerButton : MonoBehaviour
+public class TowerButton : MonoBehaviour, IPointerDownHandler
 {
     [SerializeField] private GameObject towerPrefab;
     [SerializeField] private Transform buildPosition;
@@ -24,7 +25,7 @@ public class TowerButton : MonoBehaviour
     {
         this.gameObject.SetActive(false);
     }
-    private void OnMouseDown()
+    public void OnPointerDown(PointerEventData eventData)
     {
         if (gameManager.GetPoints() >= buyPrice)
         {

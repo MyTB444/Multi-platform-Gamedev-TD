@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UIElements;
 
-public class TileButton : MonoBehaviour
+public class TileButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler,IPointerDownHandler
 {
     [SerializeField] private TowerButton[] towerButtons;
     private MeshRenderer mr;
@@ -23,18 +25,18 @@ public class TileButton : MonoBehaviour
     {
         DetectTowerAbove();
     }
-    private void OnMouseEnter()
+    public void OnPointerEnter(PointerEventData eventData)
     {
         if (towerBuilt == false)
             mrMat.color = Color.magenta;
     }
 
-    private void OnMouseExit()
+    public void OnPointerExit(PointerEventData eventData)
     {
         if (towerBuilt == false)
             mrMat.color = originalColour;
     }
-    private void OnMouseDown()
+    public void OnPointerDown(PointerEventData eventData)
     {
         if (towerBuilt == false)
         {

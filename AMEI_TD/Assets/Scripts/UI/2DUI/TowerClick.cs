@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class TowerClick : MonoBehaviour
+public class TowerClick : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
     [SerializeField] private GameObject destroyButton;
     [SerializeField] private int sellPrice;
@@ -12,7 +12,7 @@ public class TowerClick : MonoBehaviour
         gameManager = GameManager.instance;
         inputHandler = InputHandler.instance;
     }
-    private void OnMouseDown()
+    public void OnPointerDown(PointerEventData eventData)
     {
         if (destroyButton.activeSelf == false)
         {
@@ -23,12 +23,12 @@ public class TowerClick : MonoBehaviour
             destroyButton.SetActive(false);
         }
     }
-    private void OnMouseEnter()
+    public void OnPointerEnter(PointerEventData eventData)
     {
         if (inputHandler != null)
             inputHandler.SelectedTower(this);
     }
-    private void OnMouseExit()
+    public void OnPointerExit(PointerEventData eventData)
     {
         if (inputHandler != null)
             inputHandler.SelectedTower(null);
