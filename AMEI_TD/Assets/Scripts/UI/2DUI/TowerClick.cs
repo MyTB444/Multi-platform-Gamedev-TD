@@ -3,20 +3,15 @@ using UnityEngine.EventSystems;
 
 public class TowerClick : MonoBehaviour
 {
-    private bool onTower = false;
     [SerializeField] private GameObject destroyButton;
     [SerializeField] private int sellPrice;
     private GameManager gameManager;
-    void Start()
+    private InputHandler inputHandler;
+    void Awake()
     {
         gameManager = GameManager.instance;
+        inputHandler = InputHandler.instance;
     }
-    void FixedUpdate()
-    {
-        if (onTower == true)
-            KeyboardDestroy();
-    }
-
     private void OnMouseDown()
     {
         if (destroyButton.activeSelf == false)
@@ -30,19 +25,15 @@ public class TowerClick : MonoBehaviour
     }
     private void OnMouseEnter()
     {
-        onTower = true;
+        if (inputHandler != null)
+            inputHandler.SelectedTower(this);
     }
     private void OnMouseExit()
     {
-        onTower = false;
+        if (inputHandler != null)
+            inputHandler.SelectedTower(null);
     }
-    private void KeyboardDestroy()
-    {
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            Destroy(this.gameObject);
-        }
-    }
+
     public void DestoryTower()
     {
         gameManager.UpdateSkillPoints(sellPrice);
