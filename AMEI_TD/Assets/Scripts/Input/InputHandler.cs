@@ -17,7 +17,7 @@ public class InputHandler : MonoBehaviour
         inputActions.Player.Enable();
         inputActions.Player.Pause.performed += PauseGame;
         inputActions.Player.SellTower.performed += SellTower;
-        uiBase = UIBase.instance;
+        uiBase = FindAnyObjectByType<UIBase>();
     }
     public void SelectedTower(TowerClick selectedTower)
     {

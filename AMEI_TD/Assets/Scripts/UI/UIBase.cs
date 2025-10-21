@@ -10,6 +10,7 @@ public class UIBase : MonoBehaviour
 {
     private bool isPaused;
     public static UIBase instance;
+    [SerializeField] private GameObject pauseUI;
     void Awake()
     {
         instance = this;
@@ -25,12 +26,14 @@ public class UIBase : MonoBehaviour
         {
             Time.timeScale = 0;
             isPaused = true;
+            pauseUI.SetActive(true);
             Debug.Log("Paused");
         }
         else
         {
             Time.timeScale = 1;
             isPaused = false;
+            pauseUI.SetActive(false);
             Debug.Log("Unpaused");
         }
     }
