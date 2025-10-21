@@ -665,7 +665,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5133425465546153557}
@@ -692,7 +692,7 @@ MonoBehaviour:
   towerHead: {fileID: 7203727007857929107}
   gunPoint: {fileID: 4450622232958331389}
   rotationSpeed: 10
-  attackRange: 1.5
+  attackRange: 3
   whatIsEnemy:
     serializedVersion: 2
     m_Bits: 64

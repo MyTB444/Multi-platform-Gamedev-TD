@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml.Serialization;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -11,10 +12,17 @@ public class UIBase : MonoBehaviour
     private bool isPaused;
     public static UIBase instance;
     [SerializeField] private GameObject pauseUI;
+    [SerializeField] private TextMeshProUGUI waveCounter;
+    private WaveManager waveMan;
     void Awake()
     {
         instance = this;
         isPaused = false;
+        waveMan = FindAnyObjectByType<WaveManager>();
+    }
+    void FixedUpdate()
+    {
+        waveCounter.text = waveMan.GetTimer().ToString("0");
     }
     public void StartButton()
     {

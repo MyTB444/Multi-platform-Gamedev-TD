@@ -12,12 +12,12 @@ public class WaveDetails
 }
 public class WaveManager : MonoBehaviour
 {
-    [Header("Wave Details")] 
+    [Header("Wave Details")]
     [SerializeField] private float timeBetweenWaves;
     [SerializeField] private float waveTimer;
     [SerializeField] private WaveDetails[] levelWaves;
 
-    [Header("Enemy Prefabs")] 
+    [Header("Enemy Prefabs")]
     [SerializeField] private GameObject enemyBasic;
     [SerializeField] private GameObject enemyFast;
     [SerializeField] private GameObject enemyTank;
@@ -41,14 +41,14 @@ public class WaveManager : MonoBehaviour
 
         HandleWaveTimer();
     }
-    
+
 
     private void ActivateWaveManager()
     {
         gameBegan = true;
         EnableWaveTimer(true);
     }
-    
+
     public void CheckIfWaveCompleted()
     {
         if (gameBegan == false) return;
@@ -59,7 +59,7 @@ public class WaveManager : MonoBehaviour
         waveIndex++;
 
         if (HasNoMoreWaves()) return;
-        
+
         EnableWaveTimer(true);
     }
 
@@ -70,7 +70,7 @@ public class WaveManager : MonoBehaviour
         waveTimer = timeBetweenWaves;
         waveTimerEnabled = enable;
     }
-    
+
     private void HandleWaveTimer()
     {
         if (waveTimerEnabled == false) return;
@@ -100,11 +100,11 @@ public class WaveManager : MonoBehaviour
         {
             GameObject enemyToAdd = newEnemies[i];
             EnemySpawner spawnerToReceiveEnemy = enemySpawners[spawnerIndex];
-            
+
             spawnerToReceiveEnemy.AddEnemy(enemyToAdd);
-            
+
             spawnerIndex++;
-            
+
             if (spawnerIndex >= enemySpawners.Count) spawnerIndex = 0;
         }
     }
@@ -123,12 +123,12 @@ public class WaveManager : MonoBehaviour
         {
             newEnemyList.Add(enemyBasic);
         }
-        
+
         for (int i = 0; i < levelWaves[waveIndex].enemyFast; i++)
         {
             newEnemyList.Add(enemyFast);
         }
-        
+
         for (int i = 0; i < levelWaves[waveIndex].enemyTank; i++)
         {
             newEnemyList.Add(enemyTank);
@@ -149,6 +149,7 @@ public class WaveManager : MonoBehaviour
 
         return true;
     }
-    
+
     private bool HasNoMoreWaves() => waveIndex >= levelWaves.Length;
+    public float GetTimer() => waveTimer;
 }
