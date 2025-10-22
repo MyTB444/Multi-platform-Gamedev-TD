@@ -21,6 +21,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         points += 200;
+        waveManager.ActivateWaveManager();
     }
     
     void Update()

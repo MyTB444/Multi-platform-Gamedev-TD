@@ -44,7 +44,7 @@ public class WaveManager : MonoBehaviour
     }
     
 
-    private void ActivateWaveManager()
+    public void ActivateWaveManager()
     {
         gameBegan = true;
         EnableWaveTimer(true);
