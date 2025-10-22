@@ -12,7 +12,6 @@ public class WaveDetails
 }
 public class WaveManager : MonoBehaviour
 {
-    private UIBase uiBase;
     [Header("Wave Details")] 
     [SerializeField] private float timeBetweenWaves;
     [SerializeField] private float waveTimer;
@@ -32,7 +31,6 @@ public class WaveManager : MonoBehaviour
     private void Awake()
     {
         enemySpawners = new List<EnemySpawner>(FindObjectsByType<EnemySpawner>(FindObjectsSortMode.None));
-        uiBase = FindFirstObjectByType<UIBase>();
     }
 
     private void Update()
@@ -79,7 +77,7 @@ public class WaveManager : MonoBehaviour
         if (waveTimerEnabled == false) return;
 
         waveTimer -= Time.deltaTime;
-        uiBase.UpdateWaveTimerUI(waveTimer);
+        UIBase.instance.UpdateWaveTimerUI(waveTimer);
 
         if (waveTimer <= 0) StartNewWave();
     }

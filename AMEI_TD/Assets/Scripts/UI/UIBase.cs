@@ -13,21 +13,18 @@ public class UIBase : MonoBehaviour
     public static UIBase instance;
     [SerializeField] private GameObject pauseUI;
     [SerializeField] private TextMeshProUGUI waveCounter;
-    private WaveManager waveMan;
+    
     void Awake()
     {
         instance = this;
         isPaused = false;
-        waveMan = FindAnyObjectByType<WaveManager>();
     }
-    void FixedUpdate()
-    {
-        waveCounter.text = waveMan.GetTimer().ToString("0");
-    }
+    
     public void StartButton()
     {
         SceneManager.LoadScene("Eren");
     }
+    
     public void Pause()
     {
         if (isPaused == false)
@@ -44,5 +41,10 @@ public class UIBase : MonoBehaviour
             pauseUI.SetActive(false);
             Debug.Log("Unpaused");
         }
+    }
+
+    public void UpdateWaveTimerUI(float value)
+    {
+        waveCounter.text = value.ToString("0");
     }
 }
