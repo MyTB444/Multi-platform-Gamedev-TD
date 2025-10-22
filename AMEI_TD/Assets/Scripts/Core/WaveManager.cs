@@ -12,12 +12,13 @@ public class WaveDetails
 }
 public class WaveManager : MonoBehaviour
 {
-    [Header("Wave Details")]
+    private UIBase uiBase;
+    [Header("Wave Details")] 
     [SerializeField] private float timeBetweenWaves;
     [SerializeField] private float waveTimer;
     [SerializeField] private WaveDetails[] levelWaves;
 
-    [Header("Enemy Prefabs")]
+    [Header("Enemy Prefabs")] 
     [SerializeField] private GameObject enemyBasic;
     [SerializeField] private GameObject enemyFast;
     [SerializeField] private GameObject enemyTank;
@@ -31,35 +32,37 @@ public class WaveManager : MonoBehaviour
     private void Awake()
     {
         enemySpawners = new List<EnemySpawner>(FindObjectsByType<EnemySpawner>(FindObjectsSortMode.None));
+        uiBase = FindFirstObjectByType<UIBase>();
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.T)) ActivateWaveManager();
+        
+        if (Input.GetKeyDown(KeyCode.T)) ActivateWaveManager(); // This is for testing purposes specifically and is not how the game starts a wave
 
         if (gameBegan == false) return;
 
         HandleWaveTimer();
     }
-
+    
 
     private void ActivateWaveManager()
     {
         gameBegan = true;
         EnableWaveTimer(true);
     }
-
+    
     public void CheckIfWaveCompleted()
     {
         if (gameBegan == false) return;
 
-        if (AllEnemiesDefeated() == false || makingNextWave) return;
+        if (AllEnemiesDefeated() == false || AllSpawnersFinishedSpawning() == false || makingNextWave) return;
 
         makingNextWave = true;
         waveIndex++;
 
         if (HasNoMoreWaves()) return;
-
+        
         EnableWaveTimer(true);
     }
 
@@ -70,14 +73,13 @@ public class WaveManager : MonoBehaviour
         waveTimer = timeBetweenWaves;
         waveTimerEnabled = enable;
     }
-
+    
     private void HandleWaveTimer()
     {
         if (waveTimerEnabled == false) return;
 
         waveTimer -= Time.deltaTime;
-        int secondsLeft = Mathf.CeilToInt(waveTimer);
-        Debug.Log(secondsLeft);
+        uiBase.UpdateWaveTimerUI(waveTimer);
 
         if (waveTimer <= 0) StartNewWave();
     }
@@ -100,11 +102,11 @@ public class WaveManager : MonoBehaviour
         {
             GameObject enemyToAdd = newEnemies[i];
             EnemySpawner spawnerToReceiveEnemy = enemySpawners[spawnerIndex];
-
+            
             spawnerToReceiveEnemy.AddEnemy(enemyToAdd);
-
+            
             spawnerIndex++;
-
+            
             if (spawnerIndex >= enemySpawners.Count) spawnerIndex = 0;
         }
     }
@@ -123,12 +125,12 @@ public class WaveManager : MonoBehaviour
         {
             newEnemyList.Add(enemyBasic);
         }
-
+        
         for (int i = 0; i < levelWaves[waveIndex].enemyFast; i++)
         {
             newEnemyList.Add(enemyFast);
         }
-
+        
         for (int i = 0; i < levelWaves[waveIndex].enemyTank; i++)
         {
             newEnemyList.Add(enemyTank);
@@ -149,7 +151,18 @@ public class WaveManager : MonoBehaviour
 
         return true;
     }
-
+    
+    private bool AllSpawnersFinishedSpawning()
+    {
+        foreach (EnemySpawner spawner in enemySpawners)
+        {
+            if (spawner.HasEnemiesToSpawn())
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    
     private bool HasNoMoreWaves() => waveIndex >= levelWaves.Length;
-    public float GetTimer() => waveTimer;
 }
