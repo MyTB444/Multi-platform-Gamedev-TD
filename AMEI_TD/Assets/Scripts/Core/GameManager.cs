@@ -56,6 +56,11 @@ public class GameManager : MonoBehaviour
         StopWaveProgression();
     }
 
+    public void LevelCompleted()
+    {
+        Debug.Log("You won yipeee");
+    }
+
     private void StopWaveProgression()
     {
         StopMakingEnemies();

@@ -65,7 +65,11 @@ public class WaveManager : MonoBehaviour
         makingNextWave = true;
         waveIndex++;
 
-        if (HasNoMoreWaves()) return;
+        if (HasNoMoreWaves())
+        {
+            GameManager.instance.LevelCompleted();
+            return;
+        }
         
         EnableWaveTimer(true);
     }
