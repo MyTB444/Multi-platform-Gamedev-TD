@@ -88,6 +88,7 @@ public class EnemySpawner : MonoBehaviour
     public void AddEnemy(GameObject enemyToAdd) => enemiesToCreate.Add(enemyToAdd);
     public List<GameObject> GetActiveEnemies() => activeEnemies;
     public bool HasEnemiesToSpawn()=> enemiesToCreate.Count > 0;
+    public void CanCreateNewEnemies(bool canCreate) => canCreateEnemies = canCreate;
     
     public void RemoveActiveEnemy(GameObject enemyToRemove)
     {

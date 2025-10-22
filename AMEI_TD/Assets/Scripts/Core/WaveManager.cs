@@ -49,10 +49,16 @@ public class WaveManager : MonoBehaviour
         gameBegan = true;
         EnableWaveTimer(true);
     }
+
+    public void DeactivateWaveManager()
+    {
+        gameBegan = false;
+        waveTimerEnabled = false;
+    }
     
     public void CheckIfWaveCompleted()
     {
-        if (gameBegan == false) return;
+        if (gameBegan == false || GameManager.instance.IsGameLost()) return;
 
         if (AllEnemiesDefeated() == false || AllSpawnersFinishedSpawning() == false || makingNextWave) return;
 
@@ -66,6 +72,8 @@ public class WaveManager : MonoBehaviour
 
     private void EnableWaveTimer(bool enable)
     {
+        if (enable && GameManager.instance.IsGameLost()) return;
+        
         if (waveTimerEnabled == enable) return;
 
         waveTimer = timeBetweenWaves;
@@ -76,6 +84,12 @@ public class WaveManager : MonoBehaviour
     {
         if (waveTimerEnabled == false) return;
 
+        if (GameManager.instance.IsGameLost())
+        {
+            waveTimerEnabled = false;
+            return;
+        }
+
         waveTimer -= Time.deltaTime;
         UIBase.instance.UpdateWaveTimerUI(waveTimer);
 
@@ -84,6 +98,8 @@ public class WaveManager : MonoBehaviour
 
     private void StartNewWave()
     {
+        if (GameManager.instance.IsGameLost()) return;
+        
         GiveEnemiesToSpawners();
         EnableWaveTimer(false);
         makingNextWave = false;

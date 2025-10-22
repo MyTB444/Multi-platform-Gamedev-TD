@@ -7,7 +7,12 @@ public class GameManager : MonoBehaviour
 {
     private int points;
     public static GameManager instance;
+    public WaveManager waveManager;
     [SerializeField] private TextMeshProUGUI pointsUI;
+
+    private bool gameLost;
+    public bool IsGameLost() => gameLost;
+    
     private void Awake()
     {
         instance = this;
@@ -17,8 +22,7 @@ public class GameManager : MonoBehaviour
     {
         points += 200;
     }
-
-    // Update is called once per frame
+    
     void Update()
     {
         points = Mathf.Clamp(points, 0, int.MaxValue);
@@ -41,6 +45,31 @@ public class GameManager : MonoBehaviour
     public void UpdateSkillPoints(int newPoints)
     {
         points += newPoints;// merged two functions into one //add negative points to remove points and positive to gain points
+
+        if (points <= 0 && gameLost == false) LevelFailed();
+    }
+
+    private void LevelFailed()
+    {
+        gameLost = true;
+        StopWaveProgression();
+    }
+
+    private void StopWaveProgression()
+    {
+        StopMakingEnemies();
+        
+        if (waveManager != null) waveManager.DeactivateWaveManager();
+    }
+
+    public void StopMakingEnemies()
+    {
+        EnemySpawner[] spawners = FindObjectsByType<EnemySpawner>(FindObjectsSortMode.None);
+
+        foreach (var spawner in spawners)
+        {
+            spawner.CanCreateNewEnemies(false);
+        }
     }
 
     public int GetPoints() => points;
