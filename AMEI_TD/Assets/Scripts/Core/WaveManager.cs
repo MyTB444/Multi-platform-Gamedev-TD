@@ -56,7 +56,7 @@ public class WaveManager : MonoBehaviour
     {
         if (gameBegan == false) return;
 
-        if (AllEnemiesDefeated() == false || makingNextWave) return;
+        if (AllEnemiesDefeated() == false || AllSpawnersFinishedSpawning() == false || makingNextWave) return;
 
         makingNextWave = true;
         waveIndex++;
@@ -149,6 +149,18 @@ public class WaveManager : MonoBehaviour
             }
         }
 
+        return true;
+    }
+    
+    private bool AllSpawnersFinishedSpawning()
+    {
+        foreach (EnemySpawner spawner in enemySpawners)
+        {
+            if (spawner.HasEnemiesToSpawn())
+            {
+                return false;
+            }
+        }
         return true;
     }
     
