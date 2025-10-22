@@ -12,6 +12,7 @@ public class WaveDetails
 }
 public class WaveManager : MonoBehaviour
 {
+    private UIBase uiBase;
     [Header("Wave Details")] 
     [SerializeField] private float timeBetweenWaves;
     [SerializeField] private float waveTimer;
@@ -31,11 +32,13 @@ public class WaveManager : MonoBehaviour
     private void Awake()
     {
         enemySpawners = new List<EnemySpawner>(FindObjectsByType<EnemySpawner>(FindObjectsSortMode.None));
+        uiBase = FindFirstObjectByType<UIBase>();
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.T)) ActivateWaveManager();
+        
+        if (Input.GetKeyDown(KeyCode.T)) ActivateWaveManager(); // This is for testing purposes specifically and is not how the game starts a wave
 
         if (gameBegan == false) return;
 
@@ -76,8 +79,7 @@ public class WaveManager : MonoBehaviour
         if (waveTimerEnabled == false) return;
 
         waveTimer -= Time.deltaTime;
-        int secondsLeft = Mathf.CeilToInt(waveTimer);
-        Debug.Log(secondsLeft);
+        uiBase.UpdateWaveTimerUI(waveTimer);
 
         if (waveTimer <= 0) StartNewWave();
     }
