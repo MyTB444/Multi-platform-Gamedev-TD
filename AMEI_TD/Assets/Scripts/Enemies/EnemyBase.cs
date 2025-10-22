@@ -178,10 +178,15 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     }
     
-    void Die()
+    private void Die()
     {
         Destroy(gameObject);
         gameManager.UpdateSkillPoints(reward);
+        RemoveEnemy();
+    }
+
+    public void RemoveEnemy()
+    {
         if (mySpawner != null) mySpawner.RemoveActiveEnemy(gameObject);
     }
 }
