@@ -86,7 +86,7 @@ MonoBehaviour:
   bottomPoint: {fileID: 40801181113712456}
   damage: 10
   reward: 0
-  enemyMaxHp: 100
+  enemyMaxHp: 10
 --- !u!33 &1041149626430647825
 MeshFilter:
   m_ObjectHideFlags: 0

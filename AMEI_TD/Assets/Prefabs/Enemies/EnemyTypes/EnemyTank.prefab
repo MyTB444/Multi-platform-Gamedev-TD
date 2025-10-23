@@ -50,12 +50,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyType: 2
-  enemySpeed: 1
+  enemySpeed: 0.4
   centerPoint: {fileID: 139848545377927323}
   bottomPoint: {fileID: 7492274713208157147}
-  damage: 4
+  damage: 40
   reward: 0
-  enemyMaxHp: 100
+  enemyMaxHp: 20
 --- !u!33 &6686336692866349630
 MeshFilter:
   m_ObjectHideFlags: 0

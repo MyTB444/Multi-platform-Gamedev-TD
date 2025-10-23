@@ -15,20 +15,21 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] public List<Transform> waypointList;
 
     public Vector3[] currentWaypoints { get; private set; }
-    
+
     private List<GameObject> enemiesToCreate = new List<GameObject>();
     private List<GameObject> activeEnemies = new List<GameObject>();
 
     private void Start()
     {
         CollectWaypoints();
+        myWaveManager = FindFirstObjectByType<WaveManager>();
     }
 
     private void Update()
     {
         if (CanMakeNewEnemy()) CreateEnemy();
     }
-    
+
     private bool CanMakeNewEnemy()
     {
         spawnTimer -= Time.deltaTime;
@@ -48,12 +49,12 @@ public class EnemySpawner : MonoBehaviour
 
         GameObject randomEnemy = GetRandomEnemy();
         if (randomEnemy == null) return;
-        
+
         GameObject newEnemy = Instantiate(randomEnemy, transform.position, Quaternion.identity);
 
         EnemyBase enemyScript = newEnemy.GetComponent<EnemyBase>();
         enemyScript.SetupEnemy(this);
-        
+
         activeEnemies.Add(newEnemy);
     }
 
@@ -76,7 +77,7 @@ public class EnemySpawner : MonoBehaviour
         {
             if (child != null) waypointList.Add(child);
         }
-        
+
         currentWaypoints = new Vector3[waypointList.Count];
 
         for (int i = 0; i < currentWaypoints.Length; i++)
@@ -87,16 +88,16 @@ public class EnemySpawner : MonoBehaviour
 
     public void AddEnemy(GameObject enemyToAdd) => enemiesToCreate.Add(enemyToAdd);
     public List<GameObject> GetActiveEnemies() => activeEnemies;
-    public bool HasEnemiesToSpawn()=> enemiesToCreate.Count > 0;
+    public bool HasEnemiesToSpawn() => enemiesToCreate.Count > 0;
     public void CanCreateNewEnemies(bool canCreate) => canCreateEnemies = canCreate;
-    
+
     public void RemoveActiveEnemy(GameObject enemyToRemove)
     {
         if (activeEnemies != null && activeEnemies.Contains(enemyToRemove))
         {
             activeEnemies.Remove(enemyToRemove);
         }
-        
+
         myWaveManager.CheckIfWaveCompleted();
     }
 }

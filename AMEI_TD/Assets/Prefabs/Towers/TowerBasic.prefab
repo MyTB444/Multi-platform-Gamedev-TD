@@ -691,8 +691,8 @@ MonoBehaviour:
   towerBody: {fileID: 0}
   towerHead: {fileID: 7203727007857929107}
   gunPoint: {fileID: 4450622232958331389}
-  rotationSpeed: 10
-  attackRange: 3
+  rotationSpeed: 20
+  attackRange: 5
   whatIsEnemy:
     serializedVersion: 2
     m_Bits: 64
@@ -700,11 +700,11 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   projectilePrefab: {fileID: 5912905722827363994, guid: 5618c7aeeb600764c8e36219980829d8, type: 3}
-  projectileSpeed: 5
+  projectileSpeed: 10
   targetMostAdvancedEnemy: 1
-  targetPriorityEnemy: 1
+  targetPriorityEnemy: 0
   enemyPriorityType: 0
-  useHpTargeting: 1
+  useHpTargeting: 0
   targetHighestHpEnemy: 1
 --- !u!114 &5853422119608799548
 MonoBehaviour:

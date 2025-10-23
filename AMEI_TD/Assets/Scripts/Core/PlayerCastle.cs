@@ -15,9 +15,9 @@ public class PlayerCastle : MonoBehaviour
                 EnemyBase enemy = other.GetComponent<EnemyBase>();
 
                 if (enemy == null) return;
-                
+
                 enemy.RemoveEnemy();
-                
+
                 GameManager.instance.UpdateSkillPoints(-30);
             }
         }

@@ -186,11 +186,29 @@ public class TowerBase : MonoBehaviour
 
     protected void AttemptToAttack()
     {
+        if (currentEnemy == null)
+        {
+            Debug.LogWarning("[AttemptToAttack] currentEnemy is NULL");
+            return;
+        }
+
         if (!currentEnemy.gameObject.activeSelf)
         {
+            Debug.Log($"[AttemptToAttack] Enemy '{currentEnemy.name}' inactive → clearing target.");
             currentEnemy = null;
             return;
         }
+
+        // Debug: show cooldown state on every attempt
+        float nextAllowed = lastTimeAttacked + attackCooldown;
+        float remaining = Mathf.Max(0f, nextAllowed - Time.time);
+        bool can = CanAttack();
+        Debug.Log($"[AttemptToAttack] now={Time.time:F3}  last={lastTimeAttacked:F3}  cd={attackCooldown:F3}  next={nextAllowed:F3}  remaining={remaining:F3}  CanAttack()={can}  enemy={currentEnemy.name}");
+
+        // NOTE: You currently ignore cooldown here and always Attack().
+        // If you intended to respect cooldown, uncomment the next 3 lines:
+        // if (!can) return;
+        // else Debug.Log("[AttemptToAttack] Cooldown passed → attacking.");
 
         Attack();
     }
@@ -198,30 +216,49 @@ public class TowerBase : MonoBehaviour
     protected virtual void Attack()
     {
         lastTimeAttacked = Time.time;
+        Debug.Log($"[Attack] Fire! t={lastTimeAttacked:F3}  nextAllowed={lastTimeAttacked + attackCooldown:F3}");
         FireProjectile();
     }
 
     protected virtual void FireProjectile()
     {
         Vector3 directionToEnemy = DirectionToEnemyFrom(gunPoint);
+        Debug.DrawRay(gunPoint.position, directionToEnemy.normalized * 50f, Color.cyan, 0.1f);
 
-        if (Physics.Raycast(gunPoint.position, directionToEnemy, out RaycastHit hitInfo, Mathf.Infinity,
-                whatIsTargetable))
+        Debug.Log($"[FireProjectile] From '{gunPoint.name}' → '{currentEnemy?.name ?? "null"}'  dir={directionToEnemy}  pos={gunPoint.position}");
+
+        if (Physics.Raycast(gunPoint.position, directionToEnemy, out RaycastHit hitInfo, Mathf.Infinity, whatIsTargetable))
         {
-            IDamageable damageable = hitInfo.transform.GetComponent<IDamageable>();
+            Debug.Log($"[FireProjectile] Raycast HIT '{hitInfo.transform.name}' at {hitInfo.point}");
 
-            if (damageable == null) return;
+            IDamageable damageable = hitInfo.transform.GetComponent<IDamageable>();
+            if (damageable == null)
+            {
+                Debug.LogWarning("[FireProjectile] Hit object has NO IDamageable.");
+                return;
+            }
 
             Vector3 spawnPosition = gunPoint.position + directionToEnemy * 0.1f;
             GameObject newProjectile = Instantiate(projectilePrefab, spawnPosition, gunPoint.rotation);
-            newProjectile.GetComponent<TowerProjectileBase>().SetupProjectile(hitInfo.point, damageable, damage, projectileSpeed);
+            Debug.Log($"[FireProjectile] Spawned '{newProjectile.name}' at {spawnPosition}  damage={damage}  speed={projectileSpeed}");
+
+            newProjectile.GetComponent<TowerProjectileBase>()
+                .SetupProjectile(hitInfo.point, damageable, damage, projectileSpeed);
+        }
+        else
+        {
+            Debug.LogWarning("[FireProjectile] Raycast MISS (check LayerMask/direction/obstacles).");
         }
     }
 
     protected virtual bool CanAttack()
     {
-        return Time.time > lastTimeAttacked + attackCooldown && currentEnemy != null;
+        bool can = Time.time > lastTimeAttacked + attackCooldown && currentEnemy != null;
+        float nextAllowed = lastTimeAttacked + attackCooldown;
+        Debug.Log($"[CanAttack] now={Time.time:F3}  last={lastTimeAttacked:F3}  cd={attackCooldown:F3}  next={nextAllowed:F3}  remaining={Mathf.Max(0f, nextAllowed - Time.time):F3}  enemy={(currentEnemy ? currentEnemy.name : "null")}  -> {can}");
+        return can;
     }
+
 
     protected virtual void HandleRotation()
     {
