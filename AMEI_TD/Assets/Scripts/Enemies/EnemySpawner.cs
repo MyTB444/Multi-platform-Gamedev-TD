@@ -59,6 +59,7 @@ public class EnemySpawner : MonoBehaviour
         activeEnemies.Add(newEnemy);
     }
 
+    // Picks and removes a random enemy prefab from the queue
     private GameObject GetRandomEnemy()
     {
         if (enemiesToCreate.Count == 0) return null;
@@ -71,6 +72,7 @@ public class EnemySpawner : MonoBehaviour
         return chosenEnemy;
     }
 
+    // Converts waypoint transforms to Vector3 positions for enemy pathfinding
     private void CollectWaypoints()
     {
         waypointList = new List<Transform>();

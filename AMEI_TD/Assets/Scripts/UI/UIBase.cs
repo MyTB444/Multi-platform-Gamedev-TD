@@ -16,7 +16,6 @@ public class UIBase : MonoBehaviour
     [SerializeField] private GameObject winUI;
     [SerializeField] private GameObject lostUI;
 
-
     void Awake()
     {
         instance = this;
@@ -50,6 +49,8 @@ public class UIBase : MonoBehaviour
     {
         waveCounter.text = value.ToString("0");
     }
+    
+    // Shows win or lose UI based on game outcome
     public void GameWon(bool a)
     {
         if (a) winUI.SetActive(true);

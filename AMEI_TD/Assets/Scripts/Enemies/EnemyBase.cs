@@ -87,6 +87,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         currentWaypointIndex = 0;
     }
 
+    // Calculates total path length for distance tracking
     private void CollectTotalDistance()
     {
         for (int i = 0; i < myWaypoints.Length; i++)
@@ -97,6 +98,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
     }
 
+    // Returns how far the enemy still has to travel to reach the end
     public float GetRemainingDistance()
     {
         if (myWaypoints == null || currentWaypointIndex >= myWaypoints.Length) return 0;
@@ -131,6 +133,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
         Vector3 direction = (targetWaypoint - bottomPoint.position).normalized;
 
+        // Smoothly rotate enemy to face movement direction
         if (direction != Vector3.zero)
         {
             Quaternion targetRotation = Quaternion.LookRotation(direction);
@@ -150,6 +153,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
         Destroy(gameObject);
     }
+    
     public virtual void TakeDamage(float damage)
     {
         enemyCurrentHp -= damage;
@@ -165,6 +169,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public EnemyType GetEnemyType() => enemyType;
     public float GetEnemyHp() => enemyCurrentHp;
     public Transform GetBottomPoint() => bottomPoint;
+    
     private void ResetEnemy()
     {
         gameObject.layer = originalLayerIndex;

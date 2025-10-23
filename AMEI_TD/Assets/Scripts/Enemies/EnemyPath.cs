@@ -18,6 +18,7 @@ public class EnemyPath : MonoBehaviour
     public Transform[] GetWaypoints() => waypoints;
     public int GetWaypointCount() => waypoints.Length;
 
+    // Visualizes the path in the Unity editor with colored lines and spheres
     void OnDrawGizmos()
     {
         Transform[] points = new Transform[transform.childCount];
@@ -28,6 +29,7 @@ public class EnemyPath : MonoBehaviour
 
         if (points.Length == 0) return;
 
+        // Draw green lines connecting waypoints
         Gizmos.color = Color.green;
         for (int i = 0; i < points.Length - 1; i++)
         {
@@ -37,6 +39,7 @@ public class EnemyPath : MonoBehaviour
             }
         }
 
+        // Draw yellow spheres for intermediate waypoints
         Gizmos.color = Color.yellow;
         for (int i = 1; i < points.Length - 1; i++)
         {
@@ -46,12 +49,14 @@ public class EnemyPath : MonoBehaviour
             }
         }
 
+        // Draw green sphere for start point
         if (points.Length > 0 && points[0] != null)
         {
             Gizmos.color = Color.green;
             Gizmos.DrawSphere(points[0].position, 0.4f);
         }
 
+        // Draw red sphere for end point
         if (points.Length > 0 && points[points.Length - 1] != null)
         {
             Gizmos.color = Color.red;

@@ -13,6 +13,7 @@ public class TileButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     private Color originalColour;
     private bool buttonControl;
     private bool towerBuilt;
+    
     void Start()
     {
         mr = GetComponent<MeshRenderer>();
@@ -21,10 +22,12 @@ public class TileButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         anim = GetComponent<Animator>();
         towerButtons = GetComponentsInChildren<TowerButton>();
     }
+    
     void Update()
     {
         DetectTowerAbove();
     }
+    
     public void OnPointerEnter(PointerEventData eventData)
     {
         if (towerBuilt == false)
@@ -36,6 +39,7 @@ public class TileButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         if (towerBuilt == false)
             mrMat.color = originalColour;
     }
+    
     public void OnPointerDown(PointerEventData eventData)
     {
         if (towerBuilt == false)
@@ -53,6 +57,7 @@ public class TileButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             }
         }
     }
+    
     public void DeactivateButtons()
     {
         for (int i = 0; i < towerButtons.Length; i++)
@@ -62,6 +67,7 @@ public class TileButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         }
         ActivateTileButtons(false);
     }
+    
     private void ActivateButtons()
     {
         for (int i = 0; i < towerButtons.Length; i++)
@@ -70,10 +76,13 @@ public class TileButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
                 towerButtons[i].Activate();
         }
     }
+    
     public void ActivateTileButtons(bool a)
     {
         anim.SetBool("TowerButtonPopup", a);
     }
+    
+    // Raycasts upward to check if a tower is already built on this tile
     private void DetectTowerAbove()
     {
         int layerMask = 1 << 7;
@@ -94,6 +103,5 @@ public class TileButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         {
             towerBuilt = false;
         }
-
     }
 }

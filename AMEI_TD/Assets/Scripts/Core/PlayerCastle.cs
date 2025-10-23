@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class PlayerCastle : MonoBehaviour
 {
+    // When an enemy reaches the castle, remove it and deduct skill points
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject != null)
@@ -18,6 +19,7 @@ public class PlayerCastle : MonoBehaviour
 
                 enemy.RemoveEnemy();
 
+                // Penalty for enemy reaching the castle
                 GameManager.instance.UpdateSkillPoints(-30);
             }
         }

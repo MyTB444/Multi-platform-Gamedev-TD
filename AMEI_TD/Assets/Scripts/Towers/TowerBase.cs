@@ -58,8 +58,7 @@ public class TowerBase : MonoBehaviour
         if (Vector3.Distance(currentEnemy.transform.position, transform.position) > attackRange) currentEnemy = null;
     }
 
-    // Checks for a new target every interval.
-    // If no current target is found, then it checks for a new target.
+    // Periodically searches for new targets instead of every frame for performance
     private void UpdateTarget()
     {
         if (Time.time > lastTimeCheckedTarget + targetCheckInterval || currentEnemy == null)
@@ -116,6 +115,7 @@ public class TowerBase : MonoBehaviour
         return null;
     }
 
+    // Selects best enemy from candidates based on HP and/or distance criteria
     private EnemyBase ChooseEnemyToTarget(List<EnemyBase> targets)
     {
         EnemyBase enemyToTarget = null;
@@ -169,7 +169,6 @@ public class TowerBase : MonoBehaviour
             {
                 float remainingDistance = enemy.GetRemainingDistance();
 
-
                 bool isBetterDistance = targetMostAdvancedEnemy
                     ? remainingDistance < bestDistance
                     : remainingDistance > bestDistance;
@@ -201,6 +200,7 @@ public class TowerBase : MonoBehaviour
         FireProjectile();
     }
 
+    // Raycasts to enemy and spawns projectile with hit information
     protected virtual void FireProjectile()
     {
         Vector3 directionToEnemy = DirectionToEnemyFrom(gunPoint);
@@ -212,6 +212,7 @@ public class TowerBase : MonoBehaviour
 
             if (damageable == null) return;
 
+            // Spawn slightly forward to prevent instant self-collision
             Vector3 spawnPosition = gunPoint.position + directionToEnemy * 0.1f;
             GameObject newProjectile = Instantiate(projectilePrefab, spawnPosition, gunPoint.rotation);
             newProjectile.GetComponent<TowerProjectileBase>().SetupProjectile(hitInfo.point, damageable, damage, projectileSpeed);
@@ -262,5 +263,4 @@ public class TowerBase : MonoBehaviour
     {
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
-
 }

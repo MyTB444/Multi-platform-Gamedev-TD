@@ -42,9 +42,10 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    // Use negative values to deduct points, positive values to add points
     public void UpdateSkillPoints(int newPoints)
     {
-        points += newPoints;// merged two functions into one //add negative points to remove points and positive to gain points
+        points += newPoints;
         UpdatePointsUI();
         if (points <= 0 && gameLost == false) LevelFailed();
     }
@@ -59,8 +60,8 @@ public class GameManager : MonoBehaviour
     public void LevelCompleted()
     {
         GameOverOutcomeUI(true);
-        //Debug.Log("You won yipeee");
     }
+    
     private void GameOverOutcomeUI(bool playerWon)
     {
         InputHandler.instance.EnableRestart();

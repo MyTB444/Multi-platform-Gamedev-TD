@@ -53,6 +53,7 @@ public class WaveManager : MonoBehaviour
         waveTimerEnabled = false;
     }
     
+    // Called when an enemy is defeated to check if wave is complete and trigger next wave
     public void CheckIfWaveCompleted()
     {
         if (gameBegan == false || GameManager.instance.IsGameLost()) return;
@@ -106,6 +107,7 @@ public class WaveManager : MonoBehaviour
         makingNextWave = false;
     }
 
+    // Distributes enemies from the current wave across all spawners in round-robin fashion
     private void GiveEnemiesToSpawners()
     {
         List<GameObject> newEnemies = GetNewEnemies();
@@ -122,6 +124,7 @@ public class WaveManager : MonoBehaviour
             
             spawnerIndex++;
             
+            // Cycle back to first spawner if we've used all spawners
             if (spawnerIndex >= enemySpawners.Count) spawnerIndex = 0;
         }
     }
