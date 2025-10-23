@@ -12,7 +12,7 @@ public class TowerButton : MonoBehaviour, IPointerDownHandler
     private GameManager gameManager;
     [SerializeField] private int buyPrice;
     private TileButton tb;
-    private void Start()
+    private void Awake()
     {
         gameManager = GameManager.instance;
         tb = GetComponentInParent<TileButton>();

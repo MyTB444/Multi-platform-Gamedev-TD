@@ -12,7 +12,7 @@ public class GameManager : MonoBehaviour
 
     private bool gameLost;
     public bool IsGameLost() => gameLost;
-    
+
     private void Awake()
     {
         instance = this;
@@ -21,14 +21,15 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         points += 200;
+        UpdatePointsUI();
         waveManager.ActivateWaveManager();
     }
-    
-    void Update()
+
+    private void UpdatePointsUI()
     {
         points = Mathf.Clamp(points, 0, int.MaxValue);
         pointsUI.text = "Points: " + points.ToString();
-        if(points > 50)
+        if (points > 50)
         {
             pointsUI.color = Color.green;
         }
@@ -40,13 +41,12 @@ public class GameManager : MonoBehaviour
                 Debug.Log("YouDied");
             }
         }
-        
     }
 
     public void UpdateSkillPoints(int newPoints)
     {
         points += newPoints;// merged two functions into one //add negative points to remove points and positive to gain points
-
+        UpdatePointsUI();
         if (points <= 0 && gameLost == false) LevelFailed();
     }
 

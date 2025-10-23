@@ -45,7 +45,6 @@ public class InputHandler : MonoBehaviour
         if (context.ReadValueAsButton())
         {
             uiBase.Pause();
-            //Debug.Log("P");
         }
     }
     private void RestartGame(InputAction.CallbackContext context)

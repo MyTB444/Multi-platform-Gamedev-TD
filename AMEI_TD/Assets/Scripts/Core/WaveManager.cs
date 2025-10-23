@@ -35,9 +35,6 @@ public class WaveManager : MonoBehaviour
 
     private void Update()
     {
-        
-        if (Input.GetKeyDown(KeyCode.T)) ActivateWaveManager(); // This is for testing purposes specifically and is not how the game starts a wave
-
         if (gameBegan == false) return;
 
         HandleWaveTimer();

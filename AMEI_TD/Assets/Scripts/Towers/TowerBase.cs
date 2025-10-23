@@ -5,8 +5,6 @@ using Random = UnityEngine.Random;
 public class TowerBase : MonoBehaviour
 {
     private EnemyBase currentEnemy;
-    private PlayerCastle playerCastle;
-
     [SerializeField] private int damage;
     [SerializeField] protected float attackCooldown = 1f;
     protected float lastTimeAttacked;

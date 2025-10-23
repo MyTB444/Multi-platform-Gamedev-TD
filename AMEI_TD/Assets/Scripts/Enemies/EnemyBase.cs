@@ -13,14 +13,14 @@ public enum EnemyType
 public class EnemyBase : MonoBehaviour, IDamageable
 {
     protected EnemySpawner mySpawner;
-    
+
     [SerializeField] private EnemyType enemyType;
     [SerializeField] private float enemySpeed;
     [SerializeField] private Transform centerPoint;
     [SerializeField] private Transform bottomPoint;
     [SerializeField] private int damage;
     [SerializeField] private int reward;
-    
+
     private float enemyCurrentHp;
     public float enemyMaxHp = 100;
     protected bool isDead;
@@ -66,7 +66,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public void SetupEnemy(EnemySpawner myNewSpawner)
     {
         mySpawner = myNewSpawner;
-        
+
         UpdateWaypoints(myNewSpawner.currentWaypoints);
         CollectTotalDistance();
         ResetEnemy();
@@ -87,12 +87,12 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
         currentWaypointIndex = 0;
     }
-    
+
     private void CollectTotalDistance()
     {
         for (int i = 0; i < myWaypoints.Length; i++)
         {
-            if(i == myWaypoints.Length - 1) break;
+            if (i == myWaypoints.Length - 1) break;
             float distance = Vector3.Distance(myWaypoints[i], myWaypoints[i + 1]);
             totalDistance += distance;
         }
@@ -100,19 +100,19 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     public float GetRemainingDistance()
     {
-        if(myWaypoints == null || currentWaypointIndex >= myWaypoints.Length) return 0;
+        if (myWaypoints == null || currentWaypointIndex >= myWaypoints.Length) return 0;
 
         float remainingDistance = 0;
-    
+
         // Distance from current position to the next waypoint
         remainingDistance += Vector3.Distance(transform.position, myWaypoints[currentWaypointIndex]);
-    
+
         // Distance for all remaining waypoint segments
         for (int i = currentWaypointIndex; i < myWaypoints.Length - 1; i++)
         {
             remainingDistance += Vector3.Distance(myWaypoints[i], myWaypoints[i + 1]);
         }
-    
+
         return remainingDistance;
     }
 
@@ -150,10 +150,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private void ReachedEnd()
     {
         Destroy(gameObject);
-        //gameManager.RemovePoints(damage);
     }
-
-    // Get Main Damage
     public virtual void TakeDamage(float damage)
     {
         enemyCurrentHp -= damage;
@@ -168,7 +165,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public Vector3 GetCenterPoint() => centerPoint.position;
     public EnemyType GetEnemyType() => enemyType;
     public float GetEnemyHp() => enemyCurrentHp;
-    
+
     private void ResetEnemy()
     {
         gameObject.layer = originalLayerIndex;
@@ -177,7 +174,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         isDead = false;
 
     }
-    
+
     private void Die()
     {
         Destroy(gameObject);
