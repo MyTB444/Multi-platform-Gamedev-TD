@@ -9,12 +9,10 @@ public class TowerButton : MonoBehaviour, IPointerDownHandler
 {
     [SerializeField] private GameObject towerPrefab;
     [SerializeField] private Transform buildPosition;
-    private GameManager gameManager;
     [SerializeField] private int buyPrice;
     private TileButton tb;
     private void Awake()
     {
-        gameManager = GameManager.instance;
         tb = GetComponentInParent<TileButton>();
     }
     public void Activate()
@@ -27,7 +25,7 @@ public class TowerButton : MonoBehaviour, IPointerDownHandler
     }
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (gameManager.GetPoints() >= buyPrice)
+        if (GameManager.instance.GetPoints() >= buyPrice)
         {
             BuildTower(towerPrefab, buildPosition);
         }
@@ -39,7 +37,7 @@ public class TowerButton : MonoBehaviour, IPointerDownHandler
     private void BuildTower(GameObject tower, Transform pos)
     {
         Instantiate(tower.gameObject, new Vector3(pos.position.x, pos.position.y, pos.position.z), Quaternion.identity);
-        gameManager.UpdateSkillPoints(-buyPrice);
+        GameManager.instance.UpdateSkillPoints(-buyPrice);
         tb.DeactivateButtons();
         tb.ActivateTileButtons(false);
     }

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 631023140104744202}
   - component: {fileID: 6686336692866349630}
   - component: {fileID: 5682379300573794083}
-  - component: {fileID: 28957993585037212}
+  - component: {fileID: 6825926895675681018}
   m_Layer: 6
   m_Name: EnemyTank
   m_TagString: Untagged
@@ -54,8 +54,8 @@ MonoBehaviour:
   centerPoint: {fileID: 139848545377927323}
   bottomPoint: {fileID: 7492274713208157147}
   damage: 40
-  reward: 0
-  enemyMaxHp: 20
+  reward: 20
+  enemyMaxHp: 100
 --- !u!33 &6686336692866349630
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -106,8 +106,8 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &28957993585037212
-CapsuleCollider:
+--- !u!64 &6825926895675681018
+MeshCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -124,11 +124,10 @@ CapsuleCollider:
   m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  serializedVersion: 5
+  m_Convex: 0
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 10208, guid: 0000000000000000e000000000000000, type: 0}
 --- !u!1 &4135430072922747042
 GameObject:
   m_ObjectHideFlags: 0

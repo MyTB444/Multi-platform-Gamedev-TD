@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
-    private int points;
+    [SerializeField] private int points;
     public static GameManager instance;
     public WaveManager waveManager;
     [SerializeField] private TextMeshProUGUI pointsUI;
@@ -20,7 +20,6 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        points += 200;
         UpdatePointsUI();
         waveManager.ActivateWaveManager();
     }

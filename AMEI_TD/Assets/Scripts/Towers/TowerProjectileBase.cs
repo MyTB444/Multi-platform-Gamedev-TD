@@ -41,8 +41,12 @@ public class TowerProjectileBase : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+
         OnHit(other);
-        DestroyProjectile();
+        LayerMask TowerLayer = LayerMask.NameToLayer("Tower");
+        if (other.gameObject.layer != TowerLayer)
+            DestroyProjectile();
+
     }
 
     protected virtual void OnHit(Collider other)

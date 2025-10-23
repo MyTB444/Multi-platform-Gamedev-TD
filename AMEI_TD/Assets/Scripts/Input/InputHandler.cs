@@ -52,8 +52,8 @@ public class InputHandler : MonoBehaviour
         if (context.ReadValueAsButton())
         {
 
-            if(gameEnd)
-            SceneManager.LoadScene("Eren");
+            if (gameEnd)
+                UIBase.instance.StartButton();
         }
     }
 }

@@ -115,9 +115,9 @@ MonoBehaviour:
   enemySpeed: 2
   centerPoint: {fileID: 6884134845494354579}
   bottomPoint: {fileID: 331970158621564899}
-  damage: 20
-  reward: 0
-  enemyMaxHp: 5
+  damage: 10
+  reward: 10
+  enemyMaxHp: 10
 --- !u!33 &1133182221447099925
 MeshFilter:
   m_ObjectHideFlags: 0

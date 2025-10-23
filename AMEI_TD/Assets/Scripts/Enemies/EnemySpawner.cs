@@ -11,6 +11,7 @@ public class EnemySpawner : MonoBehaviour
     [SerializeField] private float spawnCooldown;
     private float spawnTimer;
     private bool canCreateEnemies = true;
+    [SerializeField] private Transform spawnLocation;
 
     [SerializeField] public List<Transform> waypointList;
 
@@ -50,7 +51,7 @@ public class EnemySpawner : MonoBehaviour
         GameObject randomEnemy = GetRandomEnemy();
         if (randomEnemy == null) return;
 
-        GameObject newEnemy = Instantiate(randomEnemy, transform.position, Quaternion.identity);
+        GameObject newEnemy = Instantiate(randomEnemy, spawnLocation.position, Quaternion.identity);
 
         EnemyBase enemyScript = newEnemy.GetComponent<EnemyBase>();
         enemyScript.SetupEnemy(this);

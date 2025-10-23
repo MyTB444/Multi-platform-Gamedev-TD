@@ -25,7 +25,7 @@ public class UIBase : MonoBehaviour
 
     public void StartButton()
     {
-        SceneManager.LoadScene("Eren");
+        SceneManager.LoadScene("Prototype");
     }
 
     public void Pause()

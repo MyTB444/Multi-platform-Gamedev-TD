@@ -30,13 +30,12 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private float waypointReachDistance = 0.1f;
 
     private int originalLayerIndex;
-    private GameManager gameManager;
+   
     private float totalDistance;
 
     private void Awake()
     {
         originalLayerIndex = gameObject.layer;
-        gameManager = GameManager.instance;
     }
 
     protected virtual void Start()
@@ -165,7 +164,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public Vector3 GetCenterPoint() => centerPoint.position;
     public EnemyType GetEnemyType() => enemyType;
     public float GetEnemyHp() => enemyCurrentHp;
-
+    public Transform GetBottomPoint() => bottomPoint;
     private void ResetEnemy()
     {
         gameObject.layer = originalLayerIndex;
@@ -178,7 +177,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private void Die()
     {
         Destroy(gameObject);
-        gameManager.UpdateSkillPoints(reward);
+        GameManager.instance.UpdateSkillPoints(reward);
         RemoveEnemy();
     }
 
