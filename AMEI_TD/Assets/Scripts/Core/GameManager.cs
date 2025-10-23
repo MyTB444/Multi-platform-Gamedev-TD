@@ -52,19 +52,26 @@ public class GameManager : MonoBehaviour
 
     private void LevelFailed()
     {
+        GameOverOutcomeUI(false);
         gameLost = true;
         StopWaveProgression();
     }
 
     public void LevelCompleted()
     {
-        Debug.Log("You won yipeee");
+        GameOverOutcomeUI(true);
+        //Debug.Log("You won yipeee");
+    }
+    private void GameOverOutcomeUI(bool playerWon)
+    {
+        InputHandler.instance.EnableRestart();
+        UIBase.instance.GameWon(playerWon);
     }
 
     private void StopWaveProgression()
     {
         StopMakingEnemies();
-        
+
         if (waveManager != null) waveManager.DeactivateWaveManager();
     }
 
