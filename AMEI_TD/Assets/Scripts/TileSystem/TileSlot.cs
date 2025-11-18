@@ -29,6 +29,8 @@ public class TileSlot : MonoBehaviour
         UpdateCollider(newTile.GetCollider());
         UpdateChildren(newTile);
         UpdateLayer(referenceTile);
+        UpdateLocalRotation(referenceTile);  // Add this line
+        UpdateLocalScale(referenceTile);     // Add this line
     }
 
     public Material GetOriginalMaterial()
@@ -77,6 +79,16 @@ public class TileSlot : MonoBehaviour
         {
             Instantiate(child.gameObject, transform);
         }
+    }
+    
+    private void UpdateLocalRotation(GameObject referenceObj)
+    {
+        transform.localRotation = referenceObj.transform.localRotation;
+    }
+
+    private void UpdateLocalScale(GameObject referenceObj)
+    {
+        transform.localScale = referenceObj.transform.localScale;
     }
 
     public void UpdateLayer(GameObject referenceObj)

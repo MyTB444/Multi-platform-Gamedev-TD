@@ -11,10 +11,13 @@ public class TileSetHolder : MonoBehaviour
 
     [Header("Corners")]
     public GameObject tileInnerCorner;
+    public GameObject tileInnerCorner2;
     public GameObject tileOuterCorner;
+    public GameObject tileOuterCorner2;
 
     [Header("Sideways")]
     public GameObject tileSidewayRoad;
+    public GameObject tileSidewayRoad2;
 
     [Header("Water")]
     public GameObject tileRiver;
