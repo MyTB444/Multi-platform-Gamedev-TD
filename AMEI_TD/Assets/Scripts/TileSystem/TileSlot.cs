@@ -99,7 +99,9 @@ public class TileSlot : MonoBehaviour
 
     public void RotateTile(int dir)
     {
-        transform.Rotate(0, 90 * dir, 0);
+        Vector3 currentRotation = transform.localEulerAngles;
+        currentRotation.y += 90 * dir;
+        transform.localEulerAngles = currentRotation;
     }
 
     public void AdjustY(int verticalDir)

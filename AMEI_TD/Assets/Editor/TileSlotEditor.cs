@@ -66,15 +66,16 @@ public class TileSlotEditor : Editor
         if (GUILayout.Button("Field", GUILayout.Width(oneButtonWidth)))
         {
             TileSetHolder holder = FindFirstObjectByType<TileSetHolder>();
-            
+    
             foreach (var targetTile in targets)
             {
                 TileSlot slot = (TileSlot)targetTile;
-                
-                int x = Mathf.RoundToInt(slot.transform.position.x);
-                int z = Mathf.RoundToInt(slot.transform.position.z);
+        
+                // Divide by tileSpacing (2) to get actual grid coordinates
+                int x = Mathf.RoundToInt(slot.transform.position.x / 2f);
+                int z = Mathf.RoundToInt(slot.transform.position.z / 2f);
                 bool useLight = (x + z) % 2 == 0;
-                
+        
                 GameObject newTile = useLight ? holder.tileFieldLight : holder.tileFieldDark;
                 slot.SwitchTile(newTile);
             }
