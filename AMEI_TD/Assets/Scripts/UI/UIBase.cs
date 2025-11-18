@@ -21,6 +21,11 @@ public class UIBase : MonoBehaviour
     {
         SceneManager.LoadScene("Prototype");
     }
+    public void Quit()
+    {
+        SceneManager.LoadScene("MainMenu");
+
+    }
 
     public void Pause()
     {
@@ -44,7 +49,7 @@ public class UIBase : MonoBehaviour
     {
         waveCounter.text = value.ToString("0");
     }
-    
+
     // Shows win or lose UI based on game outcome
     public void GameWon(bool a)
     {
