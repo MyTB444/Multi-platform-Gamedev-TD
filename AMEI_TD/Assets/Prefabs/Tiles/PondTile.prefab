@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 402992413068017840}
   - component: {fileID: 5647256082337356630}
   - component: {fileID: 4608836956531636933}
+  - component: {fileID: 5475640435594494942}
   m_Layer: 0
   m_Name: PondTile
   m_TagString: Untagged
@@ -121,3 +122,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scrollSpeed: 1
   rend: {fileID: 0}
+--- !u!114 &5475640435594494942
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7590629113289187301}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52aa7f865a27a0e438cbe5baffabcfc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

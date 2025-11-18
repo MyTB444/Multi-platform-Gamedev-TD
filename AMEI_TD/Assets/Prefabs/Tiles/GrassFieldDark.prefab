@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7810930718753854665}
   - component: {fileID: 7614827863685792645}
   - component: {fileID: 866854249290487501}
+  - component: {fileID: 2371890798806801782}
   m_Layer: 0
   m_Name: GrassFieldDark
   m_TagString: Untagged
@@ -83,3 +84,15 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &2371890798806801782
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8411235983231281746}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52aa7f865a27a0e438cbe5baffabcfc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

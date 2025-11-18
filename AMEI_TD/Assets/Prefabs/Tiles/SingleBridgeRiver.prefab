@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 3307015732050827180}
   - component: {fileID: 2671025051951676185}
   - component: {fileID: 386180431087743998}
+  - component: {fileID: 596782567061998424}
   m_Layer: 0
   m_Name: SingleBridgeRiver
   m_TagString: Untagged
@@ -84,6 +85,18 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &596782567061998424
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2263522547218137169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52aa7f865a27a0e438cbe5baffabcfc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8653458230078494977
 GameObject:
   m_ObjectHideFlags: 0

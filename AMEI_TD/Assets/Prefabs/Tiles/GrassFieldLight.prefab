@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5407536781922935554}
   - component: {fileID: 1940020323878906593}
   - component: {fileID: 2683091292556168902}
+  - component: {fileID: 6381154353238006636}
   m_Layer: 0
   m_Name: GrassFieldLight
   m_TagString: Untagged
@@ -83,3 +84,15 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &6381154353238006636
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6514632015932548083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 52aa7f865a27a0e438cbe5baffabcfc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
