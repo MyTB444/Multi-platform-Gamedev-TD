@@ -5,6 +5,7 @@ using UnityEngine;
 public class TileSlotEditor : Editor
 {
     private GUIStyle centredStyle;
+    private GUIStyle propInfoStyle;
     
     public override void OnInspectorGUI()
     {
@@ -17,9 +18,17 @@ public class TileSlotEditor : Editor
             fontStyle = FontStyle.Bold,
             fontSize = 16
         };
+        
+        propInfoStyle = new GUIStyle(GUI.skin.label)
+        {
+            alignment = TextAnchor.MiddleCenter,
+            fontStyle = FontStyle.Italic,
+            fontSize = 12
+        };
 
         float oneButtonWidth = (EditorGUIUtility.currentViewWidth - 25);
         float twoButtonWidth = (EditorGUIUtility.currentViewWidth - 25) / 2;
+        float threeButtonWidth = (EditorGUIUtility.currentViewWidth - 25) / 3;
         
         // Position and Rotation Section
         GUILayout.Label("Position and Rotation", centredStyle);
@@ -202,5 +211,119 @@ public class TileSlotEditor : Editor
             }
         }
         GUILayout.EndHorizontal();
+        
+        // ==================== PROPS SECTION ====================
+        GUILayout.Space(10);
+        GUILayout.Label("Props", centredStyle);
+        
+        // Show prop count info
+        TileSlot primarySlot = (TileSlot)target;
+        int propCount = primarySlot.GetPropCount();
+        GUILayout.Label(propCount > 0 ? $"Props on tile: {propCount}" : "No props placed", propInfoStyle);
+        
+        TileSetHolder holder2 = FindFirstObjectByType<TileSetHolder>();
+        
+        // Objects
+        GUILayout.Label("Objects", EditorStyles.boldLabel);
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("Barrel", GUILayout.Width(threeButtonWidth)))
+        {
+            AddPropToTargets(holder2.propBarrel);
+        }
+        if (GUILayout.Button("Crate", GUILayout.Width(threeButtonWidth)))
+        {
+            AddPropToTargets(holder2.propCrate);
+        }
+        if (GUILayout.Button("Ladder", GUILayout.Width(threeButtonWidth)))
+        {
+            AddPropToTargets(holder2.propLadder);
+        }
+        GUILayout.EndHorizontal();
+        
+        // Grass
+        GUILayout.Label("Grass", EditorStyles.boldLabel);
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("Grass 1", GUILayout.Width(twoButtonWidth)))
+        {
+            AddPropToTargets(holder2.propGrass1);
+        }
+        if (GUILayout.Button("Grass 2", GUILayout.Width(twoButtonWidth)))
+        {
+            AddPropToTargets(holder2.propGrass2);
+        }
+        GUILayout.EndHorizontal();
+        
+        // Apple Trees
+        GUILayout.Label("Apple Trees", EditorStyles.boldLabel);
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("Apple Short", GUILayout.Width(twoButtonWidth)))
+        {
+            AddPropToTargets(holder2.propAppleTreeShort);
+        }
+        if (GUILayout.Button("Apple Tall", GUILayout.Width(twoButtonWidth)))
+        {
+            AddPropToTargets(holder2.propAppleTreeTall);
+        }
+        GUILayout.EndHorizontal();
+        
+        // Regular Trees
+        GUILayout.Label("Trees", EditorStyles.boldLabel);
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("Tree Short", GUILayout.Width(twoButtonWidth)))
+        {
+            AddPropToTargets(holder2.propTreeShort);
+        }
+        if (GUILayout.Button("Tree Tall", GUILayout.Width(twoButtonWidth)))
+        {
+            AddPropToTargets(holder2.propTreeTall);
+        }
+        GUILayout.EndHorizontal();
+        
+        // Pine Trees
+        GUILayout.Label("Pine Trees", EditorStyles.boldLabel);
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("Pine Short", GUILayout.Width(twoButtonWidth)))
+        {
+            AddPropToTargets(holder2.propPineShort);
+        }
+        if (GUILayout.Button("Pine Short 2", GUILayout.Width(twoButtonWidth)))
+        {
+            AddPropToTargets(holder2.propPineShort2);
+        }
+        GUILayout.EndHorizontal();
+        
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("Pine Tall", GUILayout.Width(twoButtonWidth)))
+        {
+            AddPropToTargets(holder2.propPineTall);
+        }
+        if (GUILayout.Button("Pine Tall 2", GUILayout.Width(twoButtonWidth)))
+        {
+            AddPropToTargets(holder2.propPineTall2);
+        }
+        GUILayout.EndHorizontal();
+        
+        // Remove All Props Button
+        GUILayout.Space(5);
+        Color originalColor = GUI.backgroundColor;
+        GUI.backgroundColor = Color.red;
+        if (GUILayout.Button("Remove All Props", GUILayout.Width(oneButtonWidth)))
+        {
+            foreach (var targetTile in targets)
+            {
+                ((TileSlot)targetTile).RemoveAllProps();
+            }
+        }
+        GUI.backgroundColor = originalColor;
+    }
+    
+    private void AddPropToTargets(GameObject propPrefab)
+    {
+        if (propPrefab == null) return;
+        
+        foreach (var targetTile in targets)
+        {
+            ((TileSlot)targetTile).AddProp(propPrefab);
+        }
     }
 }
