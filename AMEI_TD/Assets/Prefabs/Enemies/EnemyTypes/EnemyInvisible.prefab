@@ -82,8 +82,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 0
   enemySpeed: 1
-  damage: 5
-  reward: 5
+  damage: 15
+  reward: 10
   enemyMaxHp: 15
   isInvisible: 1
   isReinforced: 0
