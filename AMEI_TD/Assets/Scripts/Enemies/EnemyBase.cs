@@ -211,4 +211,5 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public Transform GetBottomPoint() => bottomPoint;
     public bool IsInvisible() => isInvisible;
     public bool IsReinforced() => isReinforced;
+    public int GetDamage() => damage;
 }

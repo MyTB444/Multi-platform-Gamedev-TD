@@ -16,7 +16,7 @@ public class PlayerCastle : MonoBehaviour
                 enemy.RemoveEnemy();
 
                 // Penalty for enemy reaching the castle
-                GameManager.instance.UpdateSkillPoints(-30);
+                GameManager.instance.UpdateSkillPoints(-enemy.GetDamage());
             }
         }
     }
