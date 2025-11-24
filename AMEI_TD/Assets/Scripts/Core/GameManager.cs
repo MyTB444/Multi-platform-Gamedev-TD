@@ -6,8 +6,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int points;
     public static GameManager instance;
     public WaveManager waveManager;
-    [SerializeField] private TextMeshProUGUI pointsUI;
-
+   
     private bool gameLost;
     public bool IsGameLost() => gameLost;
 
@@ -18,33 +17,15 @@ public class GameManager : MonoBehaviour
 
     void Start()
     {
-        UpdatePointsUI();
+        UIBase.instance.UpdatePointsUI(points);
         waveManager.ActivateWaveManager();
-    }
-
-    private void UpdatePointsUI()
-    {
-        points = Mathf.Clamp(points, 0, int.MaxValue);
-        pointsUI.text = "Points: " + points.ToString();
-        if (points > 50)
-        {
-            pointsUI.color = Color.green;
-        }
-        if (points <= 50)
-        {
-            pointsUI.color = Color.red;
-            if (points <= 0)
-            {
-                Debug.Log("YouDied");
-            }
-        }
     }
 
     // Use negative values to deduct points, positive values to add points
     public void UpdateSkillPoints(int newPoints)
     {
         points += newPoints;
-        UpdatePointsUI();
+        UIBase.instance.UpdatePointsUI(points);
         if (points <= 0 && gameLost == false) LevelFailed();
     }
 
