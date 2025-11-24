@@ -25,7 +25,7 @@ public class TowerButton : MonoBehaviour, IPointerDownHandler
     
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (GameManager.instance.GetPoints() >= buyPrice)
+        if (GameManager.instance.GetPoints() > buyPrice)
         {
             BuildTower(towerPrefab, buildPosition);
         }
