@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using UnityEngine.EventSystems;
 
-public class NodeButton : MonoBehaviour
+public class NodeButton : MonoBehaviour, IPointerEnterHandler
 {
     [Header("Main")]
     [Tooltip("ScriptableObject")]
@@ -21,9 +22,9 @@ public class NodeButton : MonoBehaviour
     public GameObject unlockedIndicator;
 
     [Header("Colors")]
-    public Color lockedColor = new Color(0.5f, 0.5f, 0.5f);     
-    public Color availableColor = new Color(1f, 1f, 1f);         
-    public Color unlockedColor = new Color(0.3f, 1f, 0.3f);      
+    public Color lockedColor = new Color(0.5f, 0.5f, 0.5f);
+    public Color availableColor = new Color(1f, 1f, 1f);
+    public Color unlockedColor = new Color(0.3f, 1f, 0.3f);
 
     private void Start()
     {
@@ -32,8 +33,6 @@ public class NodeButton : MonoBehaviour
             button = GetComponent<Button>();
         if (backgroundImage == null)
             backgroundImage = GetComponent<Image>();
-        descriptionText = GetComponentInChildren<TextMeshProUGUI>();
-
         // Setup initial state
         SetupVisuals();
         UpdateVisuals();
@@ -61,12 +60,6 @@ public class NodeButton : MonoBehaviour
         if (backgroundImage != null && skill.icon != null)
         {
             backgroundImage.sprite = skill.icon;
-        }
-
-        // Set description
-        if (descriptionText != null)
-        {
-            descriptionText.text = skill.description;
         }
     }
 
@@ -128,6 +121,13 @@ public class NodeButton : MonoBehaviour
     {
         UpdateVisuals();
     }
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        SkillDescriptionUpdater.instance.UpdateTexts(skill);
+    }
+    // public void OnPointerExit(PointerEventData eventData)
+    //{
+    //}
 
     private void OnDestroy()
     {

@@ -10,18 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 72d0a0b181c38404684b4e6fab58ceee, type: 3}
-  m_Name: Health 2
+  m_Name: Health
   m_EditorClassIdentifier: 
   skillName: Health
-  description: 'I give even more health !!!!
+  skillCost: 5
+  description: 'I give Health!  5
 
 '
-  icon: {fileID: 21300000, guid: c46d83f2b73aaa141bd5015819342d81, type: 3}
+  icon: {fileID: 21300000, guid: 8a96b38c76be79946a150249547b07bc, type: 3}
   skillPointCost: 5
   prerequisites:
   - {fileID: 11400000, guid: 38f340fe322a64fa0aceb85c873f9eae, type: 2}
-  - {fileID: 11400000, guid: 7b0473e4d06cb4545bab387b159d6d2b, type: 2}
-  - {fileID: 11400000, guid: 297226a554aff4341ba112ab30ce54cb, type: 2}
   effectType: 0
   effectValue: 10
   skillTypeName: Health

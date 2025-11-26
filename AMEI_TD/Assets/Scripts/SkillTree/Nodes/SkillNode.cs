@@ -7,6 +7,7 @@ public class SkillNode : ScriptableObject
 {
     [Header("Basic Info")]
     public string skillName;
+    public string skillCost;
     [TextArea(2, 4)]
     public string description;
     public Sprite icon;

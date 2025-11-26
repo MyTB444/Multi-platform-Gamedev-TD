@@ -12,7 +12,7 @@ public class UIBase : MonoBehaviour
     [SerializeField] private GameObject combatIcon;
     [SerializeField] private GameObject winUI;
     [SerializeField] private GameObject lostUI;
-
+    [SerializeField] private GameObject treeUI;
     [SerializeField] private TextMeshProUGUI pointsUI;
 
     void Awake()
@@ -46,6 +46,15 @@ public class UIBase : MonoBehaviour
             isPaused = false;
             pauseUI.SetActive(false);
             Debug.Log("Unpaused");
+        }
+    }
+    public void ViewSkillTree()
+    {
+        if(treeUI.activeSelf == false)
+        treeUI.SetActive(true);
+        else
+        {
+            treeUI.SetActive(false);
         }
     }
     public void UpdatePointsUI(int points)
