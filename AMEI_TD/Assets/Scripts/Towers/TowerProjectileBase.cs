@@ -5,7 +5,6 @@ public class TowerProjectileBase : MonoBehaviour
     private Vector3 direction;
     private float damage;
     private float speed;
-    private float threshold = .01f;
     private bool isActive = true;
     private IDamageable damageable;
 
