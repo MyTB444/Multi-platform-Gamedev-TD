@@ -51,7 +51,7 @@ public class UIBase : MonoBehaviour
     public void ViewSkillTree()
     {
         if(treeUI.activeSelf == false)
-        treeUI.SetActive(true);
+            treeUI.SetActive(true);
         else
         {
             treeUI.SetActive(false);
