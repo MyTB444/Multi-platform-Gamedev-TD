@@ -1,0 +1,72 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4824498966376721810
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7568191660486919474}
+  - component: {fileID: 8751069711696550408}
+  m_Layer: 0
+  m_Name: TileSetHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7568191660486919474
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4824498966376721810}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -2.6829824, y: -0.79225016, z: -1.6278284}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8751069711696550408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4824498966376721810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8d69ce4eb9c5cab4fa18e1442f62dfa4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  tileFieldLight: {fileID: 6514632015932548083, guid: 0780a191ffff55643b96ec072db3a12c, type: 3}
+  tileFieldDark: {fileID: 8411235983231281746, guid: 27db83b4c225f9a43bc7312319ae8df5, type: 3}
+  tileRoad: {fileID: 2030247278577060525, guid: 4e278f60541424e4b91c9b55b6d0b6ae, type: 3}
+  tileInnerCorner: {fileID: 2056819536031160542, guid: 3b767cac75f999b42a2bd87e6e6d4066, type: 3}
+  tileInnerCorner2: {fileID: 2056819536031160542, guid: dc1945c6cbcdb9641a4fc533ecbc46dd, type: 3}
+  tileOuterCorner: {fileID: 1345756512619157659, guid: 0126c92d8ef25b84fa3d2ff417ca8e3f, type: 3}
+  tileOuterCorner2: {fileID: 1345756512619157659, guid: 633383f6a13123447abb74ff761d5e38, type: 3}
+  tileSidewayRoad: {fileID: 2650383165402506143, guid: ed22a4339ec0fef4c8c420d79a5e9b69, type: 3}
+  tileSidewayRoad2: {fileID: 2650383165402506143, guid: 48ab6b1d995b28d41b13654ee7be9067, type: 3}
+  tileRiver: {fileID: 7873068712004969296, guid: 18ac2c5225755f04598e61d4150ed78a, type: 3}
+  tilePond: {fileID: 7590629113289187301, guid: 1a1d014483c0ae44b8dbc4463a4ba3d5, type: 3}
+  tileRiverBridge: {fileID: 2263522547218137169, guid: 85dd849f1f8551044ba720e2ddb35c0a, type: 3}
+  tileRiverDoubleBridge: {fileID: 5086750260775969512, guid: e43cdbfe80305fb429fd3cf18ccd7aa3, type: 3}
+  propBarrel: {fileID: 1707827126499572, guid: 31d3a77f906791342bc79acdc84f5218, type: 3}
+  propCrate: {fileID: 1362255755749402, guid: 1b5d1a6deebd81e4bba2448d18378844, type: 3}
+  propLadder: {fileID: 1045710228479616, guid: 8d102e899c856934a9f58af9c7508d59, type: 3}
+  propGrass1: {fileID: 1685531937540468, guid: 6c919ec1c1e88a94c95afc28b198b9f8, type: 3}
+  propGrass2: {fileID: 1913777595529458, guid: 4c9f6adf60a275840b716082e3482212, type: 3}
+  propAppleTreeShort: {fileID: 1296487970245184, guid: f4f82206765cef54ca8f19ce34136e8a, type: 3}
+  propAppleTreeTall: {fileID: 1478007673441398, guid: 7747cd3716304194fb26aa4e29900eb1, type: 3}
+  propTreeShort: {fileID: 1398384037247820, guid: 018e38b65bc9fb048a9c4271cdad70c2, type: 3}
+  propTreeTall: {fileID: 1685073300064356, guid: eb322b3f7ad50984197dced1b53b11ee, type: 3}
+  propPineShort: {fileID: 1852941587909970, guid: 45fe3ec28eac2064d985117cf812ef9d, type: 3}
+  propPineShort2: {fileID: 1726046091689300, guid: 7ad57e94574375240b181f8584be81c2, type: 3}
+  propPineTall: {fileID: 1683262223191906, guid: e150e8680dcf9784a89843e55668ad0e, type: 3}
+  propPineTall2: {fileID: 1755297518104830, guid: bb8b831afcc06c64f9df984b2ccb8642, type: 3}
