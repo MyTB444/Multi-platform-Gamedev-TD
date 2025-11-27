@@ -8,8 +8,12 @@ public class UIBase : MonoBehaviour
     public static UIBase instance;
     [SerializeField] private GameObject pauseUI;
     [SerializeField] private TextMeshProUGUI waveCounter;
+
+    [SerializeField] private GameObject combatIcon;
     [SerializeField] private GameObject winUI;
     [SerializeField] private GameObject lostUI;
+    [SerializeField] private GameObject treeUI;
+    [SerializeField] private TextMeshProUGUI pointsUI;
 
     void Awake()
     {
@@ -20,6 +24,11 @@ public class UIBase : MonoBehaviour
     public void StartButton()
     {
         SceneManager.LoadScene("Prototype");
+    }
+    public void Quit()
+    {
+        SceneManager.LoadScene("MainMenu");
+
     }
 
     public void Pause()
@@ -39,12 +48,44 @@ public class UIBase : MonoBehaviour
             Debug.Log("Unpaused");
         }
     }
+    public void ViewSkillTree()
+    {
+        if(treeUI.activeSelf == false)
+        treeUI.SetActive(true);
+        else
+        {
+            treeUI.SetActive(false);
+        }
+    }
+    public void UpdatePointsUI(int points)
+    {
+        points = Mathf.Clamp(points, 0, int.MaxValue);
+        pointsUI.text = points.ToString();
+        if (points < 50)
+        {
+            pointsUI.color = Color.red;
+            if (points <= 0)
+            {
+                Debug.Log("YouDied");
+            }
+        }
+    }
 
     public void UpdateWaveTimerUI(float value)
     {
-        waveCounter.text = value.ToString("0");
+        if (value > 0)
+        {
+            waveCounter.enabled = true;
+            waveCounter.text = value.ToString("0");
+            combatIcon.SetActive(false);
+        }
+        else
+        {
+            waveCounter.enabled = false;
+            combatIcon.SetActive(true);
+        }
     }
-    
+
     // Shows win or lose UI based on game outcome
     public void GameWon(bool a)
     {
