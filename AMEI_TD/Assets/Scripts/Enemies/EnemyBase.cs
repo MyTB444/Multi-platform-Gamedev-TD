@@ -1,4 +1,8 @@
+
+using System.Collections.Generic;
+using UnityEditor.Animations;
 using UnityEngine;
+using UnityEngine.AI;
 
 public enum EnemyType
 {
@@ -6,6 +10,7 @@ public enum EnemyType
     Fast,
     Tank,
 }
+
 
 public class EnemyBase : MonoBehaviour, IDamageable
 {
@@ -18,45 +23,59 @@ public class EnemyBase : MonoBehaviour, IDamageable
     [SerializeField] private int damage;
     [SerializeField] private int reward;
 
+    private NavMeshAgent NavAgent;
+    private Animator EnemyAnimator;
+
+
     private float enemyCurrentHp;
     public float enemyMaxHp = 100;
     protected bool isDead;
 
     protected Vector3[] myWaypoints;
-    private int currentWaypointIndex = 0;
-    private float waypointReachDistance = 0.1f;
+    protected int currentWaypointIndex = 0;
+    private float waypointReachDistance = 0.3f;
 
     private int originalLayerIndex;
    
     private float totalDistance;
 
+    private Vector3 Destination;
+
+
+
     private void Awake()
     {
         originalLayerIndex = gameObject.layer;
+     
     }
 
     protected virtual void Start()
     {
-        Renderer renderer = GetComponent<Renderer>();
-        switch (enemyType)
-        {
-            case EnemyType.Basic:
-                renderer.material.color = Color.green;
-                break;
-            case EnemyType.Fast:
-                renderer.material.color = Color.magenta;
-                break;
-            case EnemyType.Tank:
-                renderer.material.color = Color.red;
-                break;
-            default:
-                break;
-        }
+        //Renderer renderer = GetComponent<Renderer>();
+        NavAgent = GetComponent<NavMeshAgent>();
+        EnemyAnimator = GetComponent<Animator>();
+     
+
+        //switch (enemyType)
+        //{
+        //    case EnemyType.Basic:
+        //        renderer.material.color = Color.green;
+        //        break;
+        //    case EnemyType.Fast:
+        //        renderer.material.color = Color.magenta;
+        //        break;
+        //    case EnemyType.Tank:
+        //        renderer.material.color = Color.red;
+        //        break;
+        //    default:
+        //        break;
+        //}
     }
 
     protected virtual void Update()
     {
-        FollowPath();
+       FollowPath();
+       PlayAnimations();
     }
 
     public void SetupEnemy(EnemySpawner myNewSpawner)
@@ -136,16 +155,27 @@ public class EnemyBase : MonoBehaviour, IDamageable
             Quaternion targetRotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
         }
-
-        transform.position += direction * (enemySpeed * Time.deltaTime);
-
+        Destination = direction * (enemySpeed * Time.deltaTime);
+        transform.position += Destination;
+       
         float distanceToWaypoint = Vector3.Distance(bottomPoint.position, targetWaypoint);
         if (distanceToWaypoint <= waypointReachDistance)
         {
+          
             currentWaypointIndex++;
         }
+        print($"<color=red>{currentWaypointIndex}</color>");
+        NavAgent.SetDestination(Destination);
+          
+    
     }
+    private void PlayAnimations()
+    {
+        EnemyAnimator.SetBool("Walk", true);
+    }
+   
 
+   
     private void ReachedEnd()
     {
         Destroy(gameObject);
@@ -166,7 +196,9 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public EnemyType GetEnemyType() => enemyType;
     public float GetEnemyHp() => enemyCurrentHp;
     public Transform GetBottomPoint() => bottomPoint;
-    
+
+   
+
     private void ResetEnemy()
     {
         gameObject.layer = originalLayerIndex;
