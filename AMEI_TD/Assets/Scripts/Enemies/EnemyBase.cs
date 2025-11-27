@@ -182,7 +182,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         Destroy(gameObject);
     }
 
-    public virtual void TakeDamage(float damage, bool isAntiInvisible = false, bool isAntiReinforced = false)
+    public virtual void TakeDamage(float incomingDamage, bool isAntiInvisible = false, bool isAntiReinforced = false)
     {
         if (isInvisible && !isAntiInvisible)
         {
@@ -194,26 +194,13 @@ public class EnemyBase : MonoBehaviour, IDamageable
             return; 
         }
 
-        enemyCurrentHp -= damage;
+        enemyCurrentHp -= incomingDamage;
 
         if (enemyCurrentHp <= 0 && !isDead)
         {
             isDead = true;
             Die();
         }
-    }
-
-    public void TakeDamage(float damage)
-    public Vector3 GetCenterPoint() => centerPoint.position;
-    public EnemyType GetEnemyType() => enemyType;
-    public float GetEnemyHp() => enemyCurrentHp;
-    public Transform GetBottomPoint() => bottomPoint;
-
-   
-
-    private void ResetEnemy()
-    {
-        TakeDamage(damage, false, false);
     }
 
     private void Die()

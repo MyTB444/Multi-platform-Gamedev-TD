@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028504, g: 0.22571605, b: 0.30692485, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -15325,7 +15325,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   points: 0
   waveManager: {fileID: 21444031}
-  pointsUI: {fileID: 1605818985}
 --- !u!114 &696942724
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -15340,8 +15339,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pauseUI: {fileID: 1605818983}
   waveCounter: {fileID: 1674904025}
+  combatIcon: {fileID: 733698888}
   winUI: {fileID: 116591535}
   lostUI: {fileID: 1294528734}
+  treeUI: {fileID: 541592273}
+  pointsUI: {fileID: 1674904025}
 --- !u!1 &701136855
 GameObject:
   m_ObjectHideFlags: 0
