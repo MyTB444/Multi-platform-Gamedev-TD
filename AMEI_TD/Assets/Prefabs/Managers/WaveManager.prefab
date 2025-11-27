@@ -50,7 +50,11 @@ MonoBehaviour:
   - enemyBasic: 0
     enemyFast: 0
     enemyTank: 0
+    enemyInvisible: 0
+    enemyReinforced: 0
   enemyBasic: {fileID: 8182503386236004321, guid: 4de1d163947932a46badab129c06b7a0, type: 3}
   enemyFast: {fileID: 6814476941593224590, guid: bcaf9c5478caa7d4cb2e684fb3e09c85, type: 3}
   enemyTank: {fileID: 3334151365564345151, guid: 9f14d168c979c9a40af9189108928863, type: 3}
+  enemyInvisible: {fileID: 8182503386236004321, guid: d31659f9b307eb84ca01f93669d0c9a3, type: 3}
+  enemyReinforced: {fileID: 8182503386236004321, guid: 70cc92af8b0ad324ca77cc61510d1ef5, type: 3}
   gameBegan: 0

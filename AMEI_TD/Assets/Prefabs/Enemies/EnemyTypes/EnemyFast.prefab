@@ -114,11 +114,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 1
   enemySpeed: 2
-  centerPoint: {fileID: 6884134845494354579}
-  bottomPoint: {fileID: 331970158621564899}
   damage: 10
   reward: 10
   enemyMaxHp: 10
+  isInvisible: 0
+  isReinforced: 0
+  enemyColor: {r: 1, g: 0, b: 0.88550186, a: 1}
+  centerPoint: {fileID: 6884134845494354579}
+  bottomPoint: {fileID: 331970158621564899}
 --- !u!33 &1133182221447099925
 MeshFilter:
   m_ObjectHideFlags: 0

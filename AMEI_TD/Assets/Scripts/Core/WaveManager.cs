@@ -8,6 +8,8 @@ public class WaveDetails
     public int enemyBasic;
     public int enemyFast;
     public int enemyTank;
+    public int enemyInvisible;
+    public int enemyReinforced;
 }
 public class WaveManager : MonoBehaviour
 {
@@ -20,6 +22,9 @@ public class WaveManager : MonoBehaviour
     [SerializeField] private GameObject enemyBasic;
     [SerializeField] private GameObject enemyFast;
     [SerializeField] private GameObject enemyTank;
+    [SerializeField] private GameObject enemyInvisible;
+    [SerializeField] private GameObject enemyReinforced;
+    
 
     private List<EnemySpawner> enemySpawners;
     private int waveIndex;
@@ -151,6 +156,16 @@ public class WaveManager : MonoBehaviour
         for (int i = 0; i < levelWaves[waveIndex].enemyTank; i++)
         {
             newEnemyList.Add(enemyTank);
+        }
+        
+        for (int i = 0; i < levelWaves[waveIndex].enemyInvisible; i++)
+        {
+            newEnemyList.Add(enemyInvisible);
+        }
+        
+        for (int i = 0; i < levelWaves[waveIndex].enemyReinforced; i++)
+        {
+            newEnemyList.Add(enemyReinforced);
         }
 
         return newEnemyList;
