@@ -128,7 +128,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
         if (myWaypoints == null || currentWaypointIndex >= myWaypoints.Length)
         {
-            ReachedEnd();
+            //ReachedEnd();
             return;
         }
 
@@ -158,6 +158,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
     }
     private void PlayAnimations()
     {
+        if (EnemyAnimator == null) return;
+        
         EnemyAnimator.SetBool("Walk", true);
     }
    

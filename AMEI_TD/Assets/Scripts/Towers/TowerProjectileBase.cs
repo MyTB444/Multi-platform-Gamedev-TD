@@ -3,10 +3,10 @@ using UnityEngine;
 public class TowerProjectileBase : MonoBehaviour
 {
     private Vector3 direction;
-    private float damage;
-    private float speed;
-    private bool isActive = true;
-    private IDamageable damageable;
+    protected float damage;
+    protected float speed;
+    protected bool isActive = true;
+    protected IDamageable damageable;
 
     [SerializeField] protected float maxLifeTime = 10f;
     protected float spawnTime;
