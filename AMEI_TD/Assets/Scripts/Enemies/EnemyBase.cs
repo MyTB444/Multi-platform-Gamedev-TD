@@ -40,7 +40,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private Animator EnemyAnimator;
 
 
-    private float enemyCurrentHp;
+    [SerializeField] protected float enemyCurrentHp;
     protected bool isDead;
 
     protected Vector3[] myWaypoints;

@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class TowerProjectileBase : MonoBehaviour
 {
-    private Vector3 direction;
+    protected Vector3 direction;
     protected float damage;
     protected float speed;
     protected bool isActive = true;
