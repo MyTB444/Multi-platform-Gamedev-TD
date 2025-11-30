@@ -8,12 +8,13 @@ public class TowerArcher : TowerBase
     
     [Header("Animation Timing")]
     [SerializeField] private float baseAnimationLength = 1f;
-    [SerializeField] private float arrowFlightTime = 0.5f;
+    [SerializeField] private float arrowRespawnDelay = 0.9f;
+    
+    private bool isAttacking = false;
     
     protected override void Awake()
     {
         base.Awake();
-        UpdateAnimationSpeed();
     }
     
     private void UpdateAnimationSpeed()
@@ -24,9 +25,15 @@ public class TowerArcher : TowerBase
         characterAnimator.SetFloat("AttackSpeed", animSpeed);
     }
     
+    protected override bool CanAttack()
+    {
+        return base.CanAttack() && !isAttacking;
+    }
+    
     protected override void Attack()
     {
         lastTimeAttacked = Time.time;
+        isAttacking = true;
         
         if (characterAnimator != null)
         {
@@ -63,6 +70,9 @@ public class TowerArcher : TowerBase
         }
         
         characterAnimator.SetBool("Attack", false);
+        isAttacking = false;
+        
+        Invoke("OnArrowReady", arrowRespawnDelay);
     }
     
     public void OnArrowReady()
@@ -77,24 +87,21 @@ public class TowerArcher : TowerBase
     {
         if (currentEnemy == null) return;
         
-        // Use arrow visual's position and rotation
         Vector3 spawnPos = arrowVisual.transform.position;
         Quaternion spawnRot = arrowVisual.transform.rotation;
+        
+        Vector3 targetPos = currentEnemy.GetCenterPoint();
+        float distance = Vector3.Distance(spawnPos, targetPos);
         
         GameObject newArrow = Instantiate(projectilePrefab, spawnPos, spawnRot);
         
         ArrowProjectile arrow = newArrow.GetComponent<ArrowProjectile>();
         
-        Vector3 targetPos = currentEnemy.GetCenterPoint();
+        IDamageable damageable = currentEnemy.GetComponent<IDamageable>();
         
-        if (Physics.Raycast(spawnPos, (targetPos - spawnPos).normalized, out RaycastHit hitInfo, Mathf.Infinity, whatIsTargetable))
+        if (damageable != null)
         {
-            IDamageable damageable = hitInfo.transform.GetComponent<IDamageable>();
-            
-            if (damageable != null)
-            {
-                arrow.SetupArcProjectile(hitInfo.point, damageable, damage, arrowFlightTime);
-            }
+            arrow.SetupArcProjectile(targetPos, damageable, damage, projectileSpeed, distance);
         }
     }
 }

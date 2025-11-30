@@ -4,7 +4,6 @@ public class ArrowProjectile : TowerProjectileBase
 {
     [Header("Arrow Settings")]
     [SerializeField] private TrailRenderer trail;
-    [SerializeField] private float arrowSpeed = 18f;
     [SerializeField] private float curveDelay = 0.05f;
     [SerializeField] private float curveStrength = 8f;
     [SerializeField] private float gravityMultiplier = 3f;
@@ -16,20 +15,24 @@ public class ArrowProjectile : TowerProjectileBase
     private float launchTime;
     private Vector3 targetPosition;
     private Vector3 initialForward;
+    private float arrowSpeed;
     
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
     }
     
-    public void SetupArcProjectile(Vector3 targetPos, IDamageable newDamageable, float newDamage, float flightTime)
+    public void SetupArcProjectile(Vector3 targetPos, IDamageable newDamageable, float newDamage, float newSpeed, float distance)
     {
         damage = newDamage;
         damageable = newDamageable;
         spawnTime = Time.time;
         launchTime = Time.time;
-        targetPosition = targetPos; // Fixed target position, no homing
+        targetPosition = targetPos;
         initialForward = transform.forward;
+        
+        arrowSpeed = newSpeed + (distance * 0.5f);
+        maxCurveDuration = 0.3f + (distance * 0.05f);
         
         rb.useGravity = false;
         rb.velocity = initialForward * arrowSpeed;
@@ -49,10 +52,8 @@ public class ArrowProjectile : TowerProjectileBase
         
         float timeSinceLaunch = Time.time - launchTime;
         
-        // After delay, start curving toward target position (not enemy)
         if (timeSinceLaunch > curveDelay && curving)
         {
-            // Stop curving after max duration - just fly straight with gravity
             if (timeSinceLaunch > curveDelay + maxCurveDuration)
             {
                 curving = false;
@@ -65,13 +66,11 @@ public class ArrowProjectile : TowerProjectileBase
             }
         }
         
-        // Always apply gravity after delay
         if (timeSinceLaunch > curveDelay)
         {
             rb.velocity += Physics.gravity * gravityMultiplier * Time.deltaTime;
         }
         
-        // Face direction of travel
         if (rb.velocity.sqrMagnitude > 0.1f)
         {
             transform.rotation = Quaternion.LookRotation(rb.velocity);
@@ -84,14 +83,10 @@ public class ArrowProjectile : TowerProjectileBase
     
     protected override void OnHit(Collider other)
     {
-        EnemyBase enemy = other.GetComponent<EnemyBase>();
-        if (enemy != null)
+        IDamageable damageable = other.GetComponentInParent<IDamageable>();
+        if (damageable != null)
         {
-            IDamageable damageable = other.GetComponent<IDamageable>();
-            if (damageable != null)
-            {
-                damageable.TakeDamage(damage);
-            }
+            damageable.TakeDamage(damage);
         }
     }
     

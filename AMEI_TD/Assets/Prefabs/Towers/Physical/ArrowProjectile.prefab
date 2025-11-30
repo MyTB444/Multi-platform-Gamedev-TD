@@ -133,10 +133,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxLifeTime: 10
   trail: {fileID: 2312962183981141932}
-  speed: 15
   curveDelay: 0.05
   curveStrength: 5
   gravityMultiplier: 2
+  maxCurveDuration: 0.5
+  speedPerDistance: 0.5
 --- !u!135 &5166148121310787836
 SphereCollider:
   m_ObjectHideFlags: 0

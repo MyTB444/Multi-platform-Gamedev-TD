@@ -405,6 +405,7 @@ Transform:
   - {fileID: 2571567397262318440}
   - {fileID: 4789489287150457867}
   - {fileID: 6183135281300335711}
+  - {fileID: 2173450037959283682}
   m_Father: {fileID: 3661002459645546153}
   m_LocalEulerAnglesHint: {x: 283.598, y: -61.51, z: 54.046}
 --- !u!120 &8172724727884042290
@@ -638,6 +639,37 @@ Transform:
   m_Children:
   - {fileID: 7641099674982473745}
   m_Father: {fileID: 2085827621249258600}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1670796047340649908
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2173450037959283682}
+  m_Layer: 0
+  m_Name: ArrowAimTarget
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2173450037959283682
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1670796047340649908}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0, y: -0.1647, z: 0.0226}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6854442980340447792}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1705917480164542254
 GameObject:
@@ -1437,8 +1469,7 @@ Transform:
   m_LocalPosition: {x: 2.0036814e-17, y: -0.32722598, z: -2.0036814e-17}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 5405185224503729277}
+  m_Children: []
   m_Father: {fileID: 5625795289690494259}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4496204692032354388
@@ -1633,6 +1664,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5405185224503729277}
+  - component: {fileID: 1626552254083552376}
   m_Layer: 0
   m_Name: ArrowProjectile
   m_TagString: Untagged
@@ -1648,14 +1680,29 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5100918648913803848}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.010019598, y: -0.6888772, z: 0.025692994, w: 0.7243533}
-  m_LocalPosition: {x: 0.000011742117, y: 0.00000068545523, z: -0.000010414107}
-  m_LocalScale: {x: 1, y: 1, z: 1.5}
+  m_LocalRotation: {x: 0.010019597, y: -0.68887734, z: 0.02569302, w: 0.7243532}
+  m_LocalPosition: {x: 0.3272373, y: 0, z: -0.000010452274}
+  m_LocalScale: {x: 1, y: 1, z: 1.5000006}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 551402074936070713}
-  m_Father: {fileID: 7586769817152082438}
+  m_Father: {fileID: 2571567397262318440}
   m_LocalEulerAnglesHint: {x: 2.861, y: -87.09, z: 1.343}
+--- !u!114 &1626552254083552376
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5100918648913803848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67292ae7c8bb92443b699c02bcb020b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nockPoint: {fileID: 7586769817152082438}
+  aimTarget: {fileID: 2173450037959283682}
+  rotationOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &5340133843383945026
 GameObject:
   m_ObjectHideFlags: 0
@@ -1828,20 +1875,20 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   projectilePrefab: {fileID: 7217477184985419567, guid: 341f0c89bfbfe144ea2fb453eb0643ed, type: 3}
-  projectileSpeed: 10
+  projectileSpeed: 15
   attackSpawnEffectPrefab: {fileID: 0}
   characterAnimator: {fileID: 5148307974464681058}
   attackAnimationTrigger: Attack
   projectileSpawnDelay: 0
   targetMostAdvancedEnemy: 1
-  targetPriorityEnemy: 1
+  targetPriorityEnemy: 0
   enemyPriorityType: 0
-  useHpTargeting: 1
+  useHpTargeting: 0
   targetHighestHpEnemy: 1
   bowController: {fileID: 4796576192046828227}
   arrowVisual: {fileID: 5100918648913803848}
   baseAnimationLength: 1
-  arrowFlightTime: 0.7
+  arrowRespawnDelay: 0.9
 --- !u!1 &5558538649109763442
 GameObject:
   m_ObjectHideFlags: 0
@@ -2540,6 +2587,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5625795289690494259}
+  - {fileID: 5405185224503729277}
   m_Father: {fileID: 6854442980340447792}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7888550429023138808
