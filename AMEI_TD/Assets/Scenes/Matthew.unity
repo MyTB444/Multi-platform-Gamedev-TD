@@ -14273,37 +14273,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 587795645}
   m_Mesh: {fileID: 4300000, guid: caca2dfcd7da619408439605ff0667a4, type: 3}
---- !u!1 &589368599
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 589368600}
-  m_Layer: 0
-  m_Name: ArrowAimTarget
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &589368600
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 589368599}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0, y: -0.1647, z: 0.0226}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 1541806953}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &590409322
 GameObject:
   m_ObjectHideFlags: 0
@@ -16022,26 +15991,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 670233940}
   m_Mesh: {fileID: 4300000, guid: caca2dfcd7da619408439605ff0667a4, type: 3}
---- !u!1 &684397420 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5100918648913803848, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
-  m_PrefabInstance: {fileID: 1602948986}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &684397422
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 684397420}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 67292ae7c8bb92443b699c02bcb020b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  nockPoint: {fileID: 844991798}
-  aimTarget: {fileID: 589368600}
-  rotationOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &693526134
 GameObject:
   m_ObjectHideFlags: 0
@@ -19227,11 +19176,6 @@ Transform:
   - {fileID: 1391519764}
   m_Father: {fileID: 1524239316}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!4 &844991798 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7586769817152082438, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
-  m_PrefabInstance: {fileID: 1602948986}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &846116365
 GameObject:
   m_ObjectHideFlags: 0
@@ -33246,7 +33190,7 @@ PrefabInstance:
       objectReference: {fileID: 8663543207204576051, guid: e3c65aa6917ec5744b5fbb6f58025d78, type: 3}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: levelWaves.Array.data[0].enemyFast
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: levelWaves.Array.data[0].enemyTank
@@ -33254,7 +33198,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: levelWaves.Array.data[0].enemyBasic
-      value: 5
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -37891,11 +37835,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1538290649}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
---- !u!4 &1541806953 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6854442980340447792, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
-  m_PrefabInstance: {fileID: 1602948986}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1542725058
 GameObject:
   m_ObjectHideFlags: 0
@@ -39348,28 +39287,28 @@ PrefabInstance:
       value: TowerArcher
       objectReference: {fileID: 0}
     - target: {fileID: 7605547376037196238, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
-      propertyPath: useHpTargeting
-      value: 0
+      propertyPath: leadFactor
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7605547376037196238, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
-      propertyPath: projectileSpeed
+      propertyPath: baseFlightTime
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7605547376037196238, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
+      propertyPath: speedMultiplier
+      value: 0.05
+      objectReference: {fileID: 0}
+    - target: {fileID: 7605547376037196238, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
+      propertyPath: flightTimeFactor
+      value: 1.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7605547376037196238, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
+      propertyPath: closeRangeDistance
       value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 7605547376037196238, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
-      propertyPath: targetPriorityEnemy
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7605547376037196238, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
-      propertyPath: flightTimeMultiplier
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7605547376037196238, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
-      propertyPath: predictionMultiplier
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7605547376037196238, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
-      propertyPath: targetHighestHpEnemy
-      value: 1
+      propertyPath: predictedFlightTime
+      value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 8294430211428561170, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
       propertyPath: m_LocalPosition.x
@@ -39413,14 +39352,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 6854442980340447792, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 589368600}
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5100918648913803848, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 684397422}
+    m_AddedGameObjects: []
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
 --- !u!1 &1606018196
 GameObject:

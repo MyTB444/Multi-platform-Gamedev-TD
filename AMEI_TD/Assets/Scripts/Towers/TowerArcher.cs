@@ -10,11 +10,76 @@ public class TowerArcher : TowerBase
     [SerializeField] private float baseAnimationLength = 1f;
     [SerializeField] private float arrowRespawnDelay = 0.9f;
     
+    [Header("Prediction")]
+    [SerializeField] private float baseFlightTime = 0.3f;
+    [SerializeField] private float speedMultiplier = 0.15f;
+    
     private bool isAttacking = false;
+    private Vector3 enemyVelocity;
+    private Vector3 predictedPosition;
+    private Vector3 lastEnemyPosition;
     
     protected override void Awake()
     {
         base.Awake();
+    }
+    
+    protected override void FixedUpdate()
+    {
+        UpdateEnemyVelocity();
+        UpdatePredictedPosition();
+        base.FixedUpdate();
+    }
+    
+    private void UpdateEnemyVelocity()
+    {
+        if (currentEnemy == null)
+        {
+            enemyVelocity = Vector3.zero;
+            lastEnemyPosition = Vector3.zero;
+            return;
+        }
+        
+        Vector3 currentPos = currentEnemy.transform.position;
+        
+        if (lastEnemyPosition != Vector3.zero)
+        {
+            enemyVelocity = (currentPos - lastEnemyPosition) / Time.fixedDeltaTime;
+        }
+        
+        lastEnemyPosition = currentPos;
+    }
+    
+    private void UpdatePredictedPosition()
+    {
+        if (currentEnemy == null)
+        {
+            predictedPosition = Vector3.zero;
+            return;
+        }
+        
+        Vector3 currentTargetPos = currentEnemy.transform.position;
+        float enemySpeed = enemyVelocity.magnitude;
+        
+        float predictionTime = baseFlightTime + (enemySpeed * speedMultiplier);
+        
+        predictedPosition = currentTargetPos + (enemyVelocity * predictionTime);
+    }
+    
+    protected override void HandleRotation()
+    {
+        if (currentEnemy == null || towerBody == null) return;
+        
+        Vector3 targetPos = predictedPosition != Vector3.zero ? predictedPosition : currentEnemy.transform.position;
+        
+        Vector3 direction = targetPos - towerBody.position;
+        direction.y = 0;
+        
+        if (direction.sqrMagnitude > 0.001f)
+        {
+            Quaternion lookRotation = Quaternion.LookRotation(direction);
+            towerBody.rotation = Quaternion.Slerp(towerBody.rotation, lookRotation, rotationSpeed * Time.deltaTime);
+        }
     }
     
     private void UpdateAnimationSpeed()
@@ -90,8 +155,7 @@ public class TowerArcher : TowerBase
         Vector3 spawnPos = arrowVisual.transform.position;
         Quaternion spawnRot = arrowVisual.transform.rotation;
         
-        Vector3 targetPos = currentEnemy.GetCenterPoint();
-        float distance = Vector3.Distance(spawnPos, targetPos);
+        float distance = Vector3.Distance(spawnPos, predictedPosition);
         
         GameObject newArrow = Instantiate(projectilePrefab, spawnPos, spawnRot);
         
@@ -101,7 +165,7 @@ public class TowerArcher : TowerBase
         
         if (damageable != null)
         {
-            arrow.SetupArcProjectile(targetPos, damageable, damage, projectileSpeed, distance);
+            arrow.SetupArcProjectile(predictedPosition, damageable, damage, projectileSpeed, distance);
         }
     }
 }

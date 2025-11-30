@@ -1889,6 +1889,8 @@ MonoBehaviour:
   arrowVisual: {fileID: 5100918648913803848}
   baseAnimationLength: 1
   arrowRespawnDelay: 0.9
+  baseFlightTime: 0.2
+  speedMultiplier: 0.05
 --- !u!1 &5558538649109763442
 GameObject:
   m_ObjectHideFlags: 0
