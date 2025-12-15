@@ -6,11 +6,15 @@ public class TowerProjectileBase : MonoBehaviour
     protected float damage;
     protected float speed;
     protected bool isActive = true;
+    protected bool hasHit = false;
     protected IDamageable damageable;
 
     [SerializeField] protected float maxLifeTime = 10f;
     protected float spawnTime;
 
+    [Header("VFX")]
+    [SerializeField] protected GameObject impactEffectPrefab;
+    
     public void SetupProjectile(Vector3 targetPosition, IDamageable newDamageable, float newDamage, float newSpeed)
     {
         direction = (targetPosition - transform.position).normalized;
@@ -50,11 +54,24 @@ public class TowerProjectileBase : MonoBehaviour
 
     protected virtual void OnHit(Collider other)
     {
+        if (hasHit) return; // Prevent multiple hits
+        
+        hasHit = true;
+        
+        // Spawn impact effect
+        if (impactEffectPrefab != null)
+        {
+            GameObject impact = Instantiate(impactEffectPrefab, transform.position, Quaternion.identity);
+            Destroy(impact, 2f);
+        }
+        
+        // Deal damage if hit an enemy
         if (other.GetComponent<EnemyBase>())
         {
-            if (damageable == null) return;
-
-            damageable.TakeDamage(damage);
+            if (damageable != null)
+            {
+                damageable.TakeDamage(damage);
+            }
         }
     }
 
