@@ -39292,7 +39292,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7605547376037196238, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
       propertyPath: baseFlightTime
-      value: 0.2
+      value: 0.3
       objectReference: {fileID: 0}
     - target: {fileID: 7605547376037196238, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
       propertyPath: speedMultiplier
