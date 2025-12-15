@@ -54,17 +54,18 @@ public class TowerProjectileBase : MonoBehaviour
 
     protected virtual void OnHit(Collider other)
     {
-        if (hasHit) return; // Prevent multiple hits
-        
+        if (hasHit) return;
+    
         hasHit = true;
-        
-        // Spawn impact effect
+    
+        // Spawn impact effect at the closest point on the enemy's collider
         if (impactEffectPrefab != null)
         {
-            GameObject impact = Instantiate(impactEffectPrefab, transform.position, Quaternion.identity);
+            Vector3 impactPoint = other.ClosestPoint(transform.position);
+            GameObject impact = Instantiate(impactEffectPrefab, impactPoint, Quaternion.identity);
             Destroy(impact, 2f);
         }
-        
+    
         // Deal damage if hit an enemy
         if (other.GetComponent<EnemyBase>())
         {
