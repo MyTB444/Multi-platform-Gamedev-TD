@@ -42,17 +42,4 @@ public class HomingProjectile : TowerProjectileBase
         
         isHoming = false;
     }
-    
-    protected override void DestroyProjectile()
-    {
-        // Always spawn impact effect when destroyed
-        if (!hasHit && impactEffectPrefab != null)
-        {
-            GameObject impact = Instantiate(impactEffectPrefab, transform.position, Quaternion.identity);
-            Destroy(impact, 2f);
-        }
-        
-        Destroy(gameObject);
-        isActive = false;
-    }
 }

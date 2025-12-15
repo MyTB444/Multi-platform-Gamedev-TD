@@ -77,6 +77,13 @@ public class TowerProjectileBase : MonoBehaviour
 
     protected virtual void DestroyProjectile()
     {
+        // Always spawn impact effect when destroyed
+        if (!hasHit && impactEffectPrefab != null)
+        {
+            GameObject impact = Instantiate(impactEffectPrefab, transform.position, Quaternion.identity);
+            Destroy(impact, 2f);
+        }
+        
         Destroy(gameObject);
         isActive = false;
     }
