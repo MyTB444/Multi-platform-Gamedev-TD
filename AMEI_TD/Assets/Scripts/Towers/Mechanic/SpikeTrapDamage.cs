@@ -19,6 +19,7 @@ public class SpikeTrapDamage : MonoBehaviour
     private float damage;
     private float cooldown;
     private bool isOnCooldown = false;
+    private bool spikesAreRaised = false;
     private Vector3 loweredPosition;
     private Vector3 raisedPosition;
     private Collider[] detectedEnemies = new Collider[20];
@@ -42,6 +43,13 @@ public class SpikeTrapDamage : MonoBehaviour
     private void Update()
     {
         if (isOnCooldown) return;
+        
+        // Reset spikes if they're stuck up with no enemies
+        if (spikesAreRaised && !HasEnemiesInRange())
+        {
+            StartCoroutine(ResetSpikes());
+            return;
+        }
         
         if (HasEnemiesInRange())
         {
@@ -73,38 +81,41 @@ public class SpikeTrapDamage : MonoBehaviour
     private IEnumerator TrapCycle()
     {
         isOnCooldown = true;
-    
-        // Play hammer animation on tower
+        
         if (tower != null)
         {
             tower.PlayHammerAnimation();
         }
-    
-        // Wait for hammer to hit anvil
+        
         yield return new WaitForSeconds(spikeDelay);
-    
-        // Spawn impact VFX
+        
         if (tower != null)
         {
             tower.SpawnHammerImpactVFX();
         }
-    
-        // Start raising spikes
+        
         StartCoroutine(MoveSpikes(raisedPosition, raiseSpeed));
-    
-        // Small delay then damage (spikes partially up)
+        spikesAreRaised = true;
+        
         yield return new WaitForSeconds(damageDelay);
         DamageEnemiesInRange();
-    
-        // Wait for rest of active duration
+        
         yield return new WaitForSeconds(trapActiveDuration);
-    
-        // Lower spikes
+        
         yield return StartCoroutine(MoveSpikes(loweredPosition, lowerSpeed));
-    
-        // Cooldown starts after spikes are lowered
+        spikesAreRaised = false;
+        
         yield return new WaitForSeconds(cooldown);
+        
+        isOnCooldown = false;
+    }
     
+    private IEnumerator ResetSpikes()
+    {
+        isOnCooldown = true;
+        yield return StartCoroutine(MoveSpikes(loweredPosition, lowerSpeed));
+        spikesAreRaised = false;
+        yield return new WaitForSeconds(cooldown);
         isOnCooldown = false;
     }
     
@@ -117,9 +128,7 @@ public class SpikeTrapDamage : MonoBehaviour
             transform.rotation,
             whatIsEnemy
         );
-    
-        Debug.Log($"Spike Trap Damage Triggered! Enemies in range: {enemyCount}");
-    
+        
         for (int i = 0; i < enemyCount; i++)
         {
             if (detectedEnemies[i] != null && detectedEnemies[i].gameObject.activeSelf)
@@ -127,7 +136,6 @@ public class SpikeTrapDamage : MonoBehaviour
                 IDamageable damageable = detectedEnemies[i].GetComponent<IDamageable>();
                 if (damageable != null)
                 {
-                    Debug.Log($"Dealing {damage} damage to {detectedEnemies[i].name}");
                     damageable.TakeDamage(damage);
                 }
             }
