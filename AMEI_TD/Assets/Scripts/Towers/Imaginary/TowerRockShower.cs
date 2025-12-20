@@ -1,0 +1,154 @@
+using System.Collections;
+using UnityEngine;
+
+public class TowerRockShower : TowerBase
+{
+    [Header("Rock Shower")]
+    [SerializeField] private GameObject rockPrefab;
+    [SerializeField] private float spawnHeight = 10f;
+    [SerializeField] private float spawnRadius = 1.5f;
+    
+    [Header("Shower Settings")]
+    [SerializeField] private float showerDuration = 3f;
+    [SerializeField] private float timeBetweenRocks = 0.2f;
+    [SerializeField] private float rockSizeMin = 0.5f;
+    [SerializeField] private float rockSizeMax = 1.5f;
+    [SerializeField] private float rockSpeedMin = 8f;
+    [SerializeField] private float rockSpeedMax = 15f;
+    
+    [Header("Prediction")]
+    [SerializeField] private float predictionMultiplier = 0.5f;
+    
+    private bool isShowering = false;
+    private Vector3 enemyVelocity;
+    private Vector3 lastEnemyPosition;
+    
+    protected override void FixedUpdate()
+    {
+        UpdateEnemyVelocity();
+    
+        // Only update target when not showering
+        if (!isShowering)
+        {
+            base.FixedUpdate();
+        }
+        else
+        {
+            // Still need to check if current target is valid
+            if (currentEnemy != null && !currentEnemy.gameObject.activeSelf)
+            {
+                currentEnemy = null;
+            }
+        
+            HandleRotation();
+        }
+    }
+    
+    private void UpdateEnemyVelocity()
+    {
+        if (currentEnemy == null)
+        {
+            enemyVelocity = Vector3.zero;
+            lastEnemyPosition = Vector3.zero;
+            return;
+        }
+        
+        Vector3 currentPos = currentEnemy.transform.position;
+        
+        if (lastEnemyPosition != Vector3.zero)
+        {
+            enemyVelocity = (currentPos - lastEnemyPosition) / Time.fixedDeltaTime;
+        }
+        
+        lastEnemyPosition = currentPos;
+    }
+    
+    private Vector3 GetPredictedPosition(float fallTime)
+    {
+        if (currentEnemy == null) return Vector3.zero;
+        
+        Vector3 currentPos = currentEnemy.transform.position;
+        return currentPos + (enemyVelocity * fallTime * predictionMultiplier);
+    }
+    
+    private IEnumerator RockShowerRoutine()
+    {
+        isShowering = true;
+
+        float elapsed = 0f;
+
+        while (elapsed < showerDuration)
+        {
+            if (currentEnemy != null)
+            {
+                SpawnRock();
+            }
+    
+            yield return new WaitForSeconds(timeBetweenRocks);
+            elapsed += timeBetweenRocks;
+        }
+
+        // Set cooldown AFTER shower ends
+        lastTimeAttacked = Time.time;
+        isShowering = false;
+    }
+
+    protected override void Attack()
+    {
+        if (isShowering) return;
+    
+        // Don't set lastTimeAttacked here anymore
+        StartCoroutine(RockShowerRoutine());
+    }
+    
+    private void SpawnRock()
+    {
+        float randomSpeed = Random.Range(rockSpeedMin, rockSpeedMax);
+        float fallTime = spawnHeight / randomSpeed;
+    
+        Vector3 predictedPos = GetPredictedPosition(fallTime);
+    
+        Vector2 randomOffset = Random.insideUnitCircle * spawnRadius;
+        Vector3 spawnPos = predictedPos + new Vector3(randomOffset.x, spawnHeight, randomOffset.y);
+    
+        GameObject rock = Instantiate(rockPrefab, spawnPos, Random.rotation);
+    
+        float randomSize = Random.Range(rockSizeMin, rockSizeMax);
+        rock.transform.localScale = rockPrefab.transform.localScale * randomSize;
+    
+        float scaledDamage = damage * randomSize;
+    
+        RockProjectile projectile = rock.GetComponent<RockProjectile>();
+        projectile.Setup(scaledDamage, whatIsEnemy, randomSpeed);
+    }
+    
+    protected override bool CanAttack()
+    {
+        return base.CanAttack() && !isShowering;
+    }
+    
+    protected override void HandleRotation() { }
+    
+    private void OnDrawGizmosSelected()
+    {
+        if (currentEnemy != null)
+        {
+            // Show predicted position
+            float avgSpeed = (rockSpeedMin + rockSpeedMax) / 2f;
+            float fallTime = spawnHeight / avgSpeed;
+            Vector3 predicted = GetPredictedPosition(fallTime);
+            
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(predicted, spawnRadius);
+            
+            // Show spawn height
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawLine(predicted, predicted + Vector3.up * spawnHeight);
+            Gizmos.DrawWireSphere(predicted + Vector3.up * spawnHeight, 0.5f);
+        }
+        
+        // Show attack range
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, attackRange);
+    }
+}

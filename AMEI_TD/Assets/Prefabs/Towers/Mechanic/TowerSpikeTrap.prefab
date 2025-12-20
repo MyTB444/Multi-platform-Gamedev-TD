@@ -1027,7 +1027,7 @@ MonoBehaviour:
     m_Bits: 64
   projectilePrefab: {fileID: 0}
   projectileSpeed: 0
-  attackSpawnEffectPrefab: {fileID: 0}
+  attackSpawnEffectPrefab: {fileID: 1296919836167789391, guid: 5da3d6be31090404994200ae3dfa5129, type: 3}
   characterAnimator: {fileID: 1985935153379817994}
   attackAnimationTrigger: Attack
   projectileSpawnDelay: 0
@@ -1042,6 +1042,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   downwardAngle: 35
+  hammerImpactPoint: {fileID: 885937671795851817}
 --- !u!1 &1868284095260715411
 GameObject:
   m_ObjectHideFlags: 0
@@ -1359,7 +1360,8 @@ Transform:
   m_LocalPosition: {x: 0.392, y: -0, z: 0.847}
   m_LocalScale: {x: 1, y: 0.83, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 885937671795851817}
   m_Father: {fileID: 7126889103069896265}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &9165681081463948513
@@ -1970,6 +1972,37 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 640512790899582426}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5702792495045594666
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 885937671795851817}
+  m_Layer: 0
+  m_Name: HammerImpactPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &885937671795851817
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5702792495045594666}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.3022, y: 0.455, z: 0.012}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8202613695891152785}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5791292189370924684
 GameObject:
