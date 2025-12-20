@@ -11,6 +11,8 @@ public class SpikeTrapDamage : MonoBehaviour
     
     [Header("Timing")]
     [SerializeField] private float trapActiveDuration = 1f;
+    [SerializeField] private float spikeDelay = 0.3f;
+    [SerializeField] private float damageDelay = 0.1f;
     
     private BoxCollider boxCollider;
     private LayerMask whatIsEnemy;
@@ -20,12 +22,14 @@ public class SpikeTrapDamage : MonoBehaviour
     private Vector3 loweredPosition;
     private Vector3 raisedPosition;
     private Collider[] detectedEnemies = new Collider[20];
+    private TowerSpikeTrap tower;
     
-    public void Setup(float damageAmount, LayerMask enemyLayer, float trapCooldown)
+    public void Setup(float damageAmount, LayerMask enemyLayer, float trapCooldown, TowerSpikeTrap ownerTower)
     {
         damage = damageAmount;
         whatIsEnemy = enemyLayer;
         cooldown = trapCooldown;
+        tower = ownerTower;
         boxCollider = GetComponent<BoxCollider>();
         
         if (spikesTransform != null)
@@ -69,22 +73,38 @@ public class SpikeTrapDamage : MonoBehaviour
     private IEnumerator TrapCycle()
     {
         isOnCooldown = true;
-        
-        // Raise spikes
-        yield return StartCoroutine(MoveSpikes(raisedPosition, raiseSpeed));
-        
-        // Damage enemies once
+    
+        // Play hammer animation on tower
+        if (tower != null)
+        {
+            tower.PlayHammerAnimation();
+        }
+    
+        // Wait for hammer to hit anvil
+        yield return new WaitForSeconds(spikeDelay);
+    
+        // Spawn impact VFX
+        if (tower != null)
+        {
+            tower.SpawnHammerImpactVFX();
+        }
+    
+        // Start raising spikes
+        StartCoroutine(MoveSpikes(raisedPosition, raiseSpeed));
+    
+        // Small delay then damage (spikes partially up)
+        yield return new WaitForSeconds(damageDelay);
         DamageEnemiesInRange();
-        
-        // Stay raised for duration
+    
+        // Wait for rest of active duration
         yield return new WaitForSeconds(trapActiveDuration);
-        
+    
         // Lower spikes
         yield return StartCoroutine(MoveSpikes(loweredPosition, lowerSpeed));
-        
+    
         // Cooldown starts after spikes are lowered
         yield return new WaitForSeconds(cooldown);
-        
+    
         isOnCooldown = false;
     }
     
@@ -97,7 +117,9 @@ public class SpikeTrapDamage : MonoBehaviour
             transform.rotation,
             whatIsEnemy
         );
-        
+    
+        Debug.Log($"Spike Trap Damage Triggered! Enemies in range: {enemyCount}");
+    
         for (int i = 0; i < enemyCount; i++)
         {
             if (detectedEnemies[i] != null && detectedEnemies[i].gameObject.activeSelf)
@@ -105,6 +127,7 @@ public class SpikeTrapDamage : MonoBehaviour
                 IDamageable damageable = detectedEnemies[i].GetComponent<IDamageable>();
                 if (damageable != null)
                 {
+                    Debug.Log($"Dealing {damage} damage to {detectedEnemies[i].name}");
                     damageable.TakeDamage(damage);
                 }
             }

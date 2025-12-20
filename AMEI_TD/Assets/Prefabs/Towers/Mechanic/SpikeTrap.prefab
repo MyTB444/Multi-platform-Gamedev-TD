@@ -61,6 +61,7 @@ MonoBehaviour:
   raiseSpeed: 8
   lowerSpeed: 2
   trapActiveDuration: 1
+  spikeDelay: 0.33
 --- !u!23 &4189041184091310871
 MeshRenderer:
   m_ObjectHideFlags: 0
