@@ -71,6 +71,33 @@ public class TowerRockShower : TowerBase
         return currentPos + (enemyVelocity * fallTime * predictionMultiplier);
     }
     
+    protected override void Attack()
+    {
+        if (isShowering) return;
+        
+        if (characterAnimator != null)
+        {
+            characterAnimator.SetTrigger(attackAnimationTrigger);
+        }
+        
+        if (projectileSpawnDelay > 0)
+        {
+            StartCoroutine(DelayedRockShower());
+        }
+        else
+        {
+            StartCoroutine(RockShowerRoutine());
+        }
+    }
+    
+    private IEnumerator DelayedRockShower()
+    {
+        yield return new WaitForSeconds(projectileSpawnDelay);
+        StartCoroutine(RockShowerRoutine());
+    }
+    
+    
+    
     private IEnumerator RockShowerRoutine()
     {
         isShowering = true;
@@ -88,17 +115,8 @@ public class TowerRockShower : TowerBase
             elapsed += timeBetweenRocks;
         }
 
-        // Set cooldown AFTER shower ends
         lastTimeAttacked = Time.time;
         isShowering = false;
-    }
-
-    protected override void Attack()
-    {
-        if (isShowering) return;
-    
-        // Don't set lastTimeAttacked here anymore
-        StartCoroutine(RockShowerRoutine());
     }
     
     private void SpawnRock()
@@ -134,7 +152,19 @@ public class TowerRockShower : TowerBase
         return base.CanAttack() && !isShowering;
     }
     
-    protected override void HandleRotation() { }
+    protected override void HandleRotation()
+    {
+        if (currentEnemy == null || towerBody == null) return;
+    
+        Vector3 direction = currentEnemy.transform.position - towerBody.position;
+        direction.y = 0;
+    
+        if (direction.sqrMagnitude > 0.001f)
+        {
+            Quaternion lookRotation = Quaternion.LookRotation(direction);
+            towerBody.rotation = Quaternion.Slerp(towerBody.rotation, lookRotation, rotationSpeed * Time.deltaTime);
+        }
+    }
     
     private void OnDrawGizmosSelected()
     {
