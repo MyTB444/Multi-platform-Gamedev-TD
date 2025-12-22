@@ -105,21 +105,28 @@ public class TowerRockShower : TowerBase
     {
         float randomSpeed = Random.Range(rockSpeedMin, rockSpeedMax);
         float fallTime = spawnHeight / randomSpeed;
-    
+
         Vector3 predictedPos = GetPredictedPosition(fallTime);
-    
+
         Vector2 randomOffset = Random.insideUnitCircle * spawnRadius;
         Vector3 spawnPos = predictedPos + new Vector3(randomOffset.x, spawnHeight, randomOffset.y);
-    
+
+        // Spawn VFX
+        if (attackSpawnEffectPrefab != null)
+        {
+            GameObject vfx = Instantiate(attackSpawnEffectPrefab, spawnPos, Quaternion.identity);
+            Destroy(vfx, 2f);
+        }
+
         GameObject rock = Instantiate(rockPrefab, spawnPos, Random.rotation);
-    
+
         float randomSize = Random.Range(rockSizeMin, rockSizeMax);
         rock.transform.localScale = rockPrefab.transform.localScale * randomSize;
-    
+
         float scaledDamage = damage * randomSize;
-    
+
         RockProjectile projectile = rock.GetComponent<RockProjectile>();
-        projectile.Setup(scaledDamage, whatIsEnemy, randomSpeed);
+        projectile.Setup(scaledDamage, whatIsEnemy, randomSpeed, randomSize);
     }
     
     protected override bool CanAttack()
