@@ -20,6 +20,7 @@ public class TowerRockShower : TowerBase
     [SerializeField] private float predictionMultiplier = 0.5f;
     
     private bool isShowering = false;
+    private bool isAttacking = false;
     private Vector3 enemyVelocity;
     private Vector3 lastEnemyPosition;
     
@@ -27,14 +28,12 @@ public class TowerRockShower : TowerBase
     {
         UpdateEnemyVelocity();
     
-        // Only update target when not showering
         if (!isShowering)
         {
             base.FixedUpdate();
         }
         else
         {
-            // Still need to check if current target is valid
             if (currentEnemy != null && !currentEnemy.gameObject.activeSelf)
             {
                 currentEnemy = null;
@@ -73,30 +72,22 @@ public class TowerRockShower : TowerBase
     
     protected override void Attack()
     {
-        if (isShowering) return;
+        if (isShowering || isAttacking) return;
+        
+        lastTimeAttacked = Time.time;
+        isAttacking = true;
         
         if (characterAnimator != null)
         {
             characterAnimator.SetTrigger(attackAnimationTrigger);
         }
-        
-        if (projectileSpawnDelay > 0)
-        {
-            StartCoroutine(DelayedRockShower());
-        }
-        else
-        {
-            StartCoroutine(RockShowerRoutine());
-        }
     }
     
-    private IEnumerator DelayedRockShower()
+    // Called by animation event
+    public void OnStartRockShower()
     {
-        yield return new WaitForSeconds(projectileSpawnDelay);
         StartCoroutine(RockShowerRoutine());
     }
-    
-    
     
     private IEnumerator RockShowerRoutine()
     {
@@ -115,8 +106,8 @@ public class TowerRockShower : TowerBase
             elapsed += timeBetweenRocks;
         }
 
-        lastTimeAttacked = Time.time;
         isShowering = false;
+        isAttacking = false;
     }
     
     private void SpawnRock()
@@ -129,7 +120,6 @@ public class TowerRockShower : TowerBase
         Vector2 randomOffset = Random.insideUnitCircle * spawnRadius;
         Vector3 spawnPos = predictedPos + new Vector3(randomOffset.x, spawnHeight, randomOffset.y);
 
-        // Spawn VFX
         if (attackSpawnEffectPrefab != null)
         {
             GameObject vfx = Instantiate(attackSpawnEffectPrefab, spawnPos, Quaternion.identity);
@@ -149,7 +139,7 @@ public class TowerRockShower : TowerBase
     
     protected override bool CanAttack()
     {
-        return base.CanAttack() && !isShowering;
+        return base.CanAttack() && !isShowering && !isAttacking;
     }
     
     protected override void HandleRotation()
@@ -170,7 +160,6 @@ public class TowerRockShower : TowerBase
     {
         if (currentEnemy != null)
         {
-            // Show predicted position
             float avgSpeed = (rockSpeedMin + rockSpeedMax) / 2f;
             float fallTime = spawnHeight / avgSpeed;
             Vector3 predicted = GetPredictedPosition(fallTime);
@@ -178,13 +167,11 @@ public class TowerRockShower : TowerBase
             Gizmos.color = Color.green;
             Gizmos.DrawWireSphere(predicted, spawnRadius);
             
-            // Show spawn height
             Gizmos.color = Color.yellow;
             Gizmos.DrawLine(predicted, predicted + Vector3.up * spawnHeight);
             Gizmos.DrawWireSphere(predicted + Vector3.up * spawnHeight, 0.5f);
         }
         
-        // Show attack range
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
