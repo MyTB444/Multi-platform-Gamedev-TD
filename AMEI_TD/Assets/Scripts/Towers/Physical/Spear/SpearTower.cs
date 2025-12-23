@@ -7,20 +7,23 @@ public class SpearTower : TowerBase
     
     [Header("Animation Timing")]
     [SerializeField] private float spearRespawnDelay = 1.5f;
+    [SerializeField] private float throwAnimationDelay = 0.5f;
     
-    [Header("Prediction")]
-    [SerializeField] private float baseFlightTime = 0.4f;
-    [SerializeField] private float speedMultiplier = 0.2f;
+    [Header("Spawn Offset")]
+    [SerializeField] private float forwardSpawnOffset = 0.5f;
     
     private bool isAttacking = false;
     private Vector3 enemyVelocity;
-    private Vector3 predictedPosition;
     private Vector3 lastEnemyPosition;
+    private int velocityFrameCount = 0;
+    
+    // Locked at attack time
+    private Vector3 lockedTargetPosition;
+    private IDamageable lockedDamageable;
     
     protected override void FixedUpdate()
     {
         UpdateEnemyVelocity();
-        UpdatePredictedPosition();
         base.FixedUpdate();
     }
     
@@ -30,6 +33,7 @@ public class SpearTower : TowerBase
         {
             enemyVelocity = Vector3.zero;
             lastEnemyPosition = Vector3.zero;
+            velocityFrameCount = 0;
             return;
         }
         
@@ -37,33 +41,50 @@ public class SpearTower : TowerBase
         
         if (lastEnemyPosition != Vector3.zero)
         {
-            enemyVelocity = (currentPos - lastEnemyPosition) / Time.fixedDeltaTime;
+            velocityFrameCount++;
+            
+            if (velocityFrameCount > 1)
+            {
+                enemyVelocity = (currentPos - lastEnemyPosition) / Time.fixedDeltaTime;
+                enemyVelocity.x = 0f;
+            }
         }
         
         lastEnemyPosition = currentPos;
     }
     
-    private void UpdatePredictedPosition()
+    private Vector3 PredictTargetPosition()
     {
-        if (currentEnemy == null)
+        if (currentEnemy == null) return Vector3.zero;
+        
+        Vector3 spawnPos = spearVisual.transform.position;
+        Vector3 enemyCenter = currentEnemy.GetCenterPoint();
+        
+        Vector3 predictedPos = enemyCenter;
+        
+        for (int i = 0; i < 3; i++)
         {
-            predictedPosition = Vector3.zero;
-            return;
+            float distance = Vector3.Distance(spawnPos, predictedPos);
+            float flightTime = distance / projectileSpeed;
+            float totalTime = throwAnimationDelay + flightTime;
+            
+            Vector3 movement = enemyVelocity * totalTime;
+            predictedPos = new Vector3(
+                enemyCenter.x + movement.x,
+                enemyCenter.y,
+                enemyCenter.z + movement.z
+            );
         }
         
-        Vector3 currentTargetPos = currentEnemy.transform.position;
-        float enemySpeed = enemyVelocity.magnitude;
-        
-        float predictionTime = baseFlightTime + (enemySpeed * speedMultiplier);
-        
-        predictedPosition = currentTargetPos + (enemyVelocity * predictionTime);
+        return predictedPos;
     }
     
     protected override void HandleRotation()
     {
         if (currentEnemy == null || towerBody == null) return;
         
-        Vector3 targetPos = predictedPosition != Vector3.zero ? predictedPosition : currentEnemy.transform.position;
+        Vector3 targetPos = PredictTargetPosition();
+        if (targetPos == Vector3.zero) targetPos = currentEnemy.GetCenterPoint();
         
         Vector3 direction = targetPos - towerBody.position;
         direction.y = 0;
@@ -77,7 +98,8 @@ public class SpearTower : TowerBase
     
     protected override bool CanAttack()
     {
-        return base.CanAttack() && !isAttacking;
+        bool hasValidTracking = velocityFrameCount > 1;
+        return base.CanAttack() && !isAttacking && hasValidTracking;
     }
     
     protected override void Attack()
@@ -85,13 +107,18 @@ public class SpearTower : TowerBase
         lastTimeAttacked = Time.time;
         isAttacking = true;
         
+        if (currentEnemy != null)
+        {
+            lockedTargetPosition = PredictTargetPosition();
+            lockedDamageable = currentEnemy.GetComponent<IDamageable>();
+        }
+        
         if (characterAnimator != null)
         {
             characterAnimator.SetTrigger(attackAnimationTrigger);
         }
     }
     
-    // Called by animation event at the throw release frame
     public void OnThrowSpear()
     {
         FireSpear();
@@ -100,8 +127,6 @@ public class SpearTower : TowerBase
         {
             spearVisual.SetActive(false);
         }
-        
-        isAttacking = false;
         
         Invoke("OnSpearReady", spearRespawnDelay);
     }
@@ -112,30 +137,25 @@ public class SpearTower : TowerBase
         {
             spearVisual.SetActive(true);
         }
+        
+        isAttacking = false;
     }
     
     private void FireSpear()
     {
-        if (currentEnemy == null) return;
-    
-        // Spawn at exact spearVisual position and rotation
+        if (lockedDamageable == null) return;
+        
         Vector3 spawnPos = spearVisual.transform.position;
         Quaternion spawnRot = spearVisual.transform.rotation;
-    
-        Vector3 targetPos = predictedPosition != Vector3.zero ? predictedPosition : currentEnemy.transform.position;
-    
-        // Offset slightly forward in the fire direction (spear tip is transform.up)
+        
         Vector3 fireDirection = spawnRot * Vector3.up;
-        spawnPos += fireDirection * 0.5f; // Adjust this value as needed
-    
+        spawnPos += fireDirection * forwardSpawnOffset;
+        
         GameObject newSpear = Instantiate(projectilePrefab, spawnPos, spawnRot);
-    
         SpearProjectile spear = newSpear.GetComponent<SpearProjectile>();
-        IDamageable damageable = currentEnemy.GetComponent<IDamageable>();
-    
-        if (damageable != null)
-        {
-            spear.SetupSpear(targetPos, damageable, damage, projectileSpeed);
-        }
+        
+        spear.SetupSpear(lockedTargetPosition, lockedDamageable, damage, projectileSpeed);
+        
+        lockedDamageable = null;
     }
 }

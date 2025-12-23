@@ -4,11 +4,9 @@ public class SpearProjectile : TowerProjectileBase
 {
     [Header("Spear Settings")]
     [SerializeField] private TrailRenderer trail;
-    [SerializeField] private float gravityMultiplier = 2f;
     
     private Rigidbody rb;
     private bool launched = false;
-    private Vector3 targetPosition;
     private float spearSpeed;
     
     private void Awake()
@@ -21,12 +19,11 @@ public class SpearProjectile : TowerProjectileBase
         damage = newDamage;
         damageable = newDamageable;
         spawnTime = Time.time;
-        targetPosition = targetPos;
         spearSpeed = newSpeed;
-    
-        // Fire along UP instead of FORWARD (green axis is the spear tip)
-        Vector3 fireDirection = transform.up;
-    
+        
+        Vector3 fireDirection = (targetPos - transform.position).normalized;
+        transform.rotation = Quaternion.FromToRotation(Vector3.up, fireDirection);
+        
         rb.useGravity = false;
         rb.velocity = fireDirection * spearSpeed;
         launched = true;
@@ -35,25 +32,21 @@ public class SpearProjectile : TowerProjectileBase
     protected override void Update()
     {
         if (!launched || !isActive) return;
-    
+        
         if (Time.time - spawnTime > maxLifeTime)
         {
             DestroyProjectile();
             return;
         }
-    
-        rb.velocity += Physics.gravity * gravityMultiplier * Time.deltaTime;
-    
-        // Rotate so the UP axis (spear tip) faces velocity direction
+        
         if (rb.velocity.sqrMagnitude > 0.1f)
         {
-            transform.rotation = Quaternion.FromToRotation(Vector3.up, rb.velocity.normalized) ;
+            transform.rotation = Quaternion.FromToRotation(Vector3.up, rb.velocity.normalized);
         }
     }
     
     protected override void MoveProjectile()
     {
-        // Using rigidbody instead
     }
     
     protected override void OnHit(Collider other)

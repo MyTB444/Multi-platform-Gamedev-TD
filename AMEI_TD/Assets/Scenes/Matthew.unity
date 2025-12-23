@@ -33255,7 +33255,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: levelWaves.Array.data[0].enemyBasic
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -80285,21 +80285,23 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   projectilePrefab: {fileID: 7029389940526463345, guid: 7e8143ff3f21e92419dd2a9dfaf4be5b, type: 3}
-  projectileSpeed: 10
+  projectileSpeed: 20
   attackSpawnEffectPrefab: {fileID: 0}
   characterAnimator: {fileID: 5148307973608296875}
   attackAnimationTrigger: Attack
   projectileSpawnDelay: 0.1
   targetMostAdvancedEnemy: 1
-  targetPriorityEnemy: 1
+  targetPriorityEnemy: 0
   enemyPriorityType: 0
-  useHpTargeting: 1
+  useHpTargeting: 0
   targetHighestHpEnemy: 1
   useRandomTargeting: 0
   spearVisual: {fileID: 5892372760524370638}
   spearRespawnDelay: 1.5
-  baseFlightTime: 0.4
-  speedMultiplier: 0.2
+  throwAnimationDelay: 1.1
+  forwardSpawnOffset: 0.5
+  showDebug: 1
+  debugSphereDuration: 2
 --- !u!4 &8294580662668287074
 Transform:
   m_ObjectHideFlags: 0
