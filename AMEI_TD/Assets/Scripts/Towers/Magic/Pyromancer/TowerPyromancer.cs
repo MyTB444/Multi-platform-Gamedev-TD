@@ -17,16 +17,13 @@ public class TowerPyromancer : TowerBase
         IDamageable damageable = currentEnemy.GetComponent<IDamageable>();
         if (damageable == null) return;
 
-        // Calculate direction to enemy
-        Vector3 directionToEnemy = (currentEnemy.transform.position - gunPoint.position).normalized;
-    
-        // Spawn position slightly forward
+        // Target center point
+        Vector3 targetPos = currentEnemy.GetCenterPoint();
+        
+        Vector3 directionToEnemy = (targetPos - gunPoint.position).normalized;
         Vector3 spawnPosition = gunPoint.position + directionToEnemy * 0.5f;
-    
-        // Create rotation facing the enemy
         Quaternion spawnRotation = Quaternion.LookRotation(directionToEnemy);
     
-        // Spawn with correct rotation
         GameObject newProjectile = Instantiate(projectilePrefab, spawnPosition, spawnRotation);
     
         HomingProjectile homing = newProjectile.GetComponent<HomingProjectile>();

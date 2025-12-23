@@ -76,15 +76,18 @@ public class TowerProjectileBase : MonoBehaviour
         }
     }
 
+// In TowerProjectileBase.cs
     protected virtual void DestroyProjectile()
     {
-        // Always spawn impact effect when destroyed
+        Debug.Log($"DestroyProjectile - hasHit: {hasHit}");
+    
         if (!hasHit && impactEffectPrefab != null)
         {
+            Debug.Log("DestroyProjectile - Spawning impact (missed)");
             GameObject impact = Instantiate(impactEffectPrefab, transform.position, Quaternion.identity);
             Destroy(impact, 2f);
         }
-        
+    
         Destroy(gameObject);
         isActive = false;
     }

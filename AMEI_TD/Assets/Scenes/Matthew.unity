@@ -33365,7 +33365,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: levelWaves.Array.data[0].enemyBasic
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -54734,9 +54734,9 @@ GameObject:
   - component: {fileID: 547816778257186968}
   - component: {fileID: 486403096817528410}
   - component: {fileID: 464000035270405124}
-  - component: {fileID: 8619389433284168001}
+  - component: {fileID: 547816778257186969}
   m_Layer: 0
-  m_Name: TowerPyromancer
+  m_Name: TowerFreezer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -54758,6 +54758,50 @@ Transform:
   - {fileID: 5004103968940759749}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &547816778257186969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 545678614652845140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a2446dbd515ac34dacd0915c80e74da, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 0
+  attackCooldown: 1
+  towerBody: {fileID: 547816778257186968}
+  towerHead: {fileID: 0}
+  gunPoint: {fileID: 9081728767362182533}
+  rotationSpeed: 10
+  attackRange: 15
+  whatIsEnemy:
+    serializedVersion: 2
+    m_Bits: 64
+  whatIsTargetable:
+    serializedVersion: 2
+    m_Bits: 64
+  projectilePrefab: {fileID: 1116695714023712260, guid: 4ae91dc2ec6dad042bb24e27914be73d, type: 3}
+  projectileSpeed: 8
+  attackSpawnEffectPrefab: {fileID: 3125467519713422411, guid: cb9d85bd70dafc44bb9bda92fca7a2d5, type: 3}
+  characterAnimator: {fileID: 486403096817528410}
+  attackAnimationTrigger: Attack
+  projectileSpawnDelay: 0.5
+  targetMostAdvancedEnemy: 1
+  targetPriorityEnemy: 1
+  enemyPriorityType: 0
+  useHpTargeting: 1
+  targetHighestHpEnemy: 1
+  useRandomTargeting: 0
+  visualRotationOffset: {x: 90, y: 0, z: 0}
+  slowPercent: 0.5
+  slowDuration: 3
+  effectRadius: 2
+  dotDamagePerTick: 5
+  dotDuration: 3
+  dotTickInterval: 0.5
 --- !u!1 &559478375333136366
 GameObject:
   m_ObjectHideFlags: 0
@@ -72081,67 +72125,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 3991552441087197240}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &6399554996113015672
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 3517796916297274249, guid: 2c697f064fe55754395fc558b149d596, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 12.414
-      objectReference: {fileID: 0}
-    - target: {fileID: 3517796916297274249, guid: 2c697f064fe55754395fc558b149d596, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 5.453
-      objectReference: {fileID: 0}
-    - target: {fileID: 3517796916297274249, guid: 2c697f064fe55754395fc558b149d596, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 7.17
-      objectReference: {fileID: 0}
-    - target: {fileID: 3517796916297274249, guid: 2c697f064fe55754395fc558b149d596, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.72514516
-      objectReference: {fileID: 0}
-    - target: {fileID: 3517796916297274249, guid: 2c697f064fe55754395fc558b149d596, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3517796916297274249, guid: 2c697f064fe55754395fc558b149d596, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.6885961
-      objectReference: {fileID: 0}
-    - target: {fileID: 3517796916297274249, guid: 2c697f064fe55754395fc558b149d596, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3517796916297274249, guid: 2c697f064fe55754395fc558b149d596, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3517796916297274249, guid: 2c697f064fe55754395fc558b149d596, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 87.038
-      objectReference: {fileID: 0}
-    - target: {fileID: 3517796916297274249, guid: 2c697f064fe55754395fc558b149d596, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4499273221298853635, guid: 2c697f064fe55754395fc558b149d596, type: 3}
-      propertyPath: m_Name
-      value: TowerSpear
-      objectReference: {fileID: 0}
-    - target: {fileID: 4499273221298853635, guid: 2c697f064fe55754395fc558b149d596, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 2c697f064fe55754395fc558b149d596, type: 3}
 --- !u!1 &6423190691561832422
 GameObject:
   m_ObjectHideFlags: 0
@@ -80137,43 +80120,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
---- !u!114 &8619389433284168001
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 545678614652845140}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b280a9a08a6f6d043addd96e78393154, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damage: 0
-  attackCooldown: 3
-  towerBody: {fileID: 547816778257186968}
-  towerHead: {fileID: 0}
-  gunPoint: {fileID: 9081728767362182533}
-  rotationSpeed: 10
-  attackRange: 10
-  whatIsEnemy:
-    serializedVersion: 2
-    m_Bits: 64
-  whatIsTargetable:
-    serializedVersion: 2
-    m_Bits: 64
-  projectilePrefab: {fileID: 5912905722827363994, guid: 17db417334a9d8f45a6dae4397e32918, type: 3}
-  projectileSpeed: 5
-  attackSpawnEffectPrefab: {fileID: 3125467519713422411, guid: cb9d85bd70dafc44bb9bda92fca7a2d5, type: 3}
-  characterAnimator: {fileID: 486403096817528410}
-  attackAnimationTrigger: Attack
-  projectileSpawnDelay: 0.5
-  targetMostAdvancedEnemy: 1
-  targetPriorityEnemy: 1
-  enemyPriorityType: 0
-  useHpTargeting: 1
-  targetHighestHpEnemy: 1
-  useRandomTargeting: 0
 --- !u!137 &8646516010247801467
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 0
@@ -82123,5 +82069,4 @@ SceneRoots:
   - {fileID: 1424495898}
   - {fileID: 1637495339}
   - {fileID: 367581003}
-  - {fileID: 6399554996113015672}
   - {fileID: 547816778257186968}

@@ -28,7 +28,11 @@ public class HomingProjectile : TowerProjectileBase
             return;
         }
 
-        Vector3 direction = (target.position - transform.position).normalized;
+        // Target center point
+        EnemyBase enemy = target.GetComponent<EnemyBase>();
+        Vector3 targetPos = enemy != null ? enemy.GetCenterPoint() : target.position;
+
+        Vector3 direction = (targetPos - transform.position).normalized;
         
         Quaternion targetRotation = Quaternion.LookRotation(direction);
         transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
