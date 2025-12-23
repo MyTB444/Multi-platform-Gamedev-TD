@@ -23,6 +23,7 @@ public class TowerRockShower : TowerBase
     private bool isAttacking = false;
     private Vector3 enemyVelocity;
     private Vector3 lastEnemyPosition;
+    private Vector3 lockedTargetPosition;
     
     protected override void FixedUpdate()
     {
@@ -77,6 +78,20 @@ public class TowerRockShower : TowerBase
         lastTimeAttacked = Time.time;
         isAttacking = true;
         
+        // Lock position here before animation plays
+        if (currentEnemy != null)
+        {
+            float avgSpeed = (rockSpeedMin + rockSpeedMax) / 2f;
+            float fallTime = spawnHeight / avgSpeed;
+            lockedTargetPosition = GetPredictedPosition(fallTime);
+            
+            // Fallback to current position if prediction fails
+            if (lockedTargetPosition == Vector3.zero)
+            {
+                lockedTargetPosition = currentEnemy.transform.position;
+            }
+        }
+        
         if (characterAnimator != null)
         {
             characterAnimator.SetTrigger(attackAnimationTrigger);
@@ -97,11 +112,8 @@ public class TowerRockShower : TowerBase
 
         while (elapsed < showerDuration)
         {
-            if (currentEnemy != null)
-            {
-                SpawnRock();
-            }
-    
+            SpawnRock(lockedTargetPosition);
+
             yield return new WaitForSeconds(timeBetweenRocks);
             elapsed += timeBetweenRocks;
         }
@@ -110,15 +122,12 @@ public class TowerRockShower : TowerBase
         isAttacking = false;
     }
     
-    private void SpawnRock()
+    private void SpawnRock(Vector3 targetPosition)
     {
         float randomSpeed = Random.Range(rockSpeedMin, rockSpeedMax);
-        float fallTime = spawnHeight / randomSpeed;
-
-        Vector3 predictedPos = GetPredictedPosition(fallTime);
 
         Vector2 randomOffset = Random.insideUnitCircle * spawnRadius;
-        Vector3 spawnPos = predictedPos + new Vector3(randomOffset.x, spawnHeight, randomOffset.y);
+        Vector3 spawnPos = targetPosition + new Vector3(randomOffset.x, spawnHeight, randomOffset.y);
 
         if (attackSpawnEffectPrefab != null)
         {
