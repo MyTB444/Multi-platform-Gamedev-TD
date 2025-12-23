@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4418755323783538635}
   - component: {fileID: 7784201025279125575}
   - component: {fileID: 4009893282459921387}
+  - component: {fileID: 6088677527623337291}
   m_Layer: 8
   m_Name: DirtRoad
   m_TagString: Untagged
@@ -118,3 +119,24 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1.9999998, y: 0.5079489, z: 2.0000005}
   m_Center: {x: -0.0000009536743, y: 0.74602556, z: 0}
+--- !u!65 &6088677527623337291
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2030247278577060525}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
