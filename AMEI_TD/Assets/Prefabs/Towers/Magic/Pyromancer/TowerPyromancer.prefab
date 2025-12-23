@@ -92,8 +92,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b280a9a08a6f6d043addd96e78393154, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 0
-  attackCooldown: 3
+  damage: 10
+  attackCooldown: 1
   towerBody: {fileID: 4063552230360950}
   towerHead: {fileID: 0}
   gunPoint: {fileID: 8763049949150767723}

@@ -17,7 +17,6 @@ public class TowerPyromancer : TowerBase
         IDamageable damageable = currentEnemy.GetComponent<IDamageable>();
         if (damageable == null) return;
 
-        // Target center point
         Vector3 targetPos = currentEnemy.GetCenterPoint();
         
         Vector3 directionToEnemy = (targetPos - gunPoint.position).normalized;
@@ -29,7 +28,7 @@ public class TowerPyromancer : TowerBase
         HomingProjectile homing = newProjectile.GetComponent<HomingProjectile>();
         if (homing != null)
         {
-            homing.SetupHomingProjectile(currentEnemy.transform, damageable, damage, projectileSpeed);
+            homing.SetupHomingProjectile(currentEnemy.transform, damageable, damage, projectileSpeed, whatIsEnemy);
         }
     }
 }
