@@ -52,7 +52,14 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     private Vector3 Destination;
 
-
+    private void OnEnable()
+    {
+        UpdateVisuals();
+        //Renderer renderer = GetComponent<Renderer>();
+        NavAgent = GetComponent<NavMeshAgent>();
+        EnemyAnimator = GetComponent<Animator>();
+        NavAgent.enabled = false;
+    }
 
     private void Awake()
     {
@@ -62,10 +69,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     protected virtual void Start()
     {
-        UpdateVisuals();
-        //Renderer renderer = GetComponent<Renderer>();
-        NavAgent = GetComponent<NavMeshAgent>();
-        EnemyAnimator = GetComponent<Animator>();
+       
      
 
         //switch (enemyType)
@@ -88,6 +92,11 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
        FollowPath();
        PlayAnimations();
+        if(Input.GetKeyDown(KeyCode.Y))
+        {
+
+           
+        }
     }
 
     public void SetupEnemy(EnemySpawner myNewSpawner)
@@ -151,10 +160,13 @@ public class EnemyBase : MonoBehaviour, IDamageable
           
             currentWaypointIndex++;
         }
-        print($"<color=red>{currentWaypointIndex}</color>");
-        NavAgent.SetDestination(Destination);
-          
-    
+        //print($"<color=red>{currentWaypointIndex}</color>");
+        NavAgent.enabled = true;
+        if (NavAgent.isActiveAndEnabled && NavAgent.isOnNavMesh)
+        {
+            NavAgent.SetDestination(Destination);
+
+        }
     }
     private void PlayAnimations()
     {
@@ -203,29 +215,48 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
     }
 
-    public void TakeDamage(float damage)
-    public Vector3 GetCenterPoint() => centerPoint.position;
-    public EnemyType GetEnemyType() => enemyType;
-    public float GetEnemyHp() => enemyCurrentHp;
-    public Transform GetBottomPoint() => bottomPoint;
+
+  
 
    
 
-    private void ResetEnemy()
-    {
-        TakeDamage(damage, false, false);
-    }
+   
 
     private void Die()
     {
-        Destroy(gameObject);
+       
+        //Destroy(gameObject);
+       
         if (GameManager.instance != null) 
         {
             GameManager.instance.UpdateSkillPoints(reward);
         }
         RemoveEnemy();
+        ObjectPooling.instance.ReturnGameObejctToPool(GetEnemyTypeForPooling(), gameObject);
     }
+ 
+    
+    private PoolGameObjectType GetEnemyTypeForPooling()
+    {
+        switch (enemyType)
+        {
+            case EnemyType.Basic:
+                return PoolGameObjectType.EnemyBasic;
 
+            case EnemyType.Fast:
+                return PoolGameObjectType.EnemyFast;
+
+            case EnemyType.Tank:
+                return PoolGameObjectType.EnemyTank;
+
+            case EnemyType.Invisible:
+                return PoolGameObjectType.EnemyInvisible;
+
+            case EnemyType.Reinforced:
+                return PoolGameObjectType.EnemyReinforced;
+        }
+        return 0;
+    }
     public void RemoveEnemy()
     {
         if (mySpawner != null) mySpawner.RemoveActiveEnemy(gameObject);
