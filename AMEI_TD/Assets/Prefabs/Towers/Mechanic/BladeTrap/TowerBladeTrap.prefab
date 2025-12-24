@@ -2413,6 +2413,8 @@ MonoBehaviour:
   momentumOffset: 90
   damageCooldown: 0.5
   animationAnticipation: 0.5
+  hammerImpactPoint: {fileID: 3133988239432917995}
+  vfxDelay: 0.3
 --- !u!1 &1062970667448674519
 GameObject:
   m_ObjectHideFlags: 0

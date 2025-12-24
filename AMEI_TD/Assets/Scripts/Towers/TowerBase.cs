@@ -20,6 +20,10 @@ public class TowerBase : MonoBehaviour
 
     [SerializeField] protected GameObject projectilePrefab;
     [SerializeField] protected float projectileSpeed;
+
+    [Header(("Tower Pricing"))] 
+    [SerializeField] protected int buyPrice = 1;
+    [SerializeField] protected int sellPrice = 1;
     
     [Header("VFX")]
     [SerializeField] protected GameObject attackSpawnEffectPrefab;
@@ -297,4 +301,7 @@ public class TowerBase : MonoBehaviour
     {
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
+    
+    public int GetBuyPrice() { return buyPrice; }
+    public int GetSellPrice() { return sellPrice; }
 }
