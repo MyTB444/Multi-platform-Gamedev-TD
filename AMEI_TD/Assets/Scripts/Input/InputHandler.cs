@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 public class InputHandler : MonoBehaviour
 {
     private PlayerInputActions inputActions;
-    private TowerClick tc;
+    private TileButton tb;
     public static InputHandler instance;
     [SerializeField] private UIBase uiBase;
     private bool gameEnd;
@@ -25,9 +25,9 @@ public class InputHandler : MonoBehaviour
     }
     
     // Called when player clicks on a tower to track the selected tower for selling
-    public void SelectedTower(TowerClick selectedTower)
+    public void SelectedTower(TileButton selectedTower)
     {
-        tc = selectedTower;
+        tb = selectedTower;
     }
     
     // Enables restart functionality when game ends (win or lose)
@@ -40,8 +40,8 @@ public class InputHandler : MonoBehaviour
     {
         if (context.ReadValueAsButton())
         {
-            if (tc != null)
-                tc.DestoryTower();
+            if (tb != null)
+                tb.DestoryTower();
         }
     }
     

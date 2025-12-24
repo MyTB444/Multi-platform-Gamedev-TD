@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class TileButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler,IPointerDownHandler
+public class TileButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
     [SerializeField] private TowerButton[] towerButtons;
     private MeshRenderer mr;
@@ -10,7 +10,11 @@ public class TileButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     private Color originalColour;
     private bool buttonControl;
     private bool towerBuilt;
-    
+    [SerializeField] private GameObject spawnedUnit;
+    [SerializeField] private GameObject destroyButton;
+    [SerializeField] private int sellPrice;
+    private GameManager gameManager;
+    private InputHandler inputHandler;
     void Start()
     {
         mr = GetComponent<MeshRenderer>();
@@ -18,25 +22,24 @@ public class TileButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         originalColour = mrMat.color;
         anim = GetComponent<Animator>();
         towerButtons = GetComponentsInChildren<TowerButton>();
+        gameManager = GameManager.instance;
+        inputHandler = InputHandler.instance;
     }
-    
-    void Update()
-    {
-        DetectTowerAbove();
-    }
-    
+
+
     public void OnPointerEnter(PointerEventData eventData)
     {
-        if (towerBuilt == false)
             mrMat.color = Color.magenta;
+        if (inputHandler != null)
+            inputHandler.SelectedTower(this);
+
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-        if (towerBuilt == false)
             mrMat.color = originalColour;
     }
-    
+
     public void OnPointerDown(PointerEventData eventData)
     {
         if (towerBuilt == false)
@@ -53,8 +56,19 @@ public class TileButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
                 DeactivateButtons();
             }
         }
+        else if (towerBuilt == true)
+        {
+            if (destroyButton.activeSelf == false)
+            {
+                destroyButton.SetActive(true);
+            }
+            else if (destroyButton.activeSelf == true)
+            {
+                destroyButton.SetActive(false);
+            }
+        }
     }
-    
+
     public void DeactivateButtons()
     {
         for (int i = 0; i < towerButtons.Length; i++)
@@ -64,7 +78,7 @@ public class TileButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         }
         ActivateTileButtons(false);
     }
-    
+
     private void ActivateButtons()
     {
         for (int i = 0; i < towerButtons.Length; i++)
@@ -73,32 +87,28 @@ public class TileButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
                 towerButtons[i].Activate();
         }
     }
-    
+
     public void ActivateTileButtons(bool a)
     {
         anim.SetBool("TowerButtonPopup", a);
     }
-    
-    // Raycasts upward to check if a tower is already built on this tile
-    private void DetectTowerAbove()
+    public void DestoryTower()
     {
-        int layerMask = 1 << 7;
-
-        Vector3 origin = transform.position;
-        Vector3 direction = Vector3.up;
-
-        Debug.DrawRay(origin, direction * 10.0f, Color.green);
-        RaycastHit hit;
-
-        bool isHit = Physics.Raycast(origin, direction, out hit, 10.0f, layerMask);
-
-        if (isHit)
+        gameManager.UpdateSkillPoints(sellPrice);
+        Destroy(spawnedUnit);
+        towerBuilt = false;
+        if (destroyButton.activeSelf == true)
         {
-            towerBuilt = true;
+            destroyButton.SetActive(false);
         }
-        else if (isHit == false)
-        {
-            towerBuilt = false;
-        }
+    }
+
+    public void SetTowerBuiltMode(bool a)
+    {
+        towerBuilt = a;
+    }
+    public void SetUnit(GameObject a)
+    {
+        spawnedUnit = a;
     }
 }
