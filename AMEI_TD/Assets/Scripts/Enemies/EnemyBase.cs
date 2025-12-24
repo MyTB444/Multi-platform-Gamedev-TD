@@ -168,13 +168,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
         dotEndTime = Time.time + duration;
         dotTickInterval = tickInterval;
         lastDotTick = Time.time;
-       FollowPath();
-       PlayAnimations();
-        if(Input.GetKeyDown(KeyCode.Y))
-        {
-
-           
-        }
     }
 
     public void SetupEnemy(EnemySpawner myNewSpawner)
@@ -228,6 +221,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
             Quaternion targetRotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
         }
+
+        // Manual movement
         Destination = direction * (enemySpeed * Time.deltaTime);
         transform.position += Destination;
 
@@ -237,15 +232,9 @@ public class EnemyBase : MonoBehaviour, IDamageable
             currentWaypointIndex++;
         }
         
-        if (NavAgent != null)
+        if (NavAgent != null && NavAgent.isActiveAndEnabled && NavAgent.isOnNavMesh)
         {
-            NavAgent.SetDestination(Destination);
-        //print($"<color=red>{currentWaypointIndex}</color>");
-        NavAgent.enabled = true;
-        if (NavAgent.isActiveAndEnabled && NavAgent.isOnNavMesh)
-        {
-            NavAgent.SetDestination(Destination);
-
+            NavAgent.SetDestination(targetWaypoint);
         }
     }
 
