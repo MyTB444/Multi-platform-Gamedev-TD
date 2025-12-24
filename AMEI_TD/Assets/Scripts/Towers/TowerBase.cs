@@ -35,6 +35,7 @@ public class TowerBase : MonoBehaviour
     [SerializeField] protected EnemyType enemyPriorityType;
     [SerializeField] protected bool useHpTargeting = true;
     [SerializeField] protected bool targetHighestHpEnemy = true;
+    [SerializeField] protected bool useRandomTargeting = false;
 
     private float targetCheckInterval = .1f;
     private float lastTimeCheckedTarget;
@@ -126,6 +127,11 @@ public class TowerBase : MonoBehaviour
     private EnemyBase ChooseEnemyToTarget(List<EnemyBase> targets)
     {
         EnemyBase enemyToTarget = null;
+        
+        if (useRandomTargeting)
+        {
+            return targets[Random.Range(0, targets.Count)];
+        }
 
         // HP-based targeting takes priority over distance
         if (useHpTargeting)

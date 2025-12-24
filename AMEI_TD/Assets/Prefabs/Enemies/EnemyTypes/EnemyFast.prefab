@@ -122,6 +122,8 @@ MonoBehaviour:
   enemyColor: {r: 1, g: 0, b: 0.88550186, a: 1}
   centerPoint: {fileID: 6884134845494354579}
   bottomPoint: {fileID: 331970158621564899}
+  slowEffectPrefab: {fileID: 4259526894524806451, guid: cca859937b8679b49b3fc3dc323ef370, type: 3}
+  enemyCurrentHp: 0
 --- !u!33 &1133182221447099925
 MeshFilter:
   m_ObjectHideFlags: 0
