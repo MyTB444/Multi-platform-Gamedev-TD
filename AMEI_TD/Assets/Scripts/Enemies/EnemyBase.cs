@@ -63,6 +63,14 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private float dotTickInterval = 0.5f;
     private float lastDotTick;
     private bool hasDot = false;
+    private void OnEnable()
+    {
+        UpdateVisuals();
+        //Renderer renderer = GetComponent<Renderer>();
+        NavAgent = GetComponent<NavMeshAgent>();
+        EnemyAnimator = GetComponent<Animator>();
+        NavAgent.enabled = false;
+    }
 
     private void Awake()
     {
@@ -75,6 +83,23 @@ public class EnemyBase : MonoBehaviour, IDamageable
         UpdateVisuals();
         NavAgent = GetComponent<NavMeshAgent>();
         EnemyAnimator = GetComponent<Animator>();
+       
+     
+
+        //switch (enemyType)
+        //{
+        //    case EnemyType.Basic:
+        //        renderer.material.color = Color.green;
+        //        break;
+        //    case EnemyType.Fast:
+        //        renderer.material.color = Color.magenta;
+        //        break;
+        //    case EnemyType.Tank:
+        //        renderer.material.color = Color.red;
+        //        break;
+        //    default:
+        //        break;
+        //}
     }
 
     protected virtual void Update()
@@ -143,6 +168,13 @@ public class EnemyBase : MonoBehaviour, IDamageable
         dotEndTime = Time.time + duration;
         dotTickInterval = tickInterval;
         lastDotTick = Time.time;
+       FollowPath();
+       PlayAnimations();
+        if(Input.GetKeyDown(KeyCode.Y))
+        {
+
+           
+        }
     }
 
     public void SetupEnemy(EnemySpawner myNewSpawner)
@@ -208,6 +240,12 @@ public class EnemyBase : MonoBehaviour, IDamageable
         if (NavAgent != null)
         {
             NavAgent.SetDestination(Destination);
+        //print($"<color=red>{currentWaypointIndex}</color>");
+        NavAgent.enabled = true;
+        if (NavAgent.isActiveAndEnabled && NavAgent.isOnNavMesh)
+        {
+            NavAgent.SetDestination(Destination);
+
         }
     }
 
@@ -257,17 +295,42 @@ public class EnemyBase : MonoBehaviour, IDamageable
             Die();
         }
     }
-
+    
     private void Die()
     {
-        Destroy(gameObject);
-        if (GameManager.instance != null)
+       
+        //Destroy(gameObject);
+       
+        if (GameManager.instance != null) 
         {
             GameManager.instance.UpdateSkillPoints(reward);
         }
         RemoveEnemy();
+        ObjectPooling.instance.ReturnGameObejctToPool(GetEnemyTypeForPooling(), gameObject);
     }
+ 
+    
+    private PoolGameObjectType GetEnemyTypeForPooling()
+    {
+        switch (enemyType)
+        {
+            case EnemyType.Basic:
+                return PoolGameObjectType.EnemyBasic;
 
+            case EnemyType.Fast:
+                return PoolGameObjectType.EnemyFast;
+
+            case EnemyType.Tank:
+                return PoolGameObjectType.EnemyTank;
+
+            case EnemyType.Invisible:
+                return PoolGameObjectType.EnemyInvisible;
+
+            case EnemyType.Reinforced:
+                return PoolGameObjectType.EnemyReinforced;
+        }
+        return 0;
+    }
     public void RemoveEnemy()
     {
         if (mySpawner != null) mySpawner.RemoveActiveEnemy(gameObject);

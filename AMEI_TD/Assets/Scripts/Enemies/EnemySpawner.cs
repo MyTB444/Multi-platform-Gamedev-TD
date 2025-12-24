@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
 public class EnemySpawner : MonoBehaviour
@@ -49,12 +50,52 @@ public class EnemySpawner : MonoBehaviour
         GameObject randomEnemy = GetRandomEnemy();
         if (randomEnemy == null) return;
 
-        GameObject newEnemy = Instantiate(randomEnemy, spawnLocation.position, Quaternion.identity);
+        GameObject newEnemy = ObjectPooling.instance.GetPoolObject(GetEnemyTypeForPooling(randomEnemy));
+        if (newEnemy != null)
+        {
+           
+            newEnemy.SetActive(true);
+            newEnemy.transform.position = spawnLocation.position;
+            newEnemy.transform.rotation = Quaternion.identity;
+            //GameObject newEnemy = Instantiate(randomEnemy, spawnLocation.position, Quaternion.identity);
 
-        EnemyBase enemyScript = newEnemy.GetComponent<EnemyBase>();
-        enemyScript.SetupEnemy(this);
+            EnemyBase enemyScript = newEnemy.GetComponent<EnemyBase>();
+            enemyScript.SetupEnemy(this);
 
-        activeEnemies.Add(newEnemy);
+            activeEnemies.Add(newEnemy);
+        }
+    }
+
+    private PoolGameObjectType GetEnemyTypeForPooling(GameObject randomEnemy)
+    {
+       
+        if(randomEnemy.GetComponent<EnemyBase>() != null)
+        {
+            EnemyBase enemy = randomEnemy.GetComponent<EnemyBase>();
+            EnemyType enemyType = enemy.GetEnemyType();
+
+            switch(enemyType)
+            {
+                case EnemyType.Basic:
+                return PoolGameObjectType.EnemyBasic;
+
+                case EnemyType.Fast:
+                return PoolGameObjectType.EnemyFast;
+
+                case EnemyType.Tank:    
+                return PoolGameObjectType.EnemyTank;
+
+                case EnemyType.Invisible:
+                return PoolGameObjectType.EnemyInvisible;
+
+                case EnemyType.Reinforced:
+                return PoolGameObjectType.EnemyReinforced;
+            }
+
+                
+        }
+        
+        return 0;
     }
 
     // Picks and removes a random enemy prefab from the queue
