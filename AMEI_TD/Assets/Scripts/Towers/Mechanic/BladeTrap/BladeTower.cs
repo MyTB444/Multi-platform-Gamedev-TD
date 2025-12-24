@@ -6,8 +6,12 @@ public class BladeTower : TowerBase
     [Header("Blade Setup")]
     [SerializeField] private Transform bladeHolder;
     
-    [Header("Rotation Settings")]
-    [SerializeField] private float returnSpeed = 90f;
+    [Header("Spin Settings")]
+    [SerializeField] private float spinSpeed = 360f;
+    [SerializeField] private float returnSpeed = 180f;
+    [SerializeField] private bool clockwise = true;
+    [SerializeField] [Range(0f, 0.9f)] private float momentumStrength = 0.5f;
+    [SerializeField] private float momentumOffset = 90f;
     
     [Header("Damage Settings")]
     [SerializeField] private float damageCooldown = 0.5f;
@@ -15,6 +19,8 @@ public class BladeTower : TowerBase
     private Dictionary<EnemyBase, float> recentlyHitEnemies = new Dictionary<EnemyBase, float>();
     private Quaternion startRotation;
     private bool isActive = false;
+    private bool isReturning = false;
+    private float currentAngle = 0f;
     
     protected override void Start()
     {
@@ -32,10 +38,12 @@ public class BladeTower : TowerBase
         
         if (isActive)
         {
+            isReturning = false;
             RotateBlades();
         }
-        else
+        else if (isReturning || !IsAtStartRotation())
         {
+            isReturning = true;
             ReturnToStart();
         }
         
@@ -48,22 +56,43 @@ public class BladeTower : TowerBase
         isActive = enemies.Length > 0;
     }
     
+    private bool IsAtStartRotation()
+    {
+        return Quaternion.Angle(bladeHolder.rotation, startRotation) < 1f;
+    }
+    
     private void RotateBlades()
     {
         if (bladeHolder == null) return;
         
-        bladeHolder.Rotate(Vector3.up, rotationSpeed * Time.fixedDeltaTime);
+        float adjustedAngle = currentAngle + momentumOffset;
+        float momentumMultiplier = 1f + (Mathf.Sin(adjustedAngle * Mathf.Deg2Rad) * momentumStrength);
+        
+        float currentSpeed = spinSpeed * momentumMultiplier;
+        float rotationThisFrame = currentSpeed * Time.fixedDeltaTime;
+        
+        currentAngle += rotationThisFrame;
+        if (currentAngle >= 360f) currentAngle -= 360f;
+        
+        Vector3 axis = clockwise ? Vector3.right : Vector3.left;
+        bladeHolder.Rotate(axis, rotationThisFrame);
     }
     
     private void ReturnToStart()
     {
         if (bladeHolder == null) return;
         
-        bladeHolder.rotation = Quaternion.RotateTowards(
-            bladeHolder.rotation, 
-            startRotation, 
-            returnSpeed * Time.fixedDeltaTime
-        );
+        // Continue rotating in same direction until back at start
+        Vector3 axis = clockwise ? Vector3.right : Vector3.left;
+        bladeHolder.Rotate(axis, returnSpeed * Time.fixedDeltaTime);
+        
+        // Check if we've reached start position
+        if (IsAtStartRotation())
+        {
+            bladeHolder.rotation = startRotation;
+            isReturning = false;
+            currentAngle = 0f;
+        }
     }
     
     private void CleanupHitList()

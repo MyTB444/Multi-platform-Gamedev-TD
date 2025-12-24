@@ -15,6 +15,7 @@ public class BladeDamage : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         EnemyBase enemy = other.GetComponent<EnemyBase>();
+        
         if (enemy != null && tower != null)
         {
             tower.OnBladeHit(enemy);
