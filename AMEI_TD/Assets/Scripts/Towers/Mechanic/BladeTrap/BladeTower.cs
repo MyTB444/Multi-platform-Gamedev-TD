@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections;
 using System.Collections.Generic;
 
 public class BladeTower : TowerBase
@@ -16,11 +17,19 @@ public class BladeTower : TowerBase
     [Header("Damage Settings")]
     [SerializeField] private float damageCooldown = 0.5f;
     
+    [Header("Animation")]
+    [SerializeField] private float animationAnticipation = 0.5f;
+    
+    [Header("VFX")]
+    [SerializeField] private Transform hammerImpactPoint;
+    [SerializeField] private float vfxDelay = 0.3f;
+    
     private Dictionary<EnemyBase, float> recentlyHitEnemies = new Dictionary<EnemyBase, float>();
     private Quaternion startRotation;
     private bool isActive = false;
     private bool isReturning = false;
     private float currentAngle = 0f;
+    private bool hasTriggeredAnimation = false;
     
     protected override void Start()
     {
@@ -72,26 +81,60 @@ public class BladeTower : TowerBase
         float rotationThisFrame = currentSpeed * Time.fixedDeltaTime;
         
         currentAngle += rotationThisFrame;
-        if (currentAngle >= 360f) currentAngle -= 360f;
+        
+        float triggerAngle = 360f - (spinSpeed * animationAnticipation);
+        
+        if (!hasTriggeredAnimation && currentAngle >= triggerAngle)
+        {
+            hasTriggeredAnimation = true;
+            
+            if (characterAnimator != null)
+            {
+                characterAnimator.SetTrigger(attackAnimationTrigger);
+            }
+            
+            StartCoroutine(DelayedHammerVFX());
+        }
+        
+        if (currentAngle >= 360f)
+        {
+            currentAngle -= 360f;
+            hasTriggeredAnimation = false;
+        }
         
         Vector3 axis = clockwise ? Vector3.right : Vector3.left;
         bladeHolder.Rotate(axis, rotationThisFrame);
+    }
+    
+    private IEnumerator DelayedHammerVFX()
+    {
+        yield return new WaitForSeconds(vfxDelay);
+        
+        SpawnHammerImpactVFX();
+    }
+    
+    public void SpawnHammerImpactVFX()
+    {
+        if (attackSpawnEffectPrefab != null && hammerImpactPoint != null)
+        {
+            GameObject vfx = Instantiate(attackSpawnEffectPrefab, hammerImpactPoint.position, Quaternion.identity);
+            Destroy(vfx, 2f);
+        }
     }
     
     private void ReturnToStart()
     {
         if (bladeHolder == null) return;
         
-        // Continue rotating in same direction until back at start
         Vector3 axis = clockwise ? Vector3.right : Vector3.left;
         bladeHolder.Rotate(axis, returnSpeed * Time.fixedDeltaTime);
         
-        // Check if we've reached start position
         if (IsAtStartRotation())
         {
             bladeHolder.rotation = startRotation;
             isReturning = false;
             currentAngle = 0f;
+            hasTriggeredAnimation = false;
         }
     }
     
