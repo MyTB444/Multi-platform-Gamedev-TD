@@ -1,6 +1,4 @@
-
 using System.Collections.Generic;
-using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -12,7 +10,6 @@ public enum EnemyType
     Invisible,
     Reinforced,
 }
-
 
 public class EnemyBase : MonoBehaviour, IDamageable
 {
@@ -30,17 +27,19 @@ public class EnemyBase : MonoBehaviour, IDamageable
     [SerializeField] private bool isReinforced;
 
     [Header("Visuals")]
-    [SerializeField] private Color enemyColor = Color.white; 
+    [SerializeField] private Color enemyColor = Color.white;
 
     [Header("Path")]
     [SerializeField] private Transform centerPoint;
     [SerializeField] private Transform bottomPoint;
 
+    [Header("Slow Effect")]
+    [SerializeField] private GameObject slowEffectPrefab;
+
     private NavMeshAgent NavAgent;
     private Animator EnemyAnimator;
 
-
-    private float enemyCurrentHp;
+    [SerializeField] protected float enemyCurrentHp;
     protected bool isDead;
 
     protected Vector3[] myWaypoints;
@@ -52,20 +51,39 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     private Vector3 Destination;
 
+    // Slow system
+    private float baseSpeed;
+    private float slowEndTime;
+    private bool isSlowed = false;
+    private GameObject activeSlowEffect;
 
-
-    private void Awake()
-    {
-        originalLayerIndex = gameObject.layer;
-     
-    }
-
-    protected virtual void Start()
+    // DoT system
+    private float dotDamage;
+    private float dotEndTime;
+    private float dotTickInterval = 0.5f;
+    private float lastDotTick;
+    private bool hasDot = false;
+    private void OnEnable()
     {
         UpdateVisuals();
         //Renderer renderer = GetComponent<Renderer>();
         NavAgent = GetComponent<NavMeshAgent>();
         EnemyAnimator = GetComponent<Animator>();
+        NavAgent.enabled = false;
+    }
+
+    private void Awake()
+    {
+        originalLayerIndex = gameObject.layer;
+        baseSpeed = enemySpeed;
+    }
+
+    protected virtual void Start()
+    {
+        UpdateVisuals();
+        NavAgent = GetComponent<NavMeshAgent>();
+        EnemyAnimator = GetComponent<Animator>();
+       
      
 
         //switch (enemyType)
@@ -86,8 +104,70 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     protected virtual void Update()
     {
-       FollowPath();
-       PlayAnimations();
+        UpdateStatusEffects();
+        FollowPath();
+        PlayAnimations();
+    }
+
+    private void UpdateStatusEffects()
+    {
+        // Handle slow expiry
+        if (isSlowed && Time.time >= slowEndTime)
+        {
+            RemoveSlow();
+        }
+
+        // Handle DoT
+        if (hasDot)
+        {
+            if (Time.time >= dotEndTime)
+            {
+                hasDot = false;
+            }
+            else if (Time.time >= lastDotTick + dotTickInterval)
+            {
+                lastDotTick = Time.time;
+                TakeDamage(dotDamage);
+            }
+        }
+    }
+
+    public void ApplySlow(float slowPercent, float duration)
+    {
+        Debug.Log($"ApplySlow called - slowEffectPrefab: {slowEffectPrefab}");
+    
+        isSlowed = true;
+        slowEndTime = Time.time + duration;
+
+        enemySpeed = baseSpeed * (1f - slowPercent);
+
+        if (activeSlowEffect == null && slowEffectPrefab != null)
+        {
+            activeSlowEffect = Instantiate(slowEffectPrefab, transform);
+            activeSlowEffect.transform.localPosition = Vector3.up * 0.5f;
+            Debug.Log($"Spawned slow effect: {activeSlowEffect.name}");
+        }
+    }
+
+    private void RemoveSlow()
+    {
+        isSlowed = false;
+        enemySpeed = baseSpeed;
+
+        if (activeSlowEffect != null)
+        {
+            Destroy(activeSlowEffect);
+            activeSlowEffect = null;
+        }
+    }
+
+    public void ApplyDoT(float damagePerTick, float duration, float tickInterval = 0.5f)
+    {
+        hasDot = true;
+        dotDamage = damagePerTick;
+        dotEndTime = Time.time + duration;
+        dotTickInterval = tickInterval;
+        lastDotTick = Time.time;
     }
 
     public void SetupEnemy(EnemySpawner myNewSpawner)
@@ -128,7 +208,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
         if (myWaypoints == null || currentWaypointIndex >= myWaypoints.Length)
         {
-            //ReachedEnd();
             return;
         }
 
@@ -142,27 +221,29 @@ public class EnemyBase : MonoBehaviour, IDamageable
             Quaternion targetRotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
         }
+
+        // Manual movement
         Destination = direction * (enemySpeed * Time.deltaTime);
         transform.position += Destination;
-       
+
         float distanceToWaypoint = Vector3.Distance(bottomPoint.position, targetWaypoint);
         if (distanceToWaypoint <= waypointReachDistance)
         {
-          
             currentWaypointIndex++;
         }
-        print($"<color=red>{currentWaypointIndex}</color>");
-        NavAgent.SetDestination(Destination);
-          
-    
+        
+        if (NavAgent != null && NavAgent.isActiveAndEnabled && NavAgent.isOnNavMesh)
+        {
+            NavAgent.SetDestination(targetWaypoint);
+        }
     }
+
     private void PlayAnimations()
     {
         if (EnemyAnimator == null) return;
-        
+
         EnemyAnimator.SetBool("Walk", true);
     }
-   
 
     public float GetRemainingDistance()
     {
@@ -178,7 +259,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
         return remainingDistance;
     }
 
-   
     private void ReachedEnd()
     {
         Destroy(gameObject);
@@ -188,12 +268,12 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
         if (isInvisible && !isAntiInvisible)
         {
-            return; 
+            return;
         }
-        
+
         if (isReinforced && !isAntiReinforced)
         {
-            return; 
+            return;
         }
 
         enemyCurrentHp -= incomingDamage;
@@ -204,17 +284,42 @@ public class EnemyBase : MonoBehaviour, IDamageable
             Die();
         }
     }
-
+    
     private void Die()
     {
-        Destroy(gameObject);
+       
+        //Destroy(gameObject);
+       
         if (GameManager.instance != null) 
         {
             GameManager.instance.UpdateSkillPoints(reward);
         }
         RemoveEnemy();
+        ObjectPooling.instance.ReturnGameObejctToPool(GetEnemyTypeForPooling(), gameObject);
     }
+ 
+    
+    private PoolGameObjectType GetEnemyTypeForPooling()
+    {
+        switch (enemyType)
+        {
+            case EnemyType.Basic:
+                return PoolGameObjectType.EnemyBasic;
 
+            case EnemyType.Fast:
+                return PoolGameObjectType.EnemyFast;
+
+            case EnemyType.Tank:
+                return PoolGameObjectType.EnemyTank;
+
+            case EnemyType.Invisible:
+                return PoolGameObjectType.EnemyInvisible;
+
+            case EnemyType.Reinforced:
+                return PoolGameObjectType.EnemyReinforced;
+        }
+        return 0;
+    }
     public void RemoveEnemy()
     {
         if (mySpawner != null) mySpawner.RemoveActiveEnemy(gameObject);
@@ -225,6 +330,19 @@ public class EnemyBase : MonoBehaviour, IDamageable
         gameObject.layer = originalLayerIndex;
         enemyCurrentHp = enemyMaxHp;
         isDead = false;
+
+        // Reset slow
+        isSlowed = false;
+        enemySpeed = baseSpeed;
+        if (activeSlowEffect != null)
+        {
+            Destroy(activeSlowEffect);
+            activeSlowEffect = null;
+        }
+
+        // Reset DoT
+        hasDot = false;
+
         UpdateVisuals();
     }
 
@@ -232,9 +350,9 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
         Renderer r = GetComponent<Renderer>();
         if (r == null) return;
-        
+
         Color finalColor = enemyColor;
-        
+
         if (isInvisible)
         {
             finalColor.a = 0.3f;
@@ -246,7 +364,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         r.material.color = finalColor;
     }
 
-    //Getters
+    // Getters
     public Vector3 GetCenterPoint() => centerPoint.position;
     public EnemyType GetEnemyType() => enemyType;
     public float GetEnemyHp() => enemyCurrentHp;
@@ -254,4 +372,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public bool IsInvisible() => isInvisible;
     public bool IsReinforced() => isReinforced;
     public int GetDamage() => damage;
+    public bool IsSlowed() => isSlowed;
+    public bool HasDoT() => hasDot;
 }

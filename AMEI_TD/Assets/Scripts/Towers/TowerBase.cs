@@ -20,6 +20,10 @@ public class TowerBase : MonoBehaviour
 
     [SerializeField] protected GameObject projectilePrefab;
     [SerializeField] protected float projectileSpeed;
+
+    [Header(("Tower Pricing"))] 
+    [SerializeField] protected int buyPrice = 1;
+    [SerializeField] protected int sellPrice = 1;
     
     [Header("VFX")]
     [SerializeField] protected GameObject attackSpawnEffectPrefab;
@@ -35,6 +39,7 @@ public class TowerBase : MonoBehaviour
     [SerializeField] protected EnemyType enemyPriorityType;
     [SerializeField] protected bool useHpTargeting = true;
     [SerializeField] protected bool targetHighestHpEnemy = true;
+    [SerializeField] protected bool useRandomTargeting = false;
 
     private float targetCheckInterval = .1f;
     private float lastTimeCheckedTarget;
@@ -126,6 +131,11 @@ public class TowerBase : MonoBehaviour
     private EnemyBase ChooseEnemyToTarget(List<EnemyBase> targets)
     {
         EnemyBase enemyToTarget = null;
+        
+        if (useRandomTargeting)
+        {
+            return targets[Random.Range(0, targets.Count)];
+        }
 
         // HP-based targeting takes priority over distance
         if (useHpTargeting)
@@ -291,4 +301,7 @@ public class TowerBase : MonoBehaviour
     {
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
+    
+    public int GetBuyPrice() { return buyPrice; }
+    public int GetSellPrice() { return sellPrice; }
 }

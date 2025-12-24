@@ -88,15 +88,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400050, guid: ba24e610e0a338545b447ff44a3cf1cc, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 17.594294
+      value: 20.065117
       objectReference: {fileID: 0}
     - target: {fileID: 400050, guid: ba24e610e0a338545b447ff44a3cf1cc, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1
+      value: 0.7629261
       objectReference: {fileID: 0}
     - target: {fileID: 400050, guid: ba24e610e0a338545b447ff44a3cf1cc, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -0.4844234
+      value: 2.5832205
       objectReference: {fileID: 0}
     - target: {fileID: 400050, guid: ba24e610e0a338545b447ff44a3cf1cc, type: 3}
       propertyPath: m_LocalRotation.w
@@ -178,11 +178,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 0
   enemySpeed: 1
-  centerPoint: {fileID: 6340835181720102494}
-  bottomPoint: {fileID: 6638083700992160575}
   damage: 5
   reward: 5
   enemyMaxHp: 15
+  isInvisible: 0
+  isReinforced: 0
+  enemyColor: {r: 1, g: 1, b: 1, a: 1}
+  centerPoint: {fileID: 6340835181720102494}
+  bottomPoint: {fileID: 6638083700992160575}
 --- !u!136 &5952700638257805842
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -213,9 +216,9 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8663543207204576051}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: -1372625422
-  m_Radius: 0.5
+  m_Radius: 0.4
   m_Speed: 3.5
   m_Acceleration: 1.5
   avoidancePriority: 50
