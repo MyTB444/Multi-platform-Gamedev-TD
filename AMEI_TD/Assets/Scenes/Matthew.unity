@@ -83607,7 +83607,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be1f2af24cabc6642b19e45a2d291de3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 20
+  damage: 0
   attackCooldown: 1
   towerBody: {fileID: 0}
   towerHead: {fileID: 0}
@@ -83629,18 +83629,18 @@ MonoBehaviour:
   attackAnimationTrigger: Attack
   projectileSpawnDelay: 0
   targetMostAdvancedEnemy: 1
-  targetPriorityEnemy: 1
+  targetPriorityEnemy: 0
   enemyPriorityType: 0
-  useHpTargeting: 1
-  targetHighestHpEnemy: 1
+  useHpTargeting: 0
+  targetHighestHpEnemy: 0
   useRandomTargeting: 0
   phantomPrefab: {fileID: 2537545956604527301, guid: 8b55fb7f86e2bb54a922b5e11b12cae4, type: 3}
   spawnDistanceAhead: 5
-  phantomCount: 1
+  phantomCount: 3
   horizontalSpacing: 1.5
   depthStagger: 0.5
-  phantomSpeed: 5
-  phantomDamage: 20
+  phantomSpeed: 2
+  phantomDamage: 2
   attackRadius: 2
   fadeOutTime: 0.5
   spawnVFXPrefab: {fileID: 0}

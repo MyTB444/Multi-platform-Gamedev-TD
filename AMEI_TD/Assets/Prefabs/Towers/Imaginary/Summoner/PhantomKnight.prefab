@@ -47,7 +47,7 @@ GameObject:
   - component: {fileID: 1314872642257406070}
   - component: {fileID: 7784496721468510029}
   - component: {fileID: 2472419372565254024}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: Falchion_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -139,8 +139,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 0.08, y: 0.84, z: 0.16151898}
-  m_Center: {x: -0.0000005120044, y: 0.61, z: -0.0059382096}
+  m_Size: {x: 0.07, y: 0.88, z: 0.17}
+  m_Center: {x: -0.0000005120044, y: 0.58, z: -0.0059382096}
 --- !u!114 &7784496721468510029
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1147,7 +1147,6 @@ MonoBehaviour:
   attackTriggers:
   - Attack1
   - Attack2
-  - Attack3
   swordCollider: {fileID: 1314872642257406070}
   swordActiveTime: 0.5
   swordActivationDelay: 0.2
@@ -1514,7 +1513,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8553755178970484333}
-  m_Layer: 9
+  m_Layer: 10
   m_Name: AttackPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}

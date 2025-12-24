@@ -20,6 +20,7 @@ public class PhantomKnight : MonoBehaviour
     [SerializeField] private float swordActivationDelay = 0.2f;
     
     private float damage;
+    private PhantomSwordDamage swordDamage;
     private float attackRadius;
     private float fadeOutTime;
     private LayerMask enemyLayer;
@@ -43,12 +44,6 @@ public class PhantomKnight : MonoBehaviour
         }
         
         agent = GetComponent<NavMeshAgent>();
-        
-        // Disable sword collider at start
-        if (swordCollider != null)
-        {
-            swordCollider.enabled = false;
-        }
     }
     
     public void Setup(float newSpeed, float newDamage, float newAttackRadius, float newFadeOutTime, LayerMask newEnemyLayer, Transform enemy)
@@ -58,25 +53,30 @@ public class PhantomKnight : MonoBehaviour
         fadeOutTime = newFadeOutTime;
         enemyLayer = newEnemyLayer;
         targetEnemy = enemy;
-        
+    
         // Setup sword damage component
-        PhantomSwordDamage swordDamage = swordCollider?.GetComponent<PhantomSwordDamage>();
+        swordDamage = GetComponentInChildren<PhantomSwordDamage>();
         if (swordDamage != null)
         {
             swordDamage.Setup(damage, enemyLayer);
+            Debug.Log("Sword damage component found and setup!");
         }
-        
+        else
+        {
+            Debug.LogError("No PhantomSwordDamage found in children!");
+        }
+    
         ghostEffect = GetComponent<GhostEffect>();
         if (ghostEffect == null)
         {
             ghostEffect = gameObject.AddComponent<GhostEffect>();
         }
-        
+    
         if (agent != null)
         {
             agent.speed = newSpeed;
             agent.stoppingDistance = attackRadius * 0.5f;
-            
+        
             StartCoroutine(WaitForNavMesh());
         }
         else
@@ -84,6 +84,35 @@ public class PhantomKnight : MonoBehaviour
             isReady = true;
             StartWalking();
         }
+    }
+
+    private IEnumerator ActivateSwordCollider()
+    {
+        yield return new WaitForSeconds(swordActivationDelay);
+    
+        // Enable sword damage
+        if (swordDamage != null)
+        {
+            swordDamage.EnableDamage();
+        }
+    
+        // Spawn VFX
+        if (slashVFX != null && attackPoint != null)
+        {
+            GameObject vfx = Instantiate(slashVFX, attackPoint.position, transform.rotation);
+            Destroy(vfx, 1f);
+        }
+    
+        yield return new WaitForSeconds(swordActiveTime);
+    
+        // Disable sword damage
+        if (swordDamage != null)
+        {
+            swordDamage.DisableDamage();
+        }
+    
+        // Fade out after attack
+        StartCoroutine(FadeOut());
     }
     
     private IEnumerator WaitForNavMesh()
@@ -208,53 +237,6 @@ public class PhantomKnight : MonoBehaviour
         }
     
         StartCoroutine(ActivateSwordCollider());
-    }
-    
-    private IEnumerator ActivateSwordCollider()
-    {
-        yield return new WaitForSeconds(swordActivationDelay);
-        
-        // Enable sword collider
-        if (swordCollider != null)
-        {
-            swordCollider.enabled = true;
-        }
-        
-        // Spawn VFX
-        if (slashVFX != null && attackPoint != null)
-        {
-            GameObject vfx = Instantiate(slashVFX, attackPoint.position, transform.rotation);
-            Destroy(vfx, 1f);
-        }
-        
-        yield return new WaitForSeconds(swordActiveTime);
-        
-        // Disable sword collider
-        if (swordCollider != null)
-        {
-            swordCollider.enabled = false;
-        }
-        
-        // Fade out after attack
-        StartCoroutine(FadeOut());
-    }
-    
-    // Called by animation event (optional)
-    public void EnableSwordCollider()
-    {
-        if (swordCollider != null)
-        {
-            swordCollider.enabled = true;
-        }
-    }
-    
-    // Called by animation event (optional)
-    public void DisableSwordCollider()
-    {
-        if (swordCollider != null)
-        {
-            swordCollider.enabled = false;
-        }
     }
     
     private IEnumerator FadeOut()
