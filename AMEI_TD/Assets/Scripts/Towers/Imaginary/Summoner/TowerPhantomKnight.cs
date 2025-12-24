@@ -17,16 +17,19 @@ public class TowerPhantomKnight : TowerBase
     [SerializeField] private float phantomSpeed = 5f;
     [SerializeField] private float phantomDamage = 20f;
     [SerializeField] private float attackRadius = 2f;
+    [SerializeField] private float stoppingDistance = 0.5f;
     [SerializeField] private float fadeOutTime = 0.5f;
     
     [Header("Spawn VFX")]
     [SerializeField] private GameObject spawnVFXPrefab;
+    [SerializeField] private float vfxDuration = 2f;
     
     private List<PhantomKnight> activePhantoms = new List<PhantomKnight>();
+    private bool isAttacking = false;
+    private Transform savedEnemy;
     
     protected override void FixedUpdate()
     {
-        // Clean up dead phantoms
         activePhantoms.RemoveAll(p => p == null);
         
         base.FixedUpdate();
@@ -34,48 +37,50 @@ public class TowerPhantomKnight : TowerBase
     
     protected override bool CanAttack()
     {
-        // Only attack if cooldown passed AND no active phantoms
         return Time.time > lastTimeAttacked + attackCooldown 
             && currentEnemy != null 
-            && activePhantoms.Count == 0;
+            && activePhantoms.Count == 0
+            && !isAttacking;
     }
     
     protected override void Attack()
     {
         lastTimeAttacked = Time.time;
+        isAttacking = true;
+        
+        // Save enemy reference for when animation triggers spawn
+        savedEnemy = currentEnemy?.transform;
         
         if (characterAnimator != null)
         {
             characterAnimator.SetTrigger(attackAnimationTrigger);
         }
-        
-        if (projectileSpawnDelay > 0)
-        {
-            Invoke("SpawnPhantoms", projectileSpawnDelay);
-        }
         else
         {
-            SpawnPhantoms();
+            OnSpawnPhantoms();
         }
+    }
+    
+    // Called by animation event
+    public void OnSpawnPhantoms()
+    {
+        SpawnPhantoms();
+        isAttacking = false;
     }
     
     private void SpawnPhantoms()
     {
-        if (currentEnemy == null) return;
+        if (savedEnemy == null) return;
         
-        // Get enemy's forward direction
-        Vector3 enemyPosition = currentEnemy.transform.position;
-        Vector3 enemyForward = currentEnemy.transform.forward;
+        Vector3 enemyPosition = savedEnemy.position;
+        Vector3 enemyForward = savedEnemy.forward;
         
-        // Base spawn position ahead of enemy
         Vector3 baseSpawnPos = enemyPosition + enemyForward * spawnDistanceAhead;
         
-        // Get right vector for horizontal spread
         Vector3 rightVector = Vector3.Cross(Vector3.up, -enemyForward).normalized;
         
         for (int i = 0; i < phantomCount; i++)
         {
-            // Calculate horizontal offset
             float horizontalOffset = 0f;
             if (phantomCount > 1)
             {
@@ -83,21 +88,18 @@ public class TowerPhantomKnight : TowerBase
                 horizontalOffset = Mathf.Lerp(-horizontalSpacing, horizontalSpacing, t);
             }
             
-            // Calculate depth offset
             float depthOffset = i * depthStagger;
             
-            // Calculate spawn position
             Vector3 spawnPos = baseSpawnPos + rightVector * horizontalOffset + enemyForward * depthOffset;
             
-            // Find nearest point on NavMesh
             NavMeshHit hit;
-            if (NavMesh.SamplePosition(spawnPos, out hit, 5f, NavMesh.AllAreas))
+            if (NavMesh.SamplePosition(spawnPos, out hit, 15f, NavMesh.AllAreas))  // Increased from 10f to 15f
             {
                 spawnPos = hit.position;
             }
             else
             {
-                Debug.LogWarning("PhantomKnight: No NavMesh found at spawn position");
+                Debug.LogWarning($"PhantomKnight: No NavMesh found near {spawnPos}");
                 continue;
             }
             
@@ -105,17 +107,17 @@ public class TowerPhantomKnight : TowerBase
             if (spawnVFXPrefab != null)
             {
                 GameObject vfx = Instantiate(spawnVFXPrefab, spawnPos, Quaternion.identity);
-                Destroy(vfx, 2f);
+                Destroy(vfx, vfxDuration);
             }
             
-            // Spawn phantom facing the enemy
+            // Spawn phantom
             Quaternion spawnRot = Quaternion.LookRotation(-enemyForward);
             GameObject phantomObj = Instantiate(phantomPrefab, spawnPos, spawnRot);
             
             PhantomKnight phantom = phantomObj.GetComponent<PhantomKnight>();
             if (phantom != null)
             {
-                phantom.Setup(phantomSpeed, phantomDamage, attackRadius, fadeOutTime, whatIsEnemy, currentEnemy.transform);
+                phantom.Setup(phantomSpeed, phantomDamage, attackRadius, stoppingDistance, fadeOutTime, whatIsEnemy, savedEnemy);
                 activePhantoms.Add(phantom);
             }
         }

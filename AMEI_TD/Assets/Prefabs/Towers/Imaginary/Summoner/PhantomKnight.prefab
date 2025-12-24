@@ -1142,14 +1142,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 7371037253562006322}
   attackPoint: {fileID: 8553755178970484333}
-  slashVFX: {fileID: 0}
+  slashVFX: {fileID: 3153472991145048103, guid: 47ab97d877dbc5343aef55061abf8fae, type: 3}
   walkBool: Walk
   attackTriggers:
   - Attack1
   - Attack2
-  swordCollider: {fileID: 1314872642257406070}
+  spawnTrigger: Spawn
+  spawnAnimationDuration: 1.08
   swordActiveTime: 0.5
   swordActivationDelay: 0.2
+  slashVFXRotationOffset: {x: 0, y: 0, z: 0}
+  slashVFXStartDelay: 0
+  slashVFXDuration: 0.4
 --- !u!114 &-6523280288289035866
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1162,7 +1166,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9bebf26158400714bb310f229ede5a4b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ghostColor: {r: 0.5, g: 0.8, b: 1, a: 0.6}
+  ghostColor: {r: 0.5, g: 0.8, b: 1, a: 0.69803923}
   emissionColor: {r: 0.3, g: 0.5, b: 0.7, a: 1}
   emissionIntensity: 0.5
 --- !u!195 &3482167189468420219
