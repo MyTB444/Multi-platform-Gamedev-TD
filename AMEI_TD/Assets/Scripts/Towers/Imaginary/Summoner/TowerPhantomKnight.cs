@@ -39,7 +39,6 @@ public class TowerPhantomKnight : TowerBase
     {
         return Time.time > lastTimeAttacked + attackCooldown 
             && currentEnemy != null 
-            && activePhantoms.Count == 0
             && !isAttacking;
     }
     
@@ -48,7 +47,6 @@ public class TowerPhantomKnight : TowerBase
         lastTimeAttacked = Time.time;
         isAttacking = true;
         
-        // Save enemy reference for when animation triggers spawn
         savedEnemy = currentEnemy?.transform;
         
         if (characterAnimator != null)
@@ -64,13 +62,44 @@ public class TowerPhantomKnight : TowerBase
     // Called by animation event
     public void OnSpawnPhantoms()
     {
+        // If saved enemy died, find a new one
+        if (savedEnemy == null || !savedEnemy.gameObject.activeSelf)
+        {
+            FindNewTarget();
+        }
+        
         SpawnPhantoms();
         isAttacking = false;
     }
     
+    private void FindNewTarget()
+    {
+        Collider[] enemies = Physics.OverlapSphere(transform.position, attackRange, whatIsEnemy);
+        
+        if (enemies.Length > 0)
+        {
+            float closestDist = float.MaxValue;
+            Transform closest = null;
+            
+            foreach (Collider col in enemies)
+            {
+                if (!col.gameObject.activeSelf) continue;
+                
+                float dist = Vector3.Distance(transform.position, col.transform.position);
+                if (dist < closestDist)
+                {
+                    closestDist = dist;
+                    closest = col.transform;
+                }
+            }
+            
+            savedEnemy = closest;
+        }
+    }
+    
     private void SpawnPhantoms()
     {
-        if (savedEnemy == null) return;
+        if (savedEnemy == null || !savedEnemy.gameObject.activeSelf) return;
         
         Vector3 enemyPosition = savedEnemy.position;
         Vector3 enemyForward = savedEnemy.forward;
@@ -93,7 +122,7 @@ public class TowerPhantomKnight : TowerBase
             Vector3 spawnPos = baseSpawnPos + rightVector * horizontalOffset + enemyForward * depthOffset;
             
             NavMeshHit hit;
-            if (NavMesh.SamplePosition(spawnPos, out hit, 15f, NavMesh.AllAreas))  // Increased from 10f to 15f
+            if (NavMesh.SamplePosition(spawnPos, out hit, 15f, NavMesh.AllAreas))
             {
                 spawnPos = hit.position;
             }
@@ -103,14 +132,12 @@ public class TowerPhantomKnight : TowerBase
                 continue;
             }
             
-            // Spawn VFX
             if (spawnVFXPrefab != null)
             {
                 GameObject vfx = Instantiate(spawnVFXPrefab, spawnPos, Quaternion.identity);
                 Destroy(vfx, vfxDuration);
             }
             
-            // Spawn phantom
             Quaternion spawnRot = Quaternion.LookRotation(-enemyForward);
             GameObject phantomObj = Instantiate(phantomPrefab, spawnPos, spawnRot);
             

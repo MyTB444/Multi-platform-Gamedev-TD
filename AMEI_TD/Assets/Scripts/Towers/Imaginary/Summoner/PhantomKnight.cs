@@ -25,6 +25,10 @@ public class PhantomKnight : MonoBehaviour
     [SerializeField] private float slashVFXStartDelay = 0f;
     [SerializeField] private float slashVFXDuration = 0.5f;
     
+    [Header("Target Finding")]
+    [SerializeField] private float searchRadius = 15f;
+    [SerializeField] private float maxTimeWithoutTarget = 5f;
+    
     private float damage;
     private float attackRadius;
     private float fadeOutTime;
@@ -34,6 +38,8 @@ public class PhantomKnight : MonoBehaviour
     private bool isFading = false;
     private bool isReady = false;
     private Transform targetEnemy;
+    
+    private float timeWithoutTarget = 0f;
     
     private GhostEffect ghostEffect;
     private PhantomSwordDamage swordDamage;
@@ -59,25 +65,24 @@ public class PhantomKnight : MonoBehaviour
         fadeOutTime = newFadeOutTime;
         enemyLayer = newEnemyLayer;
         targetEnemy = enemy;
-    
-        // Setup sword damage component
+        
         swordDamage = GetComponentInChildren<PhantomSwordDamage>();
         if (swordDamage != null)
         {
             swordDamage.Setup(damage, enemyLayer, slashVFX, slashVFXRotationOffset, slashVFXStartDelay, slashVFXDuration);
         }
-    
+        
         ghostEffect = GetComponent<GhostEffect>();
         if (ghostEffect == null)
         {
             ghostEffect = gameObject.AddComponent<GhostEffect>();
         }
-    
+        
         if (agent != null)
         {
             agent.speed = newSpeed;
             agent.stoppingDistance = newStoppingDistance;
-        
+            
             StartCoroutine(WaitForNavMesh());
         }
         else
@@ -116,13 +121,11 @@ public class PhantomKnight : MonoBehaviour
         
         agent.isStopped = true;
         
-        // Play spawn animation
         if (animator != null)
         {
             animator.SetTrigger(spawnTrigger);
         }
         
-        // Wait for spawn animation to finish
         yield return new WaitForSeconds(spawnAnimationDuration);
         
         agent.isStopped = false;
@@ -138,34 +141,67 @@ public class PhantomKnight : MonoBehaviour
         }
     }
     
+    private void StopWalking()
+    {
+        if (animator != null)
+        {
+            animator.SetBool(walkBool, false);
+        }
+    }
+    
     private void Update()
     {
         if (!isReady || hasAttacked || isFading) return;
         
-        if (targetEnemy != null && agent != null && agent.isOnNavMesh)
-        {
-            agent.SetDestination(targetEnemy.position);
-        }
+        // Check if target is valid
+        bool hasValidTarget = targetEnemy != null && targetEnemy.gameObject.activeSelf;
         
-        // Check distance to target
-        if (targetEnemy != null)
+        if (hasValidTarget)
         {
+            timeWithoutTarget = 0f;
+            
+            // Move toward target
+            if (agent != null && agent.isOnNavMesh)
+            {
+                agent.isStopped = false;
+                agent.SetDestination(targetEnemy.position);
+            }
+            
+            StartWalking();
+            
+            // Check distance to target
             float distToTarget = Vector3.Distance(transform.position, targetEnemy.position);
             if (distToTarget <= attackRadius)
             {
                 StartAttack();
             }
         }
-        
-        if (targetEnemy == null || !targetEnemy.gameObject.activeSelf)
+        else
         {
+            // No valid target - find new one
+            timeWithoutTarget += Time.deltaTime;
+            
             FindNewTarget();
+            
+            // Stop moving while searching
+            if (agent != null && agent.isOnNavMesh)
+            {
+                agent.isStopped = true;
+            }
+            
+            StopWalking();
+            
+            // Fade out if no target found for too long
+            if (timeWithoutTarget >= maxTimeWithoutTarget)
+            {
+                StartCoroutine(FadeOut());
+            }
         }
     }
     
     private void FindNewTarget()
     {
-        Collider[] enemies = Physics.OverlapSphere(transform.position, 10f, enemyLayer);
+        Collider[] enemies = Physics.OverlapSphere(transform.position, searchRadius, enemyLayer);
         
         if (enemies.Length > 0)
         {
@@ -174,6 +210,9 @@ public class PhantomKnight : MonoBehaviour
             
             foreach (Collider col in enemies)
             {
+                // Make sure enemy is active
+                if (!col.gameObject.activeSelf) continue;
+                
                 float dist = Vector3.Distance(transform.position, col.transform.position);
                 if (dist < closestDist)
                 {
@@ -182,11 +221,11 @@ public class PhantomKnight : MonoBehaviour
                 }
             }
             
-            targetEnemy = closest;
-        }
-        else
-        {
-            StartCoroutine(FadeOut());
+            if (closest != null)
+            {
+                targetEnemy = closest;
+                timeWithoutTarget = 0f;
+            }
         }
     }
     
@@ -211,7 +250,6 @@ public class PhantomKnight : MonoBehaviour
             animator.SetBool(walkBool, false);
             
             string randomAttack = attackTriggers[Random.Range(0, attackTriggers.Length)];
-            Debug.Log($"Triggering attack: {randomAttack}");
             animator.SetTrigger(randomAttack);
         }
         
@@ -222,7 +260,6 @@ public class PhantomKnight : MonoBehaviour
     {
         yield return new WaitForSeconds(swordActivationDelay);
         
-        // Enable sword damage
         if (swordDamage != null)
         {
             swordDamage.EnableDamage();
@@ -230,13 +267,11 @@ public class PhantomKnight : MonoBehaviour
         
         yield return new WaitForSeconds(swordActiveTime);
         
-        // Disable sword damage
         if (swordDamage != null)
         {
             swordDamage.DisableDamage();
         }
         
-        // Fade out after attack
         StartCoroutine(FadeOut());
     }
     
@@ -248,6 +283,8 @@ public class PhantomKnight : MonoBehaviour
         {
             agent.isStopped = true;
         }
+        
+        StopWalking();
         
         float elapsed = 0f;
         
@@ -267,10 +304,18 @@ public class PhantomKnight : MonoBehaviour
         Destroy(gameObject);
     }
     
+    public bool HasAttacked()
+    {
+        return hasAttacked;
+    }
+    
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;
         Vector3 pos = attackPoint != null ? attackPoint.position : transform.position;
         Gizmos.DrawWireSphere(pos, attackRadius);
+        
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, searchRadius);
     }
 }
