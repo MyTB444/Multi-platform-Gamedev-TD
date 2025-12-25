@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -38,6 +39,11 @@ public class TileButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     public void OnPointerExit(PointerEventData eventData)
     {
             mrMat.color = originalColour;
+        if (buttonControl)
+        {
+            buttonControl = false;
+            DeactivateButtons();
+        }
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -61,11 +67,23 @@ public class TileButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             if (destroyButton.activeSelf == false)
             {
                 destroyButton.SetActive(true);
+                SellButton sb = destroyButton.GetComponent<SellButton>();
+                sb.SetDefaultShake();
+                StartCoroutine(DestroyButtonDisabler());
             }
             else if (destroyButton.activeSelf == true)
             {
                 destroyButton.SetActive(false);
+                StopAllCoroutines();
             }
+        }
+    }
+    private IEnumerator DestroyButtonDisabler()
+    {
+        yield return new WaitForSeconds(5.0f);
+        if (destroyButton.activeSelf == true)
+        {
+            destroyButton.SetActive(false);
         }
     }
 
