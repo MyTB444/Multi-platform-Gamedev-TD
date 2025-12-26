@@ -1,7 +1,13 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TileSetHolder : MonoBehaviour
 {
+    public enum TileTheme { Field, Snow, Desert, Dungeon }
+    
+    [Header("Theme")]
+    public TileTheme theme = TileTheme.Field;
+    
     [Header("Field Tiles (Checkered)")]
     public GameObject tileFieldLight;
     public GameObject tileFieldDark;
@@ -25,26 +31,20 @@ public class TileSetHolder : MonoBehaviour
     public GameObject tileRiverBridge;
     public GameObject tileRiverDoubleBridge;
 
-    [Header("Props - Objects")]
-    public GameObject propBarrel;
-    public GameObject propCrate;
-    public GameObject propLadder;
+    [Header("Props")]
+    public List<PropCategory> propCategories = new List<PropCategory>();
+}
 
-    [Header("Props - Grass")]
-    public GameObject propGrass1;
-    public GameObject propGrass2;
+[System.Serializable]
+public class PropCategory
+{
+    public string categoryName = "New Category";
+    public List<PropEntry> props = new List<PropEntry>();
+}
 
-    [Header("Props - Apple Trees")]
-    public GameObject propAppleTreeShort;
-    public GameObject propAppleTreeTall;
-
-    [Header("Props - Trees")]
-    public GameObject propTreeShort;
-    public GameObject propTreeTall;
-
-    [Header("Props - Pine Trees")]
-    public GameObject propPineShort;
-    public GameObject propPineShort2;
-    public GameObject propPineTall;
-    public GameObject propPineTall2;
+[System.Serializable]
+public class PropEntry
+{
+    public string displayName = "New Prop";
+    public GameObject prefab;
 }

@@ -1,11 +1,31 @@
 using UnityEditor;
 using UnityEngine;
+using System.Linq;
 
 [CustomEditor(typeof(TileSlot)), CanEditMultipleObjects]
 public class TileSlotEditor : Editor
 {
     private GUIStyle centredStyle;
     private GUIStyle propInfoStyle;
+    
+    private static int selectedThemeIndex = 0;
+    private static readonly string[] themeNames = { "Field", "Snow", "Desert", "Dungeon" };
+    
+    private TileSetHolder GetSelectedHolder()
+    {
+        TileSetHolder.TileTheme selectedTheme = (TileSetHolder.TileTheme)selectedThemeIndex;
+        
+        var holders = FindObjectsByType<TileSetHolder>(FindObjectsSortMode.None);
+        var matchingHolder = holders.FirstOrDefault(h => h.theme == selectedTheme);
+        
+        if (matchingHolder == null && holders.Length > 0)
+        {
+            Debug.LogWarning($"No TileSetHolder found for theme '{selectedTheme}'. Using first available.");
+            return holders[0];
+        }
+        
+        return matchingHolder;
+    }
     
     public override void OnInspectorGUI()
     {
@@ -28,7 +48,21 @@ public class TileSlotEditor : Editor
 
         float oneButtonWidth = (EditorGUIUtility.currentViewWidth - 25);
         float twoButtonWidth = (EditorGUIUtility.currentViewWidth - 25) / 2;
-        float threeButtonWidth = (EditorGUIUtility.currentViewWidth - 25) / 3;
+        
+        // ==================== THEME SELECTION ====================
+        GUILayout.Space(5);
+        EditorGUILayout.LabelField("Theme", centredStyle);
+        selectedThemeIndex = GUILayout.Toolbar(selectedThemeIndex, themeNames);
+        
+        TileSetHolder holder = GetSelectedHolder();
+        
+        if (holder == null)
+        {
+            EditorGUILayout.HelpBox($"No TileSetHolder found for '{themeNames[selectedThemeIndex]}' theme.\nCreate a GameObject with TileSetHolder component and set its theme.", MessageType.Warning);
+            return;
+        }
+        
+        GUILayout.Space(10);
         
         // Position and Rotation Section
         GUILayout.Label("Position and Rotation", centredStyle);
@@ -74,17 +108,12 @@ public class TileSlotEditor : Editor
         
         if (GUILayout.Button("Field", GUILayout.Width(oneButtonWidth)))
         {
-            TileSetHolder holder = FindFirstObjectByType<TileSetHolder>();
-    
             foreach (var targetTile in targets)
             {
                 TileSlot slot = (TileSlot)targetTile;
-        
-                // Divide by tileSpacing (2) to get actual grid coordinates
                 int x = Mathf.RoundToInt(slot.transform.position.x / 2f);
                 int z = Mathf.RoundToInt(slot.transform.position.z / 2f);
                 bool useLight = (x + z) % 2 == 0;
-        
                 GameObject newTile = useLight ? holder.tileFieldLight : holder.tileFieldDark;
                 slot.SwitchTile(newTile);
             }
@@ -95,10 +124,9 @@ public class TileSlotEditor : Editor
         
         if (GUILayout.Button("Road", GUILayout.Width(oneButtonWidth)))
         {
-            GameObject newTile = FindFirstObjectByType<TileSetHolder>().tileRoad;
             foreach (var targetTile in targets)
             {
-                ((TileSlot)targetTile).SwitchTile(newTile);
+                ((TileSlot)targetTile).SwitchTile(holder.tileRoad);
             }
         }
         
@@ -108,40 +136,35 @@ public class TileSlotEditor : Editor
         GUILayout.BeginHorizontal();
         if (GUILayout.Button("Inner Corner", GUILayout.Width(twoButtonWidth)))
         {
-            GameObject newTile = FindFirstObjectByType<TileSetHolder>().tileInnerCorner;
             foreach (var targetTile in targets)
             {
-                ((TileSlot)targetTile).SwitchTile(newTile);
+                ((TileSlot)targetTile).SwitchTile(holder.tileInnerCorner);
             }
         }
         
         if (GUILayout.Button("Outer Corner", GUILayout.Width(twoButtonWidth)))
         {
-            GameObject newTile = FindFirstObjectByType<TileSetHolder>().tileOuterCorner;
             foreach (var targetTile in targets)
             {
-                ((TileSlot)targetTile).SwitchTile(newTile);
+                ((TileSlot)targetTile).SwitchTile(holder.tileOuterCorner);
             }
         }
-        
         GUILayout.EndHorizontal();
 
         GUILayout.BeginHorizontal();
         if (GUILayout.Button("Inner Corner 2", GUILayout.Width(twoButtonWidth)))
         {
-            GameObject newTile = FindFirstObjectByType<TileSetHolder>().tileInnerCorner2;
             foreach (var targetTile in targets)
             {
-                ((TileSlot)targetTile).SwitchTile(newTile);
+                ((TileSlot)targetTile).SwitchTile(holder.tileInnerCorner2);
             }
         }
         
         if (GUILayout.Button("Outer Corner 2", GUILayout.Width(twoButtonWidth)))
         {
-            GameObject newTile = FindFirstObjectByType<TileSetHolder>().tileOuterCorner2;
             foreach (var targetTile in targets)
             {
-                ((TileSlot)targetTile).SwitchTile(newTile);
+                ((TileSlot)targetTile).SwitchTile(holder.tileOuterCorner2);
             }
         }
         GUILayout.EndHorizontal();
@@ -152,19 +175,17 @@ public class TileSlotEditor : Editor
         GUILayout.BeginHorizontal();
         if (GUILayout.Button("Sideway Road1", GUILayout.Width(twoButtonWidth)))
         {
-            GameObject newTile = FindFirstObjectByType<TileSetHolder>().tileSidewayRoad;
             foreach (var targetTile in targets)
             {
-                ((TileSlot)targetTile).SwitchTile(newTile);
+                ((TileSlot)targetTile).SwitchTile(holder.tileSidewayRoad);
             }
         }
         
         if (GUILayout.Button("Sideway Road2", GUILayout.Width(twoButtonWidth)))
         {
-            GameObject newTile = FindFirstObjectByType<TileSetHolder>().tileSidewayRoad2;
             foreach (var targetTile in targets)
             {
-                ((TileSlot)targetTile).SwitchTile(newTile);
+                ((TileSlot)targetTile).SwitchTile(holder.tileSidewayRoad2);
             }
         }
         GUILayout.EndHorizontal();
@@ -175,19 +196,17 @@ public class TileSlotEditor : Editor
         GUILayout.BeginHorizontal();
         if (GUILayout.Button("River", GUILayout.Width(twoButtonWidth)))
         {
-            GameObject newTile = FindFirstObjectByType<TileSetHolder>().tileRiver;
             foreach (var targetTile in targets)
             {
-                ((TileSlot)targetTile).SwitchTile(newTile);
+                ((TileSlot)targetTile).SwitchTile(holder.tileRiver);
             }
         }
         
         if (GUILayout.Button("Pond", GUILayout.Width(twoButtonWidth)))
         {
-            GameObject newTile = FindFirstObjectByType<TileSetHolder>().tilePond;
             foreach (var targetTile in targets)
             {
-                ((TileSlot)targetTile).SwitchTile(newTile);
+                ((TileSlot)targetTile).SwitchTile(holder.tilePond);
             }
         }
         GUILayout.EndHorizontal();
@@ -195,113 +214,66 @@ public class TileSlotEditor : Editor
         GUILayout.BeginHorizontal();
         if (GUILayout.Button("River Bridge", GUILayout.Width(twoButtonWidth)))
         {
-            GameObject newTile = FindFirstObjectByType<TileSetHolder>().tileRiverBridge;
             foreach (var targetTile in targets)
             {
-                ((TileSlot)targetTile).SwitchTile(newTile);
+                ((TileSlot)targetTile).SwitchTile(holder.tileRiverBridge);
             }
         }
         
         if (GUILayout.Button("River Double Bridge", GUILayout.Width(twoButtonWidth)))
         {
-            GameObject newTile = FindFirstObjectByType<TileSetHolder>().tileRiverDoubleBridge;
             foreach (var targetTile in targets)
             {
-                ((TileSlot)targetTile).SwitchTile(newTile);
+                ((TileSlot)targetTile).SwitchTile(holder.tileRiverDoubleBridge);
             }
         }
         GUILayout.EndHorizontal();
         
-        // ==================== PROPS SECTION ====================
+        // ==================== DYNAMIC PROPS SECTION ====================
         GUILayout.Space(10);
         GUILayout.Label("Props", centredStyle);
         
-        // Show prop count info
         TileSlot primarySlot = (TileSlot)target;
         int propCount = primarySlot.GetPropCount();
         GUILayout.Label(propCount > 0 ? $"Props on tile: {propCount}" : "No props placed", propInfoStyle);
         
-        TileSetHolder holder2 = FindFirstObjectByType<TileSetHolder>();
-        
-        // Objects
-        GUILayout.Label("Objects", EditorStyles.boldLabel);
-        GUILayout.BeginHorizontal();
-        if (GUILayout.Button("Barrel", GUILayout.Width(threeButtonWidth)))
+        // Dynamically generate prop buttons from categories
+        if (holder.propCategories != null && holder.propCategories.Count > 0)
         {
-            AddPropToTargets(holder2.propBarrel);
+            foreach (var category in holder.propCategories)
+            {
+                if (category.props == null || category.props.Count == 0) continue;
+                
+                GUILayout.Label(category.categoryName, EditorStyles.boldLabel);
+                
+                // Calculate button width based on prop count (max 3 per row)
+                int propsPerRow = Mathf.Min(category.props.Count, 3);
+                float buttonWidth = (EditorGUIUtility.currentViewWidth - 25) / propsPerRow;
+                
+                int propIndex = 0;
+                while (propIndex < category.props.Count)
+                {
+                    GUILayout.BeginHorizontal();
+                    
+                    // Draw up to 3 buttons per row
+                    for (int i = 0; i < 3 && propIndex < category.props.Count; i++)
+                    {
+                        var prop = category.props[propIndex];
+                        if (GUILayout.Button(prop.displayName, GUILayout.Width(buttonWidth)))
+                        {
+                            AddPropToTargets(prop.prefab);
+                        }
+                        propIndex++;
+                    }
+                    
+                    GUILayout.EndHorizontal();
+                }
+            }
         }
-        if (GUILayout.Button("Crate", GUILayout.Width(threeButtonWidth)))
+        else
         {
-            AddPropToTargets(holder2.propCrate);
+            GUILayout.Label("No prop categories defined for this theme", propInfoStyle);
         }
-        if (GUILayout.Button("Ladder", GUILayout.Width(threeButtonWidth)))
-        {
-            AddPropToTargets(holder2.propLadder);
-        }
-        GUILayout.EndHorizontal();
-        
-        // Grass
-        GUILayout.Label("Grass", EditorStyles.boldLabel);
-        GUILayout.BeginHorizontal();
-        if (GUILayout.Button("Grass 1", GUILayout.Width(twoButtonWidth)))
-        {
-            AddPropToTargets(holder2.propGrass1);
-        }
-        if (GUILayout.Button("Grass 2", GUILayout.Width(twoButtonWidth)))
-        {
-            AddPropToTargets(holder2.propGrass2);
-        }
-        GUILayout.EndHorizontal();
-        
-        // Apple Trees
-        GUILayout.Label("Apple Trees", EditorStyles.boldLabel);
-        GUILayout.BeginHorizontal();
-        if (GUILayout.Button("Apple Short", GUILayout.Width(twoButtonWidth)))
-        {
-            AddPropToTargets(holder2.propAppleTreeShort);
-        }
-        if (GUILayout.Button("Apple Tall", GUILayout.Width(twoButtonWidth)))
-        {
-            AddPropToTargets(holder2.propAppleTreeTall);
-        }
-        GUILayout.EndHorizontal();
-        
-        // Regular Trees
-        GUILayout.Label("Trees", EditorStyles.boldLabel);
-        GUILayout.BeginHorizontal();
-        if (GUILayout.Button("Tree Short", GUILayout.Width(twoButtonWidth)))
-        {
-            AddPropToTargets(holder2.propTreeShort);
-        }
-        if (GUILayout.Button("Tree Tall", GUILayout.Width(twoButtonWidth)))
-        {
-            AddPropToTargets(holder2.propTreeTall);
-        }
-        GUILayout.EndHorizontal();
-        
-        // Pine Trees
-        GUILayout.Label("Pine Trees", EditorStyles.boldLabel);
-        GUILayout.BeginHorizontal();
-        if (GUILayout.Button("Pine Short", GUILayout.Width(twoButtonWidth)))
-        {
-            AddPropToTargets(holder2.propPineShort);
-        }
-        if (GUILayout.Button("Pine Short 2", GUILayout.Width(twoButtonWidth)))
-        {
-            AddPropToTargets(holder2.propPineShort2);
-        }
-        GUILayout.EndHorizontal();
-        
-        GUILayout.BeginHorizontal();
-        if (GUILayout.Button("Pine Tall", GUILayout.Width(twoButtonWidth)))
-        {
-            AddPropToTargets(holder2.propPineTall);
-        }
-        if (GUILayout.Button("Pine Tall 2", GUILayout.Width(twoButtonWidth)))
-        {
-            AddPropToTargets(holder2.propPineTall2);
-        }
-        GUILayout.EndHorizontal();
         
         // Remove All Props Button
         GUILayout.Space(5);
