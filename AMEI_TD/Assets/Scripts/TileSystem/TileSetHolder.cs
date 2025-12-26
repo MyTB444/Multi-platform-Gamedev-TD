@@ -8,6 +8,10 @@ public class TileSetHolder : MonoBehaviour
     [Header("Theme")]
     public TileTheme theme = TileTheme.Field;
     
+    [Header("Road Y Offset")]
+    [Tooltip("Y offset applied to roads, corners, and sideways tiles")]
+    public float roadYOffset = 0f;
+    
     [Header("Field Tiles (Checkered)")]
     public GameObject tileFieldLight;
     public GameObject tileFieldDark;

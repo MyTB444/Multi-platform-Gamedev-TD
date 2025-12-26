@@ -103,9 +103,27 @@ public class TileSlotEditor : Editor
         }
         GUILayout.EndHorizontal();
         
+        GUILayout.BeginHorizontal();
+        if (GUILayout.Button("- .5f on the Y", GUILayout.Width(twoButtonWidth)))
+        {
+            foreach (var targetTile in targets)
+            {
+                ((TileSlot)targetTile).AdjustY(-5);
+            }
+        }
+        
+        if (GUILayout.Button("+ .5f on the Y", GUILayout.Width(twoButtonWidth)))
+        {
+            foreach (var targetTile in targets)
+            {
+                ((TileSlot)targetTile).AdjustY(5);
+            }
+        }
+        GUILayout.EndHorizontal();
+        
         // Field Tiles Section
         GUILayout.Label("Field Tiles", centredStyle);
-        
+
         if (GUILayout.Button("Field", GUILayout.Width(oneButtonWidth)))
         {
             foreach (var targetTile in targets)
@@ -116,17 +134,24 @@ public class TileSlotEditor : Editor
                 bool useLight = (x + z) % 2 == 0;
                 GameObject newTile = useLight ? holder.tileFieldLight : holder.tileFieldDark;
                 slot.SwitchTile(newTile);
+        
+                // Reset Y to 0
+                Vector3 pos = slot.transform.position;
+                slot.transform.position = new Vector3(pos.x, 0f, pos.z);
             }
         }
         
         // Roads Section
         GUILayout.Label("Roads", centredStyle);
-        
+
         if (GUILayout.Button("Road", GUILayout.Width(oneButtonWidth)))
         {
             foreach (var targetTile in targets)
             {
-                ((TileSlot)targetTile).SwitchTile(holder.tileRoad);
+                TileSlot slot = (TileSlot)targetTile;
+                slot.SwitchTile(holder.tileRoad);
+                Vector3 pos = slot.transform.position;
+                slot.transform.position = new Vector3(pos.x, holder.roadYOffset, pos.z);
             }
         }
         
@@ -138,15 +163,21 @@ public class TileSlotEditor : Editor
         {
             foreach (var targetTile in targets)
             {
-                ((TileSlot)targetTile).SwitchTile(holder.tileInnerCorner);
+                TileSlot slot = (TileSlot)targetTile;
+                slot.SwitchTile(holder.tileInnerCorner);
+                Vector3 pos = slot.transform.position;
+                slot.transform.position = new Vector3(pos.x, holder.roadYOffset, pos.z);
             }
         }
-        
+
         if (GUILayout.Button("Outer Corner", GUILayout.Width(twoButtonWidth)))
         {
             foreach (var targetTile in targets)
             {
-                ((TileSlot)targetTile).SwitchTile(holder.tileOuterCorner);
+                TileSlot slot = (TileSlot)targetTile;
+                slot.SwitchTile(holder.tileOuterCorner);
+                Vector3 pos = slot.transform.position;
+                slot.transform.position = new Vector3(pos.x, holder.roadYOffset, pos.z);
             }
         }
         GUILayout.EndHorizontal();
@@ -156,75 +187,99 @@ public class TileSlotEditor : Editor
         {
             foreach (var targetTile in targets)
             {
-                ((TileSlot)targetTile).SwitchTile(holder.tileInnerCorner2);
+                TileSlot slot = (TileSlot)targetTile;
+                slot.SwitchTile(holder.tileInnerCorner2);
+                Vector3 pos = slot.transform.position;
+                slot.transform.position = new Vector3(pos.x, holder.roadYOffset, pos.z);
             }
         }
-        
+
         if (GUILayout.Button("Outer Corner 2", GUILayout.Width(twoButtonWidth)))
         {
             foreach (var targetTile in targets)
             {
-                ((TileSlot)targetTile).SwitchTile(holder.tileOuterCorner2);
+                TileSlot slot = (TileSlot)targetTile;
+                slot.SwitchTile(holder.tileOuterCorner2);
+                Vector3 pos = slot.transform.position;
+                slot.transform.position = new Vector3(pos.x, holder.roadYOffset, pos.z);
             }
         }
         GUILayout.EndHorizontal();
-        
+
         // Sideways Section
         GUILayout.Label("Sideways", centredStyle);
-        
+
         GUILayout.BeginHorizontal();
         if (GUILayout.Button("Sideway Road1", GUILayout.Width(twoButtonWidth)))
         {
             foreach (var targetTile in targets)
             {
-                ((TileSlot)targetTile).SwitchTile(holder.tileSidewayRoad);
+                TileSlot slot = (TileSlot)targetTile;
+                slot.SwitchTile(holder.tileSidewayRoad);
+                Vector3 pos = slot.transform.position;
+                slot.transform.position = new Vector3(pos.x, holder.roadYOffset, pos.z);
             }
         }
-        
+
         if (GUILayout.Button("Sideway Road2", GUILayout.Width(twoButtonWidth)))
         {
             foreach (var targetTile in targets)
             {
-                ((TileSlot)targetTile).SwitchTile(holder.tileSidewayRoad2);
+                TileSlot slot = (TileSlot)targetTile;
+                slot.SwitchTile(holder.tileSidewayRoad2);
+                Vector3 pos = slot.transform.position;
+                slot.transform.position = new Vector3(pos.x, holder.roadYOffset, pos.z);
             }
         }
         GUILayout.EndHorizontal();
         
         // Water Section
         GUILayout.Label("Water", centredStyle);
-        
+
         GUILayout.BeginHorizontal();
         if (GUILayout.Button("River", GUILayout.Width(twoButtonWidth)))
         {
             foreach (var targetTile in targets)
             {
-                ((TileSlot)targetTile).SwitchTile(holder.tileRiver);
+                TileSlot slot = (TileSlot)targetTile;
+                slot.SwitchTile(holder.tileRiver);
+                Vector3 pos = slot.transform.position;
+                slot.transform.position = new Vector3(pos.x, 0f, pos.z);
             }
         }
-        
+
         if (GUILayout.Button("Pond", GUILayout.Width(twoButtonWidth)))
         {
             foreach (var targetTile in targets)
             {
-                ((TileSlot)targetTile).SwitchTile(holder.tilePond);
+                TileSlot slot = (TileSlot)targetTile;
+                slot.SwitchTile(holder.tilePond);
+                Vector3 pos = slot.transform.position;
+                slot.transform.position = new Vector3(pos.x, 0f, pos.z);
             }
         }
         GUILayout.EndHorizontal();
-        
+
         GUILayout.BeginHorizontal();
         if (GUILayout.Button("River Bridge", GUILayout.Width(twoButtonWidth)))
         {
             foreach (var targetTile in targets)
             {
-                ((TileSlot)targetTile).SwitchTile(holder.tileRiverBridge);
+                TileSlot slot = (TileSlot)targetTile;
+                slot.SwitchTile(holder.tileRiverBridge);
+                Vector3 pos = slot.transform.position;
+                slot.transform.position = new Vector3(pos.x, 0f, pos.z);
             }
         }
-        
+
         if (GUILayout.Button("River Double Bridge", GUILayout.Width(twoButtonWidth)))
         {
             foreach (var targetTile in targets)
             {
-                ((TileSlot)targetTile).SwitchTile(holder.tileRiverDoubleBridge);
+                TileSlot slot = (TileSlot)targetTile;
+                slot.SwitchTile(holder.tileRiverDoubleBridge);
+                Vector3 pos = slot.transform.position;
+                slot.transform.position = new Vector3(pos.x, 0f, pos.z);
             }
         }
         GUILayout.EndHorizontal();
