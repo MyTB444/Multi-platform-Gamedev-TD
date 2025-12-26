@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class TowerBase : MonoBehaviour
 {
-    private EnemyBase currentEnemy;
-    [SerializeField] private int damage;
+    protected EnemyBase currentEnemy;
+    [SerializeField] protected int damage;
     [SerializeField] protected float attackCooldown = 1f;
     protected float lastTimeAttacked;
 
@@ -21,12 +21,25 @@ public class TowerBase : MonoBehaviour
     [SerializeField] protected GameObject projectilePrefab;
     [SerializeField] protected float projectileSpeed;
 
+    [Header(("Tower Pricing"))] 
+    [SerializeField] protected int buyPrice = 1;
+    [SerializeField] protected int sellPrice = 1;
+    
+    [Header("VFX")]
+    [SerializeField] protected GameObject attackSpawnEffectPrefab;
+    
+    [Header("Animation")]
+    [SerializeField] protected Animator characterAnimator;
+    [SerializeField] protected string attackAnimationTrigger = "Attack";
+    [SerializeField] protected float projectileSpawnDelay = 0f;
+
     [Header("Targeting Setup")]
     [SerializeField] protected bool targetMostAdvancedEnemy = true;
     [SerializeField] protected bool targetPriorityEnemy = true;
     [SerializeField] protected EnemyType enemyPriorityType;
     [SerializeField] protected bool useHpTargeting = true;
     [SerializeField] protected bool targetHighestHpEnemy = true;
+    [SerializeField] protected bool useRandomTargeting = false;
 
     private float targetCheckInterval = .1f;
     private float lastTimeCheckedTarget;
@@ -118,6 +131,11 @@ public class TowerBase : MonoBehaviour
     private EnemyBase ChooseEnemyToTarget(List<EnemyBase> targets)
     {
         EnemyBase enemyToTarget = null;
+        
+        if (useRandomTargeting)
+        {
+            return targets[Random.Range(0, targets.Count)];
+        }
 
         // HP-based targeting takes priority over distance
         if (useHpTargeting)
@@ -196,12 +214,33 @@ public class TowerBase : MonoBehaviour
     protected virtual void Attack()
     {
         lastTimeAttacked = Time.time;
-        FireProjectile();
+    
+        // Trigger attack animation
+        if (characterAnimator != null)
+        {
+            characterAnimator.SetTrigger(attackAnimationTrigger);
+        }
+    
+        // Fire projectile with delay (0 = immediate)
+        if (projectileSpawnDelay > 0)
+        {
+            Invoke("FireProjectile", projectileSpawnDelay);
+        }
+        else
+        {
+            FireProjectile();
+        }
     }
 
     // Raycasts to enemy and spawns projectile with hit information
     protected virtual void FireProjectile()
     {
+        if (attackSpawnEffectPrefab != null && gunPoint != null)
+        {
+            GameObject spawnVFX = Instantiate(attackSpawnEffectPrefab, gunPoint.position, Quaternion.identity);
+            Destroy(spawnVFX, 2f);
+        }
+        
         Vector3 directionToEnemy = DirectionToEnemyFrom(gunPoint);
 
         if (Physics.Raycast(gunPoint.position, directionToEnemy, out RaycastHit hitInfo, Mathf.Infinity,
@@ -262,4 +301,7 @@ public class TowerBase : MonoBehaviour
     {
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
+    
+    public int GetBuyPrice() { return buyPrice; }
+    public int GetSellPrice() { return sellPrice; }
 }
