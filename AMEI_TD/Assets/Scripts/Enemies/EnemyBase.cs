@@ -240,25 +240,37 @@ public class EnemyBase : MonoBehaviour, IDamageable
         Destroy(gameObject);
     }
 
-    public virtual void TakeDamage(float incomingDamage, bool isAntiInvisible = false, bool isAntiReinforced = false)
+    public virtual void TakeDamage(DamageInfo damageInfo)
     {
-        if (isInvisible && !isAntiInvisible)
+        DamageCalculator.DamageResult result = DamageCalculator.Calculate(damageInfo, elementType);
+
+        if (result.wasImmune)
         {
+            Debug.Log($"IMMUNE! {damageInfo.elementType} vs {elementType}");
             return;
         }
 
-        if (isReinforced && !isAntiReinforced)
+        if (result.wasNotVeryEffective)
         {
-            return;
+            Debug.Log($"Not very effective... {damageInfo.elementType} vs {elementType} = {result.finalDamage}");
+        }
+        else if (result.wasSuperEffective)
+        {
+            Debug.Log($"Super effective! {damageInfo.elementType} vs {elementType} = {result.finalDamage}");
         }
 
-        enemyCurrentHp -= incomingDamage;
+        enemyCurrentHp -= result.finalDamage;
 
         if (enemyCurrentHp <= 0 && !isDead)
         {
             isDead = true;
             Die();
         }
+    }
+
+    public virtual void TakeDamage(float incomingDamage)
+    {
+        TakeDamage(new DamageInfo(incomingDamage, ElementType.Physical));
     }
 
     private void Die()
