@@ -12,18 +12,18 @@ public class HomingProjectile : TowerProjectileBase
     private bool targetLost = false;
     private LayerMask enemyLayer;
 
-    public void SetupHomingProjectile(Transform enemyTarget, IDamageable newDamageable, float newDamage, float newSpeed, LayerMask whatIsEnemy)
+    public void SetupHomingProjectile(Transform enemyTarget, IDamageable newDamageable, DamageInfo newDamageInfo, float newSpeed, LayerMask whatIsEnemy)
     {
         target = enemyTarget;
         damageable = newDamageable;
-        damageInfo.amount = newDamage;
+        damageInfo = newDamageInfo;
         speed = newSpeed;
         spawnTime = Time.time;
         isHoming = true;
         hasHit = false;
         targetLost = false;
         enemyLayer = whatIsEnemy;
-        
+    
         if (target != null)
         {
             EnemyBase enemy = target.GetComponent<EnemyBase>();

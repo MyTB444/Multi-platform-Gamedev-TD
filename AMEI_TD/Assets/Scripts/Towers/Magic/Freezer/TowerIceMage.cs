@@ -45,7 +45,7 @@ public class TowerIceMage : TowerBase
             ice.SetupIceProjectile(
                 currentEnemy.transform, 
                 damageable, 
-                damage, 
+                CreateDamageInfo(), 
                 projectileSpeed, 
                 whatIsEnemy,
                 slowPercent,

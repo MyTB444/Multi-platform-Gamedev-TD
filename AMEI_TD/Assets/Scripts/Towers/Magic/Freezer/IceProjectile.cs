@@ -24,7 +24,7 @@ public class IceProjectile : TowerProjectileBase
     public void SetupIceProjectile(
         Transform enemyTarget, 
         IDamageable newDamageable, 
-        float newDamage, 
+        DamageInfo newDamageInfo, 
         float newSpeed, 
         LayerMask whatIsEnemy,
         float newSlowPercent,
@@ -37,7 +37,7 @@ public class IceProjectile : TowerProjectileBase
     {
         target = enemyTarget;
         damageable = newDamageable;
-        damageInfo.amount = newDamage;
+        damageInfo = newDamageInfo;
         speed = newSpeed;
         spawnTime = Time.time;
         isHoming = true;
