@@ -24,7 +24,7 @@ public class ArrowProjectile : TowerProjectileBase
     
     public void SetupArcProjectile(Vector3 targetPos, IDamageable newDamageable, float newDamage, float newSpeed, float distance)
     {
-        damage = newDamage;
+        damageInfo.amount = newDamage;
         damageable = newDamageable;
         spawnTime = Time.time;
         launchTime = Time.time;

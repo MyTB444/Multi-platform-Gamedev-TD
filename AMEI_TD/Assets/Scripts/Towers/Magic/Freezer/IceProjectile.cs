@@ -37,7 +37,7 @@ public class IceProjectile : TowerProjectileBase
     {
         target = enemyTarget;
         damageable = newDamageable;
-        damage = newDamage;
+        damageInfo.amount = newDamage;
         speed = newSpeed;
         spawnTime = Time.time;
         isHoming = true;

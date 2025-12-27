@@ -9,7 +9,7 @@ public class RockProjectile : TowerProjectileBase
     
     public void Setup(float damageAmount, LayerMask enemyLayer, float fallSpeed, float size = 1f)
     {
-        damage = damageAmount;
+        damageInfo.amount = damageAmount;
         whatIsEnemy = enemyLayer;
         speed = fallSpeed;
         direction = Vector3.down;
@@ -47,8 +47,8 @@ public class RockProjectile : TowerProjectileBase
             IDamageable damageable = enemy.GetComponent<IDamageable>();
             if (damageable != null)
             {
-                Debug.Log($"Dealing {damage} damage to {enemy.name}");
-                damageable.TakeDamage(damage);
+                Debug.Log($"Dealing {damageInfo.amount} damage to {enemy.name}");
+                damageable.TakeDamage(damageInfo.amount);
             }
         }
     }

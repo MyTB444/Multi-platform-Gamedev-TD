@@ -16,7 +16,7 @@ public class SpearProjectile : TowerProjectileBase
     
     public void SetupSpear(Vector3 targetPos, IDamageable newDamageable, float newDamage, float newSpeed)
     {
-        damage = newDamage;
+        damageInfo.amount = newDamage;
         damageable = newDamageable;
         spawnTime = Time.time;
         spearSpeed = newSpeed;
@@ -68,7 +68,7 @@ public class SpearProjectile : TowerProjectileBase
         
         if (damageable != null)
         {
-            damageable.TakeDamage(damage);
+            damageable.TakeDamage(damageInfo.amount);
         }
         
         DestroyProjectile();
