@@ -17168,8 +17168,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 625146686}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.2062355, y: -0.6691008, z: 0.20357344, w: 0.68434566}
-  m_LocalPosition: {x: 27.46841, y: 9.319161, z: 7.8811555}
+  m_LocalRotation: {x: 0.3089244, y: -0.6264864, z: 0.29769093, w: 0.6507386}
+  m_LocalPosition: {x: 27.610365, y: 14.329041, z: 5.793378}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -39202,6 +39202,10 @@ PrefabInstance:
     - target: {fileID: 1060176546675274297, guid: 624fa53d9337f684c9aebcef0a9bcf17, type: 3}
       propertyPath: m_Name
       value: TowerBladeTrap
+      objectReference: {fileID: 0}
+    - target: {fileID: 1060176546675274297, guid: 624fa53d9337f684c9aebcef0a9bcf17, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -62179,6 +62183,67 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2145873955}
   m_Mesh: {fileID: 4300000, guid: caca2dfcd7da619408439605ff0667a4, type: 3}
+--- !u!1001 &1130054543529602821
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4347233623257220011, guid: f47cbcea2d313024f842d7a6765dcb9f, type: 3}
+      propertyPath: m_Name
+      value: DamageNumberSpawner
+      objectReference: {fileID: 0}
+    - target: {fileID: 7215356746320797437, guid: f47cbcea2d313024f842d7a6765dcb9f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.29250416
+      objectReference: {fileID: 0}
+    - target: {fileID: 7215356746320797437, guid: f47cbcea2d313024f842d7a6765dcb9f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.3981192
+      objectReference: {fileID: 0}
+    - target: {fileID: 7215356746320797437, guid: f47cbcea2d313024f842d7a6765dcb9f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.16714224
+      objectReference: {fileID: 0}
+    - target: {fileID: 7215356746320797437, guid: f47cbcea2d313024f842d7a6765dcb9f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7215356746320797437, guid: f47cbcea2d313024f842d7a6765dcb9f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7215356746320797437, guid: f47cbcea2d313024f842d7a6765dcb9f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7215356746320797437, guid: f47cbcea2d313024f842d7a6765dcb9f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7215356746320797437, guid: f47cbcea2d313024f842d7a6765dcb9f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7215356746320797437, guid: f47cbcea2d313024f842d7a6765dcb9f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7215356746320797437, guid: f47cbcea2d313024f842d7a6765dcb9f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8011660622586583158, guid: f47cbcea2d313024f842d7a6765dcb9f, type: 3}
+      propertyPath: spawnOffset.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: f47cbcea2d313024f842d7a6765dcb9f, type: 3}
 --- !u!1001 &2552101327190110971
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -62292,6 +62357,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TowerPhantomKnight
       objectReference: {fileID: 0}
+    - target: {fileID: 6618268475936549678, guid: 62f454052e86acd4fb4fc5e222e0d352, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -62319,3 +62388,4 @@ SceneRoots:
   - {fileID: 1850604377}
   - {fileID: 2141670697}
   - {fileID: 2552101327190110971}
+  - {fileID: 1130054543529602821}

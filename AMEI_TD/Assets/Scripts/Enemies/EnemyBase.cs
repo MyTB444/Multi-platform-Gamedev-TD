@@ -141,8 +141,18 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     public void ApplyDoT(DamageInfo damagePerTick, float duration, float tickInterval = 0.5f)
     {
+        // Check if immune to this element - skip DoT entirely
+        DamageCalculator.DamageResult testResult = DamageCalculator.Calculate(damagePerTick, elementType);
+    
+        if (testResult.wasImmune)
+        {
+            // Initial hit already showed IMMUNE, just don't apply DoT
+            return;
+        }
+    
         hasDot = true;
         dotDamageInfo = damagePerTick;
+        dotDamageInfo.isDoT = true;
         dotEndTime = Time.time + duration;
         dotTickInterval = tickInterval;
         lastDotTick = Time.time;
@@ -243,6 +253,18 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public virtual void TakeDamage(DamageInfo damageInfo)
     {
         DamageCalculator.DamageResult result = DamageCalculator.Calculate(damageInfo, elementType);
+        
+        if (DamageNumberSpawner.instance != null)
+        {
+            Vector3 spawnPos = centerPoint != null ? centerPoint.position : transform.position;
+            DamageNumberSpawner.instance.Spawn(
+                spawnPos,
+                result.finalDamage,
+                result.wasSuperEffective,
+                result.wasNotVeryEffective,
+                result.wasImmune
+            );
+        }
 
         if (result.wasImmune)
         {
