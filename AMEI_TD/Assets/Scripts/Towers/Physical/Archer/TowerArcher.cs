@@ -52,6 +52,23 @@ public class TowerArcher : TowerBase
         base.FixedUpdate();
     }
     
+    public override void SetUpgrade(TowerUpgradeType upgradeType, bool enabled)
+    {
+        base.SetUpgrade(upgradeType, enabled);
+    
+        switch (upgradeType)
+        {
+            case TowerUpgradeType.PoisonArrows:
+                poisonArrows = enabled;
+                UpdateArrowVisualVFX();
+                break;
+            case TowerUpgradeType.FireArrows:
+                fireArrows = enabled;
+                UpdateArrowVisualVFX();
+                break;
+        }
+    }
+    
     private void UpdateEnemyVelocity()
     {
         if (currentEnemy == null)
