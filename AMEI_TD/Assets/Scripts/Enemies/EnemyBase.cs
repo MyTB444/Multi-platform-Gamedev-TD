@@ -154,16 +154,15 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
     }
 
-    public void ApplySlow(float slowPercent, float duration)
+    public void ApplySlow(float slowPercent, float duration, bool showVFX = true)
     {
         isSlowed = true;
         slowEndTime = Time.time + duration;
 
-        // Clamp slow so speed can't go negative or zero
         float clampedSlow = Mathf.Clamp(slowPercent, 0f, 0.9f);
         enemySpeed = baseSpeed * (1f - clampedSlow);
 
-        if (activeSlowEffect == null && slowEffectPrefab != null)
+        if (showVFX && activeSlowEffect == null && slowEffectPrefab != null)
         {
             activeSlowEffect = Instantiate(slowEffectPrefab, transform);
             activeSlowEffect.transform.localPosition = Vector3.up * 0.5f;

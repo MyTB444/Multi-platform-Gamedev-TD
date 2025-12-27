@@ -11,6 +11,26 @@ public class TowerSpikeTrap : TowerBase
     [Header("VFX")]
     [SerializeField] private Transform hammerImpactPoint;
     
+    [Header("Spike Upgrades")]
+    [SerializeField] private bool lowerCooldown = false;
+    [SerializeField] private float cooldownReduction = 0.2f;
+    [Space]
+    [SerializeField] private bool poisonSpikes = false;
+    [SerializeField] private float poisonDamage = 2f;
+    [SerializeField] private float poisonDuration = 3f;
+    [SerializeField] private GameObject poisonSpikeVFX;
+    [Space]
+    [SerializeField] private bool bleedingSpikes = false;
+    [SerializeField] private float bleedDamage = 3f;
+    [SerializeField] private float bleedDuration = 4f;
+    [SerializeField] private GameObject bleedSpikeVFX;
+    [SerializeField] [Range(0f, 1f)] private float critChance = 0.2f;
+    [SerializeField] private float critMultiplier = 2f;
+    [Space]
+    [SerializeField] private bool cripplingSpikes = false;
+    [SerializeField] private float slowPercent = 0.3f;
+    [SerializeField] private float slowDuration = 2f;
+    
     private SpikeTrapDamage spikeTrap;
     
     protected override void Awake()
@@ -27,7 +47,26 @@ public class TowerSpikeTrap : TowerBase
         {
             GameObject trap = Instantiate(spikeTrapPrefab, hit.point, Quaternion.identity);
             spikeTrap = trap.GetComponent<SpikeTrapDamage>();
-            spikeTrap.Setup(CreateDamageInfo(), whatIsEnemy, attackCooldown, this);
+            
+            float finalCooldown = lowerCooldown ? attackCooldown * (1f - cooldownReduction) : attackCooldown;
+            
+            spikeTrap.Setup(CreateDamageInfo(), whatIsEnemy, finalCooldown, this);
+            
+            // Set upgrades
+            if (bleedingSpikes)
+            {
+                spikeTrap.SetBleedEffect(bleedDamage, bleedDuration, elementType, bleedSpikeVFX, critChance, critMultiplier);
+            }
+            else if (poisonSpikes)
+            {
+                spikeTrap.SetPoisonEffect(poisonDamage, poisonDuration, elementType, poisonSpikeVFX);
+            }
+
+            if (cripplingSpikes)
+            {
+                spikeTrap.SetCrippleEffect(slowPercent, slowDuration);
+            }
+            
             trap.transform.SetParent(transform);
         }
         else
