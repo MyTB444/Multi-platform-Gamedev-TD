@@ -52727,7 +52727,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 787283226116520210, guid: f5735c00fb878df418f3ede60a3586b8, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 989189631621950190, guid: f5735c00fb878df418f3ede60a3586b8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -62041,6 +62041,14 @@ PrefabInstance:
     - target: {fileID: 5537941893074787483, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7605547376037196238, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
+      propertyPath: fireArrows
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7605547376037196238, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
+      propertyPath: poisonArrows
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8294430211428561170, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
       propertyPath: m_LocalPosition.x

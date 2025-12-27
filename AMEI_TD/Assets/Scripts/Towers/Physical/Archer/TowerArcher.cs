@@ -14,6 +14,15 @@ public class TowerArcher : TowerBase
     [SerializeField] private float baseFlightTime = 0.3f;
     [SerializeField] private float speedMultiplier = 0.15f;
     
+    [Header("Arrow Effects")]
+    [SerializeField] private bool poisonArrows = false;
+    [SerializeField] private float poisonDamage = 2f;
+    [SerializeField] private float poisonDuration = 3f;
+
+    [SerializeField] private bool fireArrows = false;
+    [SerializeField] private float fireDamage = 4f;
+    [SerializeField] private float fireDuration = 3f;
+    
     private bool isAttacking = false;
     private Vector3 enemyVelocity;
     private Vector3 predictedPosition;
@@ -151,21 +160,30 @@ public class TowerArcher : TowerBase
     private void FireArrow()
     {
         if (currentEnemy == null) return;
-        
+    
         Vector3 spawnPos = arrowVisual.transform.position;
         Quaternion spawnRot = arrowVisual.transform.rotation;
-        
+    
         float distance = Vector3.Distance(spawnPos, predictedPosition);
-        
+    
         GameObject newArrow = Instantiate(projectilePrefab, spawnPos, spawnRot);
-        
+    
         ArrowProjectile arrow = newArrow.GetComponent<ArrowProjectile>();
-        
+    
         IDamageable damageable = currentEnemy.GetComponent<IDamageable>();
-        
+    
         if (damageable != null)
         {
             arrow.SetupArcProjectile(predictedPosition, damageable, CreateDamageInfo(), projectileSpeed, distance);
+        
+            if (fireArrows)
+            {
+                arrow.SetFireEffect(fireDamage, fireDuration, elementType);
+            }
+            else if (poisonArrows)
+            {
+                arrow.SetPoisonEffect(poisonDamage, poisonDuration, elementType);
+            }
         }
     }
 }

@@ -9,6 +9,18 @@ public class ArrowProjectile : TowerProjectileBase
     [SerializeField] private float gravityMultiplier = 3f;
     [SerializeField] private float maxCurveDuration = 0.5f;
     
+    [Header("DoT Effects")]
+    private bool applyPoison = false;
+    private float poisonDamage;
+    private float poisonDuration;
+    private DamageInfo poisonDamageInfo;
+
+    private bool applyFire = false;
+    private float fireDamage;
+    private float fireDuration;
+    private DamageInfo fireDamageInfo;
+    
+    
     private Rigidbody rb;
     private bool launched = false;
     private bool curving = true;
@@ -74,6 +86,51 @@ public class ArrowProjectile : TowerProjectileBase
         if (rb.velocity.sqrMagnitude > 0.1f)
         {
             transform.rotation = Quaternion.LookRotation(rb.velocity);
+        }
+    }
+    
+    public void SetPoisonEffect(float damage, float duration, ElementType elementType)
+    {
+        applyPoison = true;
+        poisonDamage = damage;
+        poisonDuration = duration;
+        poisonDamageInfo = new DamageInfo(damage, elementType, true);
+    }
+
+    public void SetFireEffect(float damage, float duration, ElementType elementType)
+    {
+        applyFire = true;
+        fireDamage = damage;
+        fireDuration = duration;
+        fireDamageInfo = new DamageInfo(damage, elementType, true);
+    }
+    
+    protected override void OnHit(Collider other)
+    {
+        if (hasHit) return;
+        hasHit = true;
+
+        if (impactEffectPrefab != null)
+        {
+            Vector3 impactPoint = other.ClosestPoint(transform.position);
+            GameObject impact = Instantiate(impactEffectPrefab, impactPoint, Quaternion.identity);
+            Destroy(impact, 2f);
+        }
+
+        EnemyBase enemy = other.GetComponent<EnemyBase>();
+        if (enemy != null)
+        {
+            damageable?.TakeDamage(damageInfo);
+        
+            // Apply DoT (fire replaces poison)
+            if (applyFire)
+            {
+                enemy.ApplyDoT(fireDamageInfo, fireDuration);
+            }
+            else if (applyPoison)
+            {
+                enemy.ApplyDoT(poisonDamageInfo, poisonDuration);
+            }
         }
     }
     
