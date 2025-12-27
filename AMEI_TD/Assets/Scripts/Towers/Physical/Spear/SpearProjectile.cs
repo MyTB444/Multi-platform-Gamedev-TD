@@ -4,7 +4,6 @@ public class SpearProjectile : TowerProjectileBase
 {
     [Header("Spear Settings")]
     [SerializeField] private TrailRenderer trail;
-    [SerializeField] private bool debugExplosion = true;
     
     [Header("Spear Effects")]
     private bool applyBleed = false;
@@ -68,7 +67,7 @@ public class SpearProjectile : TowerProjectileBase
         bleedDamage = damage;
         bleedDuration = duration;
         bleedDamageInfo = new DamageInfo(damage, elementType, true);
-    
+
         if (spearVFX != null)
         {
             Transform spawnPoint = vfxPoint != null ? vfxPoint : transform;
@@ -131,11 +130,6 @@ public class SpearProjectile : TowerProjectileBase
                 GameObject vfx = Instantiate(explosionVFX, impactPoint, Quaternion.identity);
                 Destroy(vfx, 2f);
             }
-        
-            if (debugExplosion)
-            {
-                SpawnDebugSphere(explosionCenter, explosionRadius);
-            }
 
             Collider[] enemies = Physics.OverlapSphere(explosionCenter, explosionRadius, enemyLayer);
             foreach (Collider col in enemies)
@@ -149,28 +143,6 @@ public class SpearProjectile : TowerProjectileBase
         }
 
         DestroyProjectile();
-    }
-    
-    private void SpawnDebugSphere(Vector3 position, float radius)
-    {
-        GameObject debugSphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        debugSphere.name = "ExplosionDebug";
-        debugSphere.transform.position = position;
-        debugSphere.transform.localScale = Vector3.one * radius * 2f;
-        
-        // Remove collider
-        Collider col = debugSphere.GetComponent<Collider>();
-        if (col != null) Destroy(col);
-        
-        // Set color
-        Renderer renderer = debugSphere.GetComponent<Renderer>();
-        if (renderer != null)
-        {
-            renderer.material = new Material(Shader.Find("Sprites/Default"));
-            renderer.material.color = new Color(1f, 0.5f, 0f, 0.5f);
-        }
-        
-        Destroy(debugSphere, 1f);
     }
     
     protected override void DestroyProjectile()

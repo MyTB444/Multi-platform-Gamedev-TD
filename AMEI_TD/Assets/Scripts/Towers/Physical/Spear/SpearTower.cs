@@ -12,11 +12,15 @@ public class SpearTower : TowerBase
     [Header("Spawn Offset")]
     [SerializeField] private float forwardSpawnOffset = 0.5f;
     
+    [Header("Spear Visual VFX")]
+    [SerializeField] private Transform spearVisualVFXPoint;
+    private GameObject activeSpearVisualVFX;
+    
     [Header("Spear Effects")]
-    [SerializeField] private bool barbedSpear = false;
+    [SerializeField] private bool bleedSpear = false;
     [SerializeField] private float bleedDamage = 3f;
     [SerializeField] private float bleedDuration = 4f;
-    [SerializeField] private GameObject barbedSpearVFX;
+    [SerializeField] private GameObject bleedSpearVFX;
 
     [SerializeField] private bool explosiveTip = false;
     [SerializeField] private float explosionRadius = 2f;
@@ -31,6 +35,13 @@ public class SpearTower : TowerBase
     // Locked at attack time
     private Vector3 lockedTargetPosition;
     private IDamageable lockedDamageable;
+    
+    
+    protected override void Start()
+    {
+        base.Start();
+        UpdateSpearVisualVFX();
+    }
     
     protected override void FixedUpdate()
     {
@@ -62,6 +73,22 @@ public class SpearTower : TowerBase
         }
         
         lastEnemyPosition = currentPos;
+    }
+    
+    private void UpdateSpearVisualVFX()
+    {
+        if (activeSpearVisualVFX != null)
+        {
+            Destroy(activeSpearVisualVFX);
+            activeSpearVisualVFX = null;
+        }
+    
+        if (bleedSpear && bleedSpearVFX != null)
+        {
+            Transform spawnPoint = spearVisualVFXPoint != null ? spearVisualVFXPoint : spearVisual.transform;
+            activeSpearVisualVFX = Instantiate(bleedSpearVFX, spawnPoint);
+            activeSpearVisualVFX.transform.localPosition = Vector3.zero;
+        }
     }
     
     private Vector3 PredictTargetPosition()
@@ -167,9 +194,9 @@ public class SpearTower : TowerBase
     
         spear.SetupSpear(lockedTargetPosition, lockedDamageable, CreateDamageInfo(), projectileSpeed);
     
-        if (barbedSpear)
+        if (bleedSpear)
         {
-            spear.SetBleedEffect(bleedDamage, bleedDuration, elementType, barbedSpearVFX);
+            spear.SetBleedEffect(bleedDamage, bleedDuration, elementType, bleedSpearVFX);
         }
     
         if (explosiveTip)

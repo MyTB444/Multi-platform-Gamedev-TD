@@ -5420,6 +5420,37 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.000000074505806, y: 0.88412756, z: 0.17106196}
     m_Extent: {x: 0.07575524, y: 0.011585534, z: 0.018551216}
   m_DirtyAABB: 0
+--- !u!1 &1273433150653994591
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 633823812887529683}
+  m_Layer: 0
+  m_Name: SpearVfxPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &633823812887529683
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1273433150653994591}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.005, y: 1.494, z: 0.021}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4390235774502252572}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1273983147941346948
 GameObject:
   m_ObjectHideFlags: 0
@@ -16945,7 +16976,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4499273221298853635}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: 0.6885961, z: -0, w: 0.72514516}
+  m_LocalRotation: {x: 0, y: 0.6885952, z: 0, w: 0.72514606}
   m_LocalPosition: {x: 12.414, y: 5.453, z: 7.17}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -16987,7 +17018,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35de821996a0c8649a16b816566eef5e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 20
+  damage: 5
   attackCooldown: 1
   towerBody: {fileID: 3517796916297274249}
   towerHead: {fileID: 0}
@@ -17002,6 +17033,9 @@ MonoBehaviour:
     m_Bits: 64
   projectilePrefab: {fileID: 7029389940526463345, guid: 7e8143ff3f21e92419dd2a9dfaf4be5b, type: 3}
   projectileSpeed: 20
+  elementType: 0
+  buyPrice: 1
+  sellPrice: 1
   attackSpawnEffectPrefab: {fileID: 0}
   characterAnimator: {fileID: 8691810099541559588}
   attackAnimationTrigger: Attack
@@ -17016,6 +17050,15 @@ MonoBehaviour:
   spearRespawnDelay: 1.5
   throwAnimationDelay: 1.1
   forwardSpawnOffset: 0.5
+  spearVisualVFXPoint: {fileID: 633823812887529683}
+  barbedSpear: 1
+  bleedDamage: 3
+  bleedDuration: 4
+  barbedSpearVFX: {fileID: 3538601806443498961, guid: ae8be53a4ea8c18479183ebb3a59bf7c, type: 3}
+  explosiveTip: 0
+  explosionRadius: 2
+  explosionDamage: 10
+  explosionVFX: {fileID: 1985299232585352030, guid: 90d2d7df4e04d4943a4c42d5dcf56669, type: 3}
 --- !u!1 &4543788862172423374
 GameObject:
   m_ObjectHideFlags: 0
@@ -29601,6 +29644,7 @@ Transform:
   - {fileID: 241328615385283414}
   - {fileID: 8321444810102697172}
   - {fileID: 5615727388501966844}
+  - {fileID: 633823812887529683}
   m_Father: {fileID: 3437404464314661636}
   m_LocalEulerAnglesHint: {x: 7.35, y: -88.405, z: 78.227}
 --- !u!1 &8910970739276696563

@@ -14,6 +14,10 @@ public class TowerArcher : TowerBase
     [SerializeField] private float baseFlightTime = 0.3f;
     [SerializeField] private float speedMultiplier = 0.15f;
     
+    [Header("Arrow Visual VFX")]
+    [SerializeField] private Transform arrowVisualVFXPoint;
+    private GameObject activeArrowVisualVFX;
+    
     [Header("Arrow Effects")]
     [SerializeField] private bool poisonArrows = false;
     [SerializeField] private float poisonDamage = 2f;
@@ -33,6 +37,12 @@ public class TowerArcher : TowerBase
     protected override void Awake()
     {
         base.Awake();
+    }
+    
+    protected override void Start()
+    {
+        base.Start();
+        UpdateArrowVisualVFX();
     }
     
     protected override void FixedUpdate()
@@ -156,6 +166,30 @@ public class TowerArcher : TowerBase
         if (arrowVisual != null)
         {
             arrowVisual.SetActive(true);
+        }
+    }
+    
+    private void UpdateArrowVisualVFX()
+    {
+        // Clear old VFX
+        if (activeArrowVisualVFX != null)
+        {
+            Destroy(activeArrowVisualVFX);
+            activeArrowVisualVFX = null;
+        }
+    
+        // Spawn new VFX based on current upgrade
+        Transform spawnPoint = arrowVisualVFXPoint != null ? arrowVisualVFXPoint : arrowVisual.transform;
+    
+        if (fireArrows && fireArrowVFX != null)
+        {
+            activeArrowVisualVFX = Instantiate(fireArrowVFX, spawnPoint);
+            activeArrowVisualVFX.transform.localPosition = Vector3.zero;
+        }
+        else if (poisonArrows && poisonArrowVFX != null)
+        {
+            activeArrowVisualVFX = Instantiate(poisonArrowVFX, spawnPoint);
+            activeArrowVisualVFX.transform.localPosition = Vector3.zero;
         }
     }
     
