@@ -28131,7 +28131,17 @@ MonoBehaviour:
   rockSizeMax: 1.5
   rockSpeedMin: 8
   rockSpeedMax: 15
-  predictionMultiplier: 0.65
+  predictionMultiplier: 0.75
+  moreRocks: 0
+  bonusRocks: 3
+  biggerRocks: 0
+  rockSizeBonus: 0.3
+  longerShower: 0
+  bonusShowerDuration: 1
+  meteorStrike: 0
+  meteorSize: 5
+  meteorHeight: 5
+  meteorDamageMultiplier: 3
 --- !u!1 &8875793742165507041
 GameObject:
   m_ObjectHideFlags: 0

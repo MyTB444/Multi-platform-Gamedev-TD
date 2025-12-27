@@ -19,6 +19,21 @@ public class TowerRockShower : TowerBase
     [Header("Prediction")]
     [SerializeField] private float predictionMultiplier = 0.5f;
     
+    [Header("Rock Shower Upgrades")]
+    [SerializeField] private bool moreRocks = false;
+    [SerializeField] private int bonusRocks = 3;
+    [Space]
+    [SerializeField] private bool biggerRocks = false;
+    [SerializeField] private float rockSizeBonus = 0.3f;
+    [Space]
+    [SerializeField] private bool longerShower = false;
+    [SerializeField] private float bonusShowerDuration = 1f;
+    [Space]
+    [SerializeField] private bool meteorStrike = false;
+    [SerializeField] private float meteorSize = 3f;
+    [SerializeField] private float meteorHeight = 3f;
+    [SerializeField] private float meteorDamageMultiplier = 3f;
+    
     private bool isShowering = false;
     private bool isAttacking = false;
     private Vector3 enemyVelocity;
@@ -109,13 +124,25 @@ public class TowerRockShower : TowerBase
         isShowering = true;
 
         float elapsed = 0f;
+        float finalDuration = longerShower ? showerDuration + bonusShowerDuration : showerDuration;
+    
+        // Calculate time between rocks to fit bonus rocks in same duration
+        float finalTimeBetweenRocks = moreRocks ? 
+            finalDuration / ((finalDuration / timeBetweenRocks) + bonusRocks) : 
+            timeBetweenRocks;
 
-        while (elapsed < showerDuration)
+        while (elapsed < finalDuration)
         {
             SpawnRock(lockedTargetPosition);
 
-            yield return new WaitForSeconds(timeBetweenRocks);
-            elapsed += timeBetweenRocks;
+            yield return new WaitForSeconds(finalTimeBetweenRocks);
+            elapsed += finalTimeBetweenRocks;
+        }
+    
+        // Meteor strike at the end
+        if (meteorStrike)
+        {
+            SpawnMeteor(lockedTargetPosition);
         }
 
         isShowering = false;
@@ -137,7 +164,9 @@ public class TowerRockShower : TowerBase
 
         GameObject rock = Instantiate(rockPrefab, spawnPos, Random.rotation);
 
-        float randomSize = Random.Range(rockSizeMin, rockSizeMax);
+        // Apply bigger rocks bonus
+        float sizeMultiplier = biggerRocks ? 1f + rockSizeBonus : 1f;
+        float randomSize = Random.Range(rockSizeMin, rockSizeMax) * sizeMultiplier;
         rock.transform.localScale = rockPrefab.transform.localScale * randomSize;
 
         float scaledDamage = damage * randomSize;
@@ -145,6 +174,29 @@ public class TowerRockShower : TowerBase
 
         RockProjectile projectile = rock.GetComponent<RockProjectile>();
         projectile.Setup(rockDamageInfo, whatIsEnemy, randomSpeed, randomSize);
+    }
+    
+    private void SpawnMeteor(Vector3 targetPosition)
+    {
+        float meteorSpeed = rockSpeedMin;
+    
+        Vector3 spawnPos = targetPosition + Vector3.up * (spawnHeight + meteorHeight);
+    
+        if (attackSpawnEffectPrefab != null)
+        {
+            GameObject vfx = Instantiate(attackSpawnEffectPrefab, spawnPos, Quaternion.identity);
+            vfx.transform.localScale *= 2f;
+            Destroy(vfx, 2f);
+        }
+    
+        GameObject meteor = Instantiate(rockPrefab, spawnPos, Random.rotation);
+        meteor.transform.localScale = rockPrefab.transform.localScale * meteorSize;
+    
+        float scaledDamage = damage * meteorSize * meteorDamageMultiplier;
+        DamageInfo meteorDamageInfo = new DamageInfo(scaledDamage, elementType);
+    
+        RockProjectile projectile = meteor.GetComponent<RockProjectile>();
+        projectile.Setup(meteorDamageInfo, whatIsEnemy, meteorSpeed, meteorSize);
     }
     
     protected override bool CanAttack()
