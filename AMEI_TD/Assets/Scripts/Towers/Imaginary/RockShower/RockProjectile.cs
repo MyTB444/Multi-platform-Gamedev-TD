@@ -7,9 +7,9 @@ public class RockProjectile : TowerProjectileBase
     
     private LayerMask whatIsEnemy;
     
-    public void Setup(float damageAmount, LayerMask enemyLayer, float fallSpeed, float size = 1f)
+    public void Setup(DamageInfo newDamageInfo, LayerMask enemyLayer, float fallSpeed, float size = 1f)
     {
-        damageInfo.amount = damageAmount;
+        damageInfo = newDamageInfo;
         whatIsEnemy = enemyLayer;
         speed = fallSpeed;
         direction = Vector3.down;
@@ -40,15 +40,12 @@ public class RockProjectile : TowerProjectileBase
     {
         Collider[] enemies = Physics.OverlapSphere(transform.position, damageRadius, whatIsEnemy);
     
-        Debug.Log($"Rock impact at {transform.position}! Enemies in radius: {enemies.Length}");
-    
         foreach (Collider enemy in enemies)
         {
             IDamageable damageable = enemy.GetComponent<IDamageable>();
             if (damageable != null)
             {
-                Debug.Log($"Dealing {damageInfo.amount} damage to {enemy.name}");
-                damageable.TakeDamage(damageInfo.amount);
+                damageable.TakeDamage(damageInfo);
             }
         }
     }
@@ -56,8 +53,6 @@ public class RockProjectile : TowerProjectileBase
     private void OnTriggerEnter(Collider other)
     {
         if (hasHit) return;
-    
-        Debug.Log($"Rock hit: {other.name} on layer {other.gameObject.layer}");
     
         bool hitEnemy = ((1 << other.gameObject.layer) & whatIsEnemy) != 0;
         bool hitGround = ((1 << other.gameObject.layer) & groundLayer) != 0;

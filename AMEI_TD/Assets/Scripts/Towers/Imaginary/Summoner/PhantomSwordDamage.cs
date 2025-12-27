@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public class PhantomSwordDamage : MonoBehaviour
 {
-    private float damage;
+    private DamageInfo damageInfo;
     private LayerMask enemyLayer;
     private HashSet<EnemyBase> hitEnemies = new HashSet<EnemyBase>();
     private bool isAttacking = false;
@@ -14,9 +14,9 @@ public class PhantomSwordDamage : MonoBehaviour
     private float vfxStartDelay;
     private float vfxDuration;
     
-    public void Setup(float newDamage, LayerMask newEnemyLayer, GameObject vfxPrefab, Vector3 rotationOffset, float startDelay = 0f, float duration = 0.5f)
+    public void Setup(DamageInfo newDamageInfo, LayerMask newEnemyLayer, GameObject vfxPrefab, Vector3 rotationOffset, float startDelay = 0f, float duration = 0.5f)
     {
-        damage = newDamage;
+        damageInfo = newDamageInfo;
         enemyLayer = newEnemyLayer;
         slashVFXPrefab = vfxPrefab;
         vfxRotationOffset = rotationOffset;
@@ -24,8 +24,6 @@ public class PhantomSwordDamage : MonoBehaviour
         vfxDuration = duration;
         hitEnemies.Clear();
         isAttacking = false;
-        
-        Debug.Log($"SwordDamage Setup - Damage: {damage}, EnemyLayer: {enemyLayer.value}");
     }
     
     public void EnableDamage()
@@ -80,8 +78,7 @@ public class PhantomSwordDamage : MonoBehaviour
         IDamageable damageable = other.GetComponent<IDamageable>();
         if (damageable != null)
         {
-            damageable.TakeDamage(damage);
-            Debug.Log($"Dealt {damage} damage to {other.name}!");
+            damageable.TakeDamage(damageInfo);
         }
     }
     
