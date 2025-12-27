@@ -20,6 +20,8 @@ public class TowerBase : MonoBehaviour
 
     [SerializeField] protected GameObject projectilePrefab;
     [SerializeField] protected float projectileSpeed;
+    
+    [SerializeField] protected ElementType elementType = ElementType.Physical;
 
     [Header(("Tower Pricing"))] 
     [SerializeField] protected int buyPrice = 1;
@@ -61,6 +63,11 @@ public class TowerBase : MonoBehaviour
         HandleRotation();
 
         if (CanAttack()) AttemptToAttack();
+    }
+    
+    protected DamageInfo CreateDamageInfo()
+    {
+        return new DamageInfo(damage, elementType);
     }
 
     protected virtual void ClearTargetOutOfRange()
