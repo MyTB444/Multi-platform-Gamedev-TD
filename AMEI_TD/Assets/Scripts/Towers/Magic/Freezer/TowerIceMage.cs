@@ -15,6 +15,20 @@ public class TowerIceMage : TowerBase
     [SerializeField] private float dotDuration = 3f;
     [SerializeField] private float dotTickInterval = 0.5f;
     
+    [Header("Ice Upgrades")]
+    [SerializeField] private bool strongerSlow = false;
+    [SerializeField] private float bonusSlowPercent = 0.15f;
+    [Space]
+    [SerializeField] private bool longerSlow = false;
+    [SerializeField] private float bonusSlowDuration = 1f;
+    [Space]
+    [SerializeField] private bool frostbite = false;
+    [SerializeField] private float frostbiteDamageMultiplier = 2f;
+    [Space]
+    [SerializeField] private bool freezeSolid = false;
+    [SerializeField] [Range(0f, 1f)] private float freezeChance = 0.2f;
+    [SerializeField] private float freezeDuration = 1.5f;
+    
     protected override void FireProjectile()
     {
         if (attackSpawnEffectPrefab != null && gunPoint != null)
@@ -39,6 +53,11 @@ public class TowerIceMage : TowerBase
         
         GameObject newProjectile = Instantiate(projectilePrefab, spawnPosition, spawnRotation);
         
+        // Calculate upgraded values
+        float finalSlowPercent = slowPercent + (strongerSlow ? bonusSlowPercent : 0f);
+        float finalSlowDuration = slowDuration + (longerSlow ? bonusSlowDuration : 0f);
+        float finalDotDamage = dotDamagePerTick * (frostbite ? frostbiteDamageMultiplier : 1f);
+        
         IceProjectile ice = newProjectile.GetComponent<IceProjectile>();
         if (ice != null)
         {
@@ -48,14 +67,19 @@ public class TowerIceMage : TowerBase
                 CreateDamageInfo(), 
                 projectileSpeed, 
                 whatIsEnemy,
-                slowPercent,
-                slowDuration,
+                finalSlowPercent,
+                finalSlowDuration,
                 effectRadius,
-                dotDamagePerTick,
+                finalDotDamage,
                 dotDuration,
                 dotTickInterval,
                 visualRotationOffset
             );
+            
+            if (freezeSolid)
+            {
+                ice.SetFreezeEffect(freezeChance, freezeDuration);
+            }
         }
     }
 }

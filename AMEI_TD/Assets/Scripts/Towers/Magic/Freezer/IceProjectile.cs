@@ -21,6 +21,11 @@ public class IceProjectile : TowerProjectileBase
     private float dotDuration;
     private float dotTickInterval;
     
+    // Freeze settings
+    private bool canFreeze = false;
+    private float freezeChance;
+    private float freezeDuration;
+    
     public void SetupIceProjectile(
         Transform enemyTarget, 
         IDamageable newDamageable, 
@@ -48,7 +53,7 @@ public class IceProjectile : TowerProjectileBase
         slowPercent = newSlowPercent;
         slowDuration = newSlowDuration;
         effectRadius = newEffectRadius;
-        dotDamageInfo = new DamageInfo(newDotDamage, newDamageInfo.elementType);
+        dotDamageInfo = new DamageInfo(newDotDamage, newDamageInfo.elementType, true);
         dotDuration = newDotDuration;
         dotTickInterval = newDotTickInterval;
         rotationOffset = Quaternion.Euler(visualRotationOffset);
@@ -58,6 +63,13 @@ public class IceProjectile : TowerProjectileBase
             EnemyBase enemy = target.GetComponent<EnemyBase>();
             lastKnownTargetPos = enemy != null ? enemy.GetCenterPoint() : target.position;
         }
+    }
+    
+    public void SetFreezeEffect(float chance, float duration)
+    {
+        canFreeze = true;
+        freezeChance = chance;
+        freezeDuration = duration;
     }
     
     protected override void MoveProjectile()
@@ -157,21 +169,27 @@ public class IceProjectile : TowerProjectileBase
     protected override void OnHit(Collider other)
     {
         if (hasHit) return;
-        
+    
         EnemyBase enemy = other.GetComponent<EnemyBase>();
         if (enemy == null) return;
-        
+    
+        // Freeze only the direct hit enemy
+        if (canFreeze && Random.value <= freezeChance)
+        {
+            enemy.ApplyStun(freezeDuration);
+        }
+    
         ApplyEffectsInRadius();
-        
+    
         isHoming = false;
-        
+    
         base.OnHit(other);
     }
-    
+
     private void ApplyEffectsInRadius()
     {
         Collider[] enemies = Physics.OverlapSphere(transform.position, effectRadius, enemyLayer);
-        
+    
         foreach (Collider col in enemies)
         {
             EnemyBase enemy = col.GetComponent<EnemyBase>();

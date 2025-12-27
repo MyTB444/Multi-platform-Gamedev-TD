@@ -38,6 +38,12 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     [Header("Slow Effect")]
     [SerializeField] private GameObject slowEffectPrefab;
+    
+    [Header("Stun Effect")]
+    [SerializeField] private Color frozenColor = new Color(0.5f, 0.8f, 1f, 1f);
+    private Renderer[] enemyRenderers;
+    private Color[] originalColors;
+    private bool hasSavedColors = false;
 
     private NavMeshAgent NavAgent;
     private Animator EnemyAnimator;
@@ -59,6 +65,10 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private float slowEndTime;
     private bool isSlowed = false;
     private GameObject activeSlowEffect;
+    
+    // Stun system
+    private bool isStunned = false;
+    private float stunEndTime;
 
     // DoT system
     private DamageInfo dotDamageInfo;
@@ -81,6 +91,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
         UpdateVisuals();
         NavAgent = GetComponent<NavMeshAgent>();
         EnemyAnimator = GetComponent<Animator>();
+    
+        SaveOriginalColors();
     }
 
     protected virtual void Update()
@@ -92,6 +104,12 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     private void UpdateStatusEffects()
     {
+        // Handle stun expiry
+        if (isStunned && Time.time >= stunEndTime)
+        {
+            RemoveStun();
+        }
+    
         // Handle slow expiry
         if (isSlowed && Time.time >= slowEndTime)
         {
@@ -110,8 +128,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
             {
                 lastDotTick = Time.time;
                 TakeDamage(dotDamageInfo);
-        
-                // Spread to nearby enemies
+    
                 if (dotCanSpread)
                 {
                     SpreadDoT();
@@ -139,18 +156,17 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     public void ApplySlow(float slowPercent, float duration)
     {
-        Debug.Log($"ApplySlow called - slowEffectPrefab: {slowEffectPrefab}");
-    
         isSlowed = true;
         slowEndTime = Time.time + duration;
 
-        enemySpeed = baseSpeed * (1f - slowPercent);
+        // Clamp slow so speed can't go negative or zero
+        float clampedSlow = Mathf.Clamp(slowPercent, 0f, 0.9f);
+        enemySpeed = baseSpeed * (1f - clampedSlow);
 
         if (activeSlowEffect == null && slowEffectPrefab != null)
         {
             activeSlowEffect = Instantiate(slowEffectPrefab, transform);
             activeSlowEffect.transform.localPosition = Vector3.up * 0.5f;
-            Debug.Log($"Spawned slow effect: {activeSlowEffect.name}");
         }
     }
 
@@ -164,6 +180,46 @@ public class EnemyBase : MonoBehaviour, IDamageable
             Destroy(activeSlowEffect);
             activeSlowEffect = null;
         }
+    }
+    
+    public void ApplyStun(float duration)
+    {
+        isStunned = true;
+        stunEndTime = Time.time + duration;
+    
+        if (hasSavedColors)
+        {
+            foreach (Renderer r in enemyRenderers)
+            {
+                r.material.color = frozenColor;
+            }
+        }
+    }
+    
+    private void RemoveStun()
+    {
+        isStunned = false;
+    
+        if (hasSavedColors)
+        {
+            for (int i = 0; i < enemyRenderers.Length; i++)
+            {
+                enemyRenderers[i].material.color = originalColors[i];
+            }
+        }
+    }
+    
+    private void SaveOriginalColors()
+    {
+        enemyRenderers = GetComponentsInChildren<Renderer>();
+        originalColors = new Color[enemyRenderers.Length];
+    
+        for (int i = 0; i < enemyRenderers.Length; i++)
+        {
+            originalColors[i] = enemyRenderers[i].material.color;
+        }
+    
+        hasSavedColors = true;
     }
 
     public void ApplyDoT(DamageInfo damagePerTick, float duration, float tickInterval = 0.5f, bool canSpread = false, float spreadRadius = 0f, LayerMask spreadLayer = default)
@@ -224,6 +280,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     private void FollowPath()
     {
+        if (isStunned) return;
+    
         if (myWaypoints == null || currentWaypointIndex >= myWaypoints.Length)
         {
             return;
@@ -257,6 +315,13 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private void PlayAnimations()
     {
         if (EnemyAnimator == null) return;
+
+        // Don't walk if stunned
+        if (isStunned)
+        {
+            EnemyAnimator.SetBool("Walk", false);
+            return;
+        }
 
         EnemyAnimator.SetBool("Walk", true);
     }
@@ -358,6 +423,17 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
         // Reset DoT
         hasDot = false;
+        dotCanSpread = false;
+    
+        // Reset Stun
+        isStunned = false;
+        if (hasSavedColors)
+        {
+            for (int i = 0; i < enemyRenderers.Length; i++)
+            {
+                enemyRenderers[i].material.color = originalColors[i];
+            }
+        }
 
         UpdateVisuals();
     }
@@ -389,6 +465,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public bool IsReinforced() => isReinforced;
     public int GetDamage() => damage;
     public bool IsSlowed() => isSlowed;
+    public bool IsStunned() => isStunned;
     public bool HasDoT() => hasDot;
     public ElementType GetElementType() => elementType;
 }

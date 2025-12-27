@@ -2009,6 +2009,15 @@ MonoBehaviour:
   dotDamagePerTick: 1
   dotDuration: 3
   dotTickInterval: 0.5
+  strongerSlow: 0
+  bonusSlowPercent: 0.15
+  longerSlow: 0
+  bonusSlowDuration: 1
+  frostbite: 0
+  frostbiteDamageMultiplier: 2
+  freezeSolid: 0
+  freezeChance: 0.4
+  freezeDuration: 1.5
 --- !u!1 &795108350994225701
 GameObject:
   m_ObjectHideFlags: 0
