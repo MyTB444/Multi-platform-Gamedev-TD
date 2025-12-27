@@ -154,7 +154,7 @@ public class SpearTower : TowerBase
         GameObject newSpear = Instantiate(projectilePrefab, spawnPos, spawnRot);
         SpearProjectile spear = newSpear.GetComponent<SpearProjectile>();
         
-        spear.SetupSpear(lockedTargetPosition, lockedDamageable, damage, projectileSpeed);
+        spear.SetupSpear(lockedTargetPosition, lockedDamageable, CreateDamageInfo(), projectileSpeed);
         
         lockedDamageable = null;
     }
