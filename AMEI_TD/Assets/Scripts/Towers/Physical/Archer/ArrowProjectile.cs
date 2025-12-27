@@ -9,6 +9,9 @@ public class ArrowProjectile : TowerProjectileBase
     [SerializeField] private float gravityMultiplier = 3f;
     [SerializeField] private float maxCurveDuration = 0.5f;
     
+    [Header("VFX")]
+    [SerializeField] private Transform vfxPoint;
+    
     [Header("DoT Effects")]
     private bool applyPoison = false;
     private float poisonDamage;
@@ -89,20 +92,34 @@ public class ArrowProjectile : TowerProjectileBase
         }
     }
     
-    public void SetPoisonEffect(float damage, float duration, ElementType elementType)
+    public void SetPoisonEffect(float damage, float duration, ElementType elementType, GameObject arrowVFX = null)
     {
         applyPoison = true;
         poisonDamage = damage;
         poisonDuration = duration;
         poisonDamageInfo = new DamageInfo(damage, elementType, true);
+    
+        if (arrowVFX != null)
+        {
+            Transform spawnPoint = vfxPoint != null ? vfxPoint : transform;
+            GameObject vfx = Instantiate(arrowVFX, spawnPoint);
+            vfx.transform.localPosition = Vector3.zero;
+        }
     }
 
-    public void SetFireEffect(float damage, float duration, ElementType elementType)
+    public void SetFireEffect(float damage, float duration, ElementType elementType, GameObject arrowVFX = null)
     {
         applyFire = true;
         fireDamage = damage;
         fireDuration = duration;
         fireDamageInfo = new DamageInfo(damage, elementType, true);
+    
+        if (arrowVFX != null)
+        {
+            Transform spawnPoint = vfxPoint != null ? vfxPoint : transform;
+            GameObject vfx = Instantiate(arrowVFX, spawnPoint);
+            vfx.transform.localPosition = Vector3.zero;
+        }
     }
     
     protected override void OnHit(Collider other)

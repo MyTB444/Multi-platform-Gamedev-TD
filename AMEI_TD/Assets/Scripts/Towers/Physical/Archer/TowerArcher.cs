@@ -18,10 +18,12 @@ public class TowerArcher : TowerBase
     [SerializeField] private bool poisonArrows = false;
     [SerializeField] private float poisonDamage = 2f;
     [SerializeField] private float poisonDuration = 3f;
+    [SerializeField] private GameObject poisonArrowVFX;
 
     [SerializeField] private bool fireArrows = false;
     [SerializeField] private float fireDamage = 4f;
     [SerializeField] private float fireDuration = 3f;
+    [SerializeField] private GameObject fireArrowVFX;
     
     private bool isAttacking = false;
     private Vector3 enemyVelocity;
@@ -178,11 +180,11 @@ public class TowerArcher : TowerBase
         
             if (fireArrows)
             {
-                arrow.SetFireEffect(fireDamage, fireDuration, elementType);
+                arrow.SetFireEffect(fireDamage, fireDuration, elementType, fireArrowVFX);
             }
             else if (poisonArrows)
             {
-                arrow.SetPoisonEffect(poisonDamage, poisonDuration, elementType);
+                arrow.SetPoisonEffect(poisonDamage, poisonDuration, elementType, poisonArrowVFX);
             }
         }
     }
