@@ -27,7 +27,7 @@ public class TowerSpikeTrap : TowerBase
         {
             GameObject trap = Instantiate(spikeTrapPrefab, hit.point, Quaternion.identity);
             spikeTrap = trap.GetComponent<SpikeTrapDamage>();
-            spikeTrap.Setup(damage, whatIsEnemy, attackCooldown, this);
+            spikeTrap.Setup(CreateDamageInfo(), whatIsEnemy, attackCooldown, this);
             trap.transform.SetParent(transform);
         }
         else
