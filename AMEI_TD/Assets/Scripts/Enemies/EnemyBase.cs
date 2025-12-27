@@ -66,6 +66,9 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private float dotTickInterval = 0.5f;
     private float lastDotTick;
     private bool hasDot = false;
+    private bool dotCanSpread = false;
+    private float dotSpreadRadius;
+    private LayerMask dotSpreadLayer;
 
     private void Awake()
     {
@@ -101,11 +104,35 @@ public class EnemyBase : MonoBehaviour, IDamageable
             if (Time.time >= dotEndTime)
             {
                 hasDot = false;
+                dotCanSpread = false;
             }
             else if (Time.time >= lastDotTick + dotTickInterval)
             {
                 lastDotTick = Time.time;
                 TakeDamage(dotDamageInfo);
+        
+                // Spread to nearby enemies
+                if (dotCanSpread)
+                {
+                    SpreadDoT();
+                }
+            }
+        }
+    }
+    
+    private void SpreadDoT()
+    {
+        Vector3 spreadCenter = centerPoint != null ? centerPoint.position : transform.position;
+        Collider[] nearbyEnemies = Physics.OverlapSphere(spreadCenter, dotSpreadRadius, dotSpreadLayer);
+    
+        foreach (Collider col in nearbyEnemies)
+        {
+            if (col.gameObject == gameObject) continue;
+        
+            EnemyBase enemy = col.GetComponent<EnemyBase>();
+            if (enemy != null && !enemy.HasDoT())
+            {
+                enemy.ApplyDoT(dotDamageInfo, dotEndTime - Time.time, dotTickInterval, false, 0f);
             }
         }
     }
@@ -139,14 +166,12 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
     }
 
-    public void ApplyDoT(DamageInfo damagePerTick, float duration, float tickInterval = 0.5f)
+    public void ApplyDoT(DamageInfo damagePerTick, float duration, float tickInterval = 0.5f, bool canSpread = false, float spreadRadius = 0f, LayerMask spreadLayer = default)
     {
-        // Check if immune to this element - skip DoT entirely
         DamageCalculator.DamageResult testResult = DamageCalculator.Calculate(damagePerTick, elementType);
     
         if (testResult.wasImmune)
         {
-            // Initial hit already showed IMMUNE, just don't apply DoT
             return;
         }
     
@@ -156,6 +181,11 @@ public class EnemyBase : MonoBehaviour, IDamageable
         dotEndTime = Time.time + duration;
         dotTickInterval = tickInterval;
         lastDotTick = Time.time;
+    
+        // Spread settings
+        dotCanSpread = canSpread;
+        dotSpreadRadius = spreadRadius;
+        dotSpreadLayer = spreadLayer;
     }
 
     public void SetupEnemy(EnemySpawner myNewSpawner)
