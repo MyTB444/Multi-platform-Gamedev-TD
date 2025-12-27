@@ -4,6 +4,23 @@ public class SpearProjectile : TowerProjectileBase
 {
     [Header("Spear Settings")]
     [SerializeField] private TrailRenderer trail;
+    [SerializeField] private bool debugExplosion = true;
+    
+    [Header("Spear Effects")]
+    private bool applyBleed = false;
+    private float bleedDamage;
+    private float bleedDuration;
+    private DamageInfo bleedDamageInfo;
+
+    private bool isExplosive = false;
+    private float explosionRadius;
+    private float explosionDamage;
+    private DamageInfo explosionDamageInfo;
+    private LayerMask enemyLayer;
+    private GameObject explosionVFX;
+
+    [Header("VFX")]
+    [SerializeField] private Transform vfxPoint;
     
     private Rigidbody rb;
     private bool launched = false;
@@ -45,6 +62,31 @@ public class SpearProjectile : TowerProjectileBase
         }
     }
     
+    public void SetBleedEffect(float damage, float duration, ElementType elementType, GameObject spearVFX = null)
+    {
+        applyBleed = true;
+        bleedDamage = damage;
+        bleedDuration = duration;
+        bleedDamageInfo = new DamageInfo(damage, elementType, true);
+    
+        if (spearVFX != null)
+        {
+            Transform spawnPoint = vfxPoint != null ? vfxPoint : transform;
+            GameObject vfx = Instantiate(spearVFX, spawnPoint);
+            vfx.transform.localPosition = Vector3.zero;
+        }
+    }
+
+    public void SetExplosiveEffect(float radius, float damage, ElementType elementType, LayerMask whatIsEnemy, GameObject vfx = null)
+    {
+        isExplosive = true;
+        explosionRadius = radius;
+        explosionDamage = damage;
+        explosionDamageInfo = new DamageInfo(damage, elementType);
+        enemyLayer = whatIsEnemy;
+        explosionVFX = vfx;
+    }
+    
     protected override void MoveProjectile()
     {
     }
@@ -52,26 +94,83 @@ public class SpearProjectile : TowerProjectileBase
     protected override void OnHit(Collider other)
     {
         if (hasHit) return;
-        
+
         EnemyBase enemy = other.GetComponent<EnemyBase>();
-        
+
         if (enemy == null) return;
-        
+
         hasHit = true;
-        
+
+        Vector3 impactPoint = other.ClosestPoint(transform.position);
+
         if (impactEffectPrefab != null)
         {
-            Vector3 impactPoint = other.ClosestPoint(transform.position);
             GameObject impact = Instantiate(impactEffectPrefab, impactPoint, Quaternion.identity);
             Destroy(impact, 2f);
         }
-        
+
+        // Deal impact damage
         if (damageable != null)
         {
             damageable.TakeDamage(damageInfo);
         }
+
+        // Apply bleed
+        if (applyBleed)
+        {
+            enemy.ApplyDoT(bleedDamageInfo, bleedDuration);
+        }
+
+        // Explosion
+        if (isExplosive)
+        {
+            Vector3 explosionCenter = enemy.GetCenterPoint();
         
+            if (explosionVFX != null)
+            {
+                GameObject vfx = Instantiate(explosionVFX, impactPoint, Quaternion.identity);
+                Destroy(vfx, 2f);
+            }
+        
+            if (debugExplosion)
+            {
+                SpawnDebugSphere(explosionCenter, explosionRadius);
+            }
+
+            Collider[] enemies = Physics.OverlapSphere(explosionCenter, explosionRadius, enemyLayer);
+            foreach (Collider col in enemies)
+            {
+                IDamageable explosionTarget = col.GetComponent<IDamageable>();
+                if (explosionTarget != null)
+                {
+                    explosionTarget.TakeDamage(explosionDamageInfo);
+                }
+            }
+        }
+
         DestroyProjectile();
+    }
+    
+    private void SpawnDebugSphere(Vector3 position, float radius)
+    {
+        GameObject debugSphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+        debugSphere.name = "ExplosionDebug";
+        debugSphere.transform.position = position;
+        debugSphere.transform.localScale = Vector3.one * radius * 2f;
+        
+        // Remove collider
+        Collider col = debugSphere.GetComponent<Collider>();
+        if (col != null) Destroy(col);
+        
+        // Set color
+        Renderer renderer = debugSphere.GetComponent<Renderer>();
+        if (renderer != null)
+        {
+            renderer.material = new Material(Shader.Find("Sprites/Default"));
+            renderer.material.color = new Color(1f, 0.5f, 0f, 0.5f);
+        }
+        
+        Destroy(debugSphere, 1f);
     }
     
     protected override void DestroyProjectile()

@@ -12,6 +12,17 @@ public class SpearTower : TowerBase
     [Header("Spawn Offset")]
     [SerializeField] private float forwardSpawnOffset = 0.5f;
     
+    [Header("Spear Effects")]
+    [SerializeField] private bool barbedSpear = false;
+    [SerializeField] private float bleedDamage = 3f;
+    [SerializeField] private float bleedDuration = 4f;
+    [SerializeField] private GameObject barbedSpearVFX;
+
+    [SerializeField] private bool explosiveTip = false;
+    [SerializeField] private float explosionRadius = 2f;
+    [SerializeField] private float explosionDamage = 10f;
+    [SerializeField] private GameObject explosionVFX;
+    
     private bool isAttacking = false;
     private Vector3 enemyVelocity;
     private Vector3 lastEnemyPosition;
@@ -144,18 +155,28 @@ public class SpearTower : TowerBase
     private void FireSpear()
     {
         if (lockedDamageable == null) return;
-        
+    
         Vector3 spawnPos = spearVisual.transform.position;
         Quaternion spawnRot = spearVisual.transform.rotation;
-        
+    
         Vector3 fireDirection = spawnRot * Vector3.up;
         spawnPos += fireDirection * forwardSpawnOffset;
-        
+    
         GameObject newSpear = Instantiate(projectilePrefab, spawnPos, spawnRot);
         SpearProjectile spear = newSpear.GetComponent<SpearProjectile>();
-        
+    
         spear.SetupSpear(lockedTargetPosition, lockedDamageable, CreateDamageInfo(), projectileSpeed);
-        
+    
+        if (barbedSpear)
+        {
+            spear.SetBleedEffect(bleedDamage, bleedDuration, elementType, barbedSpearVFX);
+        }
+    
+        if (explosiveTip)
+        {
+            spear.SetExplosiveEffect(explosionRadius, explosionDamage, elementType, whatIsEnemy, explosionVFX);
+        }
+    
         lockedDamageable = null;
     }
 }
