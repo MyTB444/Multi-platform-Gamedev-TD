@@ -22,9 +22,9 @@ public class ArrowProjectile : TowerProjectileBase
         rb = GetComponent<Rigidbody>();
     }
     
-    public void SetupArcProjectile(Vector3 targetPos, IDamageable newDamageable, float newDamage, float newSpeed, float distance)
+    public void SetupArcProjectile(Vector3 targetPos, IDamageable newDamageable, DamageInfo newDamageInfo, float newSpeed, float distance)
     {
-        damage = newDamage;
+        damageInfo = newDamageInfo;
         damageable = newDamageable;
         spawnTime = Time.time;
         launchTime = Time.time;

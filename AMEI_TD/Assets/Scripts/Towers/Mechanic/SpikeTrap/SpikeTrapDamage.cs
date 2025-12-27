@@ -16,7 +16,7 @@ public class SpikeTrapDamage : MonoBehaviour
     
     private BoxCollider boxCollider;
     private LayerMask whatIsEnemy;
-    private float damage;
+    private DamageInfo damageInfo;
     private float cooldown;
     private bool isOnCooldown = false;
     private bool spikesAreRaised = false;
@@ -25,9 +25,9 @@ public class SpikeTrapDamage : MonoBehaviour
     private Collider[] detectedEnemies = new Collider[20];
     private TowerSpikeTrap tower;
     
-    public void Setup(float damageAmount, LayerMask enemyLayer, float trapCooldown, TowerSpikeTrap ownerTower)
+    public void Setup(DamageInfo newDamageInfo, LayerMask enemyLayer, float trapCooldown, TowerSpikeTrap ownerTower)
     {
-        damage = damageAmount;
+        damageInfo = newDamageInfo;
         whatIsEnemy = enemyLayer;
         cooldown = trapCooldown;
         tower = ownerTower;
@@ -136,7 +136,7 @@ public class SpikeTrapDamage : MonoBehaviour
                 IDamageable damageable = detectedEnemies[i].GetComponent<IDamageable>();
                 if (damageable != null)
                 {
-                    damageable.TakeDamage(damage);
+                    damageable.TakeDamage(damageInfo);
                 }
             }
         }

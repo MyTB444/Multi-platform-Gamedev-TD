@@ -21,6 +21,9 @@ public class EnemyBase : MonoBehaviour, IDamageable
     [SerializeField] private int damage;
     [SerializeField] private int reward;
     public float enemyMaxHp = 100;
+    
+    [Header("Element Type")]
+    [SerializeField] private ElementType elementType;
 
     [Header("Ability")]
     [SerializeField] private bool isInvisible;
@@ -58,7 +61,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private GameObject activeSlowEffect;
 
     // DoT system
-    private float dotDamage;
+    private DamageInfo dotDamageInfo;
     private float dotEndTime;
     private float dotTickInterval = 0.5f;
     private float lastDotTick;
@@ -102,7 +105,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
             else if (Time.time >= lastDotTick + dotTickInterval)
             {
                 lastDotTick = Time.time;
-                TakeDamage(dotDamage);
+                TakeDamage(dotDamageInfo);
             }
         }
     }
@@ -136,10 +139,20 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
     }
 
-    public void ApplyDoT(float damagePerTick, float duration, float tickInterval = 0.5f)
+    public void ApplyDoT(DamageInfo damagePerTick, float duration, float tickInterval = 0.5f)
     {
+        // Check if immune to this element - skip DoT entirely
+        DamageCalculator.DamageResult testResult = DamageCalculator.Calculate(damagePerTick, elementType);
+    
+        if (testResult.wasImmune)
+        {
+            // Initial hit already showed IMMUNE, just don't apply DoT
+            return;
+        }
+    
         hasDot = true;
-        dotDamage = damagePerTick;
+        dotDamageInfo = damagePerTick;
+        dotDamageInfo.isDoT = true;
         dotEndTime = Time.time + duration;
         dotTickInterval = tickInterval;
         lastDotTick = Time.time;
@@ -237,25 +250,50 @@ public class EnemyBase : MonoBehaviour, IDamageable
         Destroy(gameObject);
     }
 
-    public virtual void TakeDamage(float incomingDamage, bool isAntiInvisible = false, bool isAntiReinforced = false)
+    public virtual void TakeDamage(DamageInfo damageInfo)
     {
-        if (isInvisible && !isAntiInvisible)
+        DamageCalculator.DamageResult result = DamageCalculator.Calculate(damageInfo, elementType);
+        
+        if (DamageNumberSpawner.instance != null)
         {
+            Vector3 spawnPos = centerPoint != null ? centerPoint.position : transform.position;
+            DamageNumberSpawner.instance.Spawn(
+                spawnPos,
+                result.finalDamage,
+                result.wasSuperEffective,
+                result.wasNotVeryEffective,
+                result.wasImmune
+            );
+        }
+
+        if (result.wasImmune)
+        {
+            Debug.Log($"IMMUNE! {damageInfo.elementType} vs {elementType}");
             return;
         }
 
-        if (isReinforced && !isAntiReinforced)
+        if (result.wasNotVeryEffective)
         {
-            return;
+            Debug.Log($"Not very effective... {damageInfo.elementType} vs {elementType} = {result.finalDamage}");
         }
-
-        enemyCurrentHp -= incomingDamage;
+        else if (result.wasSuperEffective)
+        {
+            Debug.Log($"Super effective! {damageInfo.elementType} vs {elementType} = {result.finalDamage}");
+        }
+        
+        Debug.Log($"DamageInfo: {damageInfo.elementType} vs {elementType} = {result.finalDamage}");
+        enemyCurrentHp -= result.finalDamage;
 
         if (enemyCurrentHp <= 0 && !isDead)
         {
             isDead = true;
             Die();
         }
+    }
+
+    public virtual void TakeDamage(float incomingDamage)
+    {
+        TakeDamage(new DamageInfo(incomingDamage, ElementType.Physical));
     }
 
     private void Die()
@@ -322,4 +360,5 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public int GetDamage() => damage;
     public bool IsSlowed() => isSlowed;
     public bool HasDoT() => hasDot;
+    public ElementType GetElementType() => elementType;
 }

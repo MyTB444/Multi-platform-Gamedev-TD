@@ -29,7 +29,7 @@ public class PhantomKnight : MonoBehaviour
     [SerializeField] private float searchRadius = 15f;
     [SerializeField] private float maxTimeWithoutTarget = 5f;
     
-    private float damage;
+    private DamageInfo damageInfo;
     private float attackRadius;
     private float fadeOutTime;
     private LayerMask enemyLayer;
@@ -58,9 +58,9 @@ public class PhantomKnight : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
     }
     
-    public void Setup(float newSpeed, float newDamage, float newAttackRadius, float newStoppingDistance, float newFadeOutTime, LayerMask newEnemyLayer, Transform enemy)
+    public void Setup(float newSpeed, DamageInfo newDamageInfo, float newAttackRadius, float newStoppingDistance, float newFadeOutTime, LayerMask newEnemyLayer, Transform enemy)
     {
-        damage = newDamage;
+        damageInfo = newDamageInfo;
         attackRadius = newAttackRadius;
         fadeOutTime = newFadeOutTime;
         enemyLayer = newEnemyLayer;
@@ -69,7 +69,7 @@ public class PhantomKnight : MonoBehaviour
         swordDamage = GetComponentInChildren<PhantomSwordDamage>();
         if (swordDamage != null)
         {
-            swordDamage.Setup(damage, enemyLayer, slashVFX, slashVFXRotationOffset, slashVFXStartDelay, slashVFXDuration);
+            swordDamage.Setup(damageInfo, enemyLayer, slashVFX, slashVFXRotationOffset, slashVFXStartDelay, slashVFXDuration);
         }
         
         ghostEffect = GetComponent<GhostEffect>();

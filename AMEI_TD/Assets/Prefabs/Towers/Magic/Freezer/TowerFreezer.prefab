@@ -1989,6 +1989,9 @@ MonoBehaviour:
     m_Bits: 64
   projectilePrefab: {fileID: 1116695714023712260, guid: 4ae91dc2ec6dad042bb24e27914be73d, type: 3}
   projectileSpeed: 8
+  elementType: 1
+  buyPrice: 1
+  sellPrice: 1
   attackSpawnEffectPrefab: {fileID: 3125467519713422411, guid: cb9d85bd70dafc44bb9bda92fca7a2d5, type: 3}
   characterAnimator: {fileID: 5565851648957125833}
   attackAnimationTrigger: Attack

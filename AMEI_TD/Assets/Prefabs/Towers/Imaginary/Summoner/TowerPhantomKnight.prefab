@@ -21453,6 +21453,7 @@ MonoBehaviour:
     m_Bits: 64
   projectilePrefab: {fileID: 0}
   projectileSpeed: 0
+  elementType: 3
   buyPrice: 1
   sellPrice: 1
   attackSpawnEffectPrefab: {fileID: 0}

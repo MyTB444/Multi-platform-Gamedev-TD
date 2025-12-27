@@ -1,4 +1,5 @@
 public interface IDamageable
 {
-    void TakeDamage(float incomingDamage, bool isAntiInvisible = false, bool isAntiReinforced = false);
+    void TakeDamage(DamageInfo damageInfo);
+    void TakeDamage(float incomingDamage);
 }

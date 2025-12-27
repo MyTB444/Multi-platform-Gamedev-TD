@@ -141,9 +141,10 @@ public class TowerRockShower : TowerBase
         rock.transform.localScale = rockPrefab.transform.localScale * randomSize;
 
         float scaledDamage = damage * randomSize;
+        DamageInfo rockDamageInfo = new DamageInfo(scaledDamage, elementType);
 
         RockProjectile projectile = rock.GetComponent<RockProjectile>();
-        projectile.Setup(scaledDamage, whatIsEnemy, randomSpeed, randomSize);
+        projectile.Setup(rockDamageInfo, whatIsEnemy, randomSpeed, randomSize);
     }
     
     protected override bool CanAttack()

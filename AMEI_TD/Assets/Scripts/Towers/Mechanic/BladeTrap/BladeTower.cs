@@ -159,18 +159,18 @@ public class BladeTower : TowerBase
     public void OnBladeHit(EnemyBase enemy)
     {
         if (enemy == null) return;
-        
+    
         if (recentlyHitEnemies.ContainsKey(enemy))
         {
             return;
         }
-        
+    
         IDamageable damageable = enemy.GetComponent<IDamageable>();
         if (damageable != null)
         {
-            damageable.TakeDamage(damage);
+            damageable.TakeDamage(CreateDamageInfo());
         }
-        
+    
         recentlyHitEnemies[enemy] = Time.time + damageCooldown;
     }
     

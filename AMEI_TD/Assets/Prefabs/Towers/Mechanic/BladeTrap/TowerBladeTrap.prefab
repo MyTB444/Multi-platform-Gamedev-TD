@@ -2395,6 +2395,9 @@ MonoBehaviour:
     m_Bits: 64
   projectilePrefab: {fileID: 0}
   projectileSpeed: 0
+  elementType: 2
+  buyPrice: 1
+  sellPrice: 1
   attackSpawnEffectPrefab: {fileID: 1296919836167789391, guid: 5da3d6be31090404994200ae3dfa5129, type: 3}
   characterAnimator: {fileID: 8676718295220344351}
   attackAnimationTrigger: Attack

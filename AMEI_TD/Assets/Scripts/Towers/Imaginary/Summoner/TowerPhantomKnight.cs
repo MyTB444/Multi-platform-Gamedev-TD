@@ -144,7 +144,8 @@ public class TowerPhantomKnight : TowerBase
             PhantomKnight phantom = phantomObj.GetComponent<PhantomKnight>();
             if (phantom != null)
             {
-                phantom.Setup(phantomSpeed, phantomDamage, attackRadius, stoppingDistance, fadeOutTime, whatIsEnemy, savedEnemy);
+                DamageInfo phantomDamageInfo = new DamageInfo(phantomDamage, elementType);
+                phantom.Setup(phantomSpeed, phantomDamageInfo, attackRadius, stoppingDistance, fadeOutTime, whatIsEnemy, savedEnemy);
                 activePhantoms.Add(phantom);
             }
         }

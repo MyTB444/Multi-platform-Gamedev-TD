@@ -20,6 +20,8 @@ public class TowerBase : MonoBehaviour
 
     [SerializeField] protected GameObject projectilePrefab;
     [SerializeField] protected float projectileSpeed;
+    
+    [SerializeField] protected ElementType elementType = ElementType.Physical;
 
     [Header(("Tower Pricing"))] 
     [SerializeField] protected int buyPrice = 1;
@@ -61,6 +63,11 @@ public class TowerBase : MonoBehaviour
         HandleRotation();
 
         if (CanAttack()) AttemptToAttack();
+    }
+    
+    protected DamageInfo CreateDamageInfo()
+    {
+        return new DamageInfo(damage, elementType);
     }
 
     protected virtual void ClearTargetOutOfRange()
@@ -240,20 +247,18 @@ public class TowerBase : MonoBehaviour
             GameObject spawnVFX = Instantiate(attackSpawnEffectPrefab, gunPoint.position, Quaternion.identity);
             Destroy(spawnVFX, 2f);
         }
-        
+    
         Vector3 directionToEnemy = DirectionToEnemyFrom(gunPoint);
 
-        if (Physics.Raycast(gunPoint.position, directionToEnemy, out RaycastHit hitInfo, Mathf.Infinity,
-                whatIsTargetable))
+        if (Physics.Raycast(gunPoint.position, directionToEnemy, out RaycastHit hitInfo, Mathf.Infinity, whatIsTargetable))
         {
             IDamageable damageable = hitInfo.transform.GetComponent<IDamageable>();
 
             if (damageable == null) return;
 
-            // Spawn slightly forward to prevent instant self-collision
             Vector3 spawnPosition = gunPoint.position + directionToEnemy * 0.1f;
             GameObject newProjectile = Instantiate(projectilePrefab, spawnPosition, gunPoint.rotation);
-            newProjectile.GetComponent<TowerProjectileBase>().SetupProjectile(hitInfo.point, damageable, damage, projectileSpeed);
+            newProjectile.GetComponent<TowerProjectileBase>().SetupProjectile(hitInfo.point, damageable, CreateDamageInfo(), projectileSpeed);
         }
     }
 

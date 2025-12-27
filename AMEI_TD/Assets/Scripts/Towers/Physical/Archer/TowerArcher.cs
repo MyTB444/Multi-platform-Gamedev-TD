@@ -165,7 +165,7 @@ public class TowerArcher : TowerBase
         
         if (damageable != null)
         {
-            arrow.SetupArcProjectile(predictedPosition, damageable, damage, projectileSpeed, distance);
+            arrow.SetupArcProjectile(predictedPosition, damageable, CreateDamageInfo(), projectileSpeed, distance);
         }
     }
 }
