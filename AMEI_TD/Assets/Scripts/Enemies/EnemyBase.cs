@@ -61,7 +61,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private GameObject activeSlowEffect;
 
     // DoT system
-    private float dotDamage;
+    private DamageInfo dotDamageInfo;
     private float dotEndTime;
     private float dotTickInterval = 0.5f;
     private float lastDotTick;
@@ -105,7 +105,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
             else if (Time.time >= lastDotTick + dotTickInterval)
             {
                 lastDotTick = Time.time;
-                TakeDamage(dotDamage);
+                TakeDamage(dotDamageInfo);
             }
         }
     }
@@ -139,10 +139,10 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
     }
 
-    public void ApplyDoT(float damagePerTick, float duration, float tickInterval = 0.5f)
+    public void ApplyDoT(DamageInfo damagePerTick, float duration, float tickInterval = 0.5f)
     {
         hasDot = true;
-        dotDamage = damagePerTick;
+        dotDamageInfo = damagePerTick;
         dotEndTime = Time.time + duration;
         dotTickInterval = tickInterval;
         lastDotTick = Time.time;
@@ -258,7 +258,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
         {
             Debug.Log($"Super effective! {damageInfo.elementType} vs {elementType} = {result.finalDamage}");
         }
-
+        
+        Debug.Log($"DamageInfo: {damageInfo.elementType} vs {elementType} = {result.finalDamage}");
         enemyCurrentHp -= result.finalDamage;
 
         if (enemyCurrentHp <= 0 && !isDead)

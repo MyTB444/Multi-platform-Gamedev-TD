@@ -17,7 +17,7 @@ public class IceProjectile : TowerProjectileBase
     private float slowPercent;
     private float slowDuration;
     private float effectRadius;
-    private float dotDamagePerTick;
+    private DamageInfo dotDamageInfo;
     private float dotDuration;
     private float dotTickInterval;
     
@@ -48,7 +48,7 @@ public class IceProjectile : TowerProjectileBase
         slowPercent = newSlowPercent;
         slowDuration = newSlowDuration;
         effectRadius = newEffectRadius;
-        dotDamagePerTick = newDotDamage;
+        dotDamageInfo = new DamageInfo(newDotDamage, newDamageInfo.elementType);
         dotDuration = newDotDuration;
         dotTickInterval = newDotTickInterval;
         rotationOffset = Quaternion.Euler(visualRotationOffset);
@@ -178,7 +178,7 @@ public class IceProjectile : TowerProjectileBase
             if (enemy != null)
             {
                 enemy.ApplySlow(slowPercent, slowDuration);
-                enemy.ApplyDoT(dotDamagePerTick, dotDuration, dotTickInterval);
+                enemy.ApplyDoT(dotDamageInfo, dotDuration, dotTickInterval);
             }
         }
     }
