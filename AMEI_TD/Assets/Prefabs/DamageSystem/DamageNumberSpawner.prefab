@@ -45,5 +45,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damageNumberPrefab: {fileID: 6093582545991567627, guid: c3561471eb5143d47bc2ce1a23f95394, type: 3}
-  spawnOffset: {x: 0, y: 1.5, z: 0}
+  spawnOffset: {x: 0, y: 0.5, z: 0}
   randomOffsetRange: 0.3

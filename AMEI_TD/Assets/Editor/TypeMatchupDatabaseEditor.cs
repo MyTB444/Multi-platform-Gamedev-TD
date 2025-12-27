@@ -11,6 +11,8 @@ public class TypeMatchupDatabaseEditor : Editor
     private SerializedProperty immune;
 
     private readonly string[] typeNames = { "Physical", "Magic", "Mechanic", "Imaginary" };
+    private readonly string[] effectivenessOptions = { "Immune", "Not Very Effective", "Normal", "Super Effective" };
+    
     private readonly Color superColor = new Color(0.5f, 1f, 0.5f);
     private readonly Color weakColor = new Color(1f, 0.7f, 0.7f);
     private readonly Color immuneColor = new Color(0.5f, 0.5f, 0.5f);
@@ -28,7 +30,8 @@ public class TypeMatchupDatabaseEditor : Editor
     {
         serializedObject.Update();
 
-        EditorGUILayout.LabelField("Quick Reference Values", EditorStyles.boldLabel);
+        EditorGUILayout.LabelField("Damage Multipliers", EditorStyles.boldLabel);
+        EditorGUILayout.HelpBox("These values are applied when you select an option from the dropdowns below.", MessageType.Info);
         EditorGUILayout.PropertyField(superEffective);
         EditorGUILayout.PropertyField(notVeryEffective);
         EditorGUILayout.PropertyField(normal);
@@ -40,14 +43,16 @@ public class TypeMatchupDatabaseEditor : Editor
 
         EditorGUILayout.Space(10);
 
+        // Header row
         EditorGUILayout.BeginHorizontal();
         EditorGUILayout.LabelField("", GUILayout.Width(80));
         foreach (string typeName in typeNames)
         {
-            EditorGUILayout.LabelField(typeName, EditorStyles.boldLabel, GUILayout.Width(65));
+            EditorGUILayout.LabelField(typeName, EditorStyles.boldLabel, GUILayout.Width(100));
         }
         EditorGUILayout.EndHorizontal();
 
+        // Data rows
         for (int attacker = 0; attacker < 4; attacker++)
         {
             EditorGUILayout.BeginHorizontal();
@@ -61,17 +66,22 @@ public class TypeMatchupDatabaseEditor : Editor
                 SerializedProperty cell = multipliers.GetArrayElementAtIndex(defender);
                 float value = cell.floatValue;
 
-                Color originalColor = GUI.backgroundColor;
-                
-                if (value > 1f)
-                    GUI.backgroundColor = superColor;
-                else if (value < 1f && value > 0f)
-                    GUI.backgroundColor = weakColor;
-                else if (value <= 0f)
-                    GUI.backgroundColor = immuneColor;
+                // Convert float to dropdown index
+                int selectedIndex = FloatToIndex(value);
 
-                cell.floatValue = EditorGUILayout.FloatField(value, GUILayout.Width(65));
+                // Color based on effectiveness
+                Color originalColor = GUI.backgroundColor;
+                GUI.backgroundColor = GetColorForIndex(selectedIndex);
+
+                int newIndex = EditorGUILayout.Popup(selectedIndex, effectivenessOptions, GUILayout.Width(100));
+
                 GUI.backgroundColor = originalColor;
+
+                // Convert back to float
+                if (newIndex != selectedIndex)
+                {
+                    cell.floatValue = IndexToFloat(newIndex);
+                }
             }
 
             EditorGUILayout.EndHorizontal();
@@ -79,15 +89,47 @@ public class TypeMatchupDatabaseEditor : Editor
 
         EditorGUILayout.Space(15);
 
+        // Legend
         EditorGUILayout.LabelField("Legend", EditorStyles.boldLabel);
-        
+
         EditorGUILayout.BeginHorizontal();
-        DrawLegendItem(superColor, "Super Effective (>1)");
-        DrawLegendItem(weakColor, "Not Very (<1)");
-        DrawLegendItem(immuneColor, "Immune (0)");
+        DrawLegendItem(superColor, "Super Effective");
+        DrawLegendItem(weakColor, "Not Very Effective");
+        DrawLegendItem(immuneColor, "Immune");
         EditorGUILayout.EndHorizontal();
 
         serializedObject.ApplyModifiedProperties();
+    }
+
+    private int FloatToIndex(float value)
+    {
+        if (value <= 0f) return 0;                    // Immune
+        if (value < 1f) return 1;                     // Not Very Effective
+        if (Mathf.Approximately(value, 1f)) return 2; // Normal
+        return 3;                                      // Super Effective
+    }
+
+    private float IndexToFloat(int index)
+    {
+        return index switch
+        {
+            0 => immune.floatValue,
+            1 => notVeryEffective.floatValue,
+            2 => normal.floatValue,
+            3 => superEffective.floatValue,
+            _ => 1f
+        };
+    }
+
+    private Color GetColorForIndex(int index)
+    {
+        return index switch
+        {
+            0 => immuneColor,
+            1 => weakColor,
+            3 => superColor,
+            _ => Color.white
+        };
     }
 
     private void DrawLegendItem(Color color, string label)

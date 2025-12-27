@@ -10,7 +10,7 @@ public class TypeMatchupDatabase : ScriptableObject
         public float[] multipliers = new float[4] { 1f, 1f, 1f, 1f };
     }
 
-    [Header("Quick Reference Multipliers")]
+    [Header("Damage Multipliers")]
     [SerializeField] private float superEffective = 2f;
     [SerializeField] private float notVeryEffective = 0.5f;
     [SerializeField] private float normal = 1f;
