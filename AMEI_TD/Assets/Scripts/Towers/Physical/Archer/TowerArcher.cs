@@ -39,6 +39,36 @@ public class TowerArcher : TowerBase
         base.Awake();
     }
     
+    private void Update()
+    {
+        // Safety reset if stuck attacking
+        if (isAttacking && Time.time > lastTimeAttacked + attackCooldown + 1f)
+        {
+            Debug.Log("Force reset isAttacking");
+            isAttacking = false;
+        
+            if (characterAnimator != null)
+            {
+                characterAnimator.SetBool("Attack", false);
+            }
+        
+            if (arrowVisual != null)
+            {
+                arrowVisual.SetActive(true);
+            }
+        }
+    
+        // Debug what's blocking attack
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            Debug.Log($"currentEnemy: {currentEnemy}");
+            Debug.Log($"isAttacking: {isAttacking}");
+            Debug.Log($"Time since attack: {Time.time - lastTimeAttacked}");
+            Debug.Log($"attackCooldown: {attackCooldown}");
+            Debug.Log($"base.CanAttack(): {base.CanAttack()}");
+        }
+    }
+    
     protected override void Start()
     {
         base.Start();
@@ -137,10 +167,10 @@ public class TowerArcher : TowerBase
     {
         lastTimeAttacked = Time.time;
         isAttacking = true;
-        
+    
         if (characterAnimator != null)
         {
-            UpdateAnimationSpeed();
+            // UpdateAnimationSpeed(); // Comment this out
             characterAnimator.SetBool("Attack", true);
         }
     }

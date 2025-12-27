@@ -39,6 +39,61 @@ public class TowerSpikeTrap : TowerBase
         SpawnTrapOnRoad();
     }
     
+    public override void SetUpgrade(TowerUpgradeType upgradeType, bool enabled)
+    {
+        base.SetUpgrade(upgradeType, enabled);
+    
+        switch (upgradeType)
+        {
+            case TowerUpgradeType.LowerCooldown:
+                lowerCooldown = enabled;
+                if (spikeTrap != null)
+                {
+                    float finalCooldown = lowerCooldown ? attackCooldown * (1f - cooldownReduction) : attackCooldown;
+                    spikeTrap.SetCooldown(finalCooldown);
+                }
+                break;
+            case TowerUpgradeType.PoisonSpikes:
+                poisonSpikes = enabled;
+                UpdateTrapEffects();
+                break;
+            case TowerUpgradeType.BleedingSpikes:
+                bleedingSpikes = enabled;
+                UpdateTrapEffects();
+                break;
+            case TowerUpgradeType.CripplingSpikes:
+                cripplingSpikes = enabled;
+                if (spikeTrap != null)
+                {
+                    if (enabled)
+                    {
+                        spikeTrap.SetCrippleEffect(slowPercent, slowDuration);
+                    }
+                    else
+                    {
+                        spikeTrap.ClearCrippleEffect();
+                    }
+                }
+                break;
+        }
+    }
+
+    private void UpdateTrapEffects()
+    {
+        if (spikeTrap == null) return;
+    
+        spikeTrap.ClearDoTEffects();
+    
+        if (bleedingSpikes)
+        {
+            spikeTrap.SetBleedEffect(bleedDamage, bleedDuration, elementType, bleedSpikeVFX, critChance, critMultiplier);
+        }
+        else if (poisonSpikes)
+        {
+            spikeTrap.SetPoisonEffect(poisonDamage, poisonDuration, elementType, poisonSpikeVFX);
+        }
+    }
+    
     private void SpawnTrapOnRoad()
     {
         Vector3 rayDirection = Quaternion.AngleAxis(downwardAngle, transform.right) * transform.forward;

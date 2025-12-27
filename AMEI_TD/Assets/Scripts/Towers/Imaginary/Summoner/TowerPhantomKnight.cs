@@ -28,6 +28,9 @@ public class TowerPhantomKnight : TowerBase
     [SerializeField] private bool morePhantoms = false;
     [SerializeField] private int bonusPhantomCount = 1;
     [Space]
+    [SerializeField] private bool closerSpawn = false;
+    [SerializeField] private float closerSpawnDistance = 2f;
+    [Space]
     [SerializeField] private bool spectralChains = false;
     [SerializeField] private float slowPercent = 0.3f;
     [SerializeField] private float slowDuration = 2f;
@@ -37,12 +40,54 @@ public class TowerPhantomKnight : TowerBase
     private List<PhantomKnight> activePhantoms = new List<PhantomKnight>();
     private bool isAttacking = false;
     private Transform savedEnemy;
+    private float basePhantomDamage;
     
     protected override void FixedUpdate()
     {
         activePhantoms.RemoveAll(p => p == null);
         
         base.FixedUpdate();
+    }
+    
+    protected override void Start()
+    {
+        basePhantomDamage = phantomDamage;
+        base.Start();
+    }
+    
+    public override void SetUpgrade(TowerUpgradeType upgradeType, bool enabled)
+    {
+        base.SetUpgrade(upgradeType, enabled);
+    
+        switch (upgradeType)
+        {
+            case TowerUpgradeType.MorePhantoms:
+                morePhantoms = enabled;
+                break;
+            case TowerUpgradeType.CloserSpawn:
+                closerSpawn = enabled;
+                break;
+            case TowerUpgradeType.SpectralChains:
+                spectralChains = enabled;
+                break;
+            case TowerUpgradeType.DoubleSlash:
+                doubleSlash = enabled;
+                break;
+        }
+    }
+    
+    protected override void ApplyStatUpgrades()
+    {
+        base.ApplyStatUpgrades();
+    
+        if (damageBoost)
+        {
+            phantomDamage = basePhantomDamage * (1f + damageBoostPercent);
+        }
+        else
+        {
+            phantomDamage = basePhantomDamage;
+        }
     }
     
     protected override bool CanAttack()
@@ -107,14 +152,15 @@ public class TowerPhantomKnight : TowerBase
         }
     }
     
-private void SpawnPhantoms()
-{
-    if (savedEnemy == null || !savedEnemy.gameObject.activeSelf) return;
+    private void SpawnPhantoms()
+    {
+        if (savedEnemy == null || !savedEnemy.gameObject.activeSelf) return;
     
-    Vector3 enemyPosition = savedEnemy.position;
-    Vector3 enemyForward = savedEnemy.forward;
+        Vector3 enemyPosition = savedEnemy.position;
+        Vector3 enemyForward = savedEnemy.forward;
     
-    Vector3 baseSpawnPos = enemyPosition + enemyForward * spawnDistanceAhead;
+        float finalSpawnDistance = closerSpawn ? closerSpawnDistance : spawnDistanceAhead;
+        Vector3 baseSpawnPos = enemyPosition + enemyForward * finalSpawnDistance;
     
     Vector3 rightVector = Vector3.Cross(Vector3.up, -enemyForward).normalized;
     

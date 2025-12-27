@@ -61,6 +61,41 @@ public class BladeTower : TowerBase
     
         ApplyUpgrades();
     }
+    
+    public override void SetUpgrade(TowerUpgradeType upgradeType, bool enabled)
+    {
+        base.SetUpgrade(upgradeType, enabled);
+    
+        switch (upgradeType)
+        {
+            case TowerUpgradeType.BleedChance:
+                bleedChance = enabled;
+                ClearBleedVFX();
+                ApplyUpgrades();
+                break;
+            case TowerUpgradeType.MoreBlades:
+                moreBlades = enabled;
+                ClearBleedVFX();
+                ApplyUpgrades();
+                break;
+            case TowerUpgradeType.ExtendedReach:
+                extendedReach = enabled;
+                ApplyUpgrades();
+                break;
+        }
+    }
+
+    private void ClearBleedVFX()
+    {
+        foreach (GameObject vfx in activeBleedVFXList)
+        {
+            if (vfx != null)
+            {
+                Destroy(vfx);
+            }
+        }
+        activeBleedVFXList.Clear();
+    }
 
     private void ApplyUpgrades()
     {

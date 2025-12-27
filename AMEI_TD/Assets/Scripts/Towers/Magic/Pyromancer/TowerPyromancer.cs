@@ -16,7 +16,23 @@ public class TowerPyromancer : TowerBase
     [SerializeField] private bool burnSpread = false;
     [SerializeField] private float burnSpreadRadius = 2f;
     
+    public override void SetUpgrade(TowerUpgradeType upgradeType, bool enabled)
+    {
+        base.SetUpgrade(upgradeType, enabled);
     
+        switch (upgradeType)
+        {
+            case TowerUpgradeType.BurnChance:
+                burnChance = enabled;
+                break;
+            case TowerUpgradeType.BiggerFireball:
+                biggerFireball = enabled;
+                break;
+            case TowerUpgradeType.BurnSpread:
+                burnSpread = enabled;
+                break;
+        }
+    }
     
     protected override void FireProjectile()
     {

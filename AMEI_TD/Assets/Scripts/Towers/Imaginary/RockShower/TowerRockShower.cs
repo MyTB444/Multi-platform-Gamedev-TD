@@ -59,6 +59,27 @@ public class TowerRockShower : TowerBase
         }
     }
     
+    public override void SetUpgrade(TowerUpgradeType upgradeType, bool enabled)
+    {
+        base.SetUpgrade(upgradeType, enabled);
+    
+        switch (upgradeType)
+        {
+            case TowerUpgradeType.MoreRocks:
+                moreRocks = enabled;
+                break;
+            case TowerUpgradeType.BiggerRocks:
+                biggerRocks = enabled;
+                break;
+            case TowerUpgradeType.LongerShower:
+                longerShower = enabled;
+                break;
+            case TowerUpgradeType.MeteorStrike:
+                meteorStrike = enabled;
+                break;
+        }
+    }
+    
     private void UpdateEnemyVelocity()
     {
         if (currentEnemy == null)

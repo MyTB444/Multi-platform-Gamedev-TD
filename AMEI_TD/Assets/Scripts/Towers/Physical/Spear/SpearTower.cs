@@ -48,6 +48,21 @@ public class SpearTower : TowerBase
         UpdateEnemyVelocity();
         base.FixedUpdate();
     }
+    public override void SetUpgrade(TowerUpgradeType upgradeType, bool enabled)
+    {
+        base.SetUpgrade(upgradeType, enabled);
+    
+        switch (upgradeType)
+        {
+            case TowerUpgradeType.BarbedSpear:
+                bleedSpear = enabled;
+                UpdateSpearVisualVFX();
+                break;
+            case TowerUpgradeType.ExplosiveTip:
+                explosiveTip = enabled;
+                break;
+        }
+    }
     
     private void UpdateEnemyVelocity()
     {

@@ -29,6 +29,27 @@ public class TowerIceMage : TowerBase
     [SerializeField] [Range(0f, 1f)] private float freezeChance = 0.2f;
     [SerializeField] private float freezeDuration = 1.5f;
     
+    public override void SetUpgrade(TowerUpgradeType upgradeType, bool enabled)
+    {
+        base.SetUpgrade(upgradeType, enabled);
+    
+        switch (upgradeType)
+        {
+            case TowerUpgradeType.StrongerSlow:
+                strongerSlow = enabled;
+                break;
+            case TowerUpgradeType.LongerSlow:
+                longerSlow = enabled;
+                break;
+            case TowerUpgradeType.Frostbite:
+                frostbite = enabled;
+                break;
+            case TowerUpgradeType.FreezeSolid:
+                freezeSolid = enabled;
+                break;
+        }
+    }
+    
     protected override void FireProjectile()
     {
         if (attackSpawnEffectPrefab != null && gunPoint != null)

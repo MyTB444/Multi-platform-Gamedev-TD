@@ -253,4 +253,31 @@ public class SpikeTrapDamage : MonoBehaviour
         }
         spikesTransform.localPosition = targetPosition;
     }
+    
+    public void SetCooldown(float newCooldown)
+    {
+        cooldown = newCooldown;
+    }
+
+    public void ClearDoTEffects()
+    {
+        applyPoison = false;
+        applyBleed = false;
+        hasCrit = false;
+    
+        // Clear VFX
+        foreach (GameObject vfx in activeVFXInstances)
+        {
+            if (vfx != null)
+            {
+                Destroy(vfx);
+            }
+        }
+        activeVFXInstances.Clear();
+    }
+
+    public void ClearCrippleEffect()
+    {
+        applyCripple = false;
+    }
 }

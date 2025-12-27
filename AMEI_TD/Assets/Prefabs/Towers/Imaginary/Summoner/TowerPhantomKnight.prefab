@@ -21456,6 +21456,12 @@ MonoBehaviour:
   elementType: 3
   buyPrice: 1
   sellPrice: 1
+  damageBoost: 0
+  damageBoostPercent: 0.25
+  attackSpeedBoost: 0
+  attackSpeedBoostPercent: 0.2
+  rangeBoost: 0
+  rangeBoostPercent: 0.2
   attackSpawnEffectPrefab: {fileID: 0}
   characterAnimator: {fileID: 4582930928750596067}
   attackAnimationTrigger: Attack
@@ -21474,12 +21480,14 @@ MonoBehaviour:
   phantomSpeed: 2
   phantomDamage: 5
   attackRadius: 2
-  stoppingDistance: 0.5
+  stoppingDistance: 0.45
   fadeOutTime: 0.5
   spawnVFXPrefab: {fileID: 9007503105022112843, guid: 8d3efcfbf73f29f409a1e8cb1a020c10, type: 3}
   vfxDuration: 1
   morePhantoms: 0
   bonusPhantomCount: 1
+  closerSpawn: 0
+  closerSpawnDistance: 2
   spectralChains: 0
   slowPercent: 0.3
   slowDuration: 2
