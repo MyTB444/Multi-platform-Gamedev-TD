@@ -15448,6 +15448,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 557970310}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &559197662 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2819161486565915166, guid: 624fa53d9337f684c9aebcef0a9bcf17, type: 3}
+  m_PrefabInstance: {fileID: 1421323281}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &561888483
 GameObject:
   m_ObjectHideFlags: 0
@@ -30328,22 +30333,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TowerSpikeTrap
       objectReference: {fileID: 0}
-    - target: {fileID: 6399124335794961387, guid: f1ec96bd8a2e80d4cb539d7a09e8ca43, type: 3}
-      propertyPath: poisonSpikes
+    - target: {fileID: 1666991278309154317, guid: f1ec96bd8a2e80d4cb539d7a09e8ca43, type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6399124335794961387, guid: f1ec96bd8a2e80d4cb539d7a09e8ca43, type: 3}
-      propertyPath: bleedSpikeVFX
-      value: 
-      objectReference: {fileID: 3538601806443498961, guid: ae8be53a4ea8c18479183ebb3a59bf7c, type: 3}
-    - target: {fileID: 6399124335794961387, guid: f1ec96bd8a2e80d4cb539d7a09e8ca43, type: 3}
-      propertyPath: bleedingSpikes
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6399124335794961387, guid: f1ec96bd8a2e80d4cb539d7a09e8ca43, type: 3}
-      propertyPath: poisonSpikeVFX
-      value: 
-      objectReference: {fileID: 764456538143545835, guid: 157342d22a0c84b40b3d0eb8ff79ed1d, type: 3}
     - target: {fileID: 7126889103069896265, guid: f1ec96bd8a2e80d4cb539d7a09e8ca43, type: 3}
       propertyPath: m_LocalPosition.x
       value: 24.962
@@ -39272,13 +39265,33 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 857534486113657836, guid: 624fa53d9337f684c9aebcef0a9bcf17, type: 3}
+      propertyPath: moreBlades
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 857534486113657836, guid: 624fa53d9337f684c9aebcef0a9bcf17, type: 3}
+      propertyPath: extendedReach
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 857534486113657836, guid: 624fa53d9337f684c9aebcef0a9bcf17, type: 3}
+      propertyPath: allBlades.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 857534486113657836, guid: 624fa53d9337f684c9aebcef0a9bcf17, type: 3}
+      propertyPath: 'allBlades.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2108955370}
+    - target: {fileID: 857534486113657836, guid: 624fa53d9337f684c9aebcef0a9bcf17, type: 3}
+      propertyPath: 'allBlades.Array.data[1]'
+      value: 
+      objectReference: {fileID: 559197662}
+    - target: {fileID: 857534486113657836, guid: 624fa53d9337f684c9aebcef0a9bcf17, type: 3}
+      propertyPath: 'allBlades.Array.data[2]'
+      value: 
+      objectReference: {fileID: 1755257477}
     - target: {fileID: 1060176546675274297, guid: 624fa53d9337f684c9aebcef0a9bcf17, type: 3}
       propertyPath: m_Name
       value: TowerBladeTrap
-      objectReference: {fileID: 0}
-    - target: {fileID: 1060176546675274297, guid: 624fa53d9337f684c9aebcef0a9bcf17, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -50344,6 +50357,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1753417446}
   m_Mesh: {fileID: 4300000, guid: dac1f6a026468af46b8928893e3eea27, type: 3}
+--- !u!4 &1755257477 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5765456216803581414, guid: 624fa53d9337f684c9aebcef0a9bcf17, type: 3}
+  m_PrefabInstance: {fileID: 1421323281}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1756681702
 GameObject:
   m_ObjectHideFlags: 0
@@ -61044,6 +61062,11 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2108132486}
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &2108955370 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6465250875578528571, guid: 624fa53d9337f684c9aebcef0a9bcf17, type: 3}
+  m_PrefabInstance: {fileID: 1421323281}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2109801588
 GameObject:
   m_ObjectHideFlags: 0
