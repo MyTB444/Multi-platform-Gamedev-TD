@@ -21,6 +21,9 @@ public class EnemyBase : MonoBehaviour, IDamageable
     [SerializeField] private int damage;
     [SerializeField] private int reward;
     public float enemyMaxHp = 100;
+    
+    [Header("Element Type")]
+    [SerializeField] private ElementType elementType;
 
     [Header("Ability")]
     [SerializeField] private bool isInvisible;
@@ -322,4 +325,5 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public int GetDamage() => damage;
     public bool IsSlowed() => isSlowed;
     public bool HasDoT() => hasDot;
+    public ElementType GetElementType() => elementType;
 }
