@@ -85,7 +85,7 @@ public class VFXDamage : MonoBehaviour
             enemyBaseGameObjectRef.enemyBaseRef = enemyBaseGameObjectRef;
             enemyBaseGameObjectRef.LiftEffectFunction(true);
             enemies.Add(enemyBaseGameObjectRef);
-            enemyBaseGameObjectRef.TakeDamage(1f, true, false, false);
+            enemyBaseGameObjectRef.TakeDamage(1f, true);
 
             Vector3 startPos = enemyBaseGameObjectRef.transform.position;
             Vector3 targetPos = new Vector3(startPos.x, startPos.y + 2, startPos.z);
@@ -172,7 +172,7 @@ public class VFXDamage : MonoBehaviour
                 if (other.gameObject != null && other.gameObject.activeInHierarchy)
                 {
 
-                    enemyBaseGameObjectRef.TakeDamage(0.0003f, true, false, false);
+                    enemyBaseGameObjectRef.TakeDamage(0.0003f, true);
 
                 }
 
@@ -182,7 +182,7 @@ public class VFXDamage : MonoBehaviour
             {
                 Debug.Log("Takingdamage");
 
-                enemyBaseGameObjectRef.TakeDamage(0.05f, true, false, false);
+                enemyBaseGameObjectRef.TakeDamage(0.05f, true);
                 
                     if (other.gameObject != null && other.gameObject.activeInHierarchy)
                     {

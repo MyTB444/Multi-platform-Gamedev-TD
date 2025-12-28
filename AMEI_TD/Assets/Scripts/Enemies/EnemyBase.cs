@@ -412,7 +412,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         Destroy(gameObject);
     }
 
-    public virtual void TakeDamage(DamageInfo damageInfo)
+    public virtual void TakeDamage(DamageInfo damageInfo, bool spellDamageEnabled = false)
     {
         DamageCalculator.DamageResult result = DamageCalculator.Calculate(damageInfo, elementType);
         
@@ -446,17 +446,29 @@ public class EnemyBase : MonoBehaviour, IDamageable
         Debug.Log($"DamageInfo: {damageInfo.elementType} vs {elementType} = {result.finalDamage}");
         enemyCurrentHp -= result.finalDamage;
 
+        if (spellDamageEnabled)
+        {
+
+            healthBar.value -= result.finalDamage * Time.fixedDeltaTime * 10;
+            StartCoroutine(DisableHealthBar(false));
+        }
+        else
+        {
+
+            healthBar.value -= result.finalDamage;
+            StartCoroutine(DisableHealthBar(false));
+        }
+        
         if ((enemyCurrentHp <= 0 || healthBar.value <= 0) && !isDead)
         {
             isDead = true;
-
             Die();
         }
         if (gameObject.activeInHierarchy && gameObject != null)
         {
-               
+
             StartCoroutine(DisableHealthBar(true));
-                
+
         }
     }
     
@@ -472,9 +484,9 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
     }
 
-    public virtual void TakeDamage(float incomingDamage)
+    public virtual void TakeDamage(float incomingDamage, bool spellDamageEnabled = false)
     {
-        TakeDamage(new DamageInfo(incomingDamage, ElementType.Physical));
+        TakeDamage(new DamageInfo(incomingDamage, ElementType.Physical), spellDamageEnabled);
     }
 
     private void Die()
