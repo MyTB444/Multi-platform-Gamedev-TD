@@ -80,6 +80,11 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private bool dotCanSpread = false;
     private float dotSpreadRadius;
     private LayerMask dotSpreadLayer;
+
+    // Shield system
+    private bool hasShield = false;
+    private float shieldHealth = 0f;
+    private GameObject activeShieldEffect;
     
     private void OnEnable()
     {
@@ -360,7 +365,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public virtual void TakeDamage(DamageInfo damageInfo)
     {
         DamageCalculator.DamageResult result = DamageCalculator.Calculate(damageInfo, elementType);
-        
+
         if (DamageNumberSpawner.instance != null)
         {
             Vector3 spawnPos = centerPoint != null ? centerPoint.position : transform.position;
@@ -387,9 +392,28 @@ public class EnemyBase : MonoBehaviour, IDamageable
         {
             Debug.Log($"Super effective! {damageInfo.elementType} vs {elementType} = {result.finalDamage}");
         }
-        
+
         Debug.Log($"DamageInfo: {damageInfo.elementType} vs {elementType} = {result.finalDamage}");
-        enemyCurrentHp -= result.finalDamage;
+
+        float damageToApply = result.finalDamage;
+        if (hasShield && shieldHealth > 0)
+        {
+            if (shieldHealth >= damageToApply)
+            {
+                shieldHealth -= damageToApply;
+                damageToApply = 0;
+                Debug.Log($"Shield absorbed all damage. Shield remaining: {shieldHealth}");
+            }
+            else
+            {
+                damageToApply -= shieldHealth;
+                Debug.Log($"Shield broken");
+                shieldHealth = 0;
+                RemoveShield();
+            }
+        }
+
+        enemyCurrentHp -= damageToApply;
 
         if (enemyCurrentHp <= 0 && !isDead)
         {
@@ -502,4 +526,34 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public bool IsStunned() => isStunned;
     public bool HasDoT() => hasDot;
     public ElementType GetElementType() => elementType;
+
+    public void ApplyShield(float shieldAmount, GameObject shieldEffectPrefab)
+    {
+        hasShield = true;
+        shieldHealth = shieldAmount;
+
+        if (shieldEffectPrefab != null && activeShieldEffect == null)
+        {
+            activeShieldEffect = Instantiate(shieldEffectPrefab, transform.position, Quaternion.identity, transform);
+        }
+
+        Debug.Log($"Shield applied: {shieldAmount} HP");
+    }
+
+    private void RemoveShield()
+    {
+        hasShield = false;
+        shieldHealth = 0f;
+
+        if (activeShieldEffect != null)
+        {
+            Destroy(activeShieldEffect);
+            activeShieldEffect = null;
+        }
+
+        Debug.Log("Shield removed");
+    }
+
+    public bool HasShield() => hasShield && shieldHealth > 0;
+    public float GetShieldHealth() => shieldHealth;
 }
