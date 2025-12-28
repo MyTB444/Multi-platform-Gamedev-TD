@@ -71,6 +71,9 @@ public class TowerBase : MonoBehaviour
     [SerializeField] protected float projectileSpeed;
     
     [SerializeField] protected ElementType elementType = ElementType.Physical;
+    
+    [Header("Pooling")]
+    [SerializeField] protected int projectilePoolAmount = 20;
 
     [Header(("Tower Pricing"))] 
     [SerializeField] protected int buyPrice = 1;
@@ -112,6 +115,10 @@ public class TowerBase : MonoBehaviour
 
     protected virtual void Awake()
     {
+        if (projectilePrefab != null)
+        {
+            ObjectPooling.instance.Register(projectilePrefab, projectilePoolAmount);
+        }
     }
 
     protected virtual void Start()
@@ -312,7 +319,6 @@ public class TowerBase : MonoBehaviour
         }
     }
 
-    // Raycasts to enemy and spawns projectile with hit information
     protected virtual void FireProjectile()
     {
         if (attackSpawnEffectPrefab != null && gunPoint != null)
@@ -320,7 +326,7 @@ public class TowerBase : MonoBehaviour
             GameObject spawnVFX = Instantiate(attackSpawnEffectPrefab, gunPoint.position, Quaternion.identity);
             Destroy(spawnVFX, 2f);
         }
-    
+
         Vector3 directionToEnemy = DirectionToEnemyFrom(gunPoint);
 
         if (Physics.Raycast(gunPoint.position, directionToEnemy, out RaycastHit hitInfo, Mathf.Infinity, whatIsTargetable))
@@ -330,7 +336,12 @@ public class TowerBase : MonoBehaviour
             if (damageable == null) return;
 
             Vector3 spawnPosition = gunPoint.position + directionToEnemy * 0.1f;
-            GameObject newProjectile = Instantiate(projectilePrefab, spawnPosition, gunPoint.rotation);
+        
+            GameObject newProjectile = ObjectPooling.instance.Get(projectilePrefab);
+            newProjectile.transform.position = spawnPosition;
+            newProjectile.transform.rotation = gunPoint.rotation;
+            newProjectile.SetActive(true);
+        
             newProjectile.GetComponent<TowerProjectileBase>().SetupProjectile(hitInfo.point, damageable, CreateDamageInfo(), projectileSpeed);
         }
     }

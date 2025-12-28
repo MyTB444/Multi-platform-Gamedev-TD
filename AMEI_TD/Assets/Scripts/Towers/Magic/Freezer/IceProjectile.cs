@@ -26,6 +26,15 @@ public class IceProjectile : TowerProjectileBase
     private float freezeChance;
     private float freezeDuration;
     
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        target = null;
+        isHoming = true;
+        targetLost = false;
+        canFreeze = false;
+    }
+    
     public void SetupIceProjectile(
         Transform enemyTarget, 
         IDamageable newDamageable, 

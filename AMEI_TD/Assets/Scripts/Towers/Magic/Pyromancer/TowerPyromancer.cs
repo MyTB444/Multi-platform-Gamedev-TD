@@ -55,18 +55,21 @@ public class TowerPyromancer : TowerBase
         Vector3 spawnPosition = gunPoint.position + directionToEnemy * 0.5f;
         Quaternion spawnRotation = Quaternion.LookRotation(directionToEnemy);
 
-        GameObject newProjectile = Instantiate(projectilePrefab, spawnPosition, spawnRotation);
+        GameObject newProjectile = ObjectPooling.instance.Get(projectilePrefab);
+        newProjectile.transform.position = spawnPosition;
+        newProjectile.transform.rotation = spawnRotation;
+        newProjectile.SetActive(true);
 
         HomingProjectile homing = newProjectile.GetComponent<HomingProjectile>();
         if (homing != null)
         {
             homing.SetupHomingProjectile(currentEnemy.transform, damageable, CreateDamageInfo(), projectileSpeed, whatIsEnemy);
-    
+
             if (burnChance)
             {
                 homing.SetBurnEffect(burnChancePercent, burnDamage, burnDuration, elementType, burnSpread, burnSpreadRadius, whatIsEnemy);
             }
-        
+    
             if (biggerFireball)
             {
                 newProjectile.transform.localScale *= fireballScaleMultiplier;

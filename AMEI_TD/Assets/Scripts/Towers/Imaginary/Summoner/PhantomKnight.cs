@@ -65,8 +65,39 @@ public class PhantomKnight : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
     }
     
+    private void OnEnable()
+    {
+        hasAttacked = false;
+        isFading = false;
+        isReady = false;
+        targetEnemy = null;
+        timeWithoutTarget = 0f;
+        attackCount = 0;
+        lastHitEnemy = null;
+    
+        if (agent != null)
+        {
+            agent.enabled = false;
+        }
+    
+        if (ghostEffect != null)
+        {
+            ghostEffect.SetAlpha(0.6f);
+        }
+    }
+    
+    private void OnDisable()
+    {
+        StopAllCoroutines();
+    }
+    
     public void Setup(float newSpeed, DamageInfo newDamageInfo, float newAttackRadius, float newStoppingDistance, float newFadeOutTime, LayerMask newEnemyLayer, Transform enemy, bool doubleSlash = false, bool applySlow = false, float slowPercent = 0f, float slowDuration = 0f)
     {
+        if (agent != null)
+        {
+            agent.enabled = true;
+        }
+        
         damageInfo = newDamageInfo;
         attackRadius = newAttackRadius;
         fadeOutTime = newFadeOutTime;
@@ -128,7 +159,7 @@ public class PhantomKnight : MonoBehaviour
         
         if (!agent.isOnNavMesh)
         {
-            Destroy(gameObject);
+            ObjectPooling.instance.Return(gameObject);
             yield break;
         }
         
@@ -349,30 +380,30 @@ public class PhantomKnight : MonoBehaviour
     private IEnumerator FadeOut()
     {
         isFading = true;
-        
+    
         if (agent != null && agent.isOnNavMesh)
         {
             agent.isStopped = true;
         }
-        
+    
         StopWalking();
-        
+    
         float elapsed = 0f;
-        
+    
         while (elapsed < fadeOutTime)
         {
             elapsed += Time.deltaTime;
             float alpha = 0.6f * (1f - (elapsed / fadeOutTime));
-            
+        
             if (ghostEffect != null)
             {
                 ghostEffect.SetAlpha(alpha);
             }
-            
+        
             yield return null;
         }
-        
-        Destroy(gameObject);
+    
+        ObjectPooling.instance.Return(gameObject);
     }
     
     public bool HasAttacked()
