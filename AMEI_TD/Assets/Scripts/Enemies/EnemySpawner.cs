@@ -69,23 +69,31 @@ public class EnemySpawner : MonoBehaviour
             EnemyBase enemy = randomEnemy.GetComponent<EnemyBase>();
             EnemyType enemyType = enemy.GetEnemyType();
 
-            switch (enemyType)
+            switch(enemyType)
             {
                 case EnemyType.Basic:
-                    return PoolGameObjectType.EnemyBasic;
+                return PoolGameObjectType.EnemyBasic;
+
                 case EnemyType.Fast:
-                    return PoolGameObjectType.EnemyFast;
-                case EnemyType.Tank:
-                    return PoolGameObjectType.EnemyTank;
+                return PoolGameObjectType.EnemyFast;
+
+                case EnemyType.Tank:    
+                return PoolGameObjectType.EnemyTank;
+
                 case EnemyType.Invisible:
-                    return PoolGameObjectType.EnemyInvisible;
+                return PoolGameObjectType.EnemyInvisible;
+
                 case EnemyType.Reinforced:
-                    return PoolGameObjectType.EnemyReinforced;
+                return PoolGameObjectType.EnemyReinforced;
+                
+                case EnemyType.Adaptive: 
+                return PoolGameObjectType.EnemyAdaptive;
             }
         }
         return PoolGameObjectType.EnemyBasic;
     }
 
+    // Picks and removes a random enemy prefab from the queue
     private GameObject GetRandomEnemy()
     {
         if (enemiesToCreate.Count == 0) return null;

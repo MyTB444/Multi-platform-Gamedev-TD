@@ -9,7 +9,8 @@ public enum PoolGameObjectType
     EnemyTank,
     EnemyInvisible,
     EnemyReinforced,
-    Flames
+    Flames,
+    EnemyAdaptive
 }
 [Serializable]
 public class PoolInfo

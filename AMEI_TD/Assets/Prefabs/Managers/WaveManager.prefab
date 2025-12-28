@@ -46,10 +46,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeBetweenWaves: 2
   waveTimer: 0
-  levelWaves: []
+  levelWaves:
+  - enemyBasic: 0
+    enemyFast: 0
+    enemyTank: 0
+    enemyInvisible: 0
+    enemyReinforced: 0
+    enemyAdaptive: 1
   enemyBasic: {fileID: 8663543207204576051, guid: e3c65aa6917ec5744b5fbb6f58025d78, type: 3}
   enemyFast: {fileID: 1812659917213882, guid: c68e7ecf54453e247816a0362e922e0c, type: 3}
   enemyTank: {fileID: 3155058319838657794, guid: 5683b0ddd461bba46886a7db5fff0655, type: 3}
   enemyInvisible: {fileID: 1931298151966786, guid: 928a1377c1cd4515b208fef3a396b8ea, type: 3}
   enemyReinforced: {fileID: 6753617674297473082, guid: 24a0663f813d4beb91fc0c6b1e8fef36, type: 3}
+  enemyAdaptive: {fileID: 1319517528997712, guid: 1543549dcdf638d488bd40cb68dd9b8e, type: 3}
   gameBegan: 1

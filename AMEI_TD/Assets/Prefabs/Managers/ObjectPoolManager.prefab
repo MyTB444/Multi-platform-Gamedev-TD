@@ -62,6 +62,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7856258661887362629}
+  - {fileID: 3316755574295627419}
   - {fileID: 2384984139715675128}
   - {fileID: 4975140921733789013}
   - {fileID: 1726143175541897380}
@@ -112,6 +113,11 @@ MonoBehaviour:
     gameObjectPrefab: {fileID: 6753617674297473082, guid: 24a0663f813d4beb91fc0c6b1e8fef36, type: 3}
     Container: {fileID: 7697279638760437040}
     pool: []
+  - objectType: 6
+    amount: 5
+    gameObjectPrefab: {fileID: 1319517528997712, guid: 1543549dcdf638d488bd40cb68dd9b8e, type: 3}
+    Container: {fileID: 3921261497352323571}
+    pool: []
 --- !u!1 &3100933237422088265
 GameObject:
   m_ObjectHideFlags: 0
@@ -135,6 +141,37 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3100933237422088265}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 4.249647, y: 0.2284975, z: -9.14251}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4556504159957609456}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3921261497352323571
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3316755574295627419}
+  m_Layer: 0
+  m_Name: EnemyAdaptivePool
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3316755574295627419
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3921261497352323571}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 4.249647, y: 0.2284975, z: -9.14251}
