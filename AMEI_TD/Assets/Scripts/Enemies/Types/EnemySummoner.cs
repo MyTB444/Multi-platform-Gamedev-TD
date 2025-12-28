@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -9,6 +10,14 @@ public class EnemySummoner : EnemyBase
     [SerializeField] private float summonCooldown = 5f;
     [SerializeField] private float spawnRadius = 1.5f;
     [SerializeField] private int minionsPerSummon = 2;
+    
+    [Header("VFX")]
+    [SerializeField] private GameObject magicCirclePrefab;
+    [SerializeField] private GameObject smokeSpawnPrefab;
+    [SerializeField] private float magicCircleYOffset = 0.1f;
+    [SerializeField] private float smokeDelay = 0.3f;
+
+    private GameObject activeMagicCircle;
 
     private float summonTimer;
     private bool isSummoning = false;
@@ -45,7 +54,13 @@ public class EnemySummoner : EnemyBase
     {
         isSummoning = true;
         canMove = false;
-        
+    
+        if (magicCirclePrefab != null)
+        {
+            Vector3 circlePos = transform.position + Vector3.up * magicCircleYOffset;
+            activeMagicCircle = Instantiate(magicCirclePrefab, circlePos, Quaternion.Euler(360, 180, 0), transform);
+        }
+    
         if (summonerAnimator != null)
         {
             summonerAnimator.SetTrigger("Summon");
@@ -56,14 +71,27 @@ public class EnemySummoner : EnemyBase
             FinishSummoning();
         }
     }
-
-    // Animation event - call when minions should appear
+    
     public void OnSummonAnimationEvent()
     {
         SpawnMinions();
+    
+        if (activeMagicCircle != null)
+        {
+            ParticleSystem ps = activeMagicCircle.GetComponent<ParticleSystem>();
+            if (ps != null)
+            {
+                ps.Stop();
+                Destroy(activeMagicCircle, ps.main.startLifetime.constantMax);
+            }
+            else
+            {
+                Destroy(activeMagicCircle);
+            }
+            activeMagicCircle = null;
+        }
     }
-
-    // Animation event - call at end of summon animation
+    
     public void OnSummonAnimationEnd()
     {
         FinishSummoning();
@@ -83,26 +111,33 @@ public class EnemySummoner : EnemyBase
         for (int i = 0; i < minionsToSpawn; i++)
         {
             float angle = (360f / minionsToSpawn) * i;
-            SpawnMinion(angle);
+            StartCoroutine(SpawnMinionWithDelay(angle));
         }
     }
 
-    private void SpawnMinion(float angle)
+    private IEnumerator SpawnMinionWithDelay(float angle)
     {
+        float radians = angle * Mathf.Deg2Rad;
+        Vector3 desiredPos = transform.position + new Vector3(Mathf.Cos(radians) * spawnRadius, 0, Mathf.Sin(radians) * spawnRadius);
+        
+        Vector3 spawnPos = transform.position;
+        if (NavMesh.SamplePosition(desiredPos, out NavMeshHit hit, spawnRadius * 2f, NavMesh.AllAreas))
+        {
+            spawnPos = hit.position;
+        }
+        
+        if (smokeSpawnPrefab != null)
+        {
+            GameObject smoke = Instantiate(smokeSpawnPrefab, spawnPos, Quaternion.identity);
+            Destroy(smoke, 2f);
+        }
+        
+        yield return new WaitForSeconds(smokeDelay);
+        
         GameObject newMinion = ObjectPooling.instance.GetPoolObject(PoolGameObjectType.EnemyMinion);
 
         if (newMinion != null)
         {
-            float radians = angle * Mathf.Deg2Rad;
-            Vector3 desiredPos = transform.position + new Vector3(Mathf.Cos(radians) * spawnRadius, 0, Mathf.Sin(radians) * spawnRadius);
-        
-            // Find valid NavMesh position
-            Vector3 spawnPos = transform.position; // fallback to summoner position
-            if (NavMesh.SamplePosition(desiredPos, out NavMeshHit hit, spawnRadius * 2f, NavMesh.AllAreas))
-            {
-                spawnPos = hit.position;
-            }
-        
             newMinion.SetActive(true);
             newMinion.transform.position = spawnPos;
     
