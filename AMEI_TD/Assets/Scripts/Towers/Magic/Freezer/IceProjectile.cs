@@ -17,14 +17,19 @@ public class IceProjectile : TowerProjectileBase
     private float slowPercent;
     private float slowDuration;
     private float effectRadius;
-    private float dotDamagePerTick;
+    private DamageInfo dotDamageInfo;
     private float dotDuration;
     private float dotTickInterval;
+    
+    // Freeze settings
+    private bool canFreeze = false;
+    private float freezeChance;
+    private float freezeDuration;
     
     public void SetupIceProjectile(
         Transform enemyTarget, 
         IDamageable newDamageable, 
-        float newDamage, 
+        DamageInfo newDamageInfo, 
         float newSpeed, 
         LayerMask whatIsEnemy,
         float newSlowPercent,
@@ -37,7 +42,7 @@ public class IceProjectile : TowerProjectileBase
     {
         target = enemyTarget;
         damageable = newDamageable;
-        damage = newDamage;
+        damageInfo = newDamageInfo;
         speed = newSpeed;
         spawnTime = Time.time;
         isHoming = true;
@@ -48,7 +53,7 @@ public class IceProjectile : TowerProjectileBase
         slowPercent = newSlowPercent;
         slowDuration = newSlowDuration;
         effectRadius = newEffectRadius;
-        dotDamagePerTick = newDotDamage;
+        dotDamageInfo = new DamageInfo(newDotDamage, newDamageInfo.elementType, true);
         dotDuration = newDotDuration;
         dotTickInterval = newDotTickInterval;
         rotationOffset = Quaternion.Euler(visualRotationOffset);
@@ -58,6 +63,13 @@ public class IceProjectile : TowerProjectileBase
             EnemyBase enemy = target.GetComponent<EnemyBase>();
             lastKnownTargetPos = enemy != null ? enemy.GetCenterPoint() : target.position;
         }
+    }
+    
+    public void SetFreezeEffect(float chance, float duration)
+    {
+        canFreeze = true;
+        freezeChance = chance;
+        freezeDuration = duration;
     }
     
     protected override void MoveProjectile()
@@ -157,28 +169,34 @@ public class IceProjectile : TowerProjectileBase
     protected override void OnHit(Collider other)
     {
         if (hasHit) return;
-        
+    
         EnemyBase enemy = other.GetComponent<EnemyBase>();
         if (enemy == null) return;
-        
+    
+        // Freeze only the direct hit enemy
+        if (canFreeze && Random.value <= freezeChance)
+        {
+            enemy.ApplyStun(freezeDuration);
+        }
+    
         ApplyEffectsInRadius();
-        
+    
         isHoming = false;
-        
+    
         base.OnHit(other);
     }
-    
+
     private void ApplyEffectsInRadius()
     {
         Collider[] enemies = Physics.OverlapSphere(transform.position, effectRadius, enemyLayer);
-        
+    
         foreach (Collider col in enemies)
         {
             EnemyBase enemy = col.GetComponent<EnemyBase>();
             if (enemy != null)
             {
                 enemy.ApplySlow(slowPercent, slowDuration);
-                enemy.ApplyDoT(dotDamagePerTick, dotDuration, dotTickInterval);
+                enemy.ApplyDoT(dotDamageInfo, dotDuration, dotTickInterval);
             }
         }
     }

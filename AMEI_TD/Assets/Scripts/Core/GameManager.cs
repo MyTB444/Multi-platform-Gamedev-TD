@@ -9,10 +9,14 @@ public class GameManager : MonoBehaviour
    
     private bool gameLost;
     public bool IsGameLost() => gameLost;
+    
+    [Header("Damage System")]
+    [SerializeField] private TypeMatchupDatabase typeMatchupDatabase;
 
     private void Awake()
     {
         instance = this;
+        DamageCalculator.Initialize(typeMatchupDatabase);
     }
 
     void Start()
