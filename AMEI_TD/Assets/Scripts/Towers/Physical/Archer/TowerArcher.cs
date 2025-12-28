@@ -170,8 +170,7 @@ public class TowerArcher : TowerBase
     
         if (characterAnimator != null)
         {
-            // UpdateAnimationSpeed(); // Comment this out
-            characterAnimator.SetBool("Attack", true);
+            characterAnimator.SetTrigger("Attack");
         }
     }
     
@@ -187,7 +186,7 @@ public class TowerArcher : TowerBase
             arrowVisual.SetActive(true);
         }
     }
-    
+
     public void OnReleaseBow()
     {
         if (bowController != null)
@@ -202,7 +201,6 @@ public class TowerArcher : TowerBase
             arrowVisual.SetActive(false);
         }
         
-        characterAnimator.SetBool("Attack", false);
         isAttacking = false;
         
         Invoke("OnArrowReady", arrowRespawnDelay);

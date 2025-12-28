@@ -55002,6 +55002,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TowerArcher
       objectReference: {fileID: 0}
+    - target: {fileID: 7605547376037196238, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
+      propertyPath: attackRange
+      value: 8
+      objectReference: {fileID: 0}
     - target: {fileID: 8294430211428561170, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
       propertyPath: m_LocalPosition.x
       value: 12.488493
