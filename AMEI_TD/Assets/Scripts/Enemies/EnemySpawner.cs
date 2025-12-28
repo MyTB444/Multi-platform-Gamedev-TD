@@ -88,6 +88,9 @@ public class EnemySpawner : MonoBehaviour
                 
                 case EnemyType.Adaptive: 
                 return PoolGameObjectType.EnemyAdaptive;
+                
+                case EnemyType.Splitter: 
+                return PoolGameObjectType.EnemySplitter;
             }
         }
         return PoolGameObjectType.EnemyBasic;

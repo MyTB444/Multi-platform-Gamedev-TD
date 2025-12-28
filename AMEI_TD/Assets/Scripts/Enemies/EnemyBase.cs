@@ -9,7 +9,8 @@ public enum EnemyType
     Tank,
     Invisible,
     Reinforced,
-    Adaptive
+    Adaptive,
+    Splitter
 }
 
 public class EnemyBase : MonoBehaviour, IDamageable

@@ -11,6 +11,7 @@ public class WaveDetails
     public int enemyInvisible;
     public int enemyReinforced;
     public int enemyAdaptive;
+    public int enemySplitter;
 }
 public class WaveManager : MonoBehaviour
 {
@@ -26,6 +27,7 @@ public class WaveManager : MonoBehaviour
     [SerializeField] private GameObject enemyInvisible;
     [SerializeField] private GameObject enemyReinforced;
     [SerializeField] private GameObject enemyAdaptive;
+    [SerializeField] private GameObject enemySplitter;
     
 
     private List<EnemySpawner> enemySpawners;
@@ -176,6 +178,11 @@ public class WaveManager : MonoBehaviour
         for (int i = 0; i < levelWaves[waveIndex].enemyAdaptive; i++)
         {
             newEnemyList.Add(enemyAdaptive);
+        }
+        
+        for (int i = 0; i < levelWaves[waveIndex].enemySplitter; i++)
+        {
+            newEnemyList.Add(enemySplitter);
         }
 
         return newEnemyList;
