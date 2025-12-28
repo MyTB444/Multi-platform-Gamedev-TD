@@ -54,9 +54,10 @@ public class EnemySpawner : MonoBehaviour
         if (newEnemy != null)
         {
            
-            newEnemy.SetActive(true);
+          
             newEnemy.transform.position = spawnLocation.position;
             newEnemy.transform.rotation = Quaternion.identity;
+            newEnemy.SetActive(true);
             //GameObject newEnemy = Instantiate(randomEnemy, spawnLocation.position, Quaternion.identity);
 
             EnemyBase enemyScript = newEnemy.GetComponent<EnemyBase>();

@@ -1,11 +1,11 @@
-using System.Collections.Generic;
-
 using System.Collections;
+using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
+
 
 public enum EnemyType
 {
@@ -97,7 +97,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     [SerializeField] private EnemyVFXPool enemyVFXPoolScriptRef;
 
-    
+    private bool status = false;
     private void OnEnable()
     {
         enemyHealthDisplayCanvas.enabled  = false;
@@ -299,6 +299,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public void SetupEnemy(EnemySpawner myNewSpawner)
     {
         mySpawner = myNewSpawner;
+     
         UpdateWaypoints(myNewSpawner.currentWaypoints);
         CollectTotalDistance();
         ResetEnemy();
@@ -318,7 +319,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
         currentWaypointIndex = 0;
     }
-
+  
     private void CollectTotalDistance()
     {
         totalDistance = 0;
@@ -360,6 +361,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
         {
             currentWaypointIndex++;
         }
+       
+            NavAgent.enabled = true;
         
         if (NavAgent != null && NavAgent.isActiveAndEnabled && NavAgent.isOnNavMesh)
         {
@@ -445,20 +448,26 @@ public class EnemyBase : MonoBehaviour, IDamageable
         
         Debug.Log($"DamageInfo: {damageInfo.elementType} vs {elementType} = {result.finalDamage}");
         enemyCurrentHp -= result.finalDamage;
-
+       
         if (spellDamageEnabled)
         {
+            healthBar.value -= result.finalDamage * Time.fixedDeltaTime/1000;
 
-            healthBar.value -= result.finalDamage * Time.fixedDeltaTime * 10;
-            StartCoroutine(DisableHealthBar(false));
         }
         else
         {
-
-            healthBar.value -= result.finalDamage;
-            StartCoroutine(DisableHealthBar(false));
+           healthBar.value -= result.finalDamage;         
         }
-        
+
+        if (gameObject.activeInHierarchy && gameObject != null)
+        {
+            healthBar.onValueChanged.AddListener((value) =>
+            {
+
+                StartCoroutine(DisableHealthBar(false));
+            });
+
+        }
         if ((enemyCurrentHp <= 0 || healthBar.value <= 0) && !isDead)
         {
             isDead = true;
@@ -476,7 +485,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
         if (gameObject.activeInHierarchy && gameObject != null)
         {
-            if (status)
+            if (this.status)
             {
                 yield return new WaitForSeconds(8f);
             }

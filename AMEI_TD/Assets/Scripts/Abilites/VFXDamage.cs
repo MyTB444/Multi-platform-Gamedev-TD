@@ -75,7 +75,7 @@ public class VFXDamage : MonoBehaviour
 
     private Vector3 ReturnRandomPointOnMesh(Bounds bounds)
     {
-        return new Vector3(Random.Range(bounds.extents.x / 10f, bounds.extents.x / 7f), Random.Range(bounds.min.y*2.5f, bounds.max.y/3.5f), Random.Range(bounds.extents.z / 10f, bounds.extents.z / 7f));
+        return new Vector3(Random.Range(bounds.min.x * 2.5f, bounds.max.x / 3.5f), Random.Range(bounds.min.y*2.5f, bounds.max.y/3.5f), Random.Range(bounds.min.z * 2.5f, bounds.max.z / 3.5f));
     }
 
     private IEnumerator EnableLiftDamage()
@@ -85,7 +85,7 @@ public class VFXDamage : MonoBehaviour
             enemyBaseGameObjectRef.enemyBaseRef = enemyBaseGameObjectRef;
             enemyBaseGameObjectRef.LiftEffectFunction(true);
             enemies.Add(enemyBaseGameObjectRef);
-            enemyBaseGameObjectRef.TakeDamage(1f, true);
+            enemyBaseGameObjectRef.TakeDamage(20f, true);
 
             Vector3 startPos = enemyBaseGameObjectRef.transform.position;
             Vector3 targetPos = new Vector3(startPos.x, startPos.y + 2, startPos.z);
@@ -172,7 +172,7 @@ public class VFXDamage : MonoBehaviour
                 if (other.gameObject != null && other.gameObject.activeInHierarchy)
                 {
 
-                    enemyBaseGameObjectRef.TakeDamage(0.0003f, true);
+                    enemyBaseGameObjectRef.TakeDamage(0.000003f, true);
 
                 }
 
@@ -182,7 +182,8 @@ public class VFXDamage : MonoBehaviour
             {
                 Debug.Log("Takingdamage");
 
-                enemyBaseGameObjectRef.TakeDamage(0.05f, true);
+                enemyBaseGameObjectRef.TakeDamage(0.0005f, true);
+               
                 
                     if (other.gameObject != null && other.gameObject.activeInHierarchy)
                     {

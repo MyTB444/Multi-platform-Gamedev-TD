@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 198104970619360998}
   - component: {fileID: 199570947319072982}
   - component: {fileID: 8681579370218767243}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: MediumFlames
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -669,7 +669,7 @@ ParticleSystem:
     angle: 25
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
-    radiusThickness: 1
+    radiusThickness: 0.1
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
     m_Rotation: {x: 0, y: 0, z: 0}
@@ -752,7 +752,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 0.4
+      value: 0.1
       mode: 0
       spread: 0
       speed:
@@ -924,7 +924,7 @@ ParticleSystem:
     rateOverDistance:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 5
+      scalar: 0
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -3817,7 +3817,7 @@ ParticleSystem:
     radiusScale: 0.12
     collidesWith:
       serializedVersion: 2
-      m_Bits: 64
+      m_Bits: 2048
     maxCollisionShapes: 1
     quality: 0
     voxelSize: 0.5
