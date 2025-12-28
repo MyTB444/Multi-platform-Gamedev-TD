@@ -121,6 +121,12 @@ public class TowerBase : MonoBehaviour
         baseAttackRange = attackRange;
     
         ApplyStatUpgrades();
+    
+        // Apply any unlocked upgrades from manager
+        if (TowerUpgradeManager.instance != null)
+        {
+            TowerUpgradeManager.instance.ApplyUnlockedUpgrades(this);
+        }
     }
 
     protected virtual void FixedUpdate()
