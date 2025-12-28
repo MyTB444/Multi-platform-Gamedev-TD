@@ -1,10 +1,59 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum TowerUpgradeType
+{
+    // Common
+    DamageBoost,
+    AttackSpeedBoost,
+    RangeBoost,
+    
+    // Archer
+    PoisonArrows,
+    FireArrows,
+    
+    // Spear
+    BarbedSpear,
+    ExplosiveTip,
+    
+    // Pyromancer
+    BurnChance,
+    BiggerFireball,
+    BurnSpread,
+    
+    // Ice Mage
+    StrongerSlow,
+    LongerSlow,
+    Frostbite,
+    FreezeSolid,
+    
+    // Spike Trap
+    PoisonSpikes,
+    BleedingSpikes,
+    CripplingSpikes,
+    
+    // Blade Tower
+    BleedChance,
+    MoreBlades,
+    ExtendedReach,
+    
+    // Rock Shower
+    MoreRocks,
+    BiggerRocks,
+    LongerShower,
+    MeteorStrike,
+    
+    // Phantom Knight
+    MorePhantoms,
+    CloserSpawn,
+    SpectralChains,
+    DoubleSlash
+}
+
 public class TowerBase : MonoBehaviour
 {
-    private EnemyBase currentEnemy;
-    [SerializeField] private int damage;
+    protected EnemyBase currentEnemy;
+    [SerializeField] protected int damage;
     [SerializeField] protected float attackCooldown = 1f;
     protected float lastTimeAttacked;
 
@@ -20,6 +69,34 @@ public class TowerBase : MonoBehaviour
 
     [SerializeField] protected GameObject projectilePrefab;
     [SerializeField] protected float projectileSpeed;
+    
+    [SerializeField] protected ElementType elementType = ElementType.Physical;
+
+    [Header(("Tower Pricing"))] 
+    [SerializeField] protected int buyPrice = 1;
+    [SerializeField] protected int sellPrice = 1;
+    
+    [Header("Stat Upgrades")]
+    [SerializeField] protected bool damageBoost = false;
+    [SerializeField] protected float damageBoostPercent = 0.25f;
+    [Space]
+    [SerializeField] protected bool attackSpeedBoost = false;
+    [SerializeField] protected float attackSpeedBoostPercent = 0.20f;
+    [Space]
+    [SerializeField] protected bool rangeBoost = false;
+    [SerializeField] protected float rangeBoostPercent = 0.20f;
+
+    protected int baseDamage;
+    protected float baseAttackCooldown;
+    protected float baseAttackRange;
+    
+    [Header("VFX")]
+    [SerializeField] protected GameObject attackSpawnEffectPrefab;
+    
+    [Header("Animation")]
+    [SerializeField] protected Animator characterAnimator;
+    [SerializeField] protected string attackAnimationTrigger = "Attack";
+    [SerializeField] protected float projectileSpawnDelay = 0f;
 
     [Header("Targeting Setup")]
     [SerializeField] protected bool targetMostAdvancedEnemy = true;
@@ -27,6 +104,7 @@ public class TowerBase : MonoBehaviour
     [SerializeField] protected EnemyType enemyPriorityType;
     [SerializeField] protected bool useHpTargeting = true;
     [SerializeField] protected bool targetHighestHpEnemy = true;
+    [SerializeField] protected bool useRandomTargeting = false;
 
     private float targetCheckInterval = .1f;
     private float lastTimeCheckedTarget;
@@ -38,7 +116,17 @@ public class TowerBase : MonoBehaviour
 
     protected virtual void Start()
     {
-
+        baseDamage = damage;
+        baseAttackCooldown = attackCooldown;
+        baseAttackRange = attackRange;
+    
+        ApplyStatUpgrades();
+    
+        // Apply any unlocked upgrades from manager
+        if (TowerUpgradeManager.instance != null)
+        {
+            TowerUpgradeManager.instance.ApplyUnlockedUpgrades(this);
+        }
     }
 
     protected virtual void FixedUpdate()
@@ -48,6 +136,11 @@ public class TowerBase : MonoBehaviour
         HandleRotation();
 
         if (CanAttack()) AttemptToAttack();
+    }
+    
+    protected DamageInfo CreateDamageInfo()
+    {
+        return new DamageInfo(damage, elementType);
     }
 
     protected virtual void ClearTargetOutOfRange()
@@ -118,6 +211,11 @@ public class TowerBase : MonoBehaviour
     private EnemyBase ChooseEnemyToTarget(List<EnemyBase> targets)
     {
         EnemyBase enemyToTarget = null;
+        
+        if (useRandomTargeting)
+        {
+            return targets[Random.Range(0, targets.Count)];
+        }
 
         // HP-based targeting takes priority over distance
         if (useHpTargeting)
@@ -196,25 +294,44 @@ public class TowerBase : MonoBehaviour
     protected virtual void Attack()
     {
         lastTimeAttacked = Time.time;
-        FireProjectile();
+    
+        // Trigger attack animation
+        if (characterAnimator != null)
+        {
+            characterAnimator.SetTrigger(attackAnimationTrigger);
+        }
+    
+        // Fire projectile with delay (0 = immediate)
+        if (projectileSpawnDelay > 0)
+        {
+            Invoke("FireProjectile", projectileSpawnDelay);
+        }
+        else
+        {
+            FireProjectile();
+        }
     }
 
     // Raycasts to enemy and spawns projectile with hit information
     protected virtual void FireProjectile()
     {
+        if (attackSpawnEffectPrefab != null && gunPoint != null)
+        {
+            GameObject spawnVFX = Instantiate(attackSpawnEffectPrefab, gunPoint.position, Quaternion.identity);
+            Destroy(spawnVFX, 2f);
+        }
+    
         Vector3 directionToEnemy = DirectionToEnemyFrom(gunPoint);
 
-        if (Physics.Raycast(gunPoint.position, directionToEnemy, out RaycastHit hitInfo, Mathf.Infinity,
-                whatIsTargetable))
+        if (Physics.Raycast(gunPoint.position, directionToEnemy, out RaycastHit hitInfo, Mathf.Infinity, whatIsTargetable))
         {
             IDamageable damageable = hitInfo.transform.GetComponent<IDamageable>();
 
             if (damageable == null) return;
 
-            // Spawn slightly forward to prevent instant self-collision
             Vector3 spawnPosition = gunPoint.position + directionToEnemy * 0.1f;
             GameObject newProjectile = Instantiate(projectilePrefab, spawnPosition, gunPoint.rotation);
-            newProjectile.GetComponent<TowerProjectileBase>().SetupProjectile(hitInfo.point, damageable, damage, projectileSpeed);
+            newProjectile.GetComponent<TowerProjectileBase>().SetupProjectile(hitInfo.point, damageable, CreateDamageInfo(), projectileSpeed);
         }
     }
 
@@ -257,9 +374,61 @@ public class TowerBase : MonoBehaviour
     {
         return (currentEnemy.GetCenterPoint() - startPosition.position).normalized;
     }
+    
+    protected virtual void ApplyStatUpgrades()
+    {
+        if (damageBoost)
+        {
+            damage = Mathf.RoundToInt(baseDamage * (1f + damageBoostPercent));
+        }
+        else
+        {
+            damage = baseDamage;
+        }
+    
+        if (attackSpeedBoost)
+        {
+            attackCooldown = baseAttackCooldown * (1f - attackSpeedBoostPercent);
+        }
+        else
+        {
+            attackCooldown = baseAttackCooldown;
+        }
+    
+        if (rangeBoost)
+        {
+            attackRange = baseAttackRange * (1f + rangeBoostPercent);
+        }
+        else
+        {
+            attackRange = baseAttackRange;
+        }
+    }
+    
+    public virtual void SetUpgrade(TowerUpgradeType upgradeType, bool enabled)
+    {
+        switch (upgradeType)
+        {
+            case TowerUpgradeType.DamageBoost:
+                damageBoost = enabled;
+                ApplyStatUpgrades();
+                break;
+            case TowerUpgradeType.AttackSpeedBoost:
+                attackSpeedBoost = enabled;
+                ApplyStatUpgrades();
+                break;
+            case TowerUpgradeType.RangeBoost:
+                rangeBoost = enabled;
+                ApplyStatUpgrades();
+                break;
+        }
+    }
 
     protected virtual void OnDrawGizmos()
     {
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
+    
+    public int GetBuyPrice() { return buyPrice; }
+    public int GetSellPrice() { return sellPrice; }
 }

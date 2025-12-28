@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6120208307205231233}
   - component: {fileID: 2170886758981279}
   - component: {fileID: 5476858389347925610}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: DirtOuterCorner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -108,6 +108,8 @@ GameObject:
   - component: {fileID: 8486405626932758005}
   - component: {fileID: 1255936120147335526}
   - component: {fileID: 7372208184168669913}
+  - component: {fileID: 1980930721005607033}
+  - component: {fileID: 7616761587130640481}
   m_Layer: 0
   m_Name: ForestBlock01
   m_TagString: Untagged
@@ -180,3 +182,40 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &1980930721005607033
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6382874158925913971}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.0000002, y: 2.0000007, z: 2.0000005}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!208 &7616761587130640481
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6382874158925913971}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 1, y: 1, z: 1}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5

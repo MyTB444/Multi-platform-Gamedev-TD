@@ -5,18 +5,20 @@ TagManager:
   serializedVersion: 2
   tags:
   - Tager
+  - FxTemporaire
   - Enemy
   - TinyFlames
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
   - Water
   - UI
   - Enemy
   - Tower
   - Road
+  - Phantom
+  - PhantomSword
   - vfx
   - 
   - 

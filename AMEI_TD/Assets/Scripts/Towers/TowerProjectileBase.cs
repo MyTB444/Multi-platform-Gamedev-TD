@@ -2,27 +2,36 @@ using UnityEngine;
 
 public class TowerProjectileBase : MonoBehaviour
 {
-    private Vector3 direction;
-    private float damage;
-    private float speed;
-    private bool isActive = true;
-    private IDamageable damageable;
+    protected Vector3 direction;
+    protected DamageInfo damageInfo;
+    protected float speed;
+    protected bool isActive = true;
+    protected bool hasHit = false;
+    protected IDamageable damageable;
 
     [SerializeField] protected float maxLifeTime = 10f;
     protected float spawnTime;
 
-    public void SetupProjectile(Vector3 targetPosition, IDamageable newDamageable, float newDamage, float newSpeed)
+    [Header("VFX")]
+    [SerializeField] protected GameObject impactEffectPrefab;
+    
+    public void SetupProjectile(Vector3 targetPosition, IDamageable newDamageable, DamageInfo newDamageInfo, float newSpeed)
     {
         direction = (targetPosition - transform.position).normalized;
-        damage = newDamage;
+        damageInfo = newDamageInfo;
         speed = newSpeed;
         spawnTime = Time.time;
         damageable = newDamageable;
     }
 
+    public void SetupProjectile(Vector3 targetPosition, IDamageable newDamageable, float newDamage, float newSpeed)
+    {
+        SetupProjectile(targetPosition, newDamageable, new DamageInfo(newDamage, ElementType.Physical), newSpeed);
+    }
+
     protected virtual void Update()
     {
-        if (isActive == false) return;
+        if (!isActive) return;
 
         if (Time.time - spawnTime > maxLifeTime)
         {
@@ -40,26 +49,38 @@ public class TowerProjectileBase : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-
         OnHit(other);
         LayerMask TowerLayer = LayerMask.NameToLayer("Tower");
         if (other.gameObject.layer != TowerLayer)
             DestroyProjectile();
-
     }
 
     protected virtual void OnHit(Collider other)
     {
+        if (hasHit) return;
+        hasHit = true;
+
+        if (impactEffectPrefab != null)
+        {
+            Vector3 impactPoint = other.ClosestPoint(transform.position);
+            GameObject impact = Instantiate(impactEffectPrefab, impactPoint, Quaternion.identity);
+            Destroy(impact, 2f);
+        }
+
         if (other.GetComponent<EnemyBase>())
         {
-            if (damageable == null) return;
-
-            damageable.TakeDamage(damage);
+            damageable?.TakeDamage(damageInfo);
         }
     }
 
     protected virtual void DestroyProjectile()
     {
+        if (!hasHit && impactEffectPrefab != null)
+        {
+            GameObject impact = Instantiate(impactEffectPrefab, transform.position, Quaternion.identity);
+            Destroy(impact, 2f);
+        }
+
         Destroy(gameObject);
         isActive = false;
     }

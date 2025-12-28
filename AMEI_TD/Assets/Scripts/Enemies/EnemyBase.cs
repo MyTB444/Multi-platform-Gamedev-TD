@@ -1,6 +1,6 @@
+using System.Collections.Generic;
 
 using System.Collections;
-using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEditor.Animations;
 using UnityEngine;
@@ -16,7 +16,6 @@ public enum EnemyType
     Reinforced,
 }
 
-
 public class EnemyBase : MonoBehaviour, IDamageable
 {
     protected EnemySpawner mySpawner;
@@ -27,23 +26,34 @@ public class EnemyBase : MonoBehaviour, IDamageable
     [SerializeField] private int damage;
     [SerializeField] private int reward;
     public float enemyMaxHp = 100;
+    
+    [Header("Element Type")]
+    [SerializeField] private ElementType elementType;
 
     [Header("Ability")]
     [SerializeField] private bool isInvisible;
     [SerializeField] private bool isReinforced;
 
     [Header("Visuals")]
-    [SerializeField] private Color enemyColor = Color.white; 
+    [SerializeField] private Color enemyColor = Color.white;
 
     [Header("Path")]
     [SerializeField] private Transform centerPoint;
     [SerializeField] private Transform bottomPoint;
 
+    [Header("Slow Effect")]
+    [SerializeField] private GameObject slowEffectPrefab;
+    
+    [Header("Stun Effect")]
+    [SerializeField] private Color frozenColor = new Color(0.5f, 0.8f, 1f, 1f);
+    private Renderer[] enemyRenderers;
+    private Color[] originalColors;
+    private bool hasSavedColors = false;
+
     private NavMeshAgent NavAgent;
     private Animator EnemyAnimator;
 
-
-    private float enemyCurrentHp;
+    [SerializeField] protected float enemyCurrentHp;
     protected bool isDead;
 
     protected Vector3[] myWaypoints;
@@ -57,6 +67,26 @@ public class EnemyBase : MonoBehaviour, IDamageable
     [HideInInspector]public Rigidbody myBody;
     private bool spellsActivated;
 
+    // Slow system
+    private float baseSpeed;
+    private float slowEndTime;
+    private bool isSlowed = false;
+    private GameObject activeSlowEffect;
+    
+    // Stun system
+    private bool isStunned = false;
+    private float stunEndTime;
+
+    // DoT system
+    private DamageInfo dotDamageInfo;
+    private float dotEndTime;
+    private float dotTickInterval = 0.5f;
+    private float lastDotTick;
+    private bool hasDot = false;
+    private bool dotCanSpread = false;
+    private float dotSpreadRadius;
+    private LayerMask dotSpreadLayer;
+    
 
    
 
@@ -92,9 +122,18 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private void Awake()
     {
         originalLayerIndex = gameObject.layer;
-     
+        baseSpeed = enemySpeed;
     }
 
+    protected virtual void Start()
+    {
+        UpdateVisuals();
+        NavAgent = GetComponent<NavMeshAgent>();
+        EnemyAnimator = GetComponent<Animator>();
+    
+        SaveOriginalColors();
+    }
+    
     public void GetRefOfVfxDamageScript(VFXDamage vfxDamageScriptRef)
     {
         this.vfxDamageScriptRef = vfxDamageScriptRef;
@@ -104,10 +143,9 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
     }
 
-   
-
     protected virtual void Update()
     {
+        UpdateStatusEffects();
         if (!enemyBaseRef.spellsActivated)
         {
             FollowPath();
@@ -115,7 +153,149 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
         PlayAnimations();
     }
+
+    private void UpdateStatusEffects()
+    {
+        // Handle stun expiry
+        if (isStunned && Time.time >= stunEndTime)
+        {
+            RemoveStun();
+        }
     
+        // Handle slow expiry
+        if (isSlowed && Time.time >= slowEndTime)
+        {
+            RemoveSlow();
+        }
+
+        // Handle DoT
+        if (hasDot)
+        {
+            if (Time.time >= dotEndTime)
+            {
+                hasDot = false;
+                dotCanSpread = false;
+            }
+            else if (Time.time >= lastDotTick + dotTickInterval)
+            {
+                lastDotTick = Time.time;
+                TakeDamage(dotDamageInfo);
+    
+                if (dotCanSpread)
+                {
+                    SpreadDoT();
+                }
+            }
+        }
+    }
+    
+    private void SpreadDoT()
+    {
+        Vector3 spreadCenter = centerPoint != null ? centerPoint.position : transform.position;
+        Collider[] nearbyEnemies = Physics.OverlapSphere(spreadCenter, dotSpreadRadius, dotSpreadLayer);
+    
+        foreach (Collider col in nearbyEnemies)
+        {
+            if (col.gameObject == gameObject) continue;
+        
+            EnemyBase enemy = col.GetComponent<EnemyBase>();
+            if (enemy != null && !enemy.HasDoT())
+            {
+                enemy.ApplyDoT(dotDamageInfo, dotEndTime - Time.time, dotTickInterval, false, 0f);
+            }
+        }
+    }
+
+    public void ApplySlow(float slowPercent, float duration, bool showVFX = true)
+    {
+        isSlowed = true;
+        slowEndTime = Time.time + duration;
+
+        float clampedSlow = Mathf.Clamp(slowPercent, 0f, 0.9f);
+        enemySpeed = baseSpeed * (1f - clampedSlow);
+
+        if (showVFX && activeSlowEffect == null && slowEffectPrefab != null)
+        {
+            activeSlowEffect = Instantiate(slowEffectPrefab, transform);
+            activeSlowEffect.transform.localPosition = Vector3.up * 0.5f;
+            Debug.Log($"Spawned slow effect: {activeSlowEffect.name}");
+        }
+    }
+
+    private void RemoveSlow()
+    {
+        isSlowed = false;
+        enemySpeed = baseSpeed;
+
+        if (activeSlowEffect != null)
+        {
+            Destroy(activeSlowEffect);
+            activeSlowEffect = null;
+        }
+    }
+    
+    public void ApplyStun(float duration)
+    {
+        isStunned = true;
+        stunEndTime = Time.time + duration;
+    
+        if (hasSavedColors)
+        {
+            foreach (Renderer r in enemyRenderers)
+            {
+                r.material.color = frozenColor;
+            }
+        }
+    }
+    
+    private void RemoveStun()
+    {
+        isStunned = false;
+    
+        if (hasSavedColors)
+        {
+            for (int i = 0; i < enemyRenderers.Length; i++)
+            {
+                enemyRenderers[i].material.color = originalColors[i];
+            }
+        }
+    }
+    
+    private void SaveOriginalColors()
+    {
+        enemyRenderers = GetComponentsInChildren<Renderer>();
+        originalColors = new Color[enemyRenderers.Length];
+    
+        for (int i = 0; i < enemyRenderers.Length; i++)
+        {
+            originalColors[i] = enemyRenderers[i].material.color;
+        }
+    
+        hasSavedColors = true;
+    }
+
+    public void ApplyDoT(DamageInfo damagePerTick, float duration, float tickInterval = 0.5f, bool canSpread = false, float spreadRadius = 0f, LayerMask spreadLayer = default)
+    {
+        DamageCalculator.DamageResult testResult = DamageCalculator.Calculate(damagePerTick, elementType);
+    
+        if (testResult.wasImmune)
+        {
+            return;
+        }
+    
+        hasDot = true;
+        dotDamageInfo = damagePerTick;
+        dotDamageInfo.isDoT = true;
+        dotEndTime = Time.time + duration;
+        dotTickInterval = tickInterval;
+        lastDotTick = Time.time;
+    
+        // Spread settings
+        dotCanSpread = canSpread;
+        dotSpreadRadius = spreadRadius;
+        dotSpreadLayer = spreadLayer;
+    }
+
     public void SetupEnemy(EnemySpawner myNewSpawner)
     {
         mySpawner = myNewSpawner;
@@ -152,6 +332,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     private void FollowPath()
     {
+        if (isStunned) return;
+    
         if (myWaypoints == null || currentWaypointIndex >= myWaypoints.Length)
         {
             ReachedEnd();
@@ -168,25 +350,34 @@ public class EnemyBase : MonoBehaviour, IDamageable
             Quaternion targetRotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
         }
+
+        // Manual movement
         Destination = direction * (enemySpeed * Time.deltaTime);
         transform.position += Destination;
-       
+
         float distanceToWaypoint = Vector3.Distance(bottomPoint.position, targetWaypoint);
         if (distanceToWaypoint <= waypointReachDistance)
         {
-          
             currentWaypointIndex++;
         }
-        //print($"<color=red>{currentWaypointIndex}</color>");
-        NavAgent.enabled = true;
-        if (NavAgent.isActiveAndEnabled && NavAgent.isOnNavMesh)
+        
+        if (NavAgent != null && NavAgent.isActiveAndEnabled && NavAgent.isOnNavMesh)
         {
-            NavAgent.SetDestination(Destination);
-
+            NavAgent.SetDestination(targetWaypoint);
         }
     }
+
     private void PlayAnimations()
     {
+        if (EnemyAnimator == null) return;
+
+        // Don't walk if stunned
+        if (isStunned)
+        {
+            EnemyAnimator.SetBool("Walk", false);
+            return;
+        }
+
         if (!spellsActivated)
         {
             EnemyAnimator.SetBool("Walk", true);
@@ -200,8 +391,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
            
         }
     }
-    
-
+   
 
     public float GetRemainingDistance()
     {
@@ -217,93 +407,79 @@ public class EnemyBase : MonoBehaviour, IDamageable
         return remainingDistance;
     }
 
-    
-
-   
     private void ReachedEnd()
     {
         Destroy(gameObject);
     }
 
-    public virtual void TakeDamage(float damage,bool spellDamageEnabled = false, bool isAntiInvisible = false, bool isAntiReinforced = false)
+    public virtual void TakeDamage(DamageInfo damageInfo)
     {
+        DamageCalculator.DamageResult result = DamageCalculator.Calculate(damageInfo, elementType);
+        
+        if (DamageNumberSpawner.instance != null)
+        {
+            Vector3 spawnPos = centerPoint != null ? centerPoint.position : transform.position;
+            DamageNumberSpawner.instance.Spawn(
+                spawnPos,
+                result.finalDamage,
+                result.wasSuperEffective,
+                result.wasNotVeryEffective,
+                result.wasImmune
+            );
+        }
+
+        if (result.wasImmune)
+        {
+            Debug.Log($"IMMUNE! {damageInfo.elementType} vs {elementType}");
+            return;
+        }
+
+        if (result.wasNotVeryEffective)
+        {
+            Debug.Log($"Not very effective... {damageInfo.elementType} vs {elementType} = {result.finalDamage}");
+        }
+        else if (result.wasSuperEffective)
+        {
+            Debug.Log($"Super effective! {damageInfo.elementType} vs {elementType} = {result.finalDamage}");
+        }
+        
+        Debug.Log($"DamageInfo: {damageInfo.elementType} vs {elementType} = {result.finalDamage}");
+        enemyCurrentHp -= result.finalDamage;
+
+        if ((enemyCurrentHp <= 0 || healthBar.value <= 0) && !isDead)
+        {
+            isDead = true;
+
+            Die();
+        }
         if (gameObject.activeInHierarchy && gameObject != null)
         {
-            
-            enemyHealthDisplayCanvas.enabled = true;
-            if (isInvisible && !isAntiInvisible)
-            {
-                return;
-            }
-
-            if (isReinforced && !isAntiReinforced)
-            {
-                return;
-            }
-
-            enemyCurrentHp -= damage;
-            if (spellDamageEnabled)
-            {
-                
-                healthBar.value -= damage * Time.fixedDeltaTime * 10;
-                StartCoroutine(DisableHealthBar(false));
-            }
-            else
-            {
-                
-                healthBar.value -= damage;
-                StartCoroutine(DisableHealthBar(false));
-            }
-
-
-
-            if ((enemyCurrentHp <= 0 || healthBar.value <= 0) && !isDead)
-            {
-                isDead = true;
-
-                Die();
-            }
-            if (gameObject.activeInHierarchy && gameObject != null)
-            {
                
-                    StartCoroutine(DisableHealthBar(true));
+            StartCoroutine(DisableHealthBar(true));
                 
-            }
         }
     }
-
+    
     private IEnumerator DisableHealthBar(bool status)
     {
         if (gameObject.activeInHierarchy && gameObject != null)
         {
-           
-         
             if (status)
             {
                 yield return new WaitForSeconds(8f);
-               
-                
             }
             enemyHealthDisplayCanvas.enabled = !status;
-
-
-
         }
     }
 
-
-
-
-
-
-
+    public virtual void TakeDamage(float incomingDamage)
+    {
+        TakeDamage(new DamageInfo(incomingDamage, ElementType.Physical));
+    }
 
     private void Die()
     {
-       
-        //Destroy(gameObject);
-       
-        if (GameManager.instance != null) 
+        if (GameManager.instance != null)
         {
             GameManager.instance.UpdateSkillPoints(reward);
         }
@@ -343,16 +519,35 @@ public class EnemyBase : MonoBehaviour, IDamageable
         gameObject.layer = originalLayerIndex;
         enemyCurrentHp = enemyMaxHp;
         isDead = false;
+
+        // Reset slow
+        isSlowed = false;
+        enemySpeed = baseSpeed;
+        if (activeSlowEffect != null)
+        {
+            Destroy(activeSlowEffect);
+            activeSlowEffect = null;
+        }
+
+        // Reset DoT
+        hasDot = false;
+        dotCanSpread = false;
+    
+        // Reset Stun
+        isStunned = false;
+        if (hasSavedColors)
+        {
+            for (int i = 0; i < enemyRenderers.Length; i++)
+            {
+                enemyRenderers[i].material.color = originalColors[i];
+            }
+        }
+
         UpdateVisuals();
     }
-
     
-
-  
-
     public void LiftEffectFunction(bool status)
     {
-
         if (gameObject.activeInHierarchy && gameObject != null)
         {
             enemyBaseRef.myBody.useGravity = !status;
@@ -360,18 +555,14 @@ public class EnemyBase : MonoBehaviour, IDamageable
             {
                 myBody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
                 StartCoroutine(EnableNavMesh());
-
             }
             else
             {
                 enemyBaseRef.spellsActivated = status;
                 enemyBaseRef.NavAgent.enabled = !status;
                 StartCoroutine(DisableYPos());
-
-
             }
         }
-           
     }
 
     private void OnMouseDown()
@@ -391,8 +582,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
     }
     
-
-
     private IEnumerator EnableNavMesh()
     {
         if (gameObject.activeInHierarchy && gameObject != null)
@@ -407,9 +596,9 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
         Renderer r = GetComponent<Renderer>();
         if (r == null) return;
-        
+
         Color finalColor = enemyColor;
-        
+
         if (isInvisible)
         {
             finalColor.a = 0.3f;
@@ -421,7 +610,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         r.material.color = finalColor;
     }
 
-    //Getters
+    // Getters
     public Vector3 GetCenterPoint() => centerPoint.position;
     public EnemyType GetEnemyType() => enemyType;
     public float GetEnemyHp() => enemyCurrentHp;
@@ -429,6 +618,10 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public bool IsInvisible() => isInvisible;
     public bool IsReinforced() => isReinforced;
     public int GetDamage() => damage;
+    public bool IsSlowed() => isSlowed;
+    public bool IsStunned() => isStunned;
+    public bool HasDoT() => hasDot;
+    public ElementType GetElementType() => elementType;
 
     public EnemyVFXPool vfxContainer { get; set; }
     public EnemyBase enemyBaseRef { get; set; }
