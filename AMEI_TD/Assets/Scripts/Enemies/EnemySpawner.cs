@@ -47,7 +47,12 @@ public class EnemySpawner : MonoBehaviour
         GameObject randomEnemy = GetRandomEnemy();
         if (randomEnemy == null) return;
 
-        GameObject newEnemy = ObjectPooling.instance.GetPoolObject(GetEnemyTypeForPooling(randomEnemy));
+        PoolGameObjectType poolType = GetEnemyTypeForPooling(randomEnemy);
+        Debug.Log($"Requesting from pool: {poolType}");
+    
+        GameObject newEnemy = ObjectPooling.instance.GetPoolObject(poolType);
+        Debug.Log($"Got from pool: {(newEnemy != null ? newEnemy.name : "NULL")}");
+    
         if (newEnemy != null)
         {
             newEnemy.SetActive(true);
@@ -55,7 +60,11 @@ public class EnemySpawner : MonoBehaviour
             newEnemy.transform.rotation = Quaternion.identity;
 
             EnemyBase enemyScript = newEnemy.GetComponent<EnemyBase>();
+            Debug.Log($"EnemyBase on spawned object: {(enemyScript != null ? "Found" : "NULL")}");
+        
             Vector3[] randomPath = GetRandomPathWaypoints();
+            Debug.Log($"Path waypoints: {(randomPath != null ? randomPath.Length.ToString() : "NULL")}");
+        
             enemyScript.SetupEnemy(this, randomPath);
 
             activeEnemies.Add(newEnemy);
@@ -81,6 +90,10 @@ public class EnemySpawner : MonoBehaviour
                     return PoolGameObjectType.EnemyInvisible;
                 case EnemyType.Reinforced:
                     return PoolGameObjectType.EnemyReinforced;
+                case EnemyType.Summoner:
+                    return PoolGameObjectType.EnemySummoner;
+                case EnemyType.Minion:
+                    return PoolGameObjectType.EnemyMinion;
             }
         }
         return PoolGameObjectType.EnemyBasic;

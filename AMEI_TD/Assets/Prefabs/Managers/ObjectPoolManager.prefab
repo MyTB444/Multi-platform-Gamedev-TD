@@ -67,6 +67,8 @@ Transform:
   - {fileID: 1726143175541897380}
   - {fileID: 5212462162428331406}
   - {fileID: 8186481140063554161}
+  - {fileID: 2700285440752803715}
+  - {fileID: 13526153089780916}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6070369461719376321
@@ -97,7 +99,7 @@ MonoBehaviour:
     gameObjectPrefab: {fileID: 3155058319838657794, guid: 5683b0ddd461bba46886a7db5fff0655, type: 3}
     Container: {fileID: 7494806083716931177}
     pool: []
-  - objectType: 5
+  - objectType: 7
     amount: 5
     gameObjectPrefab: {fileID: 1478314613700728, guid: 224a1998458f53046ac1d128a2e36871, type: 3}
     Container: {fileID: 7416615473756145624}
@@ -111,6 +113,16 @@ MonoBehaviour:
     amount: 5
     gameObjectPrefab: {fileID: 6753617674297473082, guid: 24a0663f813d4beb91fc0c6b1e8fef36, type: 3}
     Container: {fileID: 7697279638760437040}
+    pool: []
+  - objectType: 5
+    amount: 5
+    gameObjectPrefab: {fileID: 8624495124000836869, guid: 5b00d19b6dfe0384ea9a601bf195465a, type: 3}
+    Container: {fileID: 5289202279171666300}
+    pool: []
+  - objectType: 6
+    amount: 5
+    gameObjectPrefab: {fileID: 6586906181002933634, guid: 6f08c320511f7f349ba7981a64a3525a, type: 3}
+    Container: {fileID: 5262185044488547431}
     pool: []
 --- !u!1 &3100933237422088265
 GameObject:
@@ -169,6 +181,68 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 4.249647, y: 0.2284975, z: -9.14251}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4556504159957609456}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5262185044488547431
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 13526153089780916}
+  m_Layer: 0
+  m_Name: EnemyMinion
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &13526153089780916
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5262185044488547431}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4556504159957609456}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5289202279171666300
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2700285440752803715}
+  m_Layer: 0
+  m_Name: EnemySummoner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2700285440752803715
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5289202279171666300}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

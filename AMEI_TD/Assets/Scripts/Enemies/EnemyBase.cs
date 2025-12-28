@@ -9,6 +9,8 @@ public enum EnemyType
     Tank,
     Invisible,
     Reinforced,
+    Summoner,
+    Minion
 }
 
 public class EnemyBase : MonoBehaviour, IDamageable
@@ -59,6 +61,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private float totalDistance;
 
     private Vector3 Destination;
+    protected bool canMove = true;
 
     // Slow system
     private float baseSpeed;
@@ -85,7 +88,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         UpdateVisuals();
         //Renderer renderer = GetComponent<Renderer>();
         NavAgent = GetComponent<NavMeshAgent>();
-        EnemyAnimator = GetComponent<Animator>();
+        EnemyAnimator = GetComponentInChildren<Animator>();
         NavAgent.enabled = false;
     }
 
@@ -99,7 +102,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
         UpdateVisuals();
         NavAgent = GetComponent<NavMeshAgent>();
-        EnemyAnimator = GetComponent<Animator>();
+        EnemyAnimator = GetComponentInChildren<Animator>();
     
         SaveOriginalColors();
     }
@@ -289,7 +292,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     private void FollowPath()
     {
-        if (isStunned) return;
+        if (isStunned || !canMove) return;
     
         if (myWaypoints == null || currentWaypointIndex >= myWaypoints.Length)
         {
@@ -325,15 +328,19 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     private void PlayAnimations()
     {
-        if (EnemyAnimator == null) return;
+        if (EnemyAnimator == null)
+        {
+            Debug.Log($"{gameObject.name}: Animator is NULL");
+            return;
+        }
 
-        // Don't walk if stunned
         if (isStunned)
         {
             EnemyAnimator.SetBool("Walk", false);
             return;
         }
 
+        Debug.Log($"{gameObject.name}: Setting Walk to true");
         EnemyAnimator.SetBool("Walk", true);
     }
 
@@ -431,9 +438,16 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
             case EnemyType.Reinforced:
                 return PoolGameObjectType.EnemyReinforced;
+            
+            case EnemyType.Summoner:
+                return PoolGameObjectType.EnemySummoner;
+            
+            case EnemyType.Minion:
+                return PoolGameObjectType.EnemyMinion;
         }
         return 0;
     }
+    
     public void RemoveEnemy()
     {
         if (mySpawner != null) mySpawner.RemoveActiveEnemy(gameObject);

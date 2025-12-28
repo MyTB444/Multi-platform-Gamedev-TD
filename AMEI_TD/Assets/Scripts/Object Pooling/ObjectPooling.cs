@@ -5,12 +5,15 @@ using UnityEngine;
 public enum PoolGameObjectType
 {
     EnemyBasic,
-    EnemyFast, 
+    EnemyFast,
     EnemyTank,
     EnemyInvisible,
     EnemyReinforced,
+    EnemySummoner,
+    EnemyMinion,
     Flames
 }
+
 [Serializable]
 public class PoolInfo
 {
