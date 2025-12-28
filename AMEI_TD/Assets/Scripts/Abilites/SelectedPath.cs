@@ -1,12 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class SelectedPath : MonoBehaviour
 {
     private Material PathMat;
     private Color InitialColor;
-  
+
+    
+
+   
 
     private void OnEnable()
     {
@@ -33,9 +37,27 @@ public class SelectedPath : MonoBehaviour
     {
         if (SpellAbility.instance.CanSelectPaths)
         {
-            SpellAbility.instance.SelectedPathFromPlayer(this);
+            Vector3 mousepos = Input.mousePosition - Camera.main.transform.position;
+            Ray ray = Camera.main.ScreenPointToRay(mousepos);
+
+            RaycastHit hit;
+            Vector3 mouseWorldPos = Vector3.zero;
+            if (Physics.Raycast(ray, out hit) & hit.collider != null)
+            {
+              
+                mouseWorldPos = hit.point;
+                mouseWorldPos.y += 0.1f;
+                //print($"<color=green> mouseWorldpos </color>" + mouseWorldPos);
+                SpellAbility.instance.SelectedPathFromPlayer(this, mouseWorldPos);
+            }
+            //Vector3 mousepos = Input.mousePosition - Camera.main.transform.position;
+
+
+         
         }
     }
+
+  
 
     public MeshRenderer FlameArea {  get; private set; }
 }

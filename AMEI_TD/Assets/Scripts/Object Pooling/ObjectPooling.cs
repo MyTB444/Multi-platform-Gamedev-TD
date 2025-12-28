@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum PoolGameObjectType
 {
-    EnemyFast,EnemyBasic,EnemyTank,EnemyInvisible,EnemyReinforced,Flames
+    EnemyFast,EnemyBasic,EnemyTank,EnemyInvisible,EnemyReinforced,Flames,MagicArea,TinyFlames
 }
 [Serializable]
 public class PoolInfo
@@ -17,17 +17,24 @@ public class PoolInfo
     [HideInInspector]
     public List<GameObject> pool = new();
 
+    
+    
+    
+
 }
 public class ObjectPooling : MonoBehaviour
 {
     public static ObjectPooling instance;
+  
 
     private void Awake()
     {
         instance = this;
+        
     }
 
     [SerializeField] private List<PoolInfo> listOfPool = new();
+    public List<PoolInfo> listOfPoolInfoRef => listOfPool;
     private void Start()
     {
         for (int i = 0; i < listOfPool.Count; i++)
@@ -59,7 +66,7 @@ public class ObjectPooling : MonoBehaviour
             instance = pool[pool.Count - 1];
             pool.Remove(instance);
         }
-        else 
+        else
         {
            instance = Instantiate(selectedPool.gameObjectPrefab,selectedPool.Container.transform);
             instance.SetActive(false);

@@ -1,8 +1,11 @@
 
+using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public enum EnemyType
 {
@@ -51,13 +54,38 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private float totalDistance;
 
     private Vector3 Destination;
+    [HideInInspector]public Rigidbody myBody;
+    private bool spellsActivated;
 
+
+   
+
+    private VFXDamage vfxDamageScriptRef;
+
+    [SerializeField] private Canvas enemyHealthDisplayCanvas;
+    [SerializeField] private Slider healthBar;
+
+    [SerializeField] private EnemyVFXPool enemyVFXPoolScriptRef;
+
+    
     private void OnEnable()
     {
+        enemyHealthDisplayCanvas.enabled  = false;
+        if (enemyBaseRef == null)
+        {
+            enemyBaseRef = this;
+        }
+        vfxContainer = enemyVFXPoolScriptRef;
+        vfxContainer.PoolVFXGameObjects();
+
+        enemyHealthDisplayCanvas.worldCamera = Camera.main; 
+        healthBar.value = 1;
+       
         UpdateVisuals();
         //Renderer renderer = GetComponent<Renderer>();
         NavAgent = GetComponent<NavMeshAgent>();
         EnemyAnimator = GetComponent<Animator>();
+        myBody = GetComponent<Rigidbody>();
         NavAgent.enabled = false;
     }
 
@@ -67,38 +95,27 @@ public class EnemyBase : MonoBehaviour, IDamageable
      
     }
 
-    protected virtual void Start()
+    public void GetRefOfVfxDamageScript(VFXDamage vfxDamageScriptRef)
     {
-       
-     
-
-        //switch (enemyType)
-        //{
-        //    case EnemyType.Basic:
-        //        renderer.material.color = Color.green;
-        //        break;
-        //    case EnemyType.Fast:
-        //        renderer.material.color = Color.magenta;
-        //        break;
-        //    case EnemyType.Tank:
-        //        renderer.material.color = Color.red;
-        //        break;
-        //    default:
-        //        break;
-        //}
-    }
-
-    protected virtual void Update()
-    {
-       FollowPath();
-       PlayAnimations();
-        if(Input.GetKeyDown(KeyCode.Y))
+        this.vfxDamageScriptRef = vfxDamageScriptRef;
+        if (this.vfxDamageScriptRef != null)
         {
-
-           
+            this.vfxDamageScriptRef.stopFlames = false;
         }
     }
 
+   
+
+    protected virtual void Update()
+    {
+        if (!enemyBaseRef.spellsActivated)
+        {
+            FollowPath();
+          
+        }
+        PlayAnimations();
+    }
+    
     public void SetupEnemy(EnemySpawner myNewSpawner)
     {
         mySpawner = myNewSpawner;
@@ -170,9 +187,21 @@ public class EnemyBase : MonoBehaviour, IDamageable
     }
     private void PlayAnimations()
     {
-        EnemyAnimator.SetBool("Walk", true);
+        if (!spellsActivated)
+        {
+            EnemyAnimator.SetBool("Walk", true);
+            myBody.constraints = RigidbodyConstraints.FreezeRotationX|RigidbodyConstraints.FreezeRotationZ;
+        }
+        else
+        {
+            
+            EnemyAnimator.SetBool("Walk", false);
+            EnemyAnimator.SetTrigger("FloatMidAir");
+           
+        }
     }
-   
+    
+
 
     public float GetRemainingDistance()
     {
@@ -188,39 +217,86 @@ public class EnemyBase : MonoBehaviour, IDamageable
         return remainingDistance;
     }
 
+    
+
    
     private void ReachedEnd()
     {
         Destroy(gameObject);
     }
 
-    public virtual void TakeDamage(float damage, bool isAntiInvisible = false, bool isAntiReinforced = false)
+    public virtual void TakeDamage(float damage,bool spellDamageEnabled = false, bool isAntiInvisible = false, bool isAntiReinforced = false)
     {
-        if (isInvisible && !isAntiInvisible)
+        if (gameObject.activeInHierarchy && gameObject != null)
         {
-            return; 
-        }
-        
-        if (isReinforced && !isAntiReinforced)
-        {
-            return; 
-        }
+            
+            enemyHealthDisplayCanvas.enabled = true;
+            if (isInvisible && !isAntiInvisible)
+            {
+                return;
+            }
 
-        enemyCurrentHp -= damage;
+            if (isReinforced && !isAntiReinforced)
+            {
+                return;
+            }
 
-        if (enemyCurrentHp <= 0 && !isDead)
+            enemyCurrentHp -= damage;
+            if (spellDamageEnabled)
+            {
+                
+                healthBar.value -= damage * Time.fixedDeltaTime * 10;
+                StartCoroutine(DisableHealthBar(false));
+            }
+            else
+            {
+                
+                healthBar.value -= damage;
+                StartCoroutine(DisableHealthBar(false));
+            }
+
+
+
+            if ((enemyCurrentHp <= 0 || healthBar.value <= 0) && !isDead)
+            {
+                isDead = true;
+
+                Die();
+            }
+            if (gameObject.activeInHierarchy && gameObject != null)
+            {
+               
+                    StartCoroutine(DisableHealthBar(true));
+                
+            }
+        }
+    }
+
+    private IEnumerator DisableHealthBar(bool status)
+    {
+        if (gameObject.activeInHierarchy && gameObject != null)
         {
-            isDead = true;
-            Die();
+           
+         
+            if (status)
+            {
+                yield return new WaitForSeconds(8f);
+               
+                
+            }
+            enemyHealthDisplayCanvas.enabled = !status;
+
+
+
         }
     }
 
 
-  
 
-   
 
-   
+
+
+
 
     private void Die()
     {
@@ -270,6 +346,63 @@ public class EnemyBase : MonoBehaviour, IDamageable
         UpdateVisuals();
     }
 
+    
+
+  
+
+    public void LiftEffectFunction(bool status)
+    {
+
+        if (gameObject.activeInHierarchy && gameObject != null)
+        {
+            enemyBaseRef.myBody.useGravity = !status;
+            if (!status)
+            {
+                myBody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+                StartCoroutine(EnableNavMesh());
+
+            }
+            else
+            {
+                enemyBaseRef.spellsActivated = status;
+                enemyBaseRef.NavAgent.enabled = !status;
+                StartCoroutine(DisableYPos());
+
+
+            }
+        }
+           
+    }
+
+    private void OnMouseDown()
+    {
+        if (SpellAbility.instance.MechanicSpellActivated)
+        {
+            vfxDamageScriptRef.SelectedEnemy(this);
+        }
+    }
+
+    private IEnumerator DisableYPos()
+    {
+        if (gameObject.activeInHierarchy && gameObject != null)
+        {
+            yield return new WaitForSeconds(0.5f);
+            myBody.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotation;
+        }
+    }
+    
+
+
+    private IEnumerator EnableNavMesh()
+    {
+        if (gameObject.activeInHierarchy && gameObject != null)
+        {
+            yield return new WaitForSecondsRealtime(0.4f);
+            spellsActivated = false;
+            enemyBaseRef.NavAgent.enabled = true;
+        }
+    }
+  
     private void UpdateVisuals()
     {
         Renderer r = GetComponent<Renderer>();
@@ -296,4 +429,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public bool IsInvisible() => isInvisible;
     public bool IsReinforced() => isReinforced;
     public int GetDamage() => damage;
+
+    public EnemyVFXPool vfxContainer { get; set; }
+    public EnemyBase enemyBaseRef { get; set; }
 }
