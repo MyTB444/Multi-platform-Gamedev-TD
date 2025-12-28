@@ -18854,7 +18854,7 @@ MonoBehaviour:
   towerHead: {fileID: 0}
   gunPoint: {fileID: 1383047700879017827}
   rotationSpeed: 10
-  attackRange: 10
+  attackRange: 8
   whatIsEnemy:
     serializedVersion: 2
     m_Bits: 64
@@ -18866,6 +18866,12 @@ MonoBehaviour:
   elementType: 0
   buyPrice: 1
   sellPrice: 1
+  damageBoost: 0
+  damageBoostPercent: 0.25
+  attackSpeedBoost: 0
+  attackSpeedBoostPercent: 0.2
+  rangeBoost: 0
+  rangeBoostPercent: 0.2
   attackSpawnEffectPrefab: {fileID: 0}
   characterAnimator: {fileID: 5148307974464681058}
   attackAnimationTrigger: Attack

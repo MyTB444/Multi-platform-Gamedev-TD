@@ -12,9 +12,6 @@ public class TowerSpikeTrap : TowerBase
     [SerializeField] private Transform hammerImpactPoint;
     
     [Header("Spike Upgrades")]
-    [SerializeField] private bool lowerCooldown = false;
-    [SerializeField] private float cooldownReduction = 0.2f;
-    [Space]
     [SerializeField] private bool poisonSpikes = false;
     [SerializeField] private float poisonDamage = 2f;
     [SerializeField] private float poisonDuration = 3f;
@@ -45,14 +42,6 @@ public class TowerSpikeTrap : TowerBase
     
         switch (upgradeType)
         {
-            case TowerUpgradeType.LowerCooldown:
-                lowerCooldown = enabled;
-                if (spikeTrap != null)
-                {
-                    float finalCooldown = lowerCooldown ? attackCooldown * (1f - cooldownReduction) : attackCooldown;
-                    spikeTrap.SetCooldown(finalCooldown);
-                }
-                break;
             case TowerUpgradeType.PoisonSpikes:
                 poisonSpikes = enabled;
                 UpdateTrapEffects();
@@ -97,16 +86,14 @@ public class TowerSpikeTrap : TowerBase
     private void SpawnTrapOnRoad()
     {
         Vector3 rayDirection = Quaternion.AngleAxis(downwardAngle, transform.right) * transform.forward;
-        
+    
         if (Physics.Raycast(transform.position, rayDirection, out RaycastHit hit, raycastDistance, roadLayer))
         {
             GameObject trap = Instantiate(spikeTrapPrefab, hit.point, Quaternion.identity);
             spikeTrap = trap.GetComponent<SpikeTrapDamage>();
-            
-            float finalCooldown = lowerCooldown ? attackCooldown * (1f - cooldownReduction) : attackCooldown;
-            
-            spikeTrap.Setup(CreateDamageInfo(), whatIsEnemy, finalCooldown, this);
-            
+        
+            spikeTrap.Setup(CreateDamageInfo(), whatIsEnemy, attackCooldown, this);
+        
             // Set upgrades
             if (bleedingSpikes)
             {
@@ -121,7 +108,7 @@ public class TowerSpikeTrap : TowerBase
             {
                 spikeTrap.SetCrippleEffect(slowPercent, slowDuration);
             }
-            
+        
             trap.transform.SetParent(transform);
         }
         else

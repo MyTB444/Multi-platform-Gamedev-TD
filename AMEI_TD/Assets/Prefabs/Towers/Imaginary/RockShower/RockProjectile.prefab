@@ -100,7 +100,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxLifeTime: 10
   impactEffectPrefab: {fileID: 5802777098284440571, guid: 6176c51e7cb8f90489c1bd97d889a035, type: 3}
-  damageRadius: 0.5
+  damageRadius: 0.3
   groundLayer:
     serializedVersion: 2
     m_Bits: 256

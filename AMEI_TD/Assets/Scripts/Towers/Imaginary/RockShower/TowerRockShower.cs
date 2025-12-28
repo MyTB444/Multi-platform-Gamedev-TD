@@ -197,9 +197,39 @@ public class TowerRockShower : TowerBase
         projectile.Setup(rockDamageInfo, whatIsEnemy, randomSpeed, randomSize);
     }
     
-    private void SpawnMeteor(Vector3 targetPosition)
+    private void SpawnMeteor(Vector3 fallbackPosition)
     {
         float meteorSpeed = rockSpeedMin;
+    
+        // Find a new target for the meteor
+        Vector3 targetPosition = fallbackPosition;
+    
+        Collider[] enemies = Physics.OverlapSphere(transform.position, attackRange, whatIsEnemy);
+    
+        if (enemies.Length > 0)
+        {
+            // Find closest enemy
+            float closestDist = float.MaxValue;
+            Transform closestEnemy = null;
+        
+            foreach (Collider col in enemies)
+            {
+                if (!col.gameObject.activeSelf) continue;
+            
+                float dist = Vector3.Distance(transform.position, col.transform.position);
+                if (dist < closestDist)
+                {
+                    closestDist = dist;
+                    closestEnemy = col.transform;
+                }
+            }
+        
+            if (closestEnemy != null)
+            {
+                // Just use enemy's current position - no prediction needed since meteor falls fast
+                targetPosition = closestEnemy.position;
+            }
+        }
     
         Vector3 spawnPos = targetPosition + Vector3.up * (spawnHeight + meteorHeight);
     

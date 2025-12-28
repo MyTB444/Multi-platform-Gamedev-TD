@@ -17024,7 +17024,7 @@ MonoBehaviour:
   towerHead: {fileID: 0}
   gunPoint: {fileID: 4465973496646343712}
   rotationSpeed: 10
-  attackRange: 16
+  attackRange: 8
   whatIsEnemy:
     serializedVersion: 2
     m_Bits: 64
@@ -17036,6 +17036,12 @@ MonoBehaviour:
   elementType: 0
   buyPrice: 1
   sellPrice: 1
+  damageBoost: 0
+  damageBoostPercent: 0.25
+  attackSpeedBoost: 0
+  attackSpeedBoostPercent: 0.2
+  rangeBoost: 0
+  rangeBoostPercent: 0.2
   attackSpawnEffectPrefab: {fileID: 0}
   characterAnimator: {fileID: 8691810099541559588}
   attackAnimationTrigger: Attack
@@ -17051,10 +17057,10 @@ MonoBehaviour:
   throwAnimationDelay: 1.1
   forwardSpawnOffset: 0.5
   spearVisualVFXPoint: {fileID: 633823812887529683}
-  barbedSpear: 1
+  bleedSpear: 0
   bleedDamage: 3
   bleedDuration: 4
-  barbedSpearVFX: {fileID: 3538601806443498961, guid: ae8be53a4ea8c18479183ebb3a59bf7c, type: 3}
+  bleedSpearVFX: {fileID: 3538601806443498961, guid: ae8be53a4ea8c18479183ebb3a59bf7c, type: 3}
   explosiveTip: 0
   explosionRadius: 2
   explosionDamage: 10
