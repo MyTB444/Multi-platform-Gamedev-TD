@@ -115,14 +115,15 @@ public class TowerBase : MonoBehaviour
 
     protected virtual void Awake()
     {
-        if (projectilePrefab != null)
-        {
-            ObjectPooling.instance.Register(projectilePrefab, projectilePoolAmount);
-        }
     }
 
     protected virtual void Start()
     {
+        if (projectilePrefab != null)
+        {
+            ObjectPooling.instance.Register(projectilePrefab, projectilePoolAmount);
+        }
+        
         baseDamage = damage;
         baseAttackCooldown = attackCooldown;
         baseAttackRange = attackRange;

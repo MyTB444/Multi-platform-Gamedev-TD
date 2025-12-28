@@ -20,9 +20,6 @@ public class TowerPhantomKnight : TowerBase
     [SerializeField] private float stoppingDistance = 0.5f;
     [SerializeField] private float fadeOutTime = 0.5f;
     
-    [Header("Pooling")]
-    [SerializeField] private int phantomPoolAmount = 10;
-    
     [Header("Spawn VFX")]
     [SerializeField] private GameObject spawnVFXPrefab;
     [SerializeField] private float vfxDuration = 2f;
@@ -45,15 +42,6 @@ public class TowerPhantomKnight : TowerBase
     private Transform savedEnemy;
     private float basePhantomDamage;
     
-    protected override void Awake()
-    {
-        base.Awake();
-        if (phantomPrefab != null)
-        {
-            ObjectPooling.instance.Register(phantomPrefab, phantomPoolAmount);
-        }
-    }
-    
     protected override void FixedUpdate()
     {
         activePhantoms.RemoveAll(p => p == null);
@@ -65,6 +53,11 @@ public class TowerPhantomKnight : TowerBase
     {
         basePhantomDamage = phantomDamage;
         base.Start();
+    
+        if (phantomPrefab != null)
+        {
+            ObjectPooling.instance.Register(phantomPrefab, 10);
+        }
     }
     
     public override void SetUpgrade(TowerUpgradeType upgradeType, bool enabled)
@@ -167,15 +160,15 @@ public class TowerPhantomKnight : TowerBase
     private void SpawnPhantoms()
     {
         if (savedEnemy == null || !savedEnemy.gameObject.activeSelf) return;
-    
+
         Vector3 enemyPosition = savedEnemy.position;
         Vector3 enemyForward = savedEnemy.forward;
-    
+
         float finalSpawnDistance = closerSpawn ? closerSpawnDistance : spawnDistanceAhead;
         Vector3 baseSpawnPos = enemyPosition + enemyForward * finalSpawnDistance;
-    
+
         Vector3 rightVector = Vector3.Cross(Vector3.up, -enemyForward).normalized;
-        
+
         int finalPhantomCount = morePhantoms ? phantomCount + bonusPhantomCount : phantomCount;
         
         for (int i = 0; i < finalPhantomCount; i++)
@@ -198,7 +191,6 @@ public class TowerPhantomKnight : TowerBase
             }
             else
             {
-                Debug.LogWarning($"PhantomKnight: No NavMesh found near {spawnPos}");
                 continue;
             }
             
@@ -213,7 +205,7 @@ public class TowerPhantomKnight : TowerBase
             phantomObj.transform.position = spawnPos;
             phantomObj.transform.rotation = spawnRot;
             phantomObj.SetActive(true);
-            
+
             PhantomKnight phantom = phantomObj.GetComponent<PhantomKnight>();
             if (phantom != null)
             {

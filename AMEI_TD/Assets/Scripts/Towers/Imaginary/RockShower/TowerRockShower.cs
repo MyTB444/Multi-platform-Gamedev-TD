@@ -45,7 +45,12 @@ public class TowerRockShower : TowerBase
     
     protected override void Awake()
     {
-        base.Awake();
+    }
+    
+    protected override void Start()
+    {
+        base.Start();
+    
         if (rockPrefab != null)
         {
             ObjectPooling.instance.Register(rockPrefab, rockPoolAmount);
