@@ -47,6 +47,7 @@ public class WaveManager : MonoBehaviour
 
     public void ActivateWaveManager()
     {
+        Debug.Log($"WaveManager activated. Spawners found: {enemySpawners.Count}, Waves configured: {levelWaves.Length}");
         gameBegan = true;
         EnableWaveTimer(true);
     }
@@ -97,7 +98,7 @@ public class WaveManager : MonoBehaviour
         }
 
         waveTimer -= Time.deltaTime;
-        UIBase.instance.UpdateWaveTimerUI(waveTimer);
+        //UIBase.instance.UpdateWaveTimerUI(waveTimer);
 
         if (waveTimer <= 0) StartNewWave();
     }
@@ -105,7 +106,8 @@ public class WaveManager : MonoBehaviour
     private void StartNewWave()
     {
         if (GameManager.instance.IsGameLost()) return;
-        
+    
+        Debug.Log($"Starting wave {waveIndex}");
         GiveEnemiesToSpawners();
         EnableWaveTimer(false);
         makingNextWave = false;
@@ -115,6 +117,7 @@ public class WaveManager : MonoBehaviour
     private void GiveEnemiesToSpawners()
     {
         List<GameObject> newEnemies = GetNewEnemies();
+        Debug.Log($"Enemies to distribute: {(newEnemies != null ? newEnemies.Count : 0)}");
         int spawnerIndex = 0;
 
         if (newEnemies == null) return;

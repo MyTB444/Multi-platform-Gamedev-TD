@@ -45,6 +45,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void CreateEnemy()
     {
+        Debug.Log($"CreateEnemy called. canCreateEnemies: {canCreateEnemies}, enemiesToCreate: {enemiesToCreate.Count}");
         if (!canCreateEnemies) return;
 
         GameObject randomEnemy = GetRandomEnemy();
