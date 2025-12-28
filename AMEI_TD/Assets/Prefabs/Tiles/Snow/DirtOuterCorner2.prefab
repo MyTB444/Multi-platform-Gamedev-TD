@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2873792577695338837}
   - component: {fileID: 8277430374671566213}
   - component: {fileID: 3596887607658683289}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: DirtOuterCorner2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -156,8 +156,56 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 3830142943325667936, guid: ea78471431e56e647980629b115f33d6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5269895460560596609}
+    - targetCorrespondingSourceObject: {fileID: 3830142943325667936, guid: ea78471431e56e647980629b115f33d6, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6951321738203637866}
   m_SourcePrefab: {fileID: 100100000, guid: ea78471431e56e647980629b115f33d6, type: 3}
+--- !u!1 &3954232223824874558 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3830142943325667936, guid: ea78471431e56e647980629b115f33d6, type: 3}
+  m_PrefabInstance: {fileID: 272230244618423902}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &5269895460560596609
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3954232223824874558}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.0000001, y: 1.0523417, z: 1}
+  m_Center: {x: 0, y: 0.02617082, z: 0}
+--- !u!208 &6951321738203637866
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3954232223824874558}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.526, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0.026, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!4 &6484249747834801076 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6501941384088733162, guid: ea78471431e56e647980629b115f33d6, type: 3}

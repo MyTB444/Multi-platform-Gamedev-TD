@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 3854698285954751341}
   - component: {fileID: 6350429099547027845}
   - component: {fileID: 8750044291520963103}
+  - component: {fileID: 2265060413323997008}
+  - component: {fileID: 4545027267097709607}
   m_Layer: 0
   m_Name: BlockS01D
   m_TagString: Untagged
@@ -83,6 +85,43 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &2265060413323997008
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 363641916597483041}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.0000002, y: 1.0000004, z: 0.9999999}
+  m_Center: {x: 0.000000029802322, y: -0.000000059604645, z: 0.06666666}
+--- !u!208 &4545027267097709607
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 363641916597483041}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0.067}
+  m_TimeToStationary: 0.5
 --- !u!1 &3328638026137563574
 GameObject:
   m_ObjectHideFlags: 0
@@ -95,7 +134,7 @@ GameObject:
   - component: {fileID: 4515933972042698919}
   - component: {fileID: 2912799572596495769}
   - component: {fileID: 8426261245211516095}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: DungeonSideway1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -314,6 +353,8 @@ GameObject:
   - component: {fileID: 7778059558393182926}
   - component: {fileID: 5018323481307454781}
   - component: {fileID: 6195205676956178374}
+  - component: {fileID: 4896915354892578645}
+  - component: {fileID: 7500042159592974259}
   m_Layer: 0
   m_Name: BlockS02D
   m_TagString: Untagged
@@ -386,3 +427,40 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &4896915354892578645
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4032184641369826347}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.0000002, y: 1.0000004, z: 0.9999999}
+  m_Center: {x: 0.000000029802322, y: -0.000000059604645, z: 0.06666666}
+--- !u!208 &7500042159592974259
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4032184641369826347}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0.067}
+  m_TimeToStationary: 0.5

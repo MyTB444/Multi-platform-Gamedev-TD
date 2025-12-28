@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3275547978853057942}
   - component: {fileID: 704442992628550904}
   - component: {fileID: 2523234362625587967}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: OuterCorner2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -108,6 +108,8 @@ GameObject:
   - component: {fileID: 2985142030421170053}
   - component: {fileID: 5211301431966714309}
   - component: {fileID: 7936570801080505574}
+  - component: {fileID: 4764733702696344793}
+  - component: {fileID: 3923179494554642010}
   m_Layer: 0
   m_Name: DesertCube01_Half
   m_TagString: Untagged
@@ -180,3 +182,40 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &4764733702696344793
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7025558938090078381}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.0000005, y: 1.9999995, z: 1.9999998}
+  m_Center: {x: 0, y: 0, z: 0.00000047683716}
+--- !u!208 &3923179494554642010
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7025558938090078381}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 1, y: 1, z: 1}
+  m_MoveThreshold: 0.1
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
