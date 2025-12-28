@@ -79,6 +79,15 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private bool dotCanSpread = false;
     private float dotSpreadRadius;
     private LayerMask dotSpreadLayer;
+    
+    private void OnEnable()
+    {
+        UpdateVisuals();
+        //Renderer renderer = GetComponent<Renderer>();
+        NavAgent = GetComponent<NavMeshAgent>();
+        EnemyAnimator = GetComponent<Animator>();
+        NavAgent.enabled = false;
+    }
 
     private void Awake()
     {
@@ -166,6 +175,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         {
             activeSlowEffect = Instantiate(slowEffectPrefab, transform);
             activeSlowEffect.transform.localPosition = Vector3.up * 0.5f;
+            Debug.Log($"Spawned slow effect: {activeSlowEffect.name}");
         }
     }
 
@@ -296,6 +306,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
             Quaternion targetRotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
         }
+
+        // Manual movement
         Destination = direction * (enemySpeed * Time.deltaTime);
         transform.position += Destination;
 
@@ -305,9 +317,9 @@ public class EnemyBase : MonoBehaviour, IDamageable
             currentWaypointIndex++;
         }
         
-        if (NavAgent != null)
+        if (NavAgent != null && NavAgent.isActiveAndEnabled && NavAgent.isOnNavMesh)
         {
-            NavAgent.SetDestination(Destination);
+            NavAgent.SetDestination(targetWaypoint);
         }
     }
 
@@ -392,14 +404,36 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     private void Die()
     {
-        Destroy(gameObject);
-        if (GameManager.instance != null)
+        if (GameManager.instance != null) 
         {
             GameManager.instance.UpdateSkillPoints(reward);
         }
         RemoveEnemy();
+        ObjectPooling.instance.ReturnGameObejctToPool(GetEnemyTypeForPooling(), gameObject);
     }
+ 
+    
+    private PoolGameObjectType GetEnemyTypeForPooling()
+    {
+        switch (enemyType)
+        {
+            case EnemyType.Basic:
+                return PoolGameObjectType.EnemyBasic;
 
+            case EnemyType.Fast:
+                return PoolGameObjectType.EnemyFast;
+
+            case EnemyType.Tank:
+                return PoolGameObjectType.EnemyTank;
+
+            case EnemyType.Invisible:
+                return PoolGameObjectType.EnemyInvisible;
+
+            case EnemyType.Reinforced:
+                return PoolGameObjectType.EnemyReinforced;
+        }
+        return 0;
+    }
     public void RemoveEnemy()
     {
         if (mySpawner != null) mySpawner.RemoveActiveEnemy(gameObject);
