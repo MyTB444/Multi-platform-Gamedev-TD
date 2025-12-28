@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemySummoner : EnemyBase
 {
@@ -81,23 +82,30 @@ public class EnemySummoner : EnemyBase
 
         for (int i = 0; i < minionsToSpawn; i++)
         {
-            SpawnMinion();
+            float angle = (360f / minionsToSpawn) * i;
+            SpawnMinion(angle);
         }
     }
 
-    private void SpawnMinion()
+    private void SpawnMinion(float angle)
     {
         GameObject newMinion = ObjectPooling.instance.GetPoolObject(PoolGameObjectType.EnemyMinion);
-    
+
         if (newMinion != null)
         {
-            Vector2 randomCircle = Random.insideUnitCircle * spawnRadius;
-            Vector3 spawnPos = transform.position + new Vector3(randomCircle.x, 0, randomCircle.y);
+            float radians = angle * Mathf.Deg2Rad;
+            Vector3 desiredPos = transform.position + new Vector3(Mathf.Cos(radians) * spawnRadius, 0, Mathf.Sin(radians) * spawnRadius);
+        
+            // Find valid NavMesh position
+            Vector3 spawnPos = transform.position; // fallback to summoner position
+            if (NavMesh.SamplePosition(desiredPos, out NavMeshHit hit, spawnRadius * 2f, NavMesh.AllAreas))
+            {
+                spawnPos = hit.position;
+            }
         
             newMinion.SetActive(true);
             newMinion.transform.position = spawnPos;
-        
-            // Face toward first waypoint
+    
             Vector3[] remainingWaypoints = GetRemainingWaypoints();
             if (remainingWaypoints.Length > 0)
             {
@@ -105,12 +113,12 @@ public class EnemySummoner : EnemyBase
                 directionToWaypoint.y = 0;
                 if (directionToWaypoint != Vector3.zero)
                 {
-                    newMinion.transform.rotation = Quaternion.LookRotation(directionToWaypoint) * Quaternion.Euler(0, 180, 0);
+                    newMinion.transform.rotation = Quaternion.LookRotation(directionToWaypoint);
                 }
             }
 
             EnemyBase minionScript = newMinion.GetComponent<EnemyBase>();
-        
+    
             if (minionScript != null)
             {
                 minionScript.SetupEnemy(mySpawner, remainingWaypoints);
