@@ -404,7 +404,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     private void Die()
     {
-        if (GameManager.instance != null) 
+        if (GameManager.instance != null)
         {
             GameManager.instance.UpdateSkillPoints(reward);
         }
