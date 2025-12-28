@@ -371,12 +371,9 @@ public class TowerBase : MonoBehaviour
     
     protected virtual void ApplyStatUpgrades()
     {
-        Debug.Log($"ApplyStatUpgrades - baseDamage: {baseDamage}, damageBoost: {damageBoost}");
-    
         if (damageBoost)
         {
             damage = Mathf.RoundToInt(baseDamage * (1f + damageBoostPercent));
-            Debug.Log($"Damage boosted to: {damage}");
         }
         else
         {
