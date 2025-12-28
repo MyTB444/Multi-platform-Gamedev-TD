@@ -29,6 +29,13 @@ public class PhantomKnight : MonoBehaviour
     [SerializeField] private float searchRadius = 15f;
     [SerializeField] private float maxTimeWithoutTarget = 5f;
     
+    private bool canDoubleSlash = false;
+    private int attackCount = 0;
+    private EnemyBase lastHitEnemy;
+    private bool applySlow = false;
+    private float slowPercent;
+    private float slowDuration;
+    
     private DamageInfo damageInfo;
     private float attackRadius;
     private float fadeOutTime;
@@ -58,18 +65,24 @@ public class PhantomKnight : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
     }
     
-    public void Setup(float newSpeed, DamageInfo newDamageInfo, float newAttackRadius, float newStoppingDistance, float newFadeOutTime, LayerMask newEnemyLayer, Transform enemy)
+    public void Setup(float newSpeed, DamageInfo newDamageInfo, float newAttackRadius, float newStoppingDistance, float newFadeOutTime, LayerMask newEnemyLayer, Transform enemy, bool doubleSlash = false, bool applySlow = false, float slowPercent = 0f, float slowDuration = 0f)
     {
         damageInfo = newDamageInfo;
         attackRadius = newAttackRadius;
         fadeOutTime = newFadeOutTime;
         enemyLayer = newEnemyLayer;
         targetEnemy = enemy;
-        
+        canDoubleSlash = doubleSlash;
+        attackCount = 0;
+        lastHitEnemy = null;
+        this.applySlow = applySlow;
+        this.slowPercent = slowPercent;
+        this.slowDuration = slowDuration;
+    
         swordDamage = GetComponentInChildren<PhantomSwordDamage>();
         if (swordDamage != null)
         {
-            swordDamage.Setup(damageInfo, enemyLayer, slashVFX, slashVFXRotationOffset, slashVFXStartDelay, slashVFXDuration);
+            swordDamage.Setup(damageInfo, enemyLayer, slashVFX, slashVFXRotationOffset, slashVFXStartDelay, slashVFXDuration, applySlow, slowPercent, slowDuration);
         }
         
         ghostEffect = GetComponent<GhostEffect>();
@@ -259,20 +272,78 @@ public class PhantomKnight : MonoBehaviour
     private IEnumerator ActivateSwordCollider()
     {
         yield return new WaitForSeconds(swordActivationDelay);
-        
+    
         if (swordDamage != null)
         {
             swordDamage.EnableDamage();
         }
-        
+    
         yield return new WaitForSeconds(swordActiveTime);
-        
+    
         if (swordDamage != null)
         {
             swordDamage.DisableDamage();
         }
+    
+        attackCount++;
+    
+        // Double slash - find new target after first attack
+        if (canDoubleSlash && attackCount < 2)
+        {
+            FindNewTargetExcluding(lastHitEnemy);
         
-        StartCoroutine(FadeOut());
+            if (targetEnemy != null && targetEnemy.gameObject.activeSelf)
+            {
+                // Reset to chase new target
+                hasAttacked = false;
+                StartWalking();
+            
+                if (agent != null && agent.isOnNavMesh)
+                {
+                    agent.isStopped = false;
+                }
+            }
+            else
+            {
+                StartCoroutine(FadeOut());
+            }
+        }
+        else
+        {
+            StartCoroutine(FadeOut());
+        }
+    }
+    
+    private void FindNewTargetExcluding(EnemyBase excludeEnemy)
+    {
+        Collider[] enemies = Physics.OverlapSphere(transform.position, searchRadius, enemyLayer);
+    
+        float closestDist = float.MaxValue;
+        Transform closest = null;
+    
+        foreach (Collider col in enemies)
+        {
+            if (!col.gameObject.activeSelf) continue;
+        
+            // Skip the enemy we just hit
+            EnemyBase enemy = col.GetComponent<EnemyBase>();
+            if (enemy != null && enemy == excludeEnemy) continue;
+        
+            float dist = Vector3.Distance(transform.position, col.transform.position);
+            if (dist < closestDist)
+            {
+                closestDist = dist;
+                closest = col.transform;
+            }
+        }
+    
+        // If no new target found, attack the same enemy again
+        if (closest == null && excludeEnemy != null && excludeEnemy.gameObject.activeSelf)
+        {
+            closest = excludeEnemy.transform;
+        }
+    
+        targetEnemy = closest;
     }
     
     private IEnumerator FadeOut()

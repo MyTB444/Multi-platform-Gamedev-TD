@@ -24,6 +24,25 @@ public class BladeTower : TowerBase
     [SerializeField] private Transform hammerImpactPoint;
     [SerializeField] private float vfxDelay = 0.3f;
     
+    [Header("Blade Upgrades")]
+    [SerializeField] private bool bleedChance = false;
+    [SerializeField] [Range(0f, 1f)] private float bleedChancePercent = 0.3f;
+    [SerializeField] private float bleedDamage = 3f;
+    [SerializeField] private float bleedDuration = 4f;
+    [SerializeField] private GameObject bleedVFX;
+    [Space]
+    [SerializeField] private bool moreBlades = false;
+    [SerializeField] private GameObject[] extraBlades;
+    [SerializeField] private Transform[] bladeVFXPoints;
+    [Space]
+    [SerializeField] private bool extendedReach = false;
+    [SerializeField] private float extendedBladeScale = 1.5f;
+    [SerializeField] private Transform[] allBlades;
+
+    private List<GameObject> activeBleedVFXList = new List<GameObject>();
+
+    private GameObject activeBleedVFX;
+    
     private Dictionary<EnemyBase, float> recentlyHitEnemies = new Dictionary<EnemyBase, float>();
     private Quaternion startRotation;
     private bool isActive = false;
@@ -34,10 +53,89 @@ public class BladeTower : TowerBase
     protected override void Start()
     {
         base.Start();
-        
+    
         if (bladeHolder != null)
         {
             startRotation = bladeHolder.rotation;
+        }
+    
+        ApplyUpgrades();
+    }
+    
+    public override void SetUpgrade(TowerUpgradeType upgradeType, bool enabled)
+    {
+        base.SetUpgrade(upgradeType, enabled);
+    
+        switch (upgradeType)
+        {
+            case TowerUpgradeType.BleedChance:
+                bleedChance = enabled;
+                ClearBleedVFX();
+                ApplyUpgrades();
+                break;
+            case TowerUpgradeType.MoreBlades:
+                moreBlades = enabled;
+                ClearBleedVFX();
+                ApplyUpgrades();
+                break;
+            case TowerUpgradeType.ExtendedReach:
+                extendedReach = enabled;
+                ApplyUpgrades();
+                break;
+        }
+    }
+
+    private void ClearBleedVFX()
+    {
+        foreach (GameObject vfx in activeBleedVFXList)
+        {
+            if (vfx != null)
+            {
+                Destroy(vfx);
+            }
+        }
+        activeBleedVFXList.Clear();
+    }
+
+    private void ApplyUpgrades()
+    {
+        // Enable extra blades
+        if (extraBlades != null)
+        {
+            foreach (GameObject blade in extraBlades)
+            {
+                if (blade != null)
+                {
+                    blade.SetActive(moreBlades);
+                }
+            }
+        }
+    
+        // Spawn bleed VFX on blades
+        if (bleedChance && bleedVFX != null && bladeVFXPoints != null)
+        {
+            foreach (Transform point in bladeVFXPoints)
+            {
+                // Skip VFX on extra blades if not enabled
+                if (!moreBlades && point.parent != null && !point.parent.gameObject.activeSelf)
+                {
+                    continue;
+                }
+            
+                GameObject vfx = Instantiate(bleedVFX, point);
+                vfx.transform.localPosition = Vector3.zero;
+                activeBleedVFXList.Add(vfx);
+            }
+        }
+        
+        // Extended reach - scale blade Y to 1.5
+        if (extendedReach && allBlades != null)
+        {
+            foreach (Transform blade in allBlades)
+            {
+                Vector3 currentScale = blade.localScale;
+                blade.localScale = new Vector3(currentScale.x, extendedBladeScale, currentScale.z);
+            }
         }
     }
     
@@ -159,18 +257,25 @@ public class BladeTower : TowerBase
     public void OnBladeHit(EnemyBase enemy)
     {
         if (enemy == null) return;
-    
+
         if (recentlyHitEnemies.ContainsKey(enemy))
         {
             return;
         }
-    
+
         IDamageable damageable = enemy.GetComponent<IDamageable>();
         if (damageable != null)
         {
             damageable.TakeDamage(CreateDamageInfo());
         }
     
+        // Bleed chance
+        if (bleedChance && Random.value <= bleedChancePercent)
+        {
+            DamageInfo bleedDamageInfo = new DamageInfo(bleedDamage, elementType, true);
+            enemy.ApplyDoT(bleedDamageInfo, bleedDuration);
+        }
+
         recentlyHitEnemies[enemy] = Time.time + damageCooldown;
     }
     

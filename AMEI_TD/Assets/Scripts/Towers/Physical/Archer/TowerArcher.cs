@@ -14,6 +14,21 @@ public class TowerArcher : TowerBase
     [SerializeField] private float baseFlightTime = 0.3f;
     [SerializeField] private float speedMultiplier = 0.15f;
     
+    [Header("Arrow Visual VFX")]
+    [SerializeField] private Transform arrowVisualVFXPoint;
+    private GameObject activeArrowVisualVFX;
+    
+    [Header("Arrow Effects")]
+    [SerializeField] private bool poisonArrows = false;
+    [SerializeField] private float poisonDamage = 2f;
+    [SerializeField] private float poisonDuration = 3f;
+    [SerializeField] private GameObject poisonArrowVFX;
+
+    [SerializeField] private bool fireArrows = false;
+    [SerializeField] private float fireDamage = 4f;
+    [SerializeField] private float fireDuration = 3f;
+    [SerializeField] private GameObject fireArrowVFX;
+    
     private bool isAttacking = false;
     private Vector3 enemyVelocity;
     private Vector3 predictedPosition;
@@ -24,11 +39,64 @@ public class TowerArcher : TowerBase
         base.Awake();
     }
     
+    private void Update()
+    {
+        // Safety reset if stuck attacking
+        if (isAttacking && Time.time > lastTimeAttacked + attackCooldown + 1f)
+        {
+            Debug.Log("Force reset isAttacking");
+            isAttacking = false;
+        
+            if (characterAnimator != null)
+            {
+                characterAnimator.SetBool("Attack", false);
+            }
+        
+            if (arrowVisual != null)
+            {
+                arrowVisual.SetActive(true);
+            }
+        }
+    
+        // Debug what's blocking attack
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            Debug.Log($"currentEnemy: {currentEnemy}");
+            Debug.Log($"isAttacking: {isAttacking}");
+            Debug.Log($"Time since attack: {Time.time - lastTimeAttacked}");
+            Debug.Log($"attackCooldown: {attackCooldown}");
+            Debug.Log($"base.CanAttack(): {base.CanAttack()}");
+        }
+    }
+    
+    protected override void Start()
+    {
+        base.Start();
+        UpdateArrowVisualVFX();
+    }
+    
     protected override void FixedUpdate()
     {
         UpdateEnemyVelocity();
         UpdatePredictedPosition();
         base.FixedUpdate();
+    }
+    
+    public override void SetUpgrade(TowerUpgradeType upgradeType, bool enabled)
+    {
+        base.SetUpgrade(upgradeType, enabled);
+    
+        switch (upgradeType)
+        {
+            case TowerUpgradeType.PoisonArrows:
+                poisonArrows = enabled;
+                UpdateArrowVisualVFX();
+                break;
+            case TowerUpgradeType.FireArrows:
+                fireArrows = enabled;
+                UpdateArrowVisualVFX();
+                break;
+        }
     }
     
     private void UpdateEnemyVelocity()
@@ -99,11 +167,10 @@ public class TowerArcher : TowerBase
     {
         lastTimeAttacked = Time.time;
         isAttacking = true;
-        
+    
         if (characterAnimator != null)
         {
-            UpdateAnimationSpeed();
-            characterAnimator.SetBool("Attack", true);
+            characterAnimator.SetTrigger("Attack");
         }
     }
     
@@ -119,7 +186,7 @@ public class TowerArcher : TowerBase
             arrowVisual.SetActive(true);
         }
     }
-    
+
     public void OnReleaseBow()
     {
         if (bowController != null)
@@ -134,7 +201,6 @@ public class TowerArcher : TowerBase
             arrowVisual.SetActive(false);
         }
         
-        characterAnimator.SetBool("Attack", false);
         isAttacking = false;
         
         Invoke("OnArrowReady", arrowRespawnDelay);
@@ -148,24 +214,57 @@ public class TowerArcher : TowerBase
         }
     }
     
+    private void UpdateArrowVisualVFX()
+    {
+        // Clear old VFX
+        if (activeArrowVisualVFX != null)
+        {
+            Destroy(activeArrowVisualVFX);
+            activeArrowVisualVFX = null;
+        }
+    
+        // Spawn new VFX based on current upgrade
+        Transform spawnPoint = arrowVisualVFXPoint != null ? arrowVisualVFXPoint : arrowVisual.transform;
+    
+        if (fireArrows && fireArrowVFX != null)
+        {
+            activeArrowVisualVFX = Instantiate(fireArrowVFX, spawnPoint);
+            activeArrowVisualVFX.transform.localPosition = Vector3.zero;
+        }
+        else if (poisonArrows && poisonArrowVFX != null)
+        {
+            activeArrowVisualVFX = Instantiate(poisonArrowVFX, spawnPoint);
+            activeArrowVisualVFX.transform.localPosition = Vector3.zero;
+        }
+    }
+    
     private void FireArrow()
     {
         if (currentEnemy == null) return;
-        
+    
         Vector3 spawnPos = arrowVisual.transform.position;
         Quaternion spawnRot = arrowVisual.transform.rotation;
-        
+    
         float distance = Vector3.Distance(spawnPos, predictedPosition);
-        
+    
         GameObject newArrow = Instantiate(projectilePrefab, spawnPos, spawnRot);
-        
+    
         ArrowProjectile arrow = newArrow.GetComponent<ArrowProjectile>();
-        
+    
         IDamageable damageable = currentEnemy.GetComponent<IDamageable>();
-        
+    
         if (damageable != null)
         {
             arrow.SetupArcProjectile(predictedPosition, damageable, CreateDamageInfo(), projectileSpeed, distance);
+        
+            if (fireArrows)
+            {
+                arrow.SetFireEffect(fireDamage, fireDuration, elementType, fireArrowVFX);
+            }
+            else if (poisonArrows)
+            {
+                arrow.SetPoisonEffect(poisonDamage, poisonDuration, elementType, poisonArrowVFX);
+            }
         }
     }
 }

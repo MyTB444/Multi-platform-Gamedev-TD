@@ -1,6 +1,55 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum TowerUpgradeType
+{
+    // Common
+    DamageBoost,
+    AttackSpeedBoost,
+    RangeBoost,
+    
+    // Archer
+    PoisonArrows,
+    FireArrows,
+    
+    // Spear
+    BarbedSpear,
+    ExplosiveTip,
+    
+    // Pyromancer
+    BurnChance,
+    BiggerFireball,
+    BurnSpread,
+    
+    // Ice Mage
+    StrongerSlow,
+    LongerSlow,
+    Frostbite,
+    FreezeSolid,
+    
+    // Spike Trap
+    PoisonSpikes,
+    BleedingSpikes,
+    CripplingSpikes,
+    
+    // Blade Tower
+    BleedChance,
+    MoreBlades,
+    ExtendedReach,
+    
+    // Rock Shower
+    MoreRocks,
+    BiggerRocks,
+    LongerShower,
+    MeteorStrike,
+    
+    // Phantom Knight
+    MorePhantoms,
+    CloserSpawn,
+    SpectralChains,
+    DoubleSlash
+}
+
 public class TowerBase : MonoBehaviour
 {
     protected EnemyBase currentEnemy;
@@ -26,6 +75,20 @@ public class TowerBase : MonoBehaviour
     [Header(("Tower Pricing"))] 
     [SerializeField] protected int buyPrice = 1;
     [SerializeField] protected int sellPrice = 1;
+    
+    [Header("Stat Upgrades")]
+    [SerializeField] protected bool damageBoost = false;
+    [SerializeField] protected float damageBoostPercent = 0.25f;
+    [Space]
+    [SerializeField] protected bool attackSpeedBoost = false;
+    [SerializeField] protected float attackSpeedBoostPercent = 0.20f;
+    [Space]
+    [SerializeField] protected bool rangeBoost = false;
+    [SerializeField] protected float rangeBoostPercent = 0.20f;
+
+    protected int baseDamage;
+    protected float baseAttackCooldown;
+    protected float baseAttackRange;
     
     [Header("VFX")]
     [SerializeField] protected GameObject attackSpawnEffectPrefab;
@@ -53,7 +116,17 @@ public class TowerBase : MonoBehaviour
 
     protected virtual void Start()
     {
-
+        baseDamage = damage;
+        baseAttackCooldown = attackCooldown;
+        baseAttackRange = attackRange;
+    
+        ApplyStatUpgrades();
+    
+        // Apply any unlocked upgrades from manager
+        if (TowerUpgradeManager.instance != null)
+        {
+            TowerUpgradeManager.instance.ApplyUnlockedUpgrades(this);
+        }
     }
 
     protected virtual void FixedUpdate()
@@ -300,6 +373,55 @@ public class TowerBase : MonoBehaviour
     protected Vector3 DirectionToEnemyFrom(Transform startPosition)
     {
         return (currentEnemy.GetCenterPoint() - startPosition.position).normalized;
+    }
+    
+    protected virtual void ApplyStatUpgrades()
+    {
+        if (damageBoost)
+        {
+            damage = Mathf.RoundToInt(baseDamage * (1f + damageBoostPercent));
+        }
+        else
+        {
+            damage = baseDamage;
+        }
+    
+        if (attackSpeedBoost)
+        {
+            attackCooldown = baseAttackCooldown * (1f - attackSpeedBoostPercent);
+        }
+        else
+        {
+            attackCooldown = baseAttackCooldown;
+        }
+    
+        if (rangeBoost)
+        {
+            attackRange = baseAttackRange * (1f + rangeBoostPercent);
+        }
+        else
+        {
+            attackRange = baseAttackRange;
+        }
+    }
+    
+    public virtual void SetUpgrade(TowerUpgradeType upgradeType, bool enabled)
+    {
+        switch (upgradeType)
+        {
+            case TowerUpgradeType.DamageBoost:
+                damageBoost = enabled;
+                ApplyStatUpgrades();
+                break;
+            case TowerUpgradeType.AttackSpeedBoost:
+                attackSpeedBoost = enabled;
+                ApplyStatUpgrades();
+                break;
+            case TowerUpgradeType.RangeBoost:
+                rangeBoost = enabled;
+                ApplyStatUpgrades();
+                break;
+        }
     }
 
     protected virtual void OnDrawGizmos()

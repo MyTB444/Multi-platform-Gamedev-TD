@@ -6,6 +6,22 @@ public class HomingProjectile : TowerProjectileBase
     [SerializeField] private float rotationSpeed = 200f;
     [SerializeField] private float retargetRange = 5f;
     
+    [Header("Burn Effects")]
+    private bool canBurn = false;
+    private float burnChancePercent;
+    private float burnDamage;
+    private float burnDuration;
+    private DamageInfo burnDamageInfo;
+    private bool canSpreadBurn = false;
+    private float spreadRadius;
+    private LayerMask spreadEnemyLayer;
+    
+    [Header("AoE Effects")]
+    private bool hasAoE = false;
+    private float aoERadius;
+    private float aoEDamagePercent;
+    private LayerMask aoEEnemyLayer;
+    
     private Transform target;
     private bool isHoming = true;
     private Vector3 lastKnownTargetPos;
@@ -29,6 +45,26 @@ public class HomingProjectile : TowerProjectileBase
             EnemyBase enemy = target.GetComponent<EnemyBase>();
             lastKnownTargetPos = enemy != null ? enemy.GetCenterPoint() : target.position;
         }
+    }
+    
+    public void SetBurnEffect(float chance, float damage, float duration, ElementType elementType, bool spread = false, float spreadRadius = 0f, LayerMask enemyLayer = default)
+    {
+        canBurn = true;
+        burnChancePercent = chance;
+        burnDamage = damage;
+        burnDuration = duration;
+        burnDamageInfo = new DamageInfo(damage, elementType, true);
+        canSpreadBurn = spread;
+        this.spreadRadius = spreadRadius;
+        spreadEnemyLayer = enemyLayer;
+    }
+    
+    public void SetAoEEffect(float radius, float damagePercent, LayerMask enemyLayer)
+    {
+        hasAoE = true;
+        aoERadius = radius;
+        aoEDamagePercent = damagePercent;
+        aoEEnemyLayer = enemyLayer;
     }
 
     protected override void MoveProjectile()
@@ -120,8 +156,49 @@ public class HomingProjectile : TowerProjectileBase
 
     protected override void OnHit(Collider other)
     {
-        base.OnHit(other);
+        if (hasHit) return;
+    
+        hasHit = true;
+    
+        if (impactEffectPrefab != null)
+        {
+            Vector3 impactPoint = other.ClosestPoint(transform.position);
+            GameObject impact = Instantiate(impactEffectPrefab, impactPoint, Quaternion.identity);
+            Destroy(impact, 2f);
+        }
+    
+        EnemyBase enemy = other.GetComponent<EnemyBase>();
+        if (enemy != null)
+        {
+            // Deal impact damage
+            damageable?.TakeDamage(damageInfo);
         
+            // Burn chance
+            if (canBurn && Random.value <= burnChancePercent)
+            {
+                enemy.ApplyDoT(burnDamageInfo, burnDuration, 0.5f, canSpreadBurn, spreadRadius, spreadEnemyLayer);
+            }
+        
+            // AoE damage
+            if (hasAoE)
+            {
+                DamageInfo aoEDamage = new DamageInfo(damageInfo.amount * aoEDamagePercent, damageInfo.elementType);
+                Collider[] enemies = Physics.OverlapSphere(transform.position, aoERadius, aoEEnemyLayer);
+            
+                foreach (Collider col in enemies)
+                {
+                    if (col.gameObject == other.gameObject) continue;
+                
+                    IDamageable target = col.GetComponent<IDamageable>();
+                    if (target != null)
+                    {
+                        target.TakeDamage(aoEDamage);
+                    }
+                }
+            }
+        }
+    
         isHoming = false;
+        DestroyProjectile();
     }
 }

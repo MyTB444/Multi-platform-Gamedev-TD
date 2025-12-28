@@ -6348,7 +6348,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97c18fa6e6e749d44a8d463d52353ba0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 15
+  damage: 5
   attackCooldown: 1
   towerBody: {fileID: 0}
   towerHead: {fileID: 0}
@@ -6381,8 +6381,23 @@ MonoBehaviour:
   roadLayer:
     serializedVersion: 2
     m_Bits: 256
-  downwardAngle: 35
+  downwardAngle: 33
   hammerImpactPoint: {fileID: 885937671795851817}
+  lowerCooldown: 0
+  cooldownReduction: 0.2
+  poisonSpikes: 0
+  poisonDamage: 2
+  poisonDuration: 3
+  poisonSpikeVFX: {fileID: 764456538143545835, guid: 157342d22a0c84b40b3d0eb8ff79ed1d, type: 3}
+  bleedingSpikes: 0
+  bleedDamage: 3
+  bleedDuration: 4
+  bleedSpikeVFX: {fileID: 3538601806443498961, guid: ae8be53a4ea8c18479183ebb3a59bf7c, type: 3}
+  critChance: 0.4
+  critMultiplier: 2
+  cripplingSpikes: 0
+  slowPercent: 0.3
+  slowDuration: 2
 --- !u!1 &1692230071948567844
 GameObject:
   m_ObjectHideFlags: 0

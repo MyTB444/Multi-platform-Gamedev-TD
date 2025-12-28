@@ -14,7 +14,11 @@ public class PhantomSwordDamage : MonoBehaviour
     private float vfxStartDelay;
     private float vfxDuration;
     
-    public void Setup(DamageInfo newDamageInfo, LayerMask newEnemyLayer, GameObject vfxPrefab, Vector3 rotationOffset, float startDelay = 0f, float duration = 0.5f)
+    private bool applySlow = false;
+    private float slowPercent;
+    private float slowDuration;
+    
+    public void Setup(DamageInfo newDamageInfo, LayerMask newEnemyLayer, GameObject vfxPrefab, Vector3 rotationOffset, float startDelay = 0f, float duration = 0.5f, bool applySlow = false, float slowPercent = 0f, float slowDuration = 0f)
     {
         damageInfo = newDamageInfo;
         enemyLayer = newEnemyLayer;
@@ -22,6 +26,9 @@ public class PhantomSwordDamage : MonoBehaviour
         vfxRotationOffset = rotationOffset;
         vfxStartDelay = startDelay;
         vfxDuration = duration;
+        this.applySlow = applySlow;
+        this.slowPercent = slowPercent;
+        this.slowDuration = slowDuration;
         hitEnemies.Clear();
         isAttacking = false;
     }
@@ -52,33 +59,39 @@ public class PhantomSwordDamage : MonoBehaviour
     private void TryDealDamage(Collider other)
     {
         if (!isAttacking) return;
-        
+    
         if (((1 << other.gameObject.layer) & enemyLayer) == 0) return;
-        
+    
         EnemyBase enemy = other.GetComponent<EnemyBase>();
         if (enemy == null) return;
-        
+    
         if (hitEnemies.Contains(enemy)) return;
-        
+    
         hitEnemies.Add(enemy);
-        
+    
         // Spawn VFX at impact point
         if (slashVFXPrefab != null)
         {
             Vector3 hitPoint = other.ClosestPoint(transform.position);
-            
+        
             Vector3 directionToEnemy = (other.transform.position - transform.position).normalized;
             directionToEnemy.y = 0;
-            
+        
             Quaternion rotation = Quaternion.LookRotation(directionToEnemy) * Quaternion.Euler(vfxRotationOffset);
-            
+        
             StartCoroutine(SpawnVFX(hitPoint, rotation));
         }
-        
+    
         IDamageable damageable = other.GetComponent<IDamageable>();
         if (damageable != null)
         {
             damageable.TakeDamage(damageInfo);
+        }
+    
+        // Apply slow
+        if (applySlow)
+        {
+            enemy.ApplySlow(slowPercent, slowDuration, false);
         }
     }
     

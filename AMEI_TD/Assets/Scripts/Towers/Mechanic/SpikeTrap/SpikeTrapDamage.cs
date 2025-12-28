@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SpikeTrapDamage : MonoBehaviour
@@ -14,6 +15,11 @@ public class SpikeTrapDamage : MonoBehaviour
     [SerializeField] private float spikeDelay = 0.3f;
     [SerializeField] private float damageDelay = 0.1f;
     
+    [Header("VFX Points")]
+    [SerializeField] private Transform[] spikeVFXPoints;
+
+    private List<GameObject> activeVFXInstances = new List<GameObject>();
+    
     private BoxCollider boxCollider;
     private LayerMask whatIsEnemy;
     private DamageInfo damageInfo;
@@ -24,6 +30,30 @@ public class SpikeTrapDamage : MonoBehaviour
     private Vector3 raisedPosition;
     private Collider[] detectedEnemies = new Collider[20];
     private TowerSpikeTrap tower;
+    
+    // Upgrade effects
+    private bool applyPoison = false;
+    private DamageInfo poisonDamageInfo;
+    private float poisonDuration;
+    private GameObject poisonVFX;
+
+    private bool applyBleed = false;
+    private DamageInfo bleedDamageInfo;
+    private float bleedDuration;
+    private GameObject bleedVFX;
+    private bool hasCrit = false;
+    private float critChance;
+    private float critMultiplier;
+
+    private bool applyCripple = false;
+    private float slowPercent;
+    private float slowDuration;
+    private GameObject crippleVFX;
+
+    // Active VFX instances
+    private GameObject activePoisonVFX;
+    private GameObject activeBleedVFX;
+    private GameObject activeCrippleVFX;
     
     public void Setup(DamageInfo newDamageInfo, LayerMask enemyLayer, float trapCooldown, TowerSpikeTrap ownerTower)
     {
@@ -38,6 +68,48 @@ public class SpikeTrapDamage : MonoBehaviour
             loweredPosition = spikesTransform.localPosition;
             raisedPosition = loweredPosition + Vector3.up * raisedHeight;
         }
+    }
+    
+    public void SetPoisonEffect(float damage, float duration, ElementType elementType, GameObject vfx = null)
+    {
+        applyPoison = true;
+        poisonDamageInfo = new DamageInfo(damage, elementType, true);
+        poisonDuration = duration;
+        poisonVFX = vfx;
+    
+        SpawnVFXOnSpikes(poisonVFX);
+    }
+
+    public void SetBleedEffect(float damage, float duration, ElementType elementType, GameObject vfx = null, float crit = 0f, float critMult = 2f)
+    {
+        applyBleed = true;
+        bleedDamageInfo = new DamageInfo(damage, elementType, true);
+        bleedDuration = duration;
+        bleedVFX = vfx;
+        hasCrit = crit > 0f;
+        critChance = crit;
+        critMultiplier = critMult;
+    
+        SpawnVFXOnSpikes(bleedVFX);
+    }
+
+    private void SpawnVFXOnSpikes(GameObject vfxPrefab)
+    {
+        if (vfxPrefab == null || spikeVFXPoints == null) return;
+    
+        foreach (Transform point in spikeVFXPoints)
+        {
+            GameObject vfx = Instantiate(vfxPrefab, point);
+            vfx.transform.localPosition = Vector3.zero;
+            activeVFXInstances.Add(vfx);
+        }
+    }
+
+    public void SetCrippleEffect(float percent, float duration)
+    {
+        applyCripple = true;
+        slowPercent = percent;
+        slowDuration = duration;
     }
     
     private void Update()
@@ -128,7 +200,7 @@ public class SpikeTrapDamage : MonoBehaviour
             transform.rotation,
             whatIsEnemy
         );
-        
+    
         for (int i = 0; i < enemyCount; i++)
         {
             if (detectedEnemies[i] != null && detectedEnemies[i].gameObject.activeSelf)
@@ -136,7 +208,33 @@ public class SpikeTrapDamage : MonoBehaviour
                 IDamageable damageable = detectedEnemies[i].GetComponent<IDamageable>();
                 if (damageable != null)
                 {
-                    damageable.TakeDamage(damageInfo);
+                    // Check for crit
+                    DamageInfo finalDamage = damageInfo;
+                    if (hasCrit && Random.value <= critChance)
+                    {
+                        finalDamage = new DamageInfo(damageInfo.amount * critMultiplier, damageInfo.elementType);
+                    }
+                
+                    damageable.TakeDamage(finalDamage);
+                }
+            
+                EnemyBase enemy = detectedEnemies[i].GetComponent<EnemyBase>();
+                if (enemy != null)
+                {
+                    // Bleed replaces poison
+                    if (applyBleed)
+                    {
+                        enemy.ApplyDoT(bleedDamageInfo, bleedDuration);
+                    }
+                    else if (applyPoison)
+                    {
+                        enemy.ApplyDoT(poisonDamageInfo, poisonDuration);
+                    }
+                
+                    if (applyCripple)
+                    {
+                        enemy.ApplySlow(slowPercent, slowDuration, false);
+                    }
                 }
             }
         }
@@ -154,5 +252,32 @@ public class SpikeTrapDamage : MonoBehaviour
             yield return null;
         }
         spikesTransform.localPosition = targetPosition;
+    }
+    
+    public void SetCooldown(float newCooldown)
+    {
+        cooldown = newCooldown;
+    }
+
+    public void ClearDoTEffects()
+    {
+        applyPoison = false;
+        applyBleed = false;
+        hasCrit = false;
+    
+        // Clear VFX
+        foreach (GameObject vfx in activeVFXInstances)
+        {
+            if (vfx != null)
+            {
+                Destroy(vfx);
+            }
+        }
+        activeVFXInstances.Clear();
+    }
+
+    public void ClearCrippleEffect()
+    {
+        applyCripple = false;
     }
 }

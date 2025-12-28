@@ -6615,6 +6615,37 @@ Transform:
   m_Children: []
   m_Father: {fileID: 8783128839557468652}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1740859724254833767
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8919103593872427823}
+  m_Layer: 0
+  m_Name: ArrowVFX
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8919103593872427823
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1740859724254833767}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.007, y: 0.9367, z: -0.005}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4699522599411592722}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1839001058752243928
 GameObject:
   m_ObjectHideFlags: 0
@@ -7973,7 +8004,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 8919103593872427823}
   m_Father: {fileID: 1939372934009702654}
   m_LocalEulerAnglesHint: {x: -90, y: 0, z: 180}
 --- !u!33 &6119634097975984085
@@ -18778,9 +18810,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8294430211428561170}
+  - component: {fileID: 7605547376037196238}
   - component: {fileID: 5148307974464681058}
   - component: {fileID: 4796576192046828227}
-  - component: {fileID: 7605547376037196238}
   m_Layer: 0
   m_Name: TowerArcher
   m_TagString: Untagged
@@ -18804,6 +18836,67 @@ Transform:
   - {fileID: 4387532787256328943}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7605547376037196238
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5537941893074787483}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc9adeb02528b0b47a27ddceb0a22df7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  damage: 5
+  attackCooldown: 1
+  towerBody: {fileID: 8294430211428561170}
+  towerHead: {fileID: 0}
+  gunPoint: {fileID: 1383047700879017827}
+  rotationSpeed: 10
+  attackRange: 8
+  whatIsEnemy:
+    serializedVersion: 2
+    m_Bits: 64
+  whatIsTargetable:
+    serializedVersion: 2
+    m_Bits: 64
+  projectilePrefab: {fileID: 7217477184985419567, guid: 341f0c89bfbfe144ea2fb453eb0643ed, type: 3}
+  projectileSpeed: 15
+  elementType: 0
+  buyPrice: 1
+  sellPrice: 1
+  damageBoost: 0
+  damageBoostPercent: 0.25
+  attackSpeedBoost: 0
+  attackSpeedBoostPercent: 0.2
+  rangeBoost: 0
+  rangeBoostPercent: 0.2
+  attackSpawnEffectPrefab: {fileID: 0}
+  characterAnimator: {fileID: 5148307974464681058}
+  attackAnimationTrigger: Attack
+  projectileSpawnDelay: 0
+  targetMostAdvancedEnemy: 1
+  targetPriorityEnemy: 0
+  enemyPriorityType: 0
+  useHpTargeting: 0
+  targetHighestHpEnemy: 1
+  useRandomTargeting: 0
+  bowController: {fileID: 4796576192046828227}
+  arrowVisual: {fileID: 5029408247247093985}
+  baseAnimationLength: 1
+  arrowRespawnDelay: 0.9
+  baseFlightTime: 0.3
+  speedMultiplier: 0.05
+  arrowVisualVFXPoint: {fileID: 8919103593872427823}
+  poisonArrows: 0
+  poisonDamage: 2
+  poisonDuration: 3
+  poisonArrowVFX: {fileID: 764456538143545835, guid: 157342d22a0c84b40b3d0eb8ff79ed1d, type: 3}
+  fireArrows: 0
+  fireDamage: 4
+  fireDuration: 3
+  fireArrowVFX: {fileID: 4717735165549109670, guid: ac8d0804ebc9bc94594ea51bf660284c, type: 3}
 --- !u!95 &5148307974464681058
 Animator:
   serializedVersion: 7
@@ -18849,49 +18942,6 @@ MonoBehaviour:
   snapForwardDuration: 0.05
   returnDelay: 0.4
   returnToHandDuration: 0.2
---- !u!114 &7605547376037196238
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5537941893074787483}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc9adeb02528b0b47a27ddceb0a22df7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damage: 5
-  attackCooldown: 1
-  towerBody: {fileID: 8294430211428561170}
-  towerHead: {fileID: 0}
-  gunPoint: {fileID: 1383047700879017827}
-  rotationSpeed: 10
-  attackRange: 10
-  whatIsEnemy:
-    serializedVersion: 2
-    m_Bits: 64
-  whatIsTargetable:
-    serializedVersion: 2
-    m_Bits: 64
-  projectilePrefab: {fileID: 7217477184985419567, guid: 341f0c89bfbfe144ea2fb453eb0643ed, type: 3}
-  projectileSpeed: 15
-  attackSpawnEffectPrefab: {fileID: 0}
-  characterAnimator: {fileID: 5148307974464681058}
-  attackAnimationTrigger: Attack
-  projectileSpawnDelay: 0
-  targetMostAdvancedEnemy: 1
-  targetPriorityEnemy: 0
-  enemyPriorityType: 0
-  useHpTargeting: 0
-  targetHighestHpEnemy: 1
-  useRandomTargeting: 0
-  bowController: {fileID: 4796576192046828227}
-  arrowVisual: {fileID: 5029408247247093985}
-  baseAnimationLength: 1
-  arrowRespawnDelay: 0.9
-  baseFlightTime: 0.3
-  speedMultiplier: 0.05
 --- !u!1 &5580422817379788159
 GameObject:
   m_ObjectHideFlags: 0

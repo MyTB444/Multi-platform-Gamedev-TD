@@ -21439,7 +21439,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damage: 0
-  attackCooldown: 1
+  attackCooldown: 3
   towerBody: {fileID: 0}
   towerHead: {fileID: 0}
   gunPoint: {fileID: 0}
@@ -21456,6 +21456,12 @@ MonoBehaviour:
   elementType: 3
   buyPrice: 1
   sellPrice: 1
+  damageBoost: 0
+  damageBoostPercent: 0.25
+  attackSpeedBoost: 0
+  attackSpeedBoostPercent: 0.2
+  rangeBoost: 0
+  rangeBoostPercent: 0.2
   attackSpawnEffectPrefab: {fileID: 0}
   characterAnimator: {fileID: 4582930928750596067}
   attackAnimationTrigger: Attack
@@ -21468,16 +21474,24 @@ MonoBehaviour:
   useRandomTargeting: 0
   phantomPrefab: {fileID: 2537545956604527301, guid: 8b55fb7f86e2bb54a922b5e11b12cae4, type: 3}
   spawnDistanceAhead: 5
-  phantomCount: 3
+  phantomCount: 1
   horizontalSpacing: 1.5
   depthStagger: 0.5
   phantomSpeed: 2
   phantomDamage: 5
   attackRadius: 2
-  stoppingDistance: 0.5
+  stoppingDistance: 0.45
   fadeOutTime: 0.5
   spawnVFXPrefab: {fileID: 9007503105022112843, guid: 8d3efcfbf73f29f409a1e8cb1a020c10, type: 3}
   vfxDuration: 1
+  morePhantoms: 0
+  bonusPhantomCount: 1
+  closerSpawn: 0
+  closerSpawnDistance: 2
+  spectralChains: 0
+  slowPercent: 0.3
+  slowDuration: 2
+  doubleSlash: 0
 --- !u!1 &6647472915751510191
 GameObject:
   m_ObjectHideFlags: 0
