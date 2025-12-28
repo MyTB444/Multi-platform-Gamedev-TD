@@ -21,6 +21,9 @@ public class EnemyBase : MonoBehaviour, IDamageable
     [SerializeField] private int damage;
     [SerializeField] private int reward;
     public float enemyMaxHp = 100;
+    
+    [Header("Element Type")]
+    [SerializeField] private ElementType elementType;
 
     [Header("Ability")]
     [SerializeField] private bool isInvisible;
@@ -35,6 +38,12 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     [Header("Slow Effect")]
     [SerializeField] private GameObject slowEffectPrefab;
+    
+    [Header("Stun Effect")]
+    [SerializeField] private Color frozenColor = new Color(0.5f, 0.8f, 1f, 1f);
+    private Renderer[] enemyRenderers;
+    private Color[] originalColors;
+    private bool hasSavedColors = false;
 
     private NavMeshAgent NavAgent;
     private Animator EnemyAnimator;
@@ -56,13 +65,21 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private float slowEndTime;
     private bool isSlowed = false;
     private GameObject activeSlowEffect;
+    
+    // Stun system
+    private bool isStunned = false;
+    private float stunEndTime;
 
     // DoT system
-    private float dotDamage;
+    private DamageInfo dotDamageInfo;
     private float dotEndTime;
     private float dotTickInterval = 0.5f;
     private float lastDotTick;
     private bool hasDot = false;
+    private bool dotCanSpread = false;
+    private float dotSpreadRadius;
+    private LayerMask dotSpreadLayer;
+    
     private void OnEnable()
     {
         UpdateVisuals();
@@ -83,23 +100,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
         UpdateVisuals();
         NavAgent = GetComponent<NavMeshAgent>();
         EnemyAnimator = GetComponent<Animator>();
-       
-     
-
-        //switch (enemyType)
-        //{
-        //    case EnemyType.Basic:
-        //        renderer.material.color = Color.green;
-        //        break;
-        //    case EnemyType.Fast:
-        //        renderer.material.color = Color.magenta;
-        //        break;
-        //    case EnemyType.Tank:
-        //        renderer.material.color = Color.red;
-        //        break;
-        //    default:
-        //        break;
-        //}
+    
+        SaveOriginalColors();
     }
 
     protected virtual void Update()
@@ -111,6 +113,12 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     private void UpdateStatusEffects()
     {
+        // Handle stun expiry
+        if (isStunned && Time.time >= stunEndTime)
+        {
+            RemoveStun();
+        }
+    
         // Handle slow expiry
         if (isSlowed && Time.time >= slowEndTime)
         {
@@ -123,25 +131,47 @@ public class EnemyBase : MonoBehaviour, IDamageable
             if (Time.time >= dotEndTime)
             {
                 hasDot = false;
+                dotCanSpread = false;
             }
             else if (Time.time >= lastDotTick + dotTickInterval)
             {
                 lastDotTick = Time.time;
-                TakeDamage(dotDamage);
+                TakeDamage(dotDamageInfo);
+    
+                if (dotCanSpread)
+                {
+                    SpreadDoT();
+                }
+            }
+        }
+    }
+    
+    private void SpreadDoT()
+    {
+        Vector3 spreadCenter = centerPoint != null ? centerPoint.position : transform.position;
+        Collider[] nearbyEnemies = Physics.OverlapSphere(spreadCenter, dotSpreadRadius, dotSpreadLayer);
+    
+        foreach (Collider col in nearbyEnemies)
+        {
+            if (col.gameObject == gameObject) continue;
+        
+            EnemyBase enemy = col.GetComponent<EnemyBase>();
+            if (enemy != null && !enemy.HasDoT())
+            {
+                enemy.ApplyDoT(dotDamageInfo, dotEndTime - Time.time, dotTickInterval, false, 0f);
             }
         }
     }
 
-    public void ApplySlow(float slowPercent, float duration)
+    public void ApplySlow(float slowPercent, float duration, bool showVFX = true)
     {
-        Debug.Log($"ApplySlow called - slowEffectPrefab: {slowEffectPrefab}");
-    
         isSlowed = true;
         slowEndTime = Time.time + duration;
 
-        enemySpeed = baseSpeed * (1f - slowPercent);
+        float clampedSlow = Mathf.Clamp(slowPercent, 0f, 0.9f);
+        enemySpeed = baseSpeed * (1f - clampedSlow);
 
-        if (activeSlowEffect == null && slowEffectPrefab != null)
+        if (showVFX && activeSlowEffect == null && slowEffectPrefab != null)
         {
             activeSlowEffect = Instantiate(slowEffectPrefab, transform);
             activeSlowEffect.transform.localPosition = Vector3.up * 0.5f;
@@ -160,14 +190,67 @@ public class EnemyBase : MonoBehaviour, IDamageable
             activeSlowEffect = null;
         }
     }
-
-    public void ApplyDoT(float damagePerTick, float duration, float tickInterval = 0.5f)
+    
+    public void ApplyStun(float duration)
     {
+        isStunned = true;
+        stunEndTime = Time.time + duration;
+    
+        if (hasSavedColors)
+        {
+            foreach (Renderer r in enemyRenderers)
+            {
+                r.material.color = frozenColor;
+            }
+        }
+    }
+    
+    private void RemoveStun()
+    {
+        isStunned = false;
+    
+        if (hasSavedColors)
+        {
+            for (int i = 0; i < enemyRenderers.Length; i++)
+            {
+                enemyRenderers[i].material.color = originalColors[i];
+            }
+        }
+    }
+    
+    private void SaveOriginalColors()
+    {
+        enemyRenderers = GetComponentsInChildren<Renderer>();
+        originalColors = new Color[enemyRenderers.Length];
+    
+        for (int i = 0; i < enemyRenderers.Length; i++)
+        {
+            originalColors[i] = enemyRenderers[i].material.color;
+        }
+    
+        hasSavedColors = true;
+    }
+
+    public void ApplyDoT(DamageInfo damagePerTick, float duration, float tickInterval = 0.5f, bool canSpread = false, float spreadRadius = 0f, LayerMask spreadLayer = default)
+    {
+        DamageCalculator.DamageResult testResult = DamageCalculator.Calculate(damagePerTick, elementType);
+    
+        if (testResult.wasImmune)
+        {
+            return;
+        }
+    
         hasDot = true;
-        dotDamage = damagePerTick;
+        dotDamageInfo = damagePerTick;
+        dotDamageInfo.isDoT = true;
         dotEndTime = Time.time + duration;
         dotTickInterval = tickInterval;
         lastDotTick = Time.time;
+    
+        // Spread settings
+        dotCanSpread = canSpread;
+        dotSpreadRadius = spreadRadius;
+        dotSpreadLayer = spreadLayer;
     }
 
     public void SetupEnemy(EnemySpawner myNewSpawner)
@@ -206,6 +289,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     private void FollowPath()
     {
+        if (isStunned) return;
+    
         if (myWaypoints == null || currentWaypointIndex >= myWaypoints.Length)
         {
             return;
@@ -242,6 +327,13 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
         if (EnemyAnimator == null) return;
 
+        // Don't walk if stunned
+        if (isStunned)
+        {
+            EnemyAnimator.SetBool("Walk", false);
+            return;
+        }
+
         EnemyAnimator.SetBool("Walk", true);
     }
 
@@ -264,19 +356,39 @@ public class EnemyBase : MonoBehaviour, IDamageable
         Destroy(gameObject);
     }
 
-    public virtual void TakeDamage(float incomingDamage, bool isAntiInvisible = false, bool isAntiReinforced = false)
+    public virtual void TakeDamage(DamageInfo damageInfo)
     {
-        if (isInvisible && !isAntiInvisible)
+        DamageCalculator.DamageResult result = DamageCalculator.Calculate(damageInfo, elementType);
+        
+        if (DamageNumberSpawner.instance != null)
         {
+            Vector3 spawnPos = centerPoint != null ? centerPoint.position : transform.position;
+            DamageNumberSpawner.instance.Spawn(
+                spawnPos,
+                result.finalDamage,
+                result.wasSuperEffective,
+                result.wasNotVeryEffective,
+                result.wasImmune
+            );
+        }
+
+        if (result.wasImmune)
+        {
+            Debug.Log($"IMMUNE! {damageInfo.elementType} vs {elementType}");
             return;
         }
 
-        if (isReinforced && !isAntiReinforced)
+        if (result.wasNotVeryEffective)
         {
-            return;
+            Debug.Log($"Not very effective... {damageInfo.elementType} vs {elementType} = {result.finalDamage}");
         }
-
-        enemyCurrentHp -= incomingDamage;
+        else if (result.wasSuperEffective)
+        {
+            Debug.Log($"Super effective! {damageInfo.elementType} vs {elementType} = {result.finalDamage}");
+        }
+        
+        Debug.Log($"DamageInfo: {damageInfo.elementType} vs {elementType} = {result.finalDamage}");
+        enemyCurrentHp -= result.finalDamage;
 
         if (enemyCurrentHp <= 0 && !isDead)
         {
@@ -284,12 +396,14 @@ public class EnemyBase : MonoBehaviour, IDamageable
             Die();
         }
     }
-    
+
+    public virtual void TakeDamage(float incomingDamage)
+    {
+        TakeDamage(new DamageInfo(incomingDamage, ElementType.Physical));
+    }
+
     private void Die()
     {
-       
-        //Destroy(gameObject);
-       
         if (GameManager.instance != null) 
         {
             GameManager.instance.UpdateSkillPoints(reward);
@@ -342,6 +456,17 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
         // Reset DoT
         hasDot = false;
+        dotCanSpread = false;
+    
+        // Reset Stun
+        isStunned = false;
+        if (hasSavedColors)
+        {
+            for (int i = 0; i < enemyRenderers.Length; i++)
+            {
+                enemyRenderers[i].material.color = originalColors[i];
+            }
+        }
 
         UpdateVisuals();
     }
@@ -373,5 +498,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public bool IsReinforced() => isReinforced;
     public int GetDamage() => damage;
     public bool IsSlowed() => isSlowed;
+    public bool IsStunned() => isStunned;
     public bool HasDoT() => hasDot;
+    public ElementType GetElementType() => elementType;
 }

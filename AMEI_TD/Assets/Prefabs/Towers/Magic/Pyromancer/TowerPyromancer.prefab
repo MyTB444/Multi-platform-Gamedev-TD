@@ -92,7 +92,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b280a9a08a6f6d043addd96e78393154, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 10
+  damage: 2
   attackCooldown: 1
   towerBody: {fileID: 4063552230360950}
   towerHead: {fileID: 0}
@@ -107,6 +107,9 @@ MonoBehaviour:
     m_Bits: 64
   projectilePrefab: {fileID: 5912905722827363994, guid: 17db417334a9d8f45a6dae4397e32918, type: 3}
   projectileSpeed: 5
+  elementType: 1
+  buyPrice: 1
+  sellPrice: 1
   attackSpawnEffectPrefab: {fileID: 3125467519713422411, guid: cb9d85bd70dafc44bb9bda92fca7a2d5, type: 3}
   characterAnimator: {fileID: 95805638432926132}
   attackAnimationTrigger: Attack
@@ -117,6 +120,16 @@ MonoBehaviour:
   useHpTargeting: 1
   targetHighestHpEnemy: 1
   useRandomTargeting: 0
+  burnChance: 0
+  burnChancePercent: 0.4
+  burnDamage: 3
+  burnDuration: 3
+  biggerFireball: 0
+  fireballScaleMultiplier: 1.5
+  fireballAoERadius: 1.5
+  fireballAoEDamagePercent: 0.5
+  burnSpread: 0
+  burnSpreadRadius: 2
 --- !u!1 &8963131367354455
 GameObject:
   m_ObjectHideFlags: 0

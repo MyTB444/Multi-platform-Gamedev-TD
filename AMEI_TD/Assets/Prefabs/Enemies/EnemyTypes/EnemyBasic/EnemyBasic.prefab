@@ -176,11 +176,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3929c037d26756d42bf18ec49537527a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyType: 0
-  enemySpeed: 1
-  damage: 5
-  reward: 5
-  enemyMaxHp: 15
+  enemyType: 1
+  enemySpeed: 3
+  damage: 10
+  reward: 10
+  enemyMaxHp: 10
+  elementType: 1
   isInvisible: 0
   isReinforced: 0
   enemyColor: {r: 1, g: 1, b: 1, a: 1}
