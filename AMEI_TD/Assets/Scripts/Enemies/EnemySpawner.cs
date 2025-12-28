@@ -54,12 +54,26 @@ public class EnemySpawner : MonoBehaviour
         GameObject newEnemy = ObjectPooling.instance.GetPoolObject(GetEnemyTypeForPooling(randomEnemy));
         if (newEnemy != null)
         {
-           
+
             newEnemy.SetActive(true);
             newEnemy.transform.position = spawnLocation.position;
-            newEnemy.transform.rotation = Quaternion.identity;
-            //GameObject newEnemy = Instantiate(randomEnemy, spawnLocation.position, Quaternion.identity);
 
+            if (currentWaypoints != null && currentWaypoints.Length > 0)
+            {
+                Vector3 directionToFirstWaypoint = (currentWaypoints[0] - spawnLocation.position).normalized;
+                if (directionToFirstWaypoint != Vector3.zero)
+                {
+                    newEnemy.transform.rotation = Quaternion.LookRotation(directionToFirstWaypoint);
+                }
+                else
+                {
+                    newEnemy.transform.rotation = Quaternion.identity;
+                }
+            }
+            else
+            {
+                newEnemy.transform.rotation = Quaternion.identity;
+            }
             EnemyBase enemyScript = newEnemy.GetComponent<EnemyBase>();
             enemyScript.SetupEnemy(this);
 
