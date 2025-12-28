@@ -966,6 +966,8 @@ MonoBehaviour:
   magicCirclePrefab: {fileID: 4285366753046329265, guid: c4a34c2e6d3f9da4fadacfff9ce95761, type: 3}
   smokeSpawnPrefab: {fileID: 1206755263195569983, guid: 4f9a929057ed47d4ab5cc4128fe930cd, type: 3}
   magicCircleYOffset: 0.1
+  smokeDelay: 0.3
+  minionPrefab: {fileID: 6586906181002933634, guid: 6f08c320511f7f349ba7981a64a3525a, type: 3}
 --- !u!195 &119214022263263075
 NavMeshAgent:
   m_ObjectHideFlags: 0

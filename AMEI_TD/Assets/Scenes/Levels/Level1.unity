@@ -34044,38 +34044,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
-      propertyPath: enemySummoner
-      value: 
-      objectReference: {fileID: 8624495124000836869, guid: 5b00d19b6dfe0384ea9a601bf195465a, type: 3}
-    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
-      propertyPath: levelWaves.Array.size
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
-      propertyPath: levelWaves.Array.data[0].enemyFast
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
-      propertyPath: levelWaves.Array.data[0].enemyTank
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
-      propertyPath: levelWaves.Array.data[0].enemyBasic
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
-      propertyPath: levelWaves.Array.data[0].enemySummoner
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
-      propertyPath: levelWaves.Array.data[0].enemyInvisible
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
-      propertyPath: levelWaves.Array.data[0].enemyReinforced
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -51205,8 +51173,20 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6070369461719376321, guid: 0c76173c030ac794c9877653882a174a, type: 3}
+      propertyPath: prewarmList.Array.size
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 5262185044488547431, guid: 0c76173c030ac794c9877653882a174a, type: 3}
+    - {fileID: 5289202279171666300, guid: 0c76173c030ac794c9877653882a174a, type: 3}
+    - {fileID: 4770524416849529207, guid: 0c76173c030ac794c9877653882a174a, type: 3}
+    - {fileID: 7416615473756145624, guid: 0c76173c030ac794c9877653882a174a, type: 3}
+    - {fileID: 7494806083716931177, guid: 0c76173c030ac794c9877653882a174a, type: 3}
+    - {fileID: 7697279638760437040, guid: 0c76173c030ac794c9877653882a174a, type: 3}
+    - {fileID: 1969604392525391689, guid: 0c76173c030ac794c9877653882a174a, type: 3}
+    - {fileID: 3100933237422088265, guid: 0c76173c030ac794c9877653882a174a, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0c76173c030ac794c9877653882a174a, type: 3}

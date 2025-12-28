@@ -16,6 +16,9 @@ public class EnemySummoner : EnemyBase
     [SerializeField] private GameObject smokeSpawnPrefab;
     [SerializeField] private float magicCircleYOffset = 0.1f;
     [SerializeField] private float smokeDelay = 0.3f;
+    
+    [Header("Minion")]
+    [SerializeField] private GameObject minionPrefab;
 
     private GameObject activeMagicCircle;
 
@@ -134,7 +137,7 @@ public class EnemySummoner : EnemyBase
         
         yield return new WaitForSeconds(smokeDelay);
         
-        GameObject newMinion = ObjectPooling.instance.GetPoolObject(PoolGameObjectType.EnemyMinion);
+        GameObject newMinion = ObjectPooling.instance.Get(minionPrefab);
 
         if (newMinion != null)
         {

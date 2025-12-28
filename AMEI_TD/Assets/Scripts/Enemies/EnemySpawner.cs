@@ -44,16 +44,15 @@ public class EnemySpawner : MonoBehaviour
     {
         if (!canCreateEnemies) return;
 
-        GameObject randomEnemy = GetRandomEnemy();
-        if (randomEnemy == null) return;
+        GameObject randomEnemyPrefab = GetRandomEnemy();
+        if (randomEnemyPrefab == null) return;
 
-        GameObject newEnemy = ObjectPooling.instance.GetPoolObject(GetEnemyTypeForPooling(randomEnemy));
+        GameObject newEnemy = ObjectPooling.instance.Get(randomEnemyPrefab);
         if (newEnemy != null)
         {
             newEnemy.SetActive(true);
             newEnemy.transform.position = spawnLocation.position;
-        
-            // Face toward first waypoint
+    
             if (allPathWaypoints.Count > 0 && allPathWaypoints[0].Length > 0)
             {
                 Vector3 directionToWaypoint = (allPathWaypoints[0][0] - spawnLocation.position).normalized;
@@ -70,34 +69,6 @@ public class EnemySpawner : MonoBehaviour
 
             activeEnemies.Add(newEnemy);
         }
-    }
-
-    private PoolGameObjectType GetEnemyTypeForPooling(GameObject randomEnemy)
-    {
-        if (randomEnemy.GetComponent<EnemyBase>() != null)
-        {
-            EnemyBase enemy = randomEnemy.GetComponent<EnemyBase>();
-            EnemyType enemyType = enemy.GetEnemyType();
-
-            switch (enemyType)
-            {
-                case EnemyType.Basic:
-                    return PoolGameObjectType.EnemyBasic;
-                case EnemyType.Fast:
-                    return PoolGameObjectType.EnemyFast;
-                case EnemyType.Tank:
-                    return PoolGameObjectType.EnemyTank;
-                case EnemyType.Invisible:
-                    return PoolGameObjectType.EnemyInvisible;
-                case EnemyType.Reinforced:
-                    return PoolGameObjectType.EnemyReinforced;
-                case EnemyType.Summoner:
-                    return PoolGameObjectType.EnemySummoner;
-                case EnemyType.Minion:
-                    return PoolGameObjectType.EnemyMinion;
-            }
-        }
-        return PoolGameObjectType.EnemyBasic;
     }
 
     private GameObject GetRandomEnemy()

@@ -416,36 +416,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
             GameManager.instance.UpdateSkillPoints(reward);
         }
         RemoveEnemy();
-        ObjectPooling.instance.ReturnGameObejctToPool(GetEnemyTypeForPooling(), gameObject);
-    }
- 
-    
-    private PoolGameObjectType GetEnemyTypeForPooling()
-    {
-        switch (enemyType)
-        {
-            case EnemyType.Basic:
-                return PoolGameObjectType.EnemyBasic;
-
-            case EnemyType.Fast:
-                return PoolGameObjectType.EnemyFast;
-
-            case EnemyType.Tank:
-                return PoolGameObjectType.EnemyTank;
-
-            case EnemyType.Invisible:
-                return PoolGameObjectType.EnemyInvisible;
-
-            case EnemyType.Reinforced:
-                return PoolGameObjectType.EnemyReinforced;
-            
-            case EnemyType.Summoner:
-                return PoolGameObjectType.EnemySummoner;
-            
-            case EnemyType.Minion:
-                return PoolGameObjectType.EnemyMinion;
-        }
-        return 0;
+        ObjectPooling.instance.Return(gameObject);
     }
     
     public void RemoveEnemy()
