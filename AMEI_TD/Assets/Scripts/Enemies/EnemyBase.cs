@@ -253,10 +253,10 @@ public class EnemyBase : MonoBehaviour, IDamageable
         dotSpreadLayer = spreadLayer;
     }
 
-    public void SetupEnemy(EnemySpawner myNewSpawner)
+    public void SetupEnemy(EnemySpawner myNewSpawner, Vector3[] pathWaypoints)
     {
         mySpawner = myNewSpawner;
-        UpdateWaypoints(myNewSpawner.currentWaypoints);
+        UpdateWaypoints(pathWaypoints);
         CollectTotalDistance();
         ResetEnemy();
         BeginMovement();

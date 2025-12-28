@@ -1,27 +1,24 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 using Random = UnityEngine.Random;
 
 public class EnemySpawner : MonoBehaviour
 {
     [SerializeField] private WaveManager myWaveManager;
-    [SerializeField] private EnemyPath myPath;
+    [SerializeField] private List<EnemyPath> myPaths;
     [SerializeField] private float spawnCooldown;
     private float spawnTimer;
     private bool canCreateEnemies = true;
     [SerializeField] private Transform spawnLocation;
 
-    [SerializeField] public List<Transform> waypointList;
-
-    public Vector3[] currentWaypoints { get; private set; }
+    private List<Vector3[]> allPathWaypoints = new List<Vector3[]>();
 
     private List<GameObject> enemiesToCreate = new List<GameObject>();
     private List<GameObject> activeEnemies = new List<GameObject>();
 
     private void Start()
     {
-        CollectWaypoints();
+        CollectAllWaypoints();
         myWaveManager = FindFirstObjectByType<WaveManager>();
     }
 
@@ -45,7 +42,6 @@ public class EnemySpawner : MonoBehaviour
 
     private void CreateEnemy()
     {
-        Debug.Log($"CreateEnemy called. canCreateEnemies: {canCreateEnemies}, enemiesToCreate: {enemiesToCreate.Count}");
         if (!canCreateEnemies) return;
 
         GameObject randomEnemy = GetRandomEnemy();
@@ -54,28 +50,13 @@ public class EnemySpawner : MonoBehaviour
         GameObject newEnemy = ObjectPooling.instance.GetPoolObject(GetEnemyTypeForPooling(randomEnemy));
         if (newEnemy != null)
         {
-
             newEnemy.SetActive(true);
             newEnemy.transform.position = spawnLocation.position;
+            newEnemy.transform.rotation = Quaternion.identity;
 
-            if (currentWaypoints != null && currentWaypoints.Length > 0)
-            {
-                Vector3 directionToFirstWaypoint = (currentWaypoints[0] - spawnLocation.position).normalized;
-                if (directionToFirstWaypoint != Vector3.zero)
-                {
-                    newEnemy.transform.rotation = Quaternion.LookRotation(directionToFirstWaypoint);
-                }
-                else
-                {
-                    newEnemy.transform.rotation = Quaternion.identity;
-                }
-            }
-            else
-            {
-                newEnemy.transform.rotation = Quaternion.identity;
-            }
             EnemyBase enemyScript = newEnemy.GetComponent<EnemyBase>();
-            enemyScript.SetupEnemy(this);
+            Vector3[] randomPath = GetRandomPathWaypoints();
+            enemyScript.SetupEnemy(this, randomPath);
 
             activeEnemies.Add(newEnemy);
         }
@@ -83,33 +64,28 @@ public class EnemySpawner : MonoBehaviour
 
     private PoolGameObjectType GetEnemyTypeForPooling(GameObject randomEnemy)
     {
-        if(randomEnemy.GetComponent<EnemyBase>() != null)
+        if (randomEnemy.GetComponent<EnemyBase>() != null)
         {
             EnemyBase enemy = randomEnemy.GetComponent<EnemyBase>();
             EnemyType enemyType = enemy.GetEnemyType();
 
-            switch(enemyType)
+            switch (enemyType)
             {
                 case EnemyType.Basic:
-                return PoolGameObjectType.EnemyBasic;
-
+                    return PoolGameObjectType.EnemyBasic;
                 case EnemyType.Fast:
-                return PoolGameObjectType.EnemyFast;
-
-                case EnemyType.Tank:    
-                return PoolGameObjectType.EnemyTank;
-
+                    return PoolGameObjectType.EnemyFast;
+                case EnemyType.Tank:
+                    return PoolGameObjectType.EnemyTank;
                 case EnemyType.Invisible:
-                return PoolGameObjectType.EnemyInvisible;
-
+                    return PoolGameObjectType.EnemyInvisible;
                 case EnemyType.Reinforced:
-                return PoolGameObjectType.EnemyReinforced;
+                    return PoolGameObjectType.EnemyReinforced;
             }
         }
-        return 0;
+        return PoolGameObjectType.EnemyBasic;
     }
 
-    // Picks and removes a random enemy prefab from the queue
     private GameObject GetRandomEnemy()
     {
         if (enemiesToCreate.Count == 0) return null;
@@ -122,21 +98,35 @@ public class EnemySpawner : MonoBehaviour
         return chosenEnemy;
     }
 
-    // Converts waypoint transforms to Vector3 positions for enemy pathfinding
-    private void CollectWaypoints()
+    private void CollectAllWaypoints()
     {
-        waypointList = new List<Transform>();
-        foreach (Transform child in myPath.GetWaypoints())
-        {
-            if (child != null) waypointList.Add(child);
-        }
+        allPathWaypoints.Clear();
 
-        currentWaypoints = new Vector3[waypointList.Count];
-
-        for (int i = 0; i < currentWaypoints.Length; i++)
+        foreach (EnemyPath path in myPaths)
         {
-            currentWaypoints[i] = waypointList[i].transform.position;
+            List<Transform> waypointTransforms = new List<Transform>();
+
+            foreach (Transform child in path.GetWaypoints())
+            {
+                if (child != null) waypointTransforms.Add(child);
+            }
+
+            Vector3[] waypoints = new Vector3[waypointTransforms.Count];
+            for (int i = 0; i < waypoints.Length; i++)
+            {
+                waypoints[i] = waypointTransforms[i].position;
+            }
+
+            allPathWaypoints.Add(waypoints);
         }
+    }
+
+    private Vector3[] GetRandomPathWaypoints()
+    {
+        if (allPathWaypoints.Count == 0) return null;
+
+        int randomIndex = Random.Range(0, allPathWaypoints.Count);
+        return allPathWaypoints[randomIndex];
     }
 
     public void AddEnemy(GameObject enemyToAdd) => enemiesToCreate.Add(enemyToAdd);
