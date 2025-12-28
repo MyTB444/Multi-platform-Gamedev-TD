@@ -68,7 +68,6 @@ public class EnemySpawner : MonoBehaviour
 
     private PoolGameObjectType GetEnemyTypeForPooling(GameObject randomEnemy)
     {
-       
         if(randomEnemy.GetComponent<EnemyBase>() != null)
         {
             EnemyBase enemy = randomEnemy.GetComponent<EnemyBase>();
@@ -91,10 +90,7 @@ public class EnemySpawner : MonoBehaviour
                 case EnemyType.Reinforced:
                 return PoolGameObjectType.EnemyReinforced;
             }
-
-                
         }
-        
         return 0;
     }
 

@@ -4,7 +4,12 @@ using UnityEngine;
 
 public enum PoolGameObjectType
 {
-    EnemyFast,EnemyBasic,EnemyTank,EnemyInvisible,EnemyReinforced,Flames
+    EnemyBasic,
+    EnemyFast, 
+    EnemyTank,
+    EnemyInvisible,
+    EnemyReinforced,
+    Flames
 }
 [Serializable]
 public class PoolInfo
