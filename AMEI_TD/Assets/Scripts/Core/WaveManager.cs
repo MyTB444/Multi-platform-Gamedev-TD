@@ -13,6 +13,7 @@ public class WaveDetails
     public int enemySummoner;
     public int enemyAdaptive;
     public int enemySplitter;
+    public int enemyGhostwalk;
 }
 
 [Serializable]
@@ -167,6 +168,7 @@ public class WaveManager : MonoBehaviour
         AddEnemiesToList(newEnemyList, EnemyType.Summoner, wave.enemySummoner);
         AddEnemiesToList(newEnemyList, EnemyType.Adaptive, wave.enemyAdaptive);
         AddEnemiesToList(newEnemyList, EnemyType.Splitter, wave.enemySplitter);
+        AddEnemiesToList(newEnemyList, EnemyType.Ghostwalk, wave.enemyGhostwalk);
 
         return newEnemyList;
     }

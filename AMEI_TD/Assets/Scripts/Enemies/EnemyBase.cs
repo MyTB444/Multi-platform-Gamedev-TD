@@ -12,7 +12,8 @@ public enum EnemyType
     Summoner,
     Minion,
     Adaptive,
-    Splitter
+    Splitter,
+    Ghostwalk
 }
 
 public class EnemyBase : MonoBehaviour, IDamageable
