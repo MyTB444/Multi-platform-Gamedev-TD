@@ -28110,6 +28110,7 @@ MonoBehaviour:
   projectilePrefab: {fileID: 0}
   projectileSpeed: 0
   elementType: 3
+  projectilePoolAmount: 20
   buyPrice: 1
   sellPrice: 1
   damageBoost: 0
@@ -28128,6 +28129,12 @@ MonoBehaviour:
   useHpTargeting: 1
   targetHighestHpEnemy: 1
   useRandomTargeting: 0
+  decoyLayer:
+    serializedVersion: 2
+    m_Bits: 2048
+  enemyLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
   rockPrefab: {fileID: 3974658804896811211, guid: 1b7e441d5d3f3844b838546e815c30c1, type: 3}
   spawnHeight: 3
   spawnRadius: 0.9
@@ -28138,6 +28145,7 @@ MonoBehaviour:
   rockSpeedMin: 8
   rockSpeedMax: 15
   predictionMultiplier: 4
+  rockPoolAmount: 30
   moreRocks: 0
   bonusRocks: 3
   biggerRocks: 0

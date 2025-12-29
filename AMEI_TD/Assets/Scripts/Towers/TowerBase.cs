@@ -108,6 +108,8 @@ public class TowerBase : MonoBehaviour
     [SerializeField] protected bool useHpTargeting = true;
     [SerializeField] protected bool targetHighestHpEnemy = true;
     [SerializeField] protected bool useRandomTargeting = false;
+    [SerializeField] protected LayerMask decoyLayer;
+    [SerializeField] protected LayerMask enemyLayerMask;
 
     private float targetCheckInterval = .1f;
     private float lastTimeCheckedTarget;
@@ -170,11 +172,34 @@ public class TowerBase : MonoBehaviour
 
     protected virtual EnemyBase FindEnemyWithinRange()
     {
+        List<EnemyBase> decoyTargets = new List<EnemyBase>();
         List<EnemyBase> priorityTargets = new List<EnemyBase>();
         List<EnemyBase> allTargets = new List<EnemyBase>();
 
-        int enemiesAround =
-            Physics.OverlapSphereNonAlloc(transform.position, attackRange, allocatedColliders, whatIsEnemy);
+        int decoysAround = Physics.OverlapSphereNonAlloc(transform.position, attackRange, allocatedColliders, decoyLayer);
+
+        if (decoysAround > 0)
+        {
+            for (int i = 0; i < decoysAround; i++)
+            {
+                EnemyBase decoy = allocatedColliders[i].GetComponent<EnemyBase>();
+
+                if (decoy == null) continue;
+
+                float distanceToDecoy = Vector3.Distance(transform.position, decoy.transform.position);
+
+                if (distanceToDecoy > attackRange) continue;
+
+                decoyTargets.Add(decoy);
+            }
+
+            if (decoyTargets.Count > 0)
+            {
+                return ChooseEnemyToTarget(decoyTargets);
+            }
+        }
+
+        int enemiesAround = Physics.OverlapSphereNonAlloc(transform.position, attackRange, allocatedColliders, enemyLayerMask);
 
         if (enemiesAround == 0) return null;
 

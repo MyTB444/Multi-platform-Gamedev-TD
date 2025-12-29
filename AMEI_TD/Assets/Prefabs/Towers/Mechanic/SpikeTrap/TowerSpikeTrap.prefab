@@ -6364,8 +6364,15 @@ MonoBehaviour:
   projectilePrefab: {fileID: 0}
   projectileSpeed: 0
   elementType: 2
+  projectilePoolAmount: 20
   buyPrice: 1
   sellPrice: 1
+  damageBoost: 0
+  damageBoostPercent: 0.25
+  attackSpeedBoost: 0
+  attackSpeedBoostPercent: 0.2
+  rangeBoost: 0
+  rangeBoostPercent: 0.2
   attackSpawnEffectPrefab: {fileID: 1296919836167789391, guid: 5da3d6be31090404994200ae3dfa5129, type: 3}
   characterAnimator: {fileID: 1985935153379817994}
   attackAnimationTrigger: Attack
@@ -6376,6 +6383,12 @@ MonoBehaviour:
   useHpTargeting: 1
   targetHighestHpEnemy: 1
   useRandomTargeting: 0
+  decoyLayer:
+    serializedVersion: 2
+    m_Bits: 2048
+  enemyLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
   spikeTrapPrefab: {fileID: 427431859011580423, guid: 7a6d196f9ffca6c4b947a00d0617ff7f, type: 3}
   raycastDistance: 10
   roadLayer:
@@ -6383,8 +6396,6 @@ MonoBehaviour:
     m_Bits: 256
   downwardAngle: 33
   hammerImpactPoint: {fileID: 885937671795851817}
-  lowerCooldown: 0
-  cooldownReduction: 0.2
   poisonSpikes: 0
   poisonDamage: 2
   poisonDuration: 3

@@ -17034,6 +17034,7 @@ MonoBehaviour:
   projectilePrefab: {fileID: 7029389940526463345, guid: 7e8143ff3f21e92419dd2a9dfaf4be5b, type: 3}
   projectileSpeed: 20
   elementType: 0
+  projectilePoolAmount: 20
   buyPrice: 1
   sellPrice: 1
   damageBoost: 0
@@ -17052,6 +17053,12 @@ MonoBehaviour:
   useHpTargeting: 0
   targetHighestHpEnemy: 1
   useRandomTargeting: 0
+  decoyLayer:
+    serializedVersion: 2
+    m_Bits: 2048
+  enemyLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
   spearVisual: {fileID: 8909929371272408851}
   spearRespawnDelay: 1.5
   throwAnimationDelay: 1.1
