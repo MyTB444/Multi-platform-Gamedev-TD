@@ -23,6 +23,5 @@ MonoBehaviour:
   irreversible: 0
   skillPointCost: 5
   prerequisites: []
-  effectType: 0
-  effectValue: 10
-  skillTypeName: Health
+  type: 10
+  type2: 14

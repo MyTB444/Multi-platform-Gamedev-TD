@@ -17,22 +17,23 @@ public class SkillNode : ScriptableObject
     [Header("Requirements")]
     public int skillPointCost;
     public List<SkillNode> prerequisites = new List<SkillNode>();
+    public TowerUpgradeType type;
+    public TowerUpgradeType type2;
 
-    [Header("Effect")]
-    public SkillEffectType effectType;
-    public float effectValue;
-    public string skillTypeName;
-    public enum SkillEffectType
-    {
-        AddFlat,
-        AddPercent,
-        UnlockSkill,
-        UnlockTower
-    }
     public void ApplyEffect()
     {
+        TowerUpgradeManager.instance.UnlockUpgrade(type);
+        if(type2 != TowerUpgradeType.Null)
+        {
+            TowerUpgradeManager.instance.UnlockUpgrade(type);
+        }
     }
     public void RemoveEffect()
     {
+       TowerUpgradeManager.instance.LockUpgrade(type);
+        if (type2 != TowerUpgradeType.Null)
+        {
+            TowerUpgradeManager.instance.LockUpgrade(type);
+        }
     }
 }

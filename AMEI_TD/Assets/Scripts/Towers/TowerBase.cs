@@ -3,6 +3,7 @@ using UnityEngine;
 
 public enum TowerUpgradeType
 {
+    Null,
     // Common
     DamageBoost,
     AttackSpeedBoost,

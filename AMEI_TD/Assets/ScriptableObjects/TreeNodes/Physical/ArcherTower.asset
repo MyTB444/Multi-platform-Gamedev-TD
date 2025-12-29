@@ -23,6 +23,5 @@ MonoBehaviour:
   skillPointCost: 5
   prerequisites:
   - {fileID: 11400000, guid: 7b0473e4d06cb4545bab387b159d6d2b, type: 2}
-  effectType: 0
-  effectValue: 10
-  skillTypeName: Health
+  type: 4
+  type2: 0

@@ -19,6 +19,5 @@ MonoBehaviour:
   irreversible: 0
   skillPointCost: 5
   prerequisites: []
-  effectType: 0
-  effectValue: 10
-  skillTypeName: Damage
+  type: 1
+  type2: 0
