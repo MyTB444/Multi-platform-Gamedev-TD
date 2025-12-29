@@ -10,7 +10,7 @@ public enum EnemyType
     Invisible,
     Reinforced,
     Summoner,
-    Minion
+    Minion,
     Adaptive,
     Splitter
 }
@@ -84,6 +84,11 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private bool dotCanSpread = false;
     private float dotSpreadRadius;
     private LayerMask dotSpreadLayer;
+    
+    // Shield system
+    private bool hasShield = false;
+    private float shieldHealth = 0f;
+    private GameObject activeShieldEffect;
     
     private void OnEnable()
     {

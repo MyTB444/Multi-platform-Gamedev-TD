@@ -11,6 +11,8 @@ public class WaveDetails
     public int enemyInvisible;
     public int enemyReinforced;
     public int enemySummoner;
+    public int enemyAdaptive;
+    public int enemySplitter;
 }
 
 [Serializable]
@@ -163,6 +165,8 @@ public class WaveManager : MonoBehaviour
         AddEnemiesToList(newEnemyList, EnemyType.Invisible, wave.enemyInvisible);
         AddEnemiesToList(newEnemyList, EnemyType.Reinforced, wave.enemyReinforced);
         AddEnemiesToList(newEnemyList, EnemyType.Summoner, wave.enemySummoner);
+        AddEnemiesToList(newEnemyList, EnemyType.Adaptive, wave.enemyAdaptive);
+        AddEnemiesToList(newEnemyList, EnemyType.Splitter, wave.enemySplitter);
 
         return newEnemyList;
     }
