@@ -241,22 +241,25 @@ public class TowerArcher : TowerBase
     private void FireArrow()
     {
         if (currentEnemy == null) return;
-    
+
         Vector3 spawnPos = arrowVisual.transform.position;
         Quaternion spawnRot = arrowVisual.transform.rotation;
-    
+
         float distance = Vector3.Distance(spawnPos, predictedPosition);
-    
-        GameObject newArrow = Instantiate(projectilePrefab, spawnPos, spawnRot);
-    
+
+        GameObject newArrow = ObjectPooling.instance.Get(projectilePrefab);
+        newArrow.transform.position = spawnPos;
+        newArrow.transform.rotation = spawnRot;
+        newArrow.SetActive(true);
+
         ArrowProjectile arrow = newArrow.GetComponent<ArrowProjectile>();
-    
+
         IDamageable damageable = currentEnemy.GetComponent<IDamageable>();
-    
+
         if (damageable != null)
         {
             arrow.SetupArcProjectile(predictedPosition, damageable, CreateDamageInfo(), projectileSpeed, distance);
-        
+    
             if (fireArrows)
             {
                 arrow.SetFireEffect(fireDamage, fireDuration, elementType, fireArrowVFX);

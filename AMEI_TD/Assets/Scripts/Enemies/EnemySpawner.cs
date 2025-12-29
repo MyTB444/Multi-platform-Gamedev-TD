@@ -44,15 +44,24 @@ public class EnemySpawner : MonoBehaviour
     {
         if (!canCreateEnemies) return;
 
-        GameObject randomEnemy = GetRandomEnemy();
-        if (randomEnemy == null) return;
+        GameObject randomEnemyPrefab = GetRandomEnemy();
+        if (randomEnemyPrefab == null) return;
 
-        GameObject newEnemy = ObjectPooling.instance.GetPoolObject(GetEnemyTypeForPooling(randomEnemy));
+        GameObject newEnemy = ObjectPooling.instance.Get(randomEnemyPrefab);
         if (newEnemy != null)
         {
             newEnemy.SetActive(true);
             newEnemy.transform.position = spawnLocation.position;
-            newEnemy.transform.rotation = Quaternion.identity;
+    
+            if (allPathWaypoints.Count > 0 && allPathWaypoints[0].Length > 0)
+            {
+                Vector3 directionToWaypoint = (allPathWaypoints[0][0] - spawnLocation.position).normalized;
+                directionToWaypoint.y = 0;
+                if (directionToWaypoint != Vector3.zero)
+                {
+                    newEnemy.transform.rotation = Quaternion.LookRotation(directionToWaypoint);
+                }
+            }
 
             EnemyBase enemyScript = newEnemy.GetComponent<EnemyBase>();
             Vector3[] randomPath = GetRandomPathWaypoints();
@@ -62,41 +71,6 @@ public class EnemySpawner : MonoBehaviour
         }
     }
 
-    private PoolGameObjectType GetEnemyTypeForPooling(GameObject randomEnemy)
-    {
-        if (randomEnemy.GetComponent<EnemyBase>() != null)
-        {
-            EnemyBase enemy = randomEnemy.GetComponent<EnemyBase>();
-            EnemyType enemyType = enemy.GetEnemyType();
-
-            switch(enemyType)
-            {
-                case EnemyType.Basic:
-                return PoolGameObjectType.EnemyBasic;
-
-                case EnemyType.Fast:
-                return PoolGameObjectType.EnemyFast;
-
-                case EnemyType.Tank:    
-                return PoolGameObjectType.EnemyTank;
-
-                case EnemyType.Invisible:
-                return PoolGameObjectType.EnemyInvisible;
-
-                case EnemyType.Reinforced:
-                return PoolGameObjectType.EnemyReinforced;
-                
-                case EnemyType.Adaptive: 
-                return PoolGameObjectType.EnemyAdaptive;
-                
-                case EnemyType.Splitter: 
-                return PoolGameObjectType.EnemySplitter;
-            }
-        }
-        return PoolGameObjectType.EnemyBasic;
-    }
-
-    // Picks and removes a random enemy prefab from the queue
     private GameObject GetRandomEnemy()
     {
         if (enemiesToCreate.Count == 0) return null;
@@ -153,5 +127,37 @@ public class EnemySpawner : MonoBehaviour
         }
 
         myWaveManager.CheckIfWaveCompleted();
+    }
+    
+    private void OnDrawGizmos()
+    {
+        // Draw spawn point
+        if (spawnLocation != null)
+        {
+            Gizmos.color = Color.green;
+            Gizmos.DrawWireSphere(spawnLocation.position, 0.5f);
+        
+            // Draw forward direction arrow
+            Gizmos.color = Color.blue;
+            Vector3 forward = spawnLocation.forward * 2f;
+            Gizmos.DrawLine(spawnLocation.position, spawnLocation.position + forward);
+        
+            // Draw arrow head
+            Vector3 right = Quaternion.Euler(0, 30, 0) * -forward.normalized * 0.5f;
+            Vector3 left = Quaternion.Euler(0, -30, 0) * -forward.normalized * 0.5f;
+            Gizmos.DrawLine(spawnLocation.position + forward, spawnLocation.position + forward + right);
+            Gizmos.DrawLine(spawnLocation.position + forward, spawnLocation.position + forward + left);
+        }
+    
+        // Draw line to first waypoint
+        if (myPaths != null && myPaths.Count > 0 && myPaths[0] != null)
+        {
+            Transform[] waypoints = myPaths[0].GetWaypoints();
+            if (waypoints != null && waypoints.Length > 0 && spawnLocation != null)
+            {
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawLine(spawnLocation.position, waypoints[0].position);
+            }
+        }
     }
 }

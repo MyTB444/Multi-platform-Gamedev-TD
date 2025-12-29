@@ -1,102 +1,136 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum PoolGameObjectType
-{
-    EnemyBasic,
-    EnemyFast, 
-    EnemyTank,
-    EnemyInvisible,
-    EnemyReinforced,
-    Flames,
-    EnemyAdaptive,
-    EnemySplitter
-}
-[Serializable]
-public class PoolInfo
-{
-    public PoolGameObjectType objectType;
-    public int amount = 0;
-    public GameObject gameObjectPrefab;
-    public GameObject Container;
-
-    [HideInInspector]
-    public List<GameObject> pool = new();
-
-}
 public class ObjectPooling : MonoBehaviour
 {
     public static ObjectPooling instance;
+
+    [System.Serializable]
+    public class PrewarmItem
+    {
+        public GameObject prefab;
+        public int amount;
+    }
+
+    [Header("Prewarm Overrides (edit amounts here)")]
+    [SerializeField] private List<PrewarmItem> prewarmList = new List<PrewarmItem>();
+
+    private Dictionary<GameObject, Queue<GameObject>> pools = new Dictionary<GameObject, Queue<GameObject>>();
+    private Dictionary<GameObject, GameObject> instanceToPrefab = new Dictionary<GameObject, GameObject>();
+    private Dictionary<GameObject, Transform> containers = new Dictionary<GameObject, Transform>();
+    private Dictionary<GameObject, int> registeredPrefabs = new Dictionary<GameObject, int>();
+    private bool hasPrewarmed = false;
 
     private void Awake()
     {
         instance = this;
     }
 
-    [SerializeField] private List<PoolInfo> listOfPool = new();
     private void Start()
     {
-        for (int i = 0; i < listOfPool.Count; i++)
-        {
-            FillPool(listOfPool[i]);
-        }
+        DoPrewarm();
     }
 
-    private void FillPool(PoolInfo info)
+    public void Register(GameObject prefab, int defaultAmount)
     {
-        for (int i = 0; i < info.amount; i++)
-        {
-            GameObject instance = null;
-            instance = Instantiate(info.gameObjectPrefab, info.Container.transform);
-            instance.SetActive(false);
-            info.pool.Add(instance);
-        }
-    }
+        if (prefab == null) return;
 
-
-    public GameObject GetPoolObject(PoolGameObjectType type)
-    {
-        PoolInfo selectedPool = GetPoolByType(type);
-        List<GameObject> pool = selectedPool.pool;
-        GameObject instance = null;
-
-        if (pool.Count > 0)
+        // Check if already in inspector list (user override)
+        foreach (var item in prewarmList)
         {
-            instance = pool[pool.Count - 1];
-            pool.Remove(instance);
-        }
-        else 
-        {
-           instance = Instantiate(selectedPool.gameObjectPrefab,selectedPool.Container.transform);
-            instance.SetActive(false);
-        }
-        return instance;
-    }
-
-    private PoolInfo GetPoolByType(PoolGameObjectType type)
-    {
-        for (int i = 0; i < listOfPool.Count; i++)
-        {
-            if (type == listOfPool[i].objectType)
+            if (item.prefab == prefab)
             {
-                return listOfPool[i];
+                registeredPrefabs[prefab] = item.amount;
+                return;
             }
         }
-        return null;
+
+        // Not in list, use script default
+        if (!registeredPrefabs.ContainsKey(prefab))
+        {
+            registeredPrefabs[prefab] = defaultAmount;
+            
+            // Add to inspector list so user can see/edit it
+            prewarmList.Add(new PrewarmItem { prefab = prefab, amount = defaultAmount });
+        }
     }
 
-    public void ReturnGameObejctToPool(PoolGameObjectType type, GameObject obj)
+    private void DoPrewarm()
     {
-        PoolInfo selectedPool = GetPoolByType(type);
-        List<GameObject> pool = selectedPool.pool;
-        obj.SetActive(false);   
-        if(!pool.Contains(obj))
+        if (hasPrewarmed) return;
+        hasPrewarmed = true;
+
+        foreach (var item in prewarmList)
         {
-            pool.Add(obj);
+            if (item.prefab == null) continue;
+
+            for (int i = 0; i < item.amount; i++)
+            {
+                GameObject obj = CreateNewInstance(item.prefab);
+                Return(obj);
+            }
+        }
+    }
+
+    public GameObject Get(GameObject prefab)
+    {
+        if (prefab == null) return null;
+
+        if (!pools.ContainsKey(prefab))
+        {
+            pools[prefab] = new Queue<GameObject>();
         }
 
+        GameObject obj;
+        if (pools[prefab].Count > 0)
+        {
+            obj = pools[prefab].Dequeue();
+        }
+        else
+        {
+            obj = CreateNewInstance(prefab);
+        }
+
+        return obj;
     }
 
+    public void Return(GameObject obj)
+    {
+        if (obj == null) return;
 
+        obj.SetActive(false);
+
+        if (instanceToPrefab.TryGetValue(obj, out GameObject prefab))
+        {
+            if (!pools.ContainsKey(prefab))
+            {
+                pools[prefab] = new Queue<GameObject>();
+            }
+
+            if (!pools[prefab].Contains(obj))
+            {
+                pools[prefab].Enqueue(obj);
+            }
+        }
+    }
+
+    private GameObject CreateNewInstance(GameObject prefab)
+    {
+        Transform container = GetContainer(prefab);
+        GameObject obj = Instantiate(prefab, container);
+        obj.SetActive(false);
+        instanceToPrefab[obj] = prefab;
+        return obj;
+    }
+
+    private Transform GetContainer(GameObject prefab)
+    {
+        if (!containers.ContainsKey(prefab))
+        {
+            GameObject containerObj = new GameObject($"Pool_{prefab.name}");
+            containerObj.transform.SetParent(transform);
+            containers[prefab] = containerObj.transform;
+        }
+        return containers[prefab];
+    }
 }

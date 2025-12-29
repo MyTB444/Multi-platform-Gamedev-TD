@@ -20,6 +20,9 @@ public class TowerPhantomKnight : TowerBase
     [SerializeField] private float stoppingDistance = 0.5f;
     [SerializeField] private float fadeOutTime = 0.5f;
     
+    [Header("Pooling")]
+    [SerializeField] private int phantomPoolAmount = 10;
+    
     [Header("Spawn VFX")]
     [SerializeField] private GameObject spawnVFXPrefab;
     [SerializeField] private float vfxDuration = 2f;
@@ -53,6 +56,11 @@ public class TowerPhantomKnight : TowerBase
     {
         basePhantomDamage = phantomDamage;
         base.Start();
+        
+        if (phantomPrefab != null)
+        {
+            ObjectPooling.instance.Register(phantomPrefab, phantomPoolAmount);
+        }
     }
     
     public override void SetUpgrade(TowerUpgradeType upgradeType, bool enabled)
@@ -92,9 +100,12 @@ public class TowerPhantomKnight : TowerBase
     
     protected override bool CanAttack()
     {
-        return Time.time > lastTimeAttacked + attackCooldown 
-            && currentEnemy != null 
-            && !isAttacking;
+        if (currentEnemy == null) return false;
+        
+        float distanceToEnemy = Vector3.Distance(transform.position, currentEnemy.transform.position);
+        if (distanceToEnemy > attackRange) return false;
+        
+        return Time.time > lastTimeAttacked + attackCooldown && !isAttacking;
     }
     
     protected override void Attack()
@@ -114,10 +125,8 @@ public class TowerPhantomKnight : TowerBase
         }
     }
     
-    // Called by animation event
     public void OnSpawnPhantoms()
     {
-        // If saved enemy died, find a new one
         if (savedEnemy == null || !savedEnemy.gameObject.activeSelf)
         {
             FindNewTarget();
@@ -155,59 +164,62 @@ public class TowerPhantomKnight : TowerBase
     private void SpawnPhantoms()
     {
         if (savedEnemy == null || !savedEnemy.gameObject.activeSelf) return;
-    
+
         Vector3 enemyPosition = savedEnemy.position;
         Vector3 enemyForward = savedEnemy.forward;
-    
+
         float finalSpawnDistance = closerSpawn ? closerSpawnDistance : spawnDistanceAhead;
         Vector3 baseSpawnPos = enemyPosition + enemyForward * finalSpawnDistance;
-    
-    Vector3 rightVector = Vector3.Cross(Vector3.up, -enemyForward).normalized;
-    
-    int finalPhantomCount = morePhantoms ? phantomCount + bonusPhantomCount : phantomCount;
-    
-    for (int i = 0; i < finalPhantomCount; i++)
-    {
-        float horizontalOffset = 0f;
-        if (finalPhantomCount > 1)
+
+        Vector3 rightVector = Vector3.Cross(Vector3.up, -enemyForward).normalized;
+
+        int finalPhantomCount = morePhantoms ? phantomCount + bonusPhantomCount : phantomCount;
+
+        for (int i = 0; i < finalPhantomCount; i++)
         {
-            float t = (float)i / (finalPhantomCount - 1);
-            horizontalOffset = Mathf.Lerp(-horizontalSpacing, horizontalSpacing, t);
-        }
-        
-        float depthOffset = i * depthStagger;
-        
-        Vector3 spawnPos = baseSpawnPos + rightVector * horizontalOffset + enemyForward * depthOffset;
-        
-        NavMeshHit hit;
-        if (NavMesh.SamplePosition(spawnPos, out hit, 15f, NavMesh.AllAreas))
-        {
-            spawnPos = hit.position;
-        }
-        else
-        {
-            Debug.LogWarning($"PhantomKnight: No NavMesh found near {spawnPos}");
-            continue;
-        }
-        
-        if (spawnVFXPrefab != null)
-        {
-            GameObject vfx = Instantiate(spawnVFXPrefab, spawnPos, Quaternion.identity);
-            Destroy(vfx, vfxDuration);
-        }
-        
-        Quaternion spawnRot = Quaternion.LookRotation(-enemyForward);
-        GameObject phantomObj = Instantiate(phantomPrefab, spawnPos, spawnRot);
-        
-        PhantomKnight phantom = phantomObj.GetComponent<PhantomKnight>();
-        if (phantom != null)
-        {
-            DamageInfo phantomDamageInfo = new DamageInfo(phantomDamage, elementType);
-            phantom.Setup(phantomSpeed, phantomDamageInfo, attackRadius, stoppingDistance, fadeOutTime, whatIsEnemy, savedEnemy, doubleSlash, spectralChains, slowPercent, slowDuration);
-            activePhantoms.Add(phantom);
+            float horizontalOffset = 0f;
+            if (finalPhantomCount > 1)
+            {
+                float t = (float)i / (finalPhantomCount - 1);
+                horizontalOffset = Mathf.Lerp(-horizontalSpacing, horizontalSpacing, t);
+            }
+
+            float depthOffset = i * depthStagger;
+
+            Vector3 spawnPos = baseSpawnPos + rightVector * horizontalOffset + enemyForward * depthOffset;
+
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(spawnPos, out hit, 15f, NavMesh.AllAreas))
+            {
+                spawnPos = hit.position;
+            }
+            else
+            {
+                Debug.LogWarning($"PhantomKnight: No NavMesh found near {spawnPos}");
+                continue;
+            }
+
+            if (spawnVFXPrefab != null)
+            {
+                GameObject vfx = Instantiate(spawnVFXPrefab, spawnPos, Quaternion.identity);
+                Destroy(vfx, vfxDuration);
+            }
+
+            Quaternion spawnRot = Quaternion.LookRotation(-enemyForward);
+            GameObject phantomObj = ObjectPooling.instance.Get(phantomPrefab);
+            phantomObj.transform.position = spawnPos;
+            phantomObj.transform.rotation = spawnRot;
+            phantomObj.SetActive(true);
+
+            PhantomKnight phantom = phantomObj.GetComponent<PhantomKnight>();
+            if (phantom != null)
+            {
+                DamageInfo phantomDamageInfo = new DamageInfo(phantomDamage, elementType);
+                phantom.Setup(phantomSpeed, phantomDamageInfo, attackRadius, stoppingDistance, fadeOutTime, whatIsEnemy, savedEnemy, doubleSlash, spectralChains, slowPercent, slowDuration);
+                activePhantoms.Add(phantom);
+            }
         }
     }
-}
     
     protected override void HandleRotation() { }
     

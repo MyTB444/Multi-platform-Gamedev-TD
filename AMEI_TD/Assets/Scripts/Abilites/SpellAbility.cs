@@ -10,9 +10,8 @@ public class SpellAbility : MonoBehaviour
     private bool stopFire = false;
     [SerializeField] private float coolDownTimer;
    
-  
-
-
+    [SerializeField] private GameObject flamePrefab;
+    
     private void Awake()
     {
         instance = this;
@@ -52,7 +51,7 @@ public class SpellAbility : MonoBehaviour
                     {
                        
 
-                        flames.Add(ObjectPooling.instance.GetPoolObject(PoolGameObjectType.Flames));
+                        flames.Add(ObjectPooling.instance.Get(flamePrefab));
                         
                         if (flames.Count > 0 && flames[i] != null)
                         {
@@ -99,8 +98,9 @@ public class SpellAbility : MonoBehaviour
         foreach (GameObject o in flames)
         {
             yield return new WaitForSeconds(0.3f);
-            ObjectPooling.instance.ReturnGameObejctToPool(PoolGameObjectType.Flames ,o);
+            ObjectPooling.instance.Return(o);
         }
+        flames.Clear();
     }
 
 

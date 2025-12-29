@@ -21454,6 +21454,7 @@ MonoBehaviour:
   projectilePrefab: {fileID: 0}
   projectileSpeed: 0
   elementType: 3
+  projectilePoolAmount: 20
   buyPrice: 1
   sellPrice: 1
   damageBoost: 0
@@ -21477,11 +21478,12 @@ MonoBehaviour:
   phantomCount: 1
   horizontalSpacing: 1.5
   depthStagger: 0.5
-  phantomSpeed: 2
+  phantomSpeed: 4
   phantomDamage: 5
   attackRadius: 2
   stoppingDistance: 0.45
   fadeOutTime: 0.5
+  phantomPoolAmount: 10
   spawnVFXPrefab: {fileID: 9007503105022112843, guid: 8d3efcfbf73f29f409a1e8cb1a020c10, type: 3}
   vfxDuration: 1
   morePhantoms: 0

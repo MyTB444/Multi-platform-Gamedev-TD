@@ -27,6 +27,25 @@ public class HomingProjectile : TowerProjectileBase
     private Vector3 lastKnownTargetPos;
     private bool targetLost = false;
     private LayerMask enemyLayer;
+    
+    private Vector3 originalScale;
+
+    private void Awake()
+    {
+        originalScale = transform.localScale;
+    }
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        transform.localScale = originalScale;
+        target = null;
+        isHoming = true;
+        targetLost = false;
+        canBurn = false;
+        hasAoE = false;
+        canSpreadBurn = false;
+    }
 
     public void SetupHomingProjectile(Transform enemyTarget, IDamageable newDamageable, DamageInfo newDamageInfo, float newSpeed, LayerMask whatIsEnemy)
     {

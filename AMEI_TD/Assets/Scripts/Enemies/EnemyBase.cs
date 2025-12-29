@@ -9,6 +9,8 @@ public enum EnemyType
     Tank,
     Invisible,
     Reinforced,
+    Summoner,
+    Minion
     Adaptive,
     Splitter
 }
@@ -61,6 +63,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private float totalDistance;
 
     private Vector3 Destination;
+    protected bool canMove = true;
 
     // Slow system
     private float baseSpeed;
@@ -81,18 +84,13 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private bool dotCanSpread = false;
     private float dotSpreadRadius;
     private LayerMask dotSpreadLayer;
-
-    // Shield system
-    private bool hasShield = false;
-    private float shieldHealth = 0f;
-    private GameObject activeShieldEffect;
     
     private void OnEnable()
     {
         UpdateVisuals();
         //Renderer renderer = GetComponent<Renderer>();
         NavAgent = GetComponent<NavMeshAgent>();
-        EnemyAnimator = GetComponent<Animator>();
+        EnemyAnimator = GetComponentInChildren<Animator>();
         NavAgent.enabled = false;
     }
 
@@ -106,7 +104,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
         UpdateVisuals();
         NavAgent = GetComponent<NavMeshAgent>();
-        EnemyAnimator = GetComponent<Animator>();
+        EnemyAnimator = GetComponentInChildren<Animator>();
     
         SaveOriginalColors();
     }
@@ -296,7 +294,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     private void FollowPath()
     {
-        if (isStunned) return;
+        if (isStunned || !canMove) return;
     
         if (myWaypoints == null || currentWaypointIndex >= myWaypoints.Length)
         {
@@ -332,15 +330,19 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     private void PlayAnimations()
     {
-        if (EnemyAnimator == null) return;
+        if (EnemyAnimator == null)
+        {
+            Debug.Log($"{gameObject.name}: Animator is NULL");
+            return;
+        }
 
-        // Don't walk if stunned
         if (isStunned)
         {
             EnemyAnimator.SetBool("Walk", false);
             return;
         }
 
+        Debug.Log($"{gameObject.name}: Setting Walk to true");
         EnemyAnimator.SetBool("Walk", true);
     }
 
@@ -435,31 +437,9 @@ public class EnemyBase : MonoBehaviour, IDamageable
             GameManager.instance.UpdateSkillPoints(reward);
         }
         RemoveEnemy();
-        ObjectPooling.instance.ReturnGameObejctToPool(GetEnemyTypeForPooling(), gameObject);
+        ObjectPooling.instance.Return(gameObject);
     }
- 
     
-    private PoolGameObjectType GetEnemyTypeForPooling()
-    {
-        switch (enemyType)
-        {
-            case EnemyType.Basic:
-                return PoolGameObjectType.EnemyBasic;
-
-            case EnemyType.Fast:
-                return PoolGameObjectType.EnemyFast;
-
-            case EnemyType.Tank:
-                return PoolGameObjectType.EnemyTank;
-
-            case EnemyType.Invisible:
-                return PoolGameObjectType.EnemyInvisible;
-
-            case EnemyType.Reinforced:
-                return PoolGameObjectType.EnemyReinforced;
-        }
-        return 0;
-    }
     public void RemoveEnemy()
     {
         if (mySpawner != null) mySpawner.RemoveActiveEnemy(gameObject);
