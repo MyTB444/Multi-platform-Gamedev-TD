@@ -12,6 +12,21 @@ public class SpearTower : TowerBase
     [Header("Spawn Offset")]
     [SerializeField] private float forwardSpawnOffset = 0.5f;
     
+    [Header("Spear Visual VFX")]
+    [SerializeField] private Transform spearVisualVFXPoint;
+    private GameObject activeSpearVisualVFX;
+    
+    [Header("Spear Effects")]
+    [SerializeField] private bool bleedSpear = false;
+    [SerializeField] private float bleedDamage = 3f;
+    [SerializeField] private float bleedDuration = 4f;
+    [SerializeField] private GameObject bleedSpearVFX;
+
+    [SerializeField] private bool explosiveTip = false;
+    [SerializeField] private float explosionRadius = 2f;
+    [SerializeField] private float explosionDamage = 10f;
+    [SerializeField] private GameObject explosionVFX;
+    
     private bool isAttacking = false;
     private Vector3 enemyVelocity;
     private Vector3 lastEnemyPosition;
@@ -21,10 +36,32 @@ public class SpearTower : TowerBase
     private Vector3 lockedTargetPosition;
     private IDamageable lockedDamageable;
     
+    
+    protected override void Start()
+    {
+        base.Start();
+        UpdateSpearVisualVFX();
+    }
+    
     protected override void FixedUpdate()
     {
         UpdateEnemyVelocity();
         base.FixedUpdate();
+    }
+    public override void SetUpgrade(TowerUpgradeType upgradeType, bool enabled)
+    {
+        base.SetUpgrade(upgradeType, enabled);
+    
+        switch (upgradeType)
+        {
+            case TowerUpgradeType.BarbedSpear:
+                bleedSpear = enabled;
+                UpdateSpearVisualVFX();
+                break;
+            case TowerUpgradeType.ExplosiveTip:
+                explosiveTip = enabled;
+                break;
+        }
     }
     
     private void UpdateEnemyVelocity()
@@ -51,6 +88,22 @@ public class SpearTower : TowerBase
         }
         
         lastEnemyPosition = currentPos;
+    }
+    
+    private void UpdateSpearVisualVFX()
+    {
+        if (activeSpearVisualVFX != null)
+        {
+            Destroy(activeSpearVisualVFX);
+            activeSpearVisualVFX = null;
+        }
+    
+        if (bleedSpear && bleedSpearVFX != null)
+        {
+            Transform spawnPoint = spearVisualVFXPoint != null ? spearVisualVFXPoint : spearVisual.transform;
+            activeSpearVisualVFX = Instantiate(bleedSpearVFX, spawnPoint);
+            activeSpearVisualVFX.transform.localPosition = Vector3.zero;
+        }
     }
     
     private Vector3 PredictTargetPosition()
@@ -144,18 +197,28 @@ public class SpearTower : TowerBase
     private void FireSpear()
     {
         if (lockedDamageable == null) return;
-        
+    
         Vector3 spawnPos = spearVisual.transform.position;
         Quaternion spawnRot = spearVisual.transform.rotation;
-        
+    
         Vector3 fireDirection = spawnRot * Vector3.up;
         spawnPos += fireDirection * forwardSpawnOffset;
-        
+    
         GameObject newSpear = Instantiate(projectilePrefab, spawnPos, spawnRot);
         SpearProjectile spear = newSpear.GetComponent<SpearProjectile>();
-        
-        spear.SetupSpear(lockedTargetPosition, lockedDamageable, damage, projectileSpeed);
-        
+    
+        spear.SetupSpear(lockedTargetPosition, lockedDamageable, CreateDamageInfo(), projectileSpeed);
+    
+        if (bleedSpear)
+        {
+            spear.SetBleedEffect(bleedDamage, bleedDuration, elementType, bleedSpearVFX);
+        }
+    
+        if (explosiveTip)
+        {
+            spear.SetExplosiveEffect(explosionRadius, explosionDamage, elementType, whatIsEnemy, explosionVFX);
+        }
+    
         lockedDamageable = null;
     }
 }

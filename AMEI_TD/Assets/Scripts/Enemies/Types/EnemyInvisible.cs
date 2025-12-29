@@ -1,0 +1,78 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.AI;
+
+public class EnemyInvisible : EnemyBase
+{
+    [Header("Invisibility Effect")]
+    [SerializeField] private float flickerSpeed = 3f;
+    [SerializeField] private float minAlpha = 0.1f;
+    [SerializeField] private float maxAlpha = 0.5f;
+    [SerializeField] private Renderer targetRenderer;
+
+    private Material enemyMaterial;
+    private float flickerTime;
+
+    protected override void Start()
+    {
+        base.Start();
+        StartCoroutine(InitializeAfterFrame());
+    }
+
+    private IEnumerator InitializeAfterFrame()
+    {
+        yield return null;
+
+        if (targetRenderer == null)
+        {
+            targetRenderer = GetComponentInChildren<Renderer>();
+        }
+
+        if (targetRenderer != null)
+        {
+            enemyMaterial = targetRenderer.material;
+
+            SetupTransparentMaterial(enemyMaterial);
+        }
+    }
+
+    private void SetupTransparentMaterial(Material mat)
+    {
+        mat.SetFloat("_Mode", 3);
+        mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+        mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+        mat.SetInt("_ZWrite", 0);
+        mat.DisableKeyword("_ALPHATEST_ON");
+        mat.EnableKeyword("_ALPHABLEND_ON");
+        mat.DisableKeyword("_ALPHAPREMULTIPLY_ON");
+        mat.renderQueue = 3000;
+    }
+
+    protected override void Update()
+    {
+        base.Update();
+        ApplyFlickerEffect();
+    }
+
+    private void ApplyFlickerEffect()
+    {
+        if (enemyMaterial == null) return;
+
+        flickerTime += Time.deltaTime * flickerSpeed;
+
+        float alpha = Mathf.Lerp(minAlpha, maxAlpha, (Mathf.Sin(flickerTime) + 1f) / 2f);
+
+        Color currentColor = enemyMaterial.color;
+        currentColor.a = alpha;
+        enemyMaterial.color = currentColor;
+    }
+
+    private void OnValidate()
+    {
+        if (targetRenderer == null && Application.isPlaying == false)
+        {
+            targetRenderer = GetComponentInChildren<Renderer>();
+        }
+    }
+}

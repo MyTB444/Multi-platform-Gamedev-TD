@@ -9,6 +9,21 @@ public class ArrowProjectile : TowerProjectileBase
     [SerializeField] private float gravityMultiplier = 3f;
     [SerializeField] private float maxCurveDuration = 0.5f;
     
+    [Header("VFX")]
+    [SerializeField] private Transform vfxPoint;
+    
+    [Header("DoT Effects")]
+    private bool applyPoison = false;
+    private float poisonDamage;
+    private float poisonDuration;
+    private DamageInfo poisonDamageInfo;
+
+    private bool applyFire = false;
+    private float fireDamage;
+    private float fireDuration;
+    private DamageInfo fireDamageInfo;
+    
+    
     private Rigidbody rb;
     private bool launched = false;
     private bool curving = true;
@@ -22,9 +37,9 @@ public class ArrowProjectile : TowerProjectileBase
         rb = GetComponent<Rigidbody>();
     }
     
-    public void SetupArcProjectile(Vector3 targetPos, IDamageable newDamageable, float newDamage, float newSpeed, float distance)
+    public void SetupArcProjectile(Vector3 targetPos, IDamageable newDamageable, DamageInfo newDamageInfo, float newSpeed, float distance)
     {
-        damage = newDamage;
+        damageInfo = newDamageInfo;
         damageable = newDamageable;
         spawnTime = Time.time;
         launchTime = Time.time;
@@ -74,6 +89,65 @@ public class ArrowProjectile : TowerProjectileBase
         if (rb.velocity.sqrMagnitude > 0.1f)
         {
             transform.rotation = Quaternion.LookRotation(rb.velocity);
+        }
+    }
+    
+    public void SetPoisonEffect(float damage, float duration, ElementType elementType, GameObject arrowVFX = null)
+    {
+        applyPoison = true;
+        poisonDamage = damage;
+        poisonDuration = duration;
+        poisonDamageInfo = new DamageInfo(damage, elementType, true);
+    
+        if (arrowVFX != null)
+        {
+            Transform spawnPoint = vfxPoint != null ? vfxPoint : transform;
+            GameObject vfx = Instantiate(arrowVFX, spawnPoint);
+            vfx.transform.localPosition = Vector3.zero;
+        }
+    }
+
+    public void SetFireEffect(float damage, float duration, ElementType elementType, GameObject arrowVFX = null)
+    {
+        applyFire = true;
+        fireDamage = damage;
+        fireDuration = duration;
+        fireDamageInfo = new DamageInfo(damage, elementType, true);
+    
+        if (arrowVFX != null)
+        {
+            Transform spawnPoint = vfxPoint != null ? vfxPoint : transform;
+            GameObject vfx = Instantiate(arrowVFX, spawnPoint);
+            vfx.transform.localPosition = Vector3.zero;
+        }
+    }
+    
+    protected override void OnHit(Collider other)
+    {
+        if (hasHit) return;
+        hasHit = true;
+
+        if (impactEffectPrefab != null)
+        {
+            Vector3 impactPoint = other.ClosestPoint(transform.position);
+            GameObject impact = Instantiate(impactEffectPrefab, impactPoint, Quaternion.identity);
+            Destroy(impact, 2f);
+        }
+
+        EnemyBase enemy = other.GetComponent<EnemyBase>();
+        if (enemy != null)
+        {
+            damageable?.TakeDamage(damageInfo);
+        
+            // Apply DoT (fire replaces poison)
+            if (applyFire)
+            {
+                enemy.ApplyDoT(fireDamageInfo, fireDuration);
+            }
+            else if (applyPoison)
+            {
+                enemy.ApplyDoT(poisonDamageInfo, poisonDuration);
+            }
         }
     }
     
