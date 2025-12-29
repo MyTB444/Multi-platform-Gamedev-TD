@@ -34574,7 +34574,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: levelWaves.Array.data[0].enemyBasic
-      value: 0
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: levelWaves.Array.data[0].enemyDecoy
@@ -34614,7 +34614,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: levelWaves.Array.data[0].enemyInvisible
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: levelWaves.Array.data[0].enemyReinforced
@@ -49425,7 +49425,7 @@ PrefabInstance:
       objectReference: {fileID: 936385994}
     - target: {fileID: 50270837286503495, guid: 210cb4476c27d0e41a846c27c876e029, type: 3}
       propertyPath: spawnCooldown
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 50270837286503495, guid: 210cb4476c27d0e41a846c27c876e029, type: 3}
       propertyPath: myPaths.Array.size
