@@ -72,11 +72,13 @@ public class SkillTreeManager : MonoBehaviour
     {
         if (!IsSkillUnlocked(skill))
             return false;
+        if(skill.irreversible)
+            return false;
 
         // Check if any unlocked skills depend on this
         foreach (var unlockedSkill in unlockedSkills)
         {
-            if (unlockedSkill.prerequisites.Contains(skill) || unlockedSkill.irreversible)
+            if (unlockedSkill.prerequisites.Contains(skill))
             {
                 Debug.Log($"Cannot lock {skill.skillName} - {unlockedSkill.skillName} depends on it");
                 return false;

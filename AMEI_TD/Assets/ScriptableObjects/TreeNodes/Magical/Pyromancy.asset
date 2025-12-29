@@ -10,16 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 72d0a0b181c38404684b4e6fab58ceee, type: 3}
-  m_Name: FIre2
+  m_Name: Pyromancy
   m_EditorClassIdentifier: 
-  skillName: FIRE
+  skillName: Pyromancy
   skillCost: 5
-  description: FFfFFFFFFFFFFFFFFFF!
-  icon: {fileID: 21300000, guid: 63b30c77b2de31d4398b65d935f4713c, type: 3}
+  description: 'Pyromancers are empowered; their fireballs are larger and hit a wider
+    area.
+
+
+    Unleash!'
+  icon: {fileID: 21300000, guid: dd3885098198d104888439be4c590aba, type: 3}
+  irreversible: 1
   skillPointCost: 5
   prerequisites:
-  - {fileID: 11400000, guid: 38f340fe322a64fa0aceb85c873f9eae, type: 2}
-  - {fileID: 11400000, guid: c9a67a2259744486a82b6a3ae0aab918, type: 2}
+  - {fileID: 11400000, guid: 74ee795e952bb4e178b3ba72e974c096, type: 2}
   effectType: 0
   effectValue: 10
-  skillTypeName: 
+  skillTypeName: Health

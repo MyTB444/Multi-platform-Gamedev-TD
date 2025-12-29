@@ -10,16 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 72d0a0b181c38404684b4e6fab58ceee, type: 3}
-  m_Name: PhysicalAttackSpeed
+  m_Name: IceMage
   m_EditorClassIdentifier: 
-  skillName: Arm Day
+  skillName: Ice Mage
   skillCost: 5
-  description: Physical towers gain 25% attack speed.
-  icon: {fileID: 21300000, guid: 313eb4d0157f6ec418d857892d7b44ad, type: 3}
-  irreversible: 0
+  description: 'Pyromancers are replaced with Ice Mages; their attacks apply Frostbite.
+
+
+    Unleash!'
+  icon: {fileID: 21300000, guid: f5ab3f534c1138f4786f23cd74103223, type: 3}
+  irreversible: 1
   skillPointCost: 5
   prerequisites:
-  - {fileID: 11400000, guid: 38f340fe322a64fa0aceb85c873f9eae, type: 2}
+  - {fileID: 11400000, guid: 74ee795e952bb4e178b3ba72e974c096, type: 2}
   effectType: 0
   effectValue: 10
   skillTypeName: Health

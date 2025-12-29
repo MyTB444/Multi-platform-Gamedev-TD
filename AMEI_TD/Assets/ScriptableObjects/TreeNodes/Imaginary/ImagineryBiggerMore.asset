@@ -10,16 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 72d0a0b181c38404684b4e6fab58ceee, type: 3}
-  m_Name: PhysicalAttackSpeed
+  m_Name: ImagineryBiggerMore
   m_EditorClassIdentifier: 
-  skillName: Arm Day
+  skillName: Improved Imagination
   skillCost: 5
-  description: Physical towers gain 25% attack speed.
-  icon: {fileID: 21300000, guid: 313eb4d0157f6ec418d857892d7b44ad, type: 3}
+  description: 'Rocks are 30% larger and deal 30% more damage.
+
+
+    Summons spawn
+    1 additional Knight.
+
+'
+  icon: {fileID: 21300000, guid: 0ad2337320c1b5841ba3ceb24de6e91a, type: 3}
   irreversible: 0
   skillPointCost: 5
   prerequisites:
-  - {fileID: 11400000, guid: 38f340fe322a64fa0aceb85c873f9eae, type: 2}
+  - {fileID: 11400000, guid: 961616388dd2242628348134abeb879c, type: 2}
   effectType: 0
   effectValue: 10
-  skillTypeName: Health
+  skillTypeName: 

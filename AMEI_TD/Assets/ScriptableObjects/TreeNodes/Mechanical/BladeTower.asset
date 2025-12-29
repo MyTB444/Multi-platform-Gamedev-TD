@@ -10,15 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 72d0a0b181c38404684b4e6fab58ceee, type: 3}
-  m_Name: Fire1
+  m_Name: BladeTower
   m_EditorClassIdentifier: 
-  skillName: FIRE
+  skillName: Blade Tower
   skillCost: 5
-  description: FIREEEE!!!
-  icon: {fileID: 21300000, guid: 3925691c2a021aa429c1dc89712a1253, type: 3}
+  description: 'Spike Trap towers are replaced with Blade Towers that deal continuous
+    spinning damage.
+
+
+    Unleash!'
+  icon: {fileID: 21300000, guid: 912f2333824ee3946814a450e92ab11a, type: 3}
+  irreversible: 1
   skillPointCost: 5
   prerequisites:
-  - {fileID: 11400000, guid: 38f340fe322a64fa0aceb85c873f9eae, type: 2}
+  - {fileID: 11400000, guid: fa3b443a4bb9f438da90fabced2c9a5e, type: 2}
   effectType: 0
   effectValue: 10
-  skillTypeName: 
+  skillTypeName: Health

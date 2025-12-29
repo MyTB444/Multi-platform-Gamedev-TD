@@ -10,16 +10,23 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 72d0a0b181c38404684b4e6fab58ceee, type: 3}
-  m_Name: PhysicalAttackSpeed
+  m_Name: FastMechanical
   m_EditorClassIdentifier: 
-  skillName: Arm Day
+  skillName: Sleight of Hand
   skillCost: 5
-  description: Physical towers gain 25% attack speed.
-  icon: {fileID: 21300000, guid: 313eb4d0157f6ec418d857892d7b44ad, type: 3}
+  description: 'Spike Traps have 20% reduced cooldown.
+
+
+    Blade Towers spin 20%
+    faster.
+
+
+'
+  icon: {fileID: 21300000, guid: aeb31def086466745b570d082197ee1f, type: 3}
   irreversible: 0
   skillPointCost: 5
   prerequisites:
   - {fileID: 11400000, guid: 38f340fe322a64fa0aceb85c873f9eae, type: 2}
   effectType: 0
   effectValue: 10
-  skillTypeName: Health
+  skillTypeName: 
