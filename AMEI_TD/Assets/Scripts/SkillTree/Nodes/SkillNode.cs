@@ -12,6 +12,8 @@ public class SkillNode : ScriptableObject
     public string description;
     public Sprite icon;
 
+    public bool irreversible;
+
     [Header("Requirements")]
     public int skillPointCost;
     public List<SkillNode> prerequisites = new List<SkillNode>();

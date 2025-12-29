@@ -104,6 +104,10 @@ public class NodeButton : MonoBehaviour, IPointerEnterHandler
     }
     private void OnButtonClick()
     {
+        ButtonEvent();
+    }
+    public void ButtonEvent()
+    {
         if (manager == null || skill == null) return;
 
         // Try to unlock
@@ -116,6 +120,7 @@ public class NodeButton : MonoBehaviour, IPointerEnterHandler
         {
             manager.TryLockSkill(skill);
         }
+
     }
     private void OnAnySkillChanged(SkillNode changedSkill)
     {
@@ -138,5 +143,9 @@ public class NodeButton : MonoBehaviour, IPointerEnterHandler
             manager.OnSkillLocked.RemoveListener(OnAnySkillChanged);
             manager.OnTreeReset.RemoveListener(OnTreeReset);
         }
+    }
+    public SkillNode GetSkill()
+    {
+        return skill;
     }
 }

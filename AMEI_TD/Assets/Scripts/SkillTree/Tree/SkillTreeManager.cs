@@ -10,10 +10,12 @@ public class SkillTreeManager : MonoBehaviour
     public UnityEvent<SkillNode> OnSkillUnlocked;
     public UnityEvent<SkillNode> OnSkillLocked;
     public UnityEvent OnTreeReset;
+    public static SkillTreeManager instance;
     // Track unlocked skills
     private HashSet<SkillNode> unlockedSkills = new HashSet<SkillNode>();
     private void Start()
     {
+        instance = this;
         LoadProgress();
     }
     public bool IsSkillUnlocked(SkillNode skill)
@@ -74,7 +76,7 @@ public class SkillTreeManager : MonoBehaviour
         // Check if any unlocked skills depend on this
         foreach (var unlockedSkill in unlockedSkills)
         {
-            if (unlockedSkill.prerequisites.Contains(skill))
+            if (unlockedSkill.prerequisites.Contains(skill) || unlockedSkill.irreversible)
             {
                 Debug.Log($"Cannot lock {skill.skillName} - {unlockedSkill.skillName} depends on it");
                 return false;

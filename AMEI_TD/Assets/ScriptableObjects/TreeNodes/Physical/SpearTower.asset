@@ -10,15 +10,20 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 72d0a0b181c38404684b4e6fab58ceee, type: 3}
-  m_Name: Damage 2
+  m_Name: SpearTower
   m_EditorClassIdentifier: 
-  skillName: Damage 2
+  skillName: Spear Thrower
   skillCost: 5
-  description: I give Even more Damage :)
-  icon: {fileID: 21300000, guid: b11f9c52da2945740b5078d84177a9ab, type: 3}
+  description: 'Physical towers are replaced with Spear Throwers; their attacks apply
+    Bleed.
+
+
+    Unleash!'
+  icon: {fileID: 21300000, guid: 530bcabb1501d8148a19a77465ecac03, type: 3}
+  irreversible: 1
   skillPointCost: 5
   prerequisites:
-  - {fileID: 11400000, guid: 38f340fe322a64fa0aceb85c873f9eae, type: 2}
+  - {fileID: 11400000, guid: 7b0473e4d06cb4545bab387b159d6d2b, type: 2}
   effectType: 0
   effectValue: 10
   skillTypeName: Health
