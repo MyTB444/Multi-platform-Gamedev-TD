@@ -95,7 +95,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.7, y: 0.7, z: 0.7}
-  m_ConstrainProportionsScale: 0
+  m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 4595271056636968}
   - {fileID: 4413730522853366}
@@ -137,7 +137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e454292a9fb34b18a60021963803d302, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyType: 6
+  enemyType: 10
   enemySpeed: 0.6
   damage: 40
   reward: 20
@@ -152,6 +152,7 @@ MonoBehaviour:
   frozenColor: {r: 0.5, g: 0.8, b: 1, a: 1}
   enemyCurrentHp: 0
   splitVFXPrefab: {fileID: 1758473627833946668, guid: 9b21333b068a5084ba09535839bee3c8, type: 3}
+  splitterPrefab: {fileID: 1067925524328404}
   maxSplitLevel: 2
   currentSplitLevel: 0
   splitDelayAfterDeath: 0.2

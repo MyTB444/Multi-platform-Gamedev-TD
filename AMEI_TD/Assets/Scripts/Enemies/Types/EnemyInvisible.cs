@@ -78,6 +78,12 @@ public class EnemyInvisible : EnemyBase
 
     public void DisableInvisible()
     {
-        
+
+    }
+
+    protected override void ResetEnemy()
+    {
+        base.ResetEnemy();
+        flickerTime = 0f;
     }
 }

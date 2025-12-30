@@ -116,24 +116,41 @@ public class EnemyReinforced : EnemyBase
     {
         if (Time.time < nextShieldTime) return;
 
+        // Always try to shield self
+        if (!HasShield())
+        {
+            ApplyShield(shieldAmount, shieldEffectPrefab);
+        }
+
+        // Then shield nearby enemies
         Collider[] nearbyColliders = Physics.OverlapSphere(transform.position, shieldRadius, enemyLayer);
-        bool shieldApplied = false;
 
         foreach (Collider col in nearbyColliders)
         {
+            if (col.gameObject == gameObject) continue;
+        
             EnemyBase enemy = col.GetComponent<EnemyBase>();
             if (enemy != null && !enemy.HasShield())
             {
                 enemy.ApplyShield(shieldAmount, shieldEffectPrefab);
-                shieldApplied = true;
             }
         }
 
-        if (shieldApplied)
-        {
-            nextShieldTime = Time.time + shieldCooldown;
-            Debug.Log($"[EnemyReinforced] Applied shields to nearby enemies. Next shield in {shieldCooldown}s");
-        }
+        // Always reset cooldown after checking (even if nothing needed shielding)
+        nextShieldTime = Time.time + shieldCooldown;
+    }
+
+    protected override void ResetEnemy()
+    {
+        base.ResetEnemy();
+
+        pulseTime = 0f;
+    
+        // Apply shield to self on spawn
+        ApplyShield(shieldAmount, shieldEffectPrefab);
+    
+        // Start cooldown immediately after spawn
+        nextShieldTime = Time.time + shieldCooldown;
     }
 
     private void OnDrawGizmosSelected()

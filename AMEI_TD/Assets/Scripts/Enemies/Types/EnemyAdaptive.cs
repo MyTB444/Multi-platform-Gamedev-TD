@@ -102,8 +102,16 @@ public class EnemyAdaptive : EnemyBase
         }
     }
 
-    private void OnDisable()
+    protected override void ResetEnemy()
     {
+        base.ResetEnemy();
+
+        // Reset element type to default
+        if (elementTypeField == null)
+        {
+            elementTypeField = typeof(EnemyBase).GetField("elementType", BindingFlags.NonPublic | BindingFlags.Instance);
+        }
+    
         if (elementTypeField != null)
         {
             elementTypeField.SetValue(this, defaultElementType);
@@ -111,6 +119,7 @@ public class EnemyAdaptive : EnemyBase
 
         currentAdaptation = defaultElementType;
 
+        // Reset color to default element color
         if (elementColors.ContainsKey(defaultElementType))
         {
             targetColor = elementColors[defaultElementType];

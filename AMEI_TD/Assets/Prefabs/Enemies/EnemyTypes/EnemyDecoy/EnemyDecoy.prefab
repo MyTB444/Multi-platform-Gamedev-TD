@@ -1387,7 +1387,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb44b4d5212242cfbf6d1bbe453a2866, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyType: 10
+  enemyType: 12
   enemySpeed: 2
   damage: 10
   reward: 10
@@ -1404,6 +1404,7 @@ MonoBehaviour:
   decoyMaterial: {fileID: 2100000, guid: e6fe7821163816c45a485408bc952121, type: 2}
   decoyLifetime: 8
   decoySpawnInterval: 5
+  decoySpawnDelay: 0.5
   decoySpawnOffset1: {x: 1, y: 0, z: 0.7}
   decoySpawnOffset2: {x: -1, y: 0, z: 0.7}
   decoySpawnEffectPrefab: {fileID: 7053385775836331393, guid: 354b6251e950209409c75ab984acf000, type: 3}

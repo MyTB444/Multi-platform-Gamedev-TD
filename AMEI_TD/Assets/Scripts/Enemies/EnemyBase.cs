@@ -64,6 +64,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private float waypointReachDistance = 0.3f;
 
     private int originalLayerIndex;
+    private bool hasStoredLayer = false;
     private float totalDistance;
 
     private Vector3 Destination;
@@ -111,12 +112,18 @@ public class EnemyBase : MonoBehaviour, IDamageable
         UpdateVisuals();
         NavAgent = GetComponent<NavMeshAgent>();
         EnemyAnimator = GetComponentInChildren<Animator>();
+    
+        // Disable NavAgent until SetupEnemy is called
+        if (NavAgent != null)
+        {
+            NavAgent.enabled = false;
+        }
     }
 
-    private void Awake()
+    protected virtual void Awake()
     {
-        originalLayerIndex = gameObject.layer;
         baseSpeed = enemySpeed;
+        originalLayerIndex = gameObject.layer;
     }
 
     protected virtual void Start()
@@ -124,7 +131,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         UpdateVisuals();
         NavAgent = GetComponent<NavMeshAgent>();
         EnemyAnimator = GetComponentInChildren<Animator>();
-    
+
         SaveOriginalColors();
     }
 
@@ -355,14 +362,32 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private void BeginMovement()
     {
         currentWaypointIndex = 0;
-    
+
         if (NavAgent != null)
         {
             NavAgent.enabled = true;
-            NavAgent.Warp(transform.position); // Snap to NavMesh
+        
+            // Find a valid NavMesh position near spawn point
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(transform.position, out hit, 5f, NavMesh.AllAreas))
+            {
+                NavAgent.Warp(hit.position);
+            }
+            else
+            {
+                Debug.LogWarning($"[{gameObject.name}] Could not find NavMesh near {transform.position}");
+                NavAgent.Warp(transform.position);
+            }
+        
             NavAgent.speed = enemySpeed;
             NavAgent.isStopped = false;
             NavAgent.updateRotation = false;
+        
+            // Set first destination immediately so it starts moving right away
+            if (myWaypoints != null && myWaypoints.Length > 0)
+            {
+                NavAgent.SetDestination(myWaypoints[0]);
+            }
         }
     }
 
@@ -381,18 +406,18 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
         if (myWaypoints == null || currentWaypointIndex >= myWaypoints.Length) return;
 
-        if (NavAgent == null || !NavAgent.isActiveAndEnabled || !NavAgent.isOnNavMesh) return;
+        if (NavAgent == null || !NavAgent.isActiveAndEnabled) return;
+    
+        // Must be on NavMesh to do anything
+        if (!NavAgent.isOnNavMesh) return;
 
         if (isStunned || !canMove)
         {
             NavAgent.isStopped = true;
             return;
         }
-        else
-        {
-            NavAgent.isStopped = false;
-        }
-
+    
+        NavAgent.isStopped = false;
         NavAgent.speed = enemySpeed;
 
         // Skip waypoints we've already passed
@@ -409,7 +434,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         // Smooth rotation towards steering target
         Vector3 direction = NavAgent.steeringTarget - transform.position;
         direction.y = 0;
-        
+    
         if (direction.sqrMagnitude > 0.01f)
         {
             Quaternion targetRotation = Quaternion.LookRotation(direction);
@@ -572,11 +597,15 @@ public class EnemyBase : MonoBehaviour, IDamageable
         if (mySpawner != null) mySpawner.RemoveActiveEnemy(gameObject);
     }
 
-    private void ResetEnemy()
+    protected virtual void ResetEnemy()
     {
+        // Restore layer first
         gameObject.layer = originalLayerIndex;
+    
         enemyCurrentHp = enemyMaxHp;
         isDead = false;
+        canMove = true;
+        currentWaypointIndex = 0;
 
         // Reset slow
         isSlowed = false;
@@ -603,13 +632,23 @@ public class EnemyBase : MonoBehaviour, IDamageable
         {
             for (int i = 0; i < enemyRenderers.Length; i++)
             {
-                enemyRenderers[i].material.color = originalColors[i];
+                if (enemyRenderers[i] != null)
+                {
+                    enemyRenderers[i].material.color = originalColors[i];
+                }
             }
         }
-        
+
+        // Reset Shield
+        if (hasShield)
+        {
+            RemoveShield();
+        }
+
+        // Reset NavAgent
         if (NavAgent != null)
         {
-            NavAgent.isStopped = false;
+            NavAgent.enabled = false;
             NavAgent.speed = baseSpeed;
         }
 
