@@ -198,13 +198,13 @@ public class IceProjectile : TowerProjectileBase
     private void ApplyEffectsInRadius()
     {
         Collider[] enemies = Physics.OverlapSphere(transform.position, effectRadius, enemyLayer);
-    
+
         foreach (Collider col in enemies)
         {
             EnemyBase enemy = col.GetComponent<EnemyBase>();
             if (enemy != null)
             {
-                enemy.ApplySlow(slowPercent, slowDuration);
+                enemy.ApplySlow(slowPercent, slowDuration, true);
                 enemy.ApplyDoT(dotDamageInfo, dotDuration, dotTickInterval);
             }
         }
