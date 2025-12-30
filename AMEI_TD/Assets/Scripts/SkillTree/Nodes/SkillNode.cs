@@ -1,6 +1,16 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
+public enum SwapType
+{
+    Null,
+    Spear,
+    Knight,
+    IceMage,
+    BladeTower
+}
 
 [CreateAssetMenu(fileName = "NewSkill", menuName = "Skill Tree/Skill Node")]
 public class SkillNode : ScriptableObject
@@ -17,23 +27,34 @@ public class SkillNode : ScriptableObject
     [Header("Requirements")]
     public int skillPointCost;
     public List<SkillNode> prerequisites = new List<SkillNode>();
-    public TowerUpgradeType type;
-    public TowerUpgradeType type2;
+
+    [Header("Functionalities")]
+    public TowerUpgradeType function;
+    public TowerUpgradeType function2;
+    public SwapType swapType;
+    public event Action<SwapType> EventRaised;
 
     public void ApplyEffect()
     {
-        TowerUpgradeManager.instance.UnlockUpgrade(type);
-        if(type2 != TowerUpgradeType.Null)
+        TowerUpgradeManager.instance.UnlockUpgrade(function);
+        if(function2 != TowerUpgradeType.Null)
         {
-            TowerUpgradeManager.instance.UnlockUpgrade(type);
+            TowerUpgradeManager.instance.UnlockUpgrade(function);
         }
+        if(swapType != SwapType.Null)
+        Raise(swapType);
+        
     }
     public void RemoveEffect()
     {
-       TowerUpgradeManager.instance.LockUpgrade(type);
-        if (type2 != TowerUpgradeType.Null)
+       TowerUpgradeManager.instance.LockUpgrade(function);
+        if (function2 != TowerUpgradeType.Null)
         {
-            TowerUpgradeManager.instance.LockUpgrade(type);
+            TowerUpgradeManager.instance.LockUpgrade(function);
         }
+    }
+    public void Raise(SwapType type)
+    {
+        EventRaised.Invoke(type);
     }
 }
