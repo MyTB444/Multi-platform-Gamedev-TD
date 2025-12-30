@@ -27,10 +27,14 @@ public class TowerGuardian : MonoBehaviour
     [SerializeField] private GameObject lightningEffectPrefab;
     [SerializeField] private GameObject lightningImpactPrefab;
     [SerializeField] private float lightningEffectDuration = 1f;
+    [SerializeField] private float lightningSpawnHeight = 5f;
+    [SerializeField] private float lightningScale = 3f;
+    [SerializeField] private float lightningSpeed = 0.5f;
 
     [Header("Spawn VFX")]
     [SerializeField] private GameObject spawnEffectPrefab;
     [SerializeField] private float spawnEffectDuration = 3f;
+    [SerializeField] private float towerAppearDelay = 1f;
 
     private float lastLightningTime;
     private float lastBuffUpdateTime;
@@ -85,27 +89,49 @@ public class TowerGuardian : MonoBehaviour
 
     public void ActivateGuardian()
     {
-        isActive = true;
-        lastLightningTime = Time.time;
-        lastBuffUpdateTime = Time.time;
-
-        // Spawn VFX
+        // Spawn VFX first
         if (spawnEffectPrefab != null)
         {
             GameObject spawnVFX = Instantiate(spawnEffectPrefab, transform.position, Quaternion.identity);
             Destroy(spawnVFX, spawnEffectDuration);
         }
 
-        // Apply initial buffs to all towers
+        // Delay the tower activation
+        StartCoroutine(DelayedActivation());
+    }
+
+    private IEnumerator DelayedActivation()
+    {
+        // Hide the tower initially
+        SetTowerVisible(false);
+
+        yield return new WaitForSeconds(towerAppearDelay);
+
+        // Show the tower
+        SetTowerVisible(true);
+
+        // Now activate everything
+        isActive = true;
+        lastLightningTime = Time.time;
+        lastBuffUpdateTime = Time.time;
+
         ApplyBuffsToAllTowers();
 
-        // Trigger mega wave
         if (WaveManager.instance != null)
         {
             WaveManager.instance.TriggerMegaWave();
         }
 
         Debug.Log("Guardian Tower Activated! Mega Wave incoming!");
+    }
+
+    private void SetTowerVisible(bool visible)
+    {
+        Renderer[] renderers = GetComponentsInChildren<Renderer>();
+        foreach (var r in renderers)
+        {
+            r.enabled = visible;
+        }
     }
 
     private void HandleBuffUpdate()
@@ -198,7 +224,7 @@ public class TowerGuardian : MonoBehaviour
 
         Vector3 targetPos = target.GetCenterPoint();
         Vector3 bottomPos = target.GetBottomPoint() != null ? target.GetBottomPoint().position : target.transform.position;
-        Vector3 spawnPos = bottomPos;
+        Vector3 spawnPos = bottomPos + Vector3.up * lightningSpawnHeight;
 
         // Spawn lightning VFX from pool
         if (lightningEffectPrefab != null)
@@ -206,7 +232,7 @@ public class TowerGuardian : MonoBehaviour
             GameObject lightningVFX = ObjectPooling.instance.Get(lightningEffectPrefab);
             lightningVFX.transform.position = spawnPos;
             lightningVFX.transform.rotation = Quaternion.identity;
-            lightningVFX.transform.localScale = Vector3.one * 3f;
+            lightningVFX.transform.localScale = Vector3.one * lightningScale;
             lightningVFX.SetActive(true);
 
             // Restart particle systems
@@ -214,7 +240,7 @@ public class TowerGuardian : MonoBehaviour
             foreach (var ps in particles)
             {
                 var main = ps.main;
-                main.simulationSpeed = 0.5f;
+                main.simulationSpeed = lightningSpeed;
                 ps.Clear();
                 ps.Play();
             }

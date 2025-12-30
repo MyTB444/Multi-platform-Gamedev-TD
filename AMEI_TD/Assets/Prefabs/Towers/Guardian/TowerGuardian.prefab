@@ -6432,8 +6432,11 @@ MonoBehaviour:
   lightningEffectPrefab: {fileID: 816132637601688329, guid: d165201146834f540b26bd72c6c6078c, type: 3}
   lightningImpactPrefab: {fileID: 0}
   lightningEffectDuration: 1
-  spawnEffectPrefab: {fileID: 0}
-  spawnEffectDuration: 3
+  lightningSpawnHeight: 0
+  lightningScale: 3
+  lightningSpeed: 0.5
+  spawnEffectPrefab: {fileID: 2908580987061774368, guid: 3e3e6746d8f128b46b8d44d6ad033131, type: 3}
+  spawnEffectDuration: 2.5
 --- !u!1 &1659699760057166846
 GameObject:
   m_ObjectHideFlags: 0
