@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -52,6 +53,16 @@ public class TowerGuardian : MonoBehaviour
         if (guardianAnimator != null)
         {
             guardianAnimator.Play(idleAnimationState);
+        }
+
+        // Register VFX prefabs with pool
+        if (lightningEffectPrefab != null)
+        {
+            ObjectPooling.instance.Register(lightningEffectPrefab, 3);
+        }
+        if (lightningImpactPrefab != null)
+        {
+            ObjectPooling.instance.Register(lightningImpactPrefab, 3);
         }
     }
 
@@ -186,28 +197,49 @@ public class TowerGuardian : MonoBehaviour
         if (target == null) return;
 
         Vector3 targetPos = target.GetCenterPoint();
-        Vector3 spawnPos = targetPos + Vector3.up * 15f;
+        Vector3 bottomPos = target.GetBottomPoint() != null ? target.GetBottomPoint().position : target.transform.position;
+        Vector3 spawnPos = bottomPos;
 
-        // Spawn lightning line
+        // Spawn lightning VFX from pool
         if (lightningEffectPrefab != null)
         {
-            GameObject lightningVFX = Instantiate(lightningEffectPrefab, targetPos, Quaternion.identity);
+            GameObject lightningVFX = ObjectPooling.instance.Get(lightningEffectPrefab);
+            lightningVFX.transform.position = spawnPos;
+            lightningVFX.transform.rotation = Quaternion.identity;
+            lightningVFX.transform.localScale = Vector3.one * 3f;
+            lightningVFX.SetActive(true);
 
-            LineRenderer lr = lightningVFX.GetComponent<LineRenderer>();
-            if (lr != null)
+            // Restart particle systems
+            ParticleSystem[] particles = lightningVFX.GetComponentsInChildren<ParticleSystem>();
+            foreach (var ps in particles)
             {
-                lr.SetPosition(0, spawnPos);
-                lr.SetPosition(1, targetPos);
+                var main = ps.main;
+                main.simulationSpeed = 0.5f;
+                ps.Clear();
+                ps.Play();
             }
 
-            Destroy(lightningVFX, lightningEffectDuration);
+            // Return to pool after duration
+            StartCoroutine(ReturnToPoolAfterDelay(lightningVFX, lightningEffectDuration * 2f));
         }
 
-        // Spawn impact VFX
+        // Spawn impact VFX from pool
         if (lightningImpactPrefab != null)
         {
-            GameObject impact = Instantiate(lightningImpactPrefab, targetPos, Quaternion.identity);
-            Destroy(impact, lightningEffectDuration);
+            GameObject impact = ObjectPooling.instance.Get(lightningImpactPrefab);
+            impact.transform.position = bottomPos;
+            impact.transform.rotation = Quaternion.identity;
+            impact.SetActive(true);
+
+            // Restart particle systems
+            ParticleSystem[] particles = impact.GetComponentsInChildren<ParticleSystem>();
+            foreach (var ps in particles)
+            {
+                ps.Clear();
+                ps.Play();
+            }
+
+            StartCoroutine(ReturnToPoolAfterDelay(impact, lightningEffectDuration));
         }
 
         // Insta-kill the target
@@ -216,6 +248,12 @@ public class TowerGuardian : MonoBehaviour
         target.TakeDamage(lightningDamage);
 
         Debug.Log($"Lightning Strike! Insta-killed {target.name}");
+    }
+
+    private IEnumerator ReturnToPoolAfterDelay(GameObject obj, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        ObjectPooling.instance.Return(obj);
     }
 
     public float GetDamageBuffPercent() => damageBuffPercent;
