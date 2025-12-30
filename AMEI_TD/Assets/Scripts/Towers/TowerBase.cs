@@ -31,6 +31,7 @@ public enum TowerUpgradeType
     FreezeSolid,
     
     // Spike Trap
+    SpikeTrapAttackSpeed,
     PoisonSpikes,
     BleedingSpikes,
     CripplingSpikes,

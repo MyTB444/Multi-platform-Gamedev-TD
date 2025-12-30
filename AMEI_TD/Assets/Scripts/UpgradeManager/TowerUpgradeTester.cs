@@ -64,6 +64,7 @@ public class TowerUpgradeTester : MonoBehaviour
         }
         else if (selectedTower is TowerSpikeTrap)
         {
+            validUpgrades.Add(TowerUpgradeType.SpikeTrapAttackSpeed);
             validUpgrades.Add(TowerUpgradeType.PoisonSpikes);
             validUpgrades.Add(TowerUpgradeType.BleedingSpikes);
             validUpgrades.Add(TowerUpgradeType.CripplingSpikes);
