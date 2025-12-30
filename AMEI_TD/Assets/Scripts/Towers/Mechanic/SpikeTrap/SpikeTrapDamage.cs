@@ -235,11 +235,11 @@ public class SpikeTrapDamage : MonoBehaviour
                     // Bleed replaces poison
                     if (applyBleed)
                     {
-                        enemy.ApplyDoT(bleedDamageInfo, bleedDuration);
+                        enemy.ApplyDoT(bleedDamageInfo, bleedDuration, 0.5f, false, 0f, default, DebuffType.Bleed);
                     }
                     else if (applyPoison)
                     {
-                        enemy.ApplyDoT(poisonDamageInfo, poisonDuration);
+                        enemy.ApplyDoT(poisonDamageInfo, poisonDuration, 0.5f, false, 0f, default, DebuffType.Poison);
                     }
                 
                     if (applyCripple)

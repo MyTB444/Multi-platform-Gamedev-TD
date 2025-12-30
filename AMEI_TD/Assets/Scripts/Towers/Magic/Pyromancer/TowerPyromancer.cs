@@ -16,16 +16,15 @@ public class TowerPyromancer : TowerBase
     [SerializeField] private bool burnSpread = false;
     [SerializeField] private float burnSpreadRadius = 2f;
     
+    // Locked target for attack
+    private EnemyBase lockedTarget;
+    
     public override void SetUpgrade(TowerUpgradeType upgradeType, bool enabled)
     {
         base.SetUpgrade(upgradeType, enabled);
     
         switch (upgradeType)
         {
-            case TowerUpgradeType.PyromancerAttackSpeed:
-                attackSpeedBoost = enabled;
-                ApplyStatUpgrades();
-                break;
             case TowerUpgradeType.BurnChance:
                 burnChance = enabled;
                 break;
@@ -38,6 +37,13 @@ public class TowerPyromancer : TowerBase
         }
     }
     
+    protected override void Attack()
+    {
+        // Lock target before animation
+        lockedTarget = currentEnemy;
+        base.Attack();
+    }
+    
     protected override void FireProjectile()
     {
         if (attackSpawnEffectPrefab != null && gunPoint != null)
@@ -48,12 +54,21 @@ public class TowerPyromancer : TowerBase
 
         if (projectilePrefab == null || gunPoint == null) return;
 
-        if (currentEnemy == null) return;
+        // Use locked target
+        if (lockedTarget == null || !lockedTarget.gameObject.activeSelf)
+        {
+            lockedTarget = null;
+            return;
+        }
 
-        IDamageable damageable = currentEnemy.GetComponent<IDamageable>();
-        if (damageable == null) return;
+        IDamageable damageable = lockedTarget.GetComponent<IDamageable>();
+        if (damageable == null)
+        {
+            lockedTarget = null;
+            return;
+        }
 
-        Vector3 targetPos = currentEnemy.GetCenterPoint();
+        Vector3 targetPos = lockedTarget.GetCenterPoint();
 
         Vector3 directionToEnemy = (targetPos - gunPoint.position).normalized;
         Vector3 spawnPosition = gunPoint.position + directionToEnemy * 0.5f;
@@ -67,7 +82,7 @@ public class TowerPyromancer : TowerBase
         HomingProjectile homing = newProjectile.GetComponent<HomingProjectile>();
         if (homing != null)
         {
-            homing.SetupHomingProjectile(currentEnemy.transform, damageable, CreateDamageInfo(), projectileSpeed, whatIsEnemy);
+            homing.SetupHomingProjectile(lockedTarget.transform, damageable, CreateDamageInfo(), projectileSpeed, whatIsEnemy);
 
             if (burnChance)
             {
@@ -80,5 +95,7 @@ public class TowerPyromancer : TowerBase
                 homing.SetAoEEffect(fireballAoERadius, fireballAoEDamagePercent, whatIsEnemy);
             }
         }
+        
+        lockedTarget = null;
     }
 }

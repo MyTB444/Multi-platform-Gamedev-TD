@@ -609,4 +609,5 @@ public class TowerBase : MonoBehaviour
     public int GetBuyPrice() { return buyPrice; }
     public int GetSellPrice() { return sellPrice; }
     public float GetSlowMultiplier() => slowMultiplier;
+    public ElementType GetElementType() => elementType;
 }

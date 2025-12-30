@@ -19,6 +19,17 @@ public enum EnemyType
     Decoy
 }
 
+public enum DebuffType
+{
+    None,
+    Slow,
+    Freeze,
+    Burn,
+    Poison,
+    Bleed,
+    Frostbite 
+}
+
 public class EnemyBase : MonoBehaviour, IDamageable
 {
     protected EnemySpawner mySpawner;
@@ -43,9 +54,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
     [Header("Path")]
     [SerializeField] private Transform centerPoint;
     [SerializeField] private Transform bottomPoint;
-
-    [Header("Slow Effect")]
-    [SerializeField] private GameObject slowEffectPrefab;
     
     [Header("Stun Effect")]
     [SerializeField] private Color frozenColor = new Color(0.5f, 0.8f, 1f, 1f);
@@ -74,7 +82,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private float baseSpeed;
     private float slowEndTime;
     private bool isSlowed = false;
-    private GameObject activeSlowEffect;
+    private bool isIceSlow = false;
 
     // Speed buff system
     private bool isSpeedBuffed = false;
@@ -93,14 +101,32 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private float stunEndTime;
 
     // DoT system
-    private DamageInfo dotDamageInfo;
-    private float dotEndTime;
+    private bool hasBurn = false;
+    private DamageInfo burnDamageInfo;
+    private float burnEndTime;
+    private float lastBurnTick;
+    
+    // Spread settings (for burn spread)
+    private bool burnCanSpread = false;
+    private float burnSpreadRadius;
+    private LayerMask burnSpreadLayer;
+
+    private bool hasPoison = false;
+    private DamageInfo poisonDamageInfo;
+    private float poisonEndTime;
+    private float lastPoisonTick;
+
+    private bool hasBleed = false;
+    private DamageInfo bleedDamageInfo;
+    private float bleedEndTime;
+    private float lastBleedTick;
+    
+    private bool hasFrostbite = false;
+    private DamageInfo frostbiteDamageInfo;
+    private float frostbiteEndTime;
+    private float lastFrostbiteTick;
+
     private float dotTickInterval = 0.5f;
-    private float lastDotTick;
-    private bool hasDot = false;
-    private bool dotCanSpread = false;
-    private float dotSpreadRadius;
-    private LayerMask dotSpreadLayer;
     
     // Shield system
     private bool hasShield = false;
@@ -133,6 +159,11 @@ public class EnemyBase : MonoBehaviour, IDamageable
         EnemyAnimator = GetComponentInChildren<Animator>();
 
         SaveOriginalColors();
+        
+        if (GetComponent<EnemyDebuffDisplay>() == null)
+        {
+            gameObject.AddComponent<EnemyDebuffDisplay>();
+        }
     }
 
     protected virtual void Update()
@@ -176,70 +207,101 @@ public class EnemyBase : MonoBehaviour, IDamageable
             }
         }
 
-        // Handle DoT
-        if (hasDot)
+        // Handle Burn DoT
+        if (hasBurn)
         {
-            if (Time.time >= dotEndTime)
+            if (Time.time >= burnEndTime)
             {
-                hasDot = false;
-                dotCanSpread = false;
+                hasBurn = false;
+                burnCanSpread = false;
             }
-            else if (Time.time >= lastDotTick + dotTickInterval)
+            else if (Time.time >= lastBurnTick + dotTickInterval)
             {
-                lastDotTick = Time.time;
-                TakeDamage(dotDamageInfo);
-    
-                if (dotCanSpread)
+                lastBurnTick = Time.time;
+                TakeDamage(burnDamageInfo);
+
+                if (burnCanSpread)
                 {
-                    SpreadDoT();
+                    SpreadBurn();
                 }
             }
         }
+
+        // Handle Poison DoT
+        if (hasPoison)
+        {
+            if (Time.time >= poisonEndTime)
+            {
+                hasPoison = false;
+            }
+            else if (Time.time >= lastPoisonTick + dotTickInterval)
+            {
+                lastPoisonTick = Time.time;
+                TakeDamage(poisonDamageInfo);
+            }
+        }
+
+        // Handle Bleed DoT
+        if (hasBleed)
+        {
+            if (Time.time >= bleedEndTime)
+            {
+                hasBleed = false;
+            }
+            else if (Time.time >= lastBleedTick + dotTickInterval)
+            {
+                lastBleedTick = Time.time;
+                TakeDamage(bleedDamageInfo);
+            }
+        }
+        
+        // Handle Frostbite DoT
+        if (hasFrostbite)
+        {
+            if (Time.time >= frostbiteEndTime)
+            {
+                hasFrostbite = false;
+            }
+            else if (Time.time >= lastFrostbiteTick + dotTickInterval)
+            {
+                lastFrostbiteTick = Time.time;
+                TakeDamage(frostbiteDamageInfo);
+            }
+        }
     }
     
-    private void SpreadDoT()
+    private void SpreadBurn()
     {
         Vector3 spreadCenter = centerPoint != null ? centerPoint.position : transform.position;
-        Collider[] nearbyEnemies = Physics.OverlapSphere(spreadCenter, dotSpreadRadius, dotSpreadLayer);
-    
+        Collider[] nearbyEnemies = Physics.OverlapSphere(spreadCenter, burnSpreadRadius, burnSpreadLayer);
+
         foreach (Collider col in nearbyEnemies)
         {
             if (col.gameObject == gameObject) continue;
-        
+    
             EnemyBase enemy = col.GetComponent<EnemyBase>();
-            if (enemy != null && !enemy.HasDoT())
+            if (enemy != null && !enemy.HasBurn())
             {
-                enemy.ApplyDoT(dotDamageInfo, dotEndTime - Time.time, dotTickInterval, false, 0f);
+                enemy.ApplyDoT(burnDamageInfo, burnEndTime - Time.time, dotTickInterval, false, 0f, default, DebuffType.Burn);
             }
         }
     }
 
-    public void ApplySlow(float slowPercent, float duration, bool showVFX = true)
+    public void ApplySlow(float slowPercent, float duration, bool fromIce = false)
     {
         isSlowed = true;
         slowEndTime = Time.time + duration;
+        isIceSlow = fromIce;
 
         float clampedSlow = Mathf.Clamp(slowPercent, 0f, 0.9f);
         enemySpeed = baseSpeed * (1f - clampedSlow);
-
-        if (showVFX && activeSlowEffect == null && slowEffectPrefab != null)
-        {
-            activeSlowEffect = Instantiate(slowEffectPrefab, transform);
-            activeSlowEffect.transform.localPosition = Vector3.up * 0.5f;
-            Debug.Log($"Spawned slow effect: {activeSlowEffect.name}");
-        }
     }
 
     private void RemoveSlow()
     {
         isSlowed = false;
+        isIceSlow = false;
         enemySpeed = baseSpeed;
-
-        if (activeSlowEffect != null)
-        {
-            Destroy(activeSlowEffect);
-            activeSlowEffect = null;
-        }
     }
 
     public void ApplySpeedBuff(float speedMultiplier, float duration)
@@ -319,26 +381,54 @@ public class EnemyBase : MonoBehaviour, IDamageable
         hasSavedColors = true;
     }
 
-    public void ApplyDoT(DamageInfo damagePerTick, float duration, float tickInterval = 0.5f, bool canSpread = false, float spreadRadius = 0f, LayerMask spreadLayer = default)
+    public void ApplyDoT(DamageInfo damagePerTick, float duration, float tickInterval = 0.5f, bool canSpread = false, float spreadRadius = 0f, LayerMask spreadLayer = default, DebuffType dotType = DebuffType.None)
     {
         DamageCalculator.DamageResult testResult = DamageCalculator.Calculate(damagePerTick, elementType);
-    
+
         if (testResult.wasImmune)
         {
             return;
         }
-    
-        hasDot = true;
-        dotDamageInfo = damagePerTick;
-        dotDamageInfo.isDoT = true;
-        dotEndTime = Time.time + duration;
+
         dotTickInterval = tickInterval;
-        lastDotTick = Time.time;
-    
-        // Spread settings
-        dotCanSpread = canSpread;
-        dotSpreadRadius = spreadRadius;
-        dotSpreadLayer = spreadLayer;
+
+        switch (dotType)
+        {
+            case DebuffType.Burn:
+                hasBurn = true;
+                burnDamageInfo = damagePerTick;
+                burnDamageInfo.isDoT = true;
+                burnEndTime = Time.time + duration;
+                lastBurnTick = Time.time;
+                burnCanSpread = canSpread;
+                burnSpreadRadius = spreadRadius;
+                burnSpreadLayer = spreadLayer;
+                break;
+            
+            case DebuffType.Poison:
+                hasPoison = true;
+                poisonDamageInfo = damagePerTick;
+                poisonDamageInfo.isDoT = true;
+                poisonEndTime = Time.time + duration;
+                lastPoisonTick = Time.time;
+                break;
+            
+            case DebuffType.Bleed:
+                hasBleed = true;
+                bleedDamageInfo = damagePerTick;
+                bleedDamageInfo.isDoT = true;
+                bleedEndTime = Time.time + duration;
+                lastBleedTick = Time.time;
+                break;
+            
+            case DebuffType.Frostbite:
+                hasFrostbite = true;
+                frostbiteDamageInfo = damagePerTick;
+                frostbiteDamageInfo.isDoT = true;
+                frostbiteEndTime = Time.time + duration;
+                lastFrostbiteTick = Time.time;
+                break;
+        }
     }
 
     public void SetupEnemy(EnemySpawner myNewSpawner, Vector3[] pathWaypoints)
@@ -609,17 +699,15 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
         // Reset slow
         isSlowed = false;
+        isIceSlow = false;
         enemySpeed = baseSpeed;
-        if (activeSlowEffect != null)
-        {
-            Destroy(activeSlowEffect);
-            activeSlowEffect = null;
-        }
 
         // Reset DoT
-        hasDot = false;
-        dotCanSpread = false;
-
+        hasBurn = false;
+        hasPoison = false;
+        hasBleed = false;
+        hasFrostbite = false;
+        burnCanSpread = false;
         // Reset Speed Buff
         isSpeedBuffed = false;
 
@@ -672,22 +760,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
         r.material.color = finalColor;
     }
-
-    // Getters
-    public Vector3 GetCenterPoint() => centerPoint.position;
-    public EnemyType GetEnemyType() => enemyType;
-    public float GetEnemyHp() => enemyCurrentHp;
-    public Transform GetBottomPoint() => bottomPoint;
-    public bool IsInvisible() => isInvisible;
-    public bool IsReinforced() => isReinforced;
-    public int GetDamage() => damage;
-    public bool IsSlowed() => isSlowed;
-    public bool IsStunned() => isStunned;
-    public bool HasDoT() => hasDot;
-    public bool IsSpeedBuffed() => isSpeedBuffed;
-    public bool HasHoT() => hasHoT;
-    public ElementType GetElementType() => elementType;
-
+    
     public void ApplyShield(float shieldAmount, GameObject shieldEffectPrefab)
     {
         hasShield = true;
@@ -715,6 +788,32 @@ public class EnemyBase : MonoBehaviour, IDamageable
         Debug.Log("Shield removed");
     }
 
+    // Getters
+    public Vector3 GetCenterPoint() => centerPoint.position;
+    public EnemyType GetEnemyType() => enemyType;
+    public float GetEnemyHp() => enemyCurrentHp;
+    public Transform GetBottomPoint() => bottomPoint;
+    public bool IsInvisible() => isInvisible;
+    public bool IsReinforced() => isReinforced;
+    public int GetDamage() => damage;
+    public bool IsSlowed() => isSlowed;
+    public bool IsStunned() => isStunned;
+    public bool IsSpeedBuffed() => isSpeedBuffed;
+    public bool HasHoT() => hasHoT;
+    public ElementType GetElementType() => elementType;
+    public bool IsFrozen() => isStunned;  // Freeze uses stun system
+    public bool HasIceSlow() => isSlowed && isIceSlow;
+    public bool HasBurn() => hasBurn;
+    public bool HasPoison() => hasPoison;
+    public bool HasBleed() => hasBleed;
+    public bool HasFrostbite() => hasFrostbite;
+    public bool HasDoT() => hasBurn || hasPoison || hasBleed || hasFrostbite;
     public bool HasShield() => hasShield && shieldHealth > 0;
     public float GetShieldHealth() => shieldHealth;
+    public float GetSlowDurationNormalized(float maxDuration = 3f) => isSlowed ? Mathf.Clamp01((slowEndTime - Time.time) / maxDuration) : 0f;
+    public float GetFreezeDurationNormalized(float maxDuration = 2f) => isStunned ? Mathf.Clamp01((stunEndTime - Time.time) / maxDuration) : 0f;
+    public float GetBurnDurationNormalized(float maxDuration = 4f) => hasBurn ? Mathf.Clamp01((burnEndTime - Time.time) / maxDuration) : 0f;
+    public float GetPoisonDurationNormalized(float maxDuration = 4f) => hasPoison ? Mathf.Clamp01((poisonEndTime - Time.time) / maxDuration) : 0f;
+    public float GetBleedDurationNormalized(float maxDuration = 4f) => hasBleed ? Mathf.Clamp01((bleedEndTime - Time.time) / maxDuration) : 0f;
+    public float GetFrostbiteDurationNormalized(float maxDuration = 3f) => hasFrostbite ? Mathf.Clamp01((frostbiteEndTime - Time.time) / maxDuration) : 0f;
 }

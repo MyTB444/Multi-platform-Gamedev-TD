@@ -146,7 +146,7 @@ public class SpearProjectile : TowerProjectileBase
         // Apply bleed
         if (applyBleed)
         {
-            enemy.ApplyDoT(bleedDamageInfo, bleedDuration);
+            enemy.ApplyDoT(bleedDamageInfo, bleedDuration, 0.5f, false, 0f, default, DebuffType.Bleed);
         }
 
         // Explosion
