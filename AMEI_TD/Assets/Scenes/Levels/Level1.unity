@@ -28497,7 +28497,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 589743654900487398, guid: 624fa53d9337f684c9aebcef0a9bcf17, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 43.06476
+      value: 43.228
       objectReference: {fileID: 0}
     - target: {fileID: 589743654900487398, guid: 624fa53d9337f684c9aebcef0a9bcf17, type: 3}
       propertyPath: m_LocalPosition.y
@@ -28535,21 +28535,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 857534486113657836, guid: 624fa53d9337f684c9aebcef0a9bcf17, type: 3}
-      propertyPath: damage
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 857534486113657836, guid: 624fa53d9337f684c9aebcef0a9bcf17, type: 3}
-      propertyPath: spinSpeedBoostPercent
-      value: 0.5
-      objectReference: {fileID: 0}
     - target: {fileID: 1060176546675274297, guid: 624fa53d9337f684c9aebcef0a9bcf17, type: 3}
       propertyPath: m_Name
       value: TowerBladeTrap
-      objectReference: {fileID: 0}
-    - target: {fileID: 1060176546675274297, guid: 624fa53d9337f684c9aebcef0a9bcf17, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -61117,18 +61105,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1927317023}
     m_Modifications:
-    - target: {fileID: 4027973325404645379, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
-      propertyPath: roadFacing
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 4027973325404645379, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
-      propertyPath: showDebugRays
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4027973325404645379, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
-      propertyPath: detectionRadius
-      value: 20
-      objectReference: {fileID: 0}
     - target: {fileID: 6142938654885707507, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
       propertyPath: m_Name
       value: TowerStandingBase (16)

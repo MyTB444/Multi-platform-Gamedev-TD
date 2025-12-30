@@ -2381,7 +2381,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69ec94be3d52698419ef19642bd2f621, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 10
+  damage: 0
   attackCooldown: 1
   towerBody: {fileID: 0}
   towerHead: {fileID: 0}
@@ -2424,6 +2424,8 @@ MonoBehaviour:
     m_Bits: 64
   disabledColor: {r: 1, g: 0.2, b: 0.2, a: 1}
   pulseSpeed: 4
+  fadeInDuration: 0.3
+  fadeOutDuration: 0.5
   bladeHolder: {fileID: 3946167265140034309}
   spinSpeed: 200
   returnSpeed: 90
@@ -2434,6 +2436,7 @@ MonoBehaviour:
   animationAnticipation: 0.5
   hammerImpactPoint: {fileID: 3133988239432917995}
   vfxDelay: 0.3
+  spinSpeedBoostPercent: 0.2
   bleedChance: 0
   bleedChancePercent: 0.3
   bleedDamage: 3
@@ -19309,7 +19312,7 @@ Transform:
   m_GameObject: {fileID: 5980783986407658145}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.03682194, z: -0, w: 0.9993219}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.007, y: 0, z: 0.565}
   m_LocalScale: {x: 1, y: 0.8333333, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -26075,7 +26078,7 @@ Transform:
   m_GameObject: {fileID: 7820367430569343007}
   serializedVersion: 2
   m_LocalRotation: {x: 0.00000006657903, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.02, y: -0.024, z: 1.45}
+  m_LocalPosition: {x: -0.02, y: -0.024, z: 1.855}
   m_LocalScale: {x: 1, y: 0.83, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
