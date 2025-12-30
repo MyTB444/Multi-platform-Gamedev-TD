@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9216202127243213461}
   - component: {fileID: 971704134026536300}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hair Type 1 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -146,7 +146,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2295583803465510149}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: HEADS
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -192,7 +192,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6577804918042707597}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: pinky_03_l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -224,7 +224,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1647766361669027380}
   - component: {fileID: 5604931815446856659}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Chest Armor Type 1 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -361,7 +361,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5811393999379434089}
   - component: {fileID: 4969117081213737025}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyebrow Type 3 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -498,7 +498,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8030860095894015096}
   - component: {fileID: 4574045101955647960}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Head Armor Type 2 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -635,7 +635,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4697502678467153740}
   - component: {fileID: 4182809277014760095}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyebrow Type 1 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -772,7 +772,7 @@ GameObject:
   m_Component:
   - component: {fileID: 115385502205278596}
   - component: {fileID: 5167050096995282957}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Belt Armor Type 4 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -908,7 +908,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6983300600080802872}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: pinky_02_l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -941,7 +941,7 @@ GameObject:
   m_Component:
   - component: {fileID: 547998062338266442}
   - component: {fileID: 2270054519633827320}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Feet Armor Type 4 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1078,7 +1078,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2134017740533689461}
   - component: {fileID: 725418706380529952}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hair Type 5 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1215,7 +1215,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1943825114702480161}
   - component: {fileID: 6133730448081297304}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Feet Armor Type 1 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1351,7 +1351,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2125316994511895307}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ArrowAimTarget
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1382,7 +1382,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8076973013047910915}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: shoulder_r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1415,7 +1415,7 @@ GameObject:
   m_Component:
   - component: {fileID: 44006636026843976}
   - component: {fileID: 1765565859457102527}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyes Type 4 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1551,7 +1551,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6778907657399683534}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ARMS
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1598,7 +1598,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4045235361325471836}
   - component: {fileID: 4384349174519373924}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hair Type 4 Color 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1735,7 +1735,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5504348586148267581}
   - component: {fileID: 1506277576856796832}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyebrow Type 3 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1872,7 +1872,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1697735596875200691}
   - component: {fileID: 6522608831463158219}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Arm Armor Type 5 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2009,7 +2009,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8758913531531980366}
   - component: {fileID: 2796991803481189717}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyebrow Type 5 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2145,7 +2145,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7738595797984603698}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: index_02_r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2177,7 +2177,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8783128839557468652}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: B-root
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2211,7 +2211,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7590309612077835004}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: shoulder_l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2244,7 +2244,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3994543379413257520}
   - component: {fileID: 5916403076719062928}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hair Type 5 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2381,7 +2381,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2781986032754041048}
   - component: {fileID: 5467643123733249223}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Legs Armor Type 1 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2518,7 +2518,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5829603795869469822}
   - component: {fileID: 5446421434075639040}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hair Type 3 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2655,7 +2655,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3878216038720920118}
   - component: {fileID: 6732465322191305860}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Feet Armor Type 2 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2791,7 +2791,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7027966290416480876}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: index_01_r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2824,7 +2824,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8468356367644594027}
   - component: {fileID: 6484778932606583483}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Feet Armor Type 5 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2960,7 +2960,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6531357858589029868}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: thumb_02_r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2993,7 +2993,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6761483389420166774}
   - component: {fileID: 1373257240331682679}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Belt Armor Type 2 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3130,7 +3130,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2696093731115030607}
   - component: {fileID: 1672273133916326788}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Face Hair Type 1 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3266,7 +3266,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1821727817573133380}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FACE DETAILS PARTS
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3304,7 +3304,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3891615463404914822}
   - component: {fileID: 5701263868688466189}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hair Type 2 Color 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3440,7 +3440,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5424962038248029102}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: upperleg_l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3473,7 +3473,7 @@ GameObject:
   m_Component:
   - component: {fileID: 859820226219964238}
   - component: {fileID: 8106400515628603972}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyebrow Type 1 Color 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3610,7 +3610,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6529660716843656984}
   - component: {fileID: 1193395029353262888}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Legs Armor Type 4 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3747,7 +3747,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5261672279594998529}
   - component: {fileID: 1052784461792294051}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Arm Armor Type 2 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3884,7 +3884,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2404984416372177179}
   - component: {fileID: 8505821731723345888}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyes Type 3 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4021,7 +4021,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7396058492734321431}
   - component: {fileID: 8088698555184930395}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hair Type 3 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4157,7 +4157,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8703679631022420806}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: LEGS
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4203,7 +4203,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2085910794998506794}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BELTS
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4250,7 +4250,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7190723985768989751}
   - component: {fileID: 5498468266313321012}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyebrow Type 4 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4387,7 +4387,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3897001082332943596}
   - component: {fileID: 454879563852622018}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyes Type 1 Color 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4523,7 +4523,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1061928699687972950}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ring_01_r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4556,7 +4556,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9174722099403435546}
   - component: {fileID: 6482471258900913066}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Face Hair Type 4 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4693,7 +4693,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6061002606433014938}
   - component: {fileID: 6288809551932147444}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Chest Armor Type 4 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4829,7 +4829,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8392203770848548679}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: pinky_01_r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4862,7 +4862,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8491207451584950370}
   - component: {fileID: 4777209994875274922}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hair Type 2 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4999,7 +4999,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2818688565736734395}
   - component: {fileID: 6704853721535279754}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyes Type 2 Color 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5136,7 +5136,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7070568237066875434}
   - component: {fileID: 612073706845572973}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyes Type 3 Color 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5273,7 +5273,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3413906187826426602}
   - component: {fileID: 4896816928984509449}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Belt Armor Type 1 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5410,7 +5410,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1845244606179950846}
   - component: {fileID: 1145358591682108751}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Legs Armor Type 5 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5547,7 +5547,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5474821594302413184}
   - component: {fileID: 5180959463828098967}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Face Hair Type 2 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5684,7 +5684,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3802496815365367635}
   - component: {fileID: 5381561377146315301}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Chest Armor Type 2 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5821,7 +5821,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6341045650536434111}
   - component: {fileID: 5380986362816021916}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Nose Type 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5958,7 +5958,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2093412068431748369}
   - component: {fileID: 8277764613117518571}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Belt Armor Type 1 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6095,7 +6095,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6204921098001417223}
   - component: {fileID: 8631569296381855512}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyes Type 5 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6231,7 +6231,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5925943114574673798}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Base Character Root
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6264,7 +6264,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8935242945062736033}
   - component: {fileID: 7355439445354625365}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Face Hair Type 2 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6401,7 +6401,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5445028592718527153}
   - component: {fileID: 6213978534131495956}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hair Type 2 Color 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6537,7 +6537,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8308879430100876202}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FACE HAIRS
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6593,7 +6593,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2322633912325240796}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: B-nockPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6624,7 +6624,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8919103593872427823}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ArrowVFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6656,7 +6656,7 @@ GameObject:
   m_Component:
   - component: {fileID: 283867711078973832}
   - component: {fileID: 5776540261103906422}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hair Type 1 Color 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6793,7 +6793,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6440214553655382677}
   - component: {fileID: 8182556955068033474}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyebrow Type 4 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6929,7 +6929,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8356853093969745745}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: toes_l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6960,7 +6960,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6322678558889047604}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: shin_l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -6993,7 +6993,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8936962310215243883}
   - component: {fileID: 2212334719029428869}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyes Type 4 Color 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7130,7 +7130,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3109290039482084485}
   - component: {fileID: 7087641722283674512}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Face Hair Type 5 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7266,7 +7266,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5356922279909364852}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: middle_01_l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7299,7 +7299,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7650041056639516373}
   - component: {fileID: 9121172897472709524}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hair Type 4 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7436,7 +7436,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7027097805497632904}
   - component: {fileID: 6147629230915373429}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Face Hair Type 1 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7573,7 +7573,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8391592403293964823}
   - component: {fileID: 1233630595684110438}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyes Type 2 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7710,7 +7710,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7256120942178780698}
   - component: {fileID: 367811440640027776}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Feet Armor Type 4 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7847,7 +7847,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7694532432579668730}
   - component: {fileID: 3403200396468529092}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyebrow Type 3 Color 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -7985,7 +7985,7 @@ GameObject:
   - component: {fileID: 4699522599411592722}
   - component: {fileID: 6119634097975984085}
   - component: {fileID: 8428373053799956881}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ArrowMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8068,7 +8068,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4814099394779913702}
   - component: {fileID: 4612536055840422278}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Chest Armor Type 1 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8205,7 +8205,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3197003684949734221}
   - component: {fileID: 3830419611670222608}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Nose Type 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8342,7 +8342,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2967983840013196014}
   - component: {fileID: 3486311500150087850}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Feet Armor Type 1 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8479,7 +8479,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9056405158084392960}
   - component: {fileID: 3176286896528262115}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hair Type 4 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8616,7 +8616,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5440349894388504422}
   - component: {fileID: 8123333819371676231}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Belt Armor Type 2 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8753,7 +8753,7 @@ GameObject:
   m_Component:
   - component: {fileID: 435113566951251312}
   - component: {fileID: 4976182562087580270}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Nose Type 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -8890,7 +8890,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8294580663929420203}
   - component: {fileID: 3851221686111784345}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Base Character Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9027,7 +9027,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1924154095983452323}
   - component: {fileID: 9075425181516566026}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hair Type 5 Color 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9164,7 +9164,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6380960272489666024}
   - component: {fileID: 6941612331380580324}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Head Armor Type 3 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9301,7 +9301,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1606607439647985466}
   - component: {fileID: 1634186703341383899}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyebrow Type 2 Color 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9438,7 +9438,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8785279694831301041}
   - component: {fileID: 7261475297696088078}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Feet Armor Type 2 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9575,7 +9575,7 @@ GameObject:
   m_Component:
   - component: {fileID: 914534594318537729}
   - component: {fileID: 3538779576995894984}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Arm Armor Type 4 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9712,7 +9712,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9021164149917581054}
   - component: {fileID: 1629684455002668835}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Belt Armor Type 3 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9849,7 +9849,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4656483836656808}
   - component: {fileID: 7546384346270366933}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Feet Armor Type 4 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9986,7 +9986,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4866612603406116223}
   - component: {fileID: 1126028461745801147}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Feet Armor Type 5 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10122,7 +10122,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7336196997431082926}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: hand_l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10160,7 +10160,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1738022365529514473}
   - component: {fileID: 5354571402734705460}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Face Hair Type 3 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10296,7 +10296,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2835223291877842156}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: index_03_l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10327,7 +10327,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1872083527964902684}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: forearm_r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10360,7 +10360,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8857777682066550604}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: spine_04
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10395,7 +10395,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4083412758746991754}
   - component: {fileID: 2976960185539024796}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Head Armor Type 3 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10531,7 +10531,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2987237990850275415}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: B-bowTip01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10562,7 +10562,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1460277556525028952}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: middle_02_r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10595,7 +10595,7 @@ GameObject:
   m_Component:
   - component: {fileID: 424557246406599665}
   - component: {fileID: 6007037410238456420}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hair Type 3 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10732,7 +10732,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6816826849444240812}
   - component: {fileID: 5535389503054368053}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Human_BowMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10822,7 +10822,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3105918308887532157}
   - component: {fileID: 8022068506162664573}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Face Hair Type 2 Color 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10958,7 +10958,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1279412602111983869}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: EARS
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -10992,7 +10992,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1096042412451525372}
   - component: {fileID: 3786805083256608392}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Arm Armor Type 4 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11129,7 +11129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7867316754445839793}
   - component: {fileID: 2778453694223132141}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Face Hair Type 1 Color 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11265,7 +11265,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5936571940837131827}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: spine_02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11298,7 +11298,7 @@ GameObject:
   m_Component:
   - component: {fileID: 900467956289277758}
   - component: {fileID: 7552800091967421093}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hair Type 3 Color 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11434,7 +11434,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3221405078058689210}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: index_02_l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11467,7 +11467,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4168236482920147153}
   - component: {fileID: 8999556933161943629}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Belt Armor Type 3 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11604,7 +11604,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1813167119834906515}
   - component: {fileID: 5703676761341449366}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Belt Armor Type 5 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11740,7 +11740,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 433554996326704726}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: pinky_01_l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11773,7 +11773,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7179493749344586235}
   - component: {fileID: 6728695240442878353}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Arm Armor Type 1 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11909,7 +11909,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8988153136367545186}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: B-bowLimb01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11941,7 +11941,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3974309903681309169}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ARMOR PARTS
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -11978,7 +11978,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5130801427371686062}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: upperarm_l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12011,7 +12011,7 @@ GameObject:
   m_Component:
   - component: {fileID: 55079442689430513}
   - component: {fileID: 4771845677112161010}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyes Type 5 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12148,7 +12148,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1966463928492582743}
   - component: {fileID: 167701068747332223}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Belt Armor Type 5 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12284,7 +12284,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6471269709960542745}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: shin_r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12317,7 +12317,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4709287983265850281}
   - component: {fileID: 713484784198651419}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyes Type 2 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12454,7 +12454,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2733135506875451583}
   - component: {fileID: 2511932998927805906}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Nose Type 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12590,7 +12590,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1527264249458688310}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: pinky_03_r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12622,7 +12622,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3863875978239086586}
   - component: {fileID: 1840103567203233041}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Legs Armor Type 2 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12759,7 +12759,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3913968338138384846}
   - component: {fileID: 6602682065878087937}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyebrow Type 2 Color 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12895,7 +12895,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3555651571454768486}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: upperleg_r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -12928,7 +12928,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6665451106334583270}
   - component: {fileID: 4215008186843089273}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Legs Armor Type 3 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13064,7 +13064,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5445371282807638047}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: upperarm_r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13097,7 +13097,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7990721305874092215}
   - component: {fileID: 3633849260308666619}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Face Hair Type 5 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13234,7 +13234,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6514184486772131406}
   - component: {fileID: 4545019473832272520}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Head Armor Type 4 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13370,7 +13370,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3338483027950687124}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: B-bowTip02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13402,7 +13402,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7090889978001114425}
   - component: {fileID: 2628885910530376624}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Legs Armor Type 5 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13539,7 +13539,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1417002055067173831}
   - component: {fileID: 8848033309922758287}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Face Hair Type 4 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13675,7 +13675,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7214863099859403745}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: thumb_01_l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13708,7 +13708,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6193442124161690348}
   - component: {fileID: 6506697325364652162}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyebrow Type 4 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13845,7 +13845,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8698517909680791058}
   - component: {fileID: 7269089679474964639}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hair Type 4 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -13982,7 +13982,7 @@ GameObject:
   m_Component:
   - component: {fileID: 618803994228053497}
   - component: {fileID: 660320710988468914}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyes Type 3 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14119,7 +14119,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3903566338642696542}
   - component: {fileID: 6059718514513449227}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hair Type 2 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14256,7 +14256,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5761216864227300278}
   - component: {fileID: 5416694225808506320}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyebrow Type 2 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14393,7 +14393,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1475596135801176430}
   - component: {fileID: 4938094196780760716}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hair Type 5 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14530,7 +14530,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4402145675037088351}
   - component: {fileID: 4453552673969339557}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Belt Armor Type 2 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14667,7 +14667,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7755571504583244075}
   - component: {fileID: 852336542228702613}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Arm Armor Type 3 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14804,7 +14804,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4647079926143737285}
   - component: {fileID: 1084405105931263901}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Face Hair Type 5 Color 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14941,7 +14941,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4264164833121688606}
   - component: {fileID: 6494879773365308649}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hair Type 1 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15078,7 +15078,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3833515021257042251}
   - component: {fileID: 5620126536852767911}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Legs Armor Type 2 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15215,7 +15215,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8035630802795302544}
   - component: {fileID: 8685743683808494452}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Legs Armor Type 1 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15352,7 +15352,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4370422270783091954}
   - component: {fileID: 647075281737349952}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Arm Armor Type 1 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15489,7 +15489,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6935843901247175360}
   - component: {fileID: 8025367149773337072}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Arm Armor Type 2 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15625,7 +15625,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1456866028627573292}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: EYEBROWS
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15682,7 +15682,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6802371107799569597}
   - component: {fileID: 6333294022246183242}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyes Type 3 Color 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15819,7 +15819,7 @@ GameObject:
   m_Component:
   - component: {fileID: 525674686879245267}
   - component: {fileID: 5907262166623078879}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Feet Armor Type 5 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15955,7 +15955,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 810843714319018308}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ring_01_l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -15988,7 +15988,7 @@ GameObject:
   m_Component:
   - component: {fileID: 809525096216961882}
   - component: {fileID: 1988701036285361808}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Arm Armor Type 3 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16124,7 +16124,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3226392379029111348}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: thumb_02_l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16157,7 +16157,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5461257028797809287}
   - component: {fileID: 7730975011010282504}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Head Armor Type 3 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16293,7 +16293,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3229628139501723833}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ring_02_l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16326,7 +16326,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8864837600775028252}
   - component: {fileID: 2167505983656761289}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyes Type 4 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16462,7 +16462,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5776567584300580825}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: middle_02_l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16495,7 +16495,7 @@ GameObject:
   m_Component:
   - component: {fileID: 917652444562737823}
   - component: {fileID: 7807940396501187721}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Face Hair Type 2 Color 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16632,7 +16632,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4387532787256328943}
   - component: {fileID: 5401361346940129771}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Free Modular Character (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16683,7 +16683,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8990363958498870550}
   - component: {fileID: 4334490388788864349}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyebrow Type 2 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16820,7 +16820,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5458985769187001759}
   - component: {fileID: 702872531156486192}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyes Type 1 Color 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -16957,7 +16957,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4122194350439648187}
   - component: {fileID: 7121981622567731246}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyebrow Type 1 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17094,7 +17094,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1935053170073314672}
   - component: {fileID: 6917503529698350267}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Belt Armor Type 4 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17231,7 +17231,7 @@ GameObject:
   m_Component:
   - component: {fileID: 202814652156879725}
   - component: {fileID: 1967420858150379137}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Belt Armor Type 1 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17367,7 +17367,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8276178569322412402}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: forearm_l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17400,7 +17400,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1939372934009702654}
   - component: {fileID: 2823547755995107317}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ArrowProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17448,7 +17448,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7668215092584795171}
   - component: {fileID: 415582391151822123}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Head Armor Type 2 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17584,7 +17584,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3635807832404219138}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: hand_r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17621,7 +17621,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4744186857671149656}
   - component: {fileID: 2441615006115137547}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hair Type 1 Color 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17757,7 +17757,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9211927702882603303}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: spine_03
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17789,7 +17789,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6545815497892356198}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17820,7 +17820,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1383047700879017827}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: DrawPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17852,7 +17852,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5044996723126414097}
   - component: {fileID: 6633548073112262771}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Chest Armor Type 4 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -17989,7 +17989,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5200813724229577352}
   - component: {fileID: 5912456171667899149}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Feet Armor Type 3 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18126,7 +18126,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7970497404747504090}
   - component: {fileID: 7607195762107418152}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Face Hair Type 4 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18263,7 +18263,7 @@ GameObject:
   m_Component:
   - component: {fileID: 935363046466416482}
   - component: {fileID: 7511339954025645916}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyebrow Type 4 Color 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18400,7 +18400,7 @@ GameObject:
   m_Component:
   - component: {fileID: 168928702048656079}
   - component: {fileID: 6569578755559331022}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyes Type 2 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18537,7 +18537,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3623904386591262813}
   - component: {fileID: 2026486885559165513}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hair Type 2 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18674,7 +18674,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4653337795730742021}
   - component: {fileID: 1830113077731024065}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Chest Armor Type 5 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18813,7 +18813,8 @@ GameObject:
   - component: {fileID: 7605547376037196238}
   - component: {fileID: 5148307974464681058}
   - component: {fileID: 4796576192046828227}
-  m_Layer: 0
+  - component: {fileID: 7327108429461926817}
+  m_Layer: 7
   m_Name: TowerArcher
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18864,6 +18865,7 @@ MonoBehaviour:
   projectilePrefab: {fileID: 7217477184985419567, guid: 341f0c89bfbfe144ea2fb453eb0643ed, type: 3}
   projectileSpeed: 15
   elementType: 0
+  projectilePoolAmount: 20
   buyPrice: 1
   sellPrice: 1
   damageBoost: 0
@@ -18882,6 +18884,8 @@ MonoBehaviour:
   useHpTargeting: 0
   targetHighestHpEnemy: 1
   useRandomTargeting: 0
+  disabledColor: {r: 1, g: 0.2, b: 0.2, a: 1}
+  pulseSpeed: 4
   bowController: {fileID: 4796576192046828227}
   arrowVisual: {fileID: 5029408247247093985}
   baseAnimationLength: 1
@@ -18942,6 +18946,27 @@ MonoBehaviour:
   snapForwardDuration: 0.05
   returnDelay: 0.4
   returnToHandDuration: 0.2
+--- !u!65 &7327108429461926817
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5537941893074787483}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1.84, z: 0.64}
+  m_Center: {x: 0, y: 0.93, z: 0}
 --- !u!1 &5580422817379788159
 GameObject:
   m_ObjectHideFlags: 0
@@ -18952,7 +18977,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6451249094187948819}
   - component: {fileID: 4049886974899162907}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Face Hair Type 3 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19089,7 +19114,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3828307790143971996}
   - component: {fileID: 719167466973789560}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Arm Armor Type 5 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19226,7 +19251,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8459474233382995177}
   - component: {fileID: 2924951683209712203}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyebrow Type 4 Color 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19363,7 +19388,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7732696475536938052}
   - component: {fileID: 214382121653710311}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Legs Armor Type 1 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19500,7 +19525,7 @@ GameObject:
   m_Component:
   - component: {fileID: 535356963813853325}
   - component: {fileID: 3392328641799668028}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Head Armor Type 1 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19636,7 +19661,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3214192592825107336}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: thumb_03_r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19668,7 +19693,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7905289244182731443}
   - component: {fileID: 7421432041339670431}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyes Type 4 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19804,7 +19829,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6119076531530858653}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Human_Bow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19837,7 +19862,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5165010192924653327}
   - component: {fileID: 1234621580117518977}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Head Armor Type 2 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19974,7 +19999,7 @@ GameObject:
   m_Component:
   - component: {fileID: 22167012216178301}
   - component: {fileID: 6896357679577892270}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Chest Armor Type 4 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20110,7 +20135,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6398907857338446146}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: middle_01_r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20143,7 +20168,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4148123771386473245}
   - component: {fileID: 9070959485836393801}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Legs Armor Type 4 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20280,7 +20305,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2398631700813114708}
   - component: {fileID: 6155467590331150025}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Chest Armor Type 3 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20416,7 +20441,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8639644703196688962}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: foot_r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20448,7 +20473,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6361277846074273959}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: AnchorPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20480,7 +20505,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2512885197300923351}
   - component: {fileID: 6161292987594134}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Face Hair Type 3 Color 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20616,7 +20641,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3188500287262158293}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: index_03_r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20648,7 +20673,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2936102995761156892}
   - component: {fileID: 413517867181866937}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Ears Type 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20784,7 +20809,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4292929942284708141}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ring_02_r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20817,7 +20842,7 @@ GameObject:
   m_Component:
   - component: {fileID: 221356752456230962}
   - component: {fileID: 2444858846720514954}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Legs Armor Type 2 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20954,7 +20979,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6068915288159054116}
   - component: {fileID: 2476552785293320241}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyes Type 4 Color 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21091,7 +21116,7 @@ GameObject:
   m_Component:
   - component: {fileID: 664994142406802734}
   - component: {fileID: 2757826426372301999}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Face Hair Type 1 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21227,7 +21252,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2200592985009485978}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: foot_l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21260,7 +21285,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7043163933668361985}
   - component: {fileID: 7462306959829846863}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Feet Armor Type 2 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21397,7 +21422,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3579470765934859894}
   - component: {fileID: 3851057845336976954}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Head Armor Type 4 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21534,7 +21559,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5709178929298298011}
   - component: {fileID: 2654055794322725916}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Head Armor Type 1 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21671,7 +21696,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5305492417536037826}
   - component: {fileID: 3438119167839742144}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hair Type 1 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21808,7 +21833,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8589638083117673323}
   - component: {fileID: 4859946472488310251}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyebrow Type 1 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -21945,7 +21970,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8402012485564867255}
   - component: {fileID: 6730490148862370527}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Chest Armor Type 5 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22081,7 +22106,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3095615878485889453}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: middle_03_r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22113,7 +22138,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6528962350642490259}
   - component: {fileID: 7744368588673216536}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Legs Armor Type 5 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22250,7 +22275,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2019670541268666596}
   - component: {fileID: 2031218819014405624}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Belt Armor Type 3 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22387,7 +22412,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5499899289072827036}
   - component: {fileID: 6264763405755953331}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Chest Armor Type 3 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22524,7 +22549,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6939470346801444571}
   - component: {fileID: 2116087564203314667}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Chest Armor Type 2 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22661,7 +22686,7 @@ GameObject:
   m_Component:
   - component: {fileID: 114774624874991712}
   - component: {fileID: 1708111133721680669}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Arm Armor Type 2 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22798,7 +22823,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4613841355255347133}
   - component: {fileID: 3828660152438453914}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Face Hair Type 4 Color 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -22935,7 +22960,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6132352297836830525}
   - component: {fileID: 1718505669733371663}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Belt Armor Type 5 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23072,7 +23097,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4434682895717138032}
   - component: {fileID: 1431934697342902497}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Arm Armor Type 4 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23209,7 +23234,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8212692337157718810}
   - component: {fileID: 953545392181758683}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Face Hair Type 3 Color 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23346,7 +23371,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3829082396482608906}
   - component: {fileID: 2769949813425086071}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Chest Armor Type 2 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23483,7 +23508,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8045809791609364157}
   - component: {fileID: 1956019179809470196}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyes Type 3 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23620,7 +23645,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5499458381504415167}
   - component: {fileID: 5078374119464668580}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Arm Armor Type 1 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23757,7 +23782,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4560431827606364627}
   - component: {fileID: 5327572748589659954}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Chest Armor Type 3 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -23894,7 +23919,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7363547428838815795}
   - component: {fileID: 4342966128632375247}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Head Armor Type 5 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24031,7 +24056,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3585768911243500491}
   - component: {fileID: 1742272116721393091}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Face Hair Type 1 Color 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24167,7 +24192,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5050233914277802}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: spine_01
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24201,7 +24226,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4765055168775685503}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: thumb_03_l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24233,7 +24258,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3724315203077583288}
   - component: {fileID: 638747157558024545}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Face Hair Type 4 Color 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24370,7 +24395,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3025804604440623911}
   - component: {fileID: 3582715433978101805}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyes Type 1 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24507,7 +24532,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1283477445407652759}
   - component: {fileID: 7350647990130703617}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Arm Armor Type 3 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24644,7 +24669,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1839109842729684986}
   - component: {fileID: 3970653743049129041}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Arm Armor Type 5 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24781,7 +24806,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7881223599349036787}
   - component: {fileID: 5878639783591387554}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyebrow Type 3 Color 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24917,7 +24942,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2705198161607666348}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: thumb_01_r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24949,7 +24974,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8642474845400502145}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: EYES
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25005,7 +25030,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5889935891275649475}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: NOSES
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25042,7 +25067,7 @@ GameObject:
   m_Component:
   - component: {fileID: 596819593415863600}
   - component: {fileID: 5197847498657075322}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyebrow Type 5 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25178,7 +25203,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1767951235830844728}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: index_01_l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25211,7 +25236,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2070190517627180286}
   - component: {fileID: 2731308285614608513}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyes Type 1 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25347,7 +25372,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8037305162386356719}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: pinky_02_r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25380,7 +25405,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5090229180774333128}
   - component: {fileID: 6047295106136896205}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hair Type 4 Color 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25517,7 +25542,7 @@ GameObject:
   m_Component:
   - component: {fileID: 938596393529693392}
   - component: {fileID: 4568254623920990829}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: HumanArcher_Bow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25657,7 +25682,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7029607183319312761}
   - component: {fileID: 83616480087344860}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Head Armor Type 5 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25794,7 +25819,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2615808756219447395}
   - component: {fileID: 2605137125887949810}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyebrow Type 3 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -25931,7 +25956,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4645508382991577098}
   - component: {fileID: 5915934165759119101}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Feet Armor Type 1 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26067,7 +26092,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1833662650400466357}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ring_03_r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26099,7 +26124,7 @@ GameObject:
   m_Component:
   - component: {fileID: 501673751071173508}
   - component: {fileID: 5338429054953410503}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Belt Armor Type 4 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26236,7 +26261,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8591861396028389177}
   - component: {fileID: 3526361793701604331}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Face Hair Type 5 Color 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26373,7 +26398,7 @@ GameObject:
   m_Component:
   - component: {fileID: 472763614686463732}
   - component: {fileID: 7864267491895049271}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyes Type 5 Color 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26509,7 +26534,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6382449026615259450}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: CHESTS
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26556,7 +26581,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7124445792376576466}
   - component: {fileID: 3313218554346962530}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyebrow Type 5 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26693,7 +26718,7 @@ GameObject:
   m_Component:
   - component: {fileID: 455644254946853242}
   - component: {fileID: 5742156572077363225}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Nose Type 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26830,7 +26855,7 @@ GameObject:
   m_Component:
   - component: {fileID: 810606722899560690}
   - component: {fileID: 1739189801997460159}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyebrow Type 5 Color 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -26967,7 +26992,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5197607318567474943}
   - component: {fileID: 2437572509493527059}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyes Type 2 Color 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27104,7 +27129,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8956934029898016569}
   - component: {fileID: 7406501923067611847}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Face Hair Type 5 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27241,7 +27266,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7675388190935919986}
   - component: {fileID: 7827113838065945309}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Face Hair Type 2 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27378,7 +27403,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3048038911758560236}
   - component: {fileID: 138458635494090934}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Feet Armor Type 3 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27514,7 +27539,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1534210708596322924}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: B-bowLimb02
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27547,7 +27572,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1575673441527412810}
   - component: {fileID: 6500781880227122748}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hair Type 5 Color 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27683,7 +27708,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8993497932718345634}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: neck
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27715,7 +27740,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 745530985241956193}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ring_03_l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27747,7 +27772,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7041870705823999169}
   - component: {fileID: 7344375444123711388}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Feet Armor Type 3 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -27884,7 +27909,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7837024488214382855}
   - component: {fileID: 7036547758515886696}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Head Armor Type 1 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28021,7 +28046,7 @@ GameObject:
   m_Component:
   - component: {fileID: 373947741468090519}
   - component: {fileID: 8876674705383723473}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Face Hair Type 3 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28158,7 +28183,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6342057043062367957}
   - component: {fileID: 2068433362367622574}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Chest Armor Type 5 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28295,7 +28320,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1966503789119785535}
   - component: {fileID: 7750545365649237595}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyes Type 5 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28431,7 +28456,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3141534902773040074}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: toes_r
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28463,7 +28488,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3441408164575382153}
   - component: {fileID: 4980473006257579173}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Chest Armor Type 1 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28599,7 +28624,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2157281868354288509}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: middle_03_l
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28630,7 +28655,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4206451200794732843}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: FEET
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28677,7 +28702,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5260020246329858985}
   - component: {fileID: 5458810177657555418}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyebrow Type 1 Color 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28814,7 +28839,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1717005654129310345}
   - component: {fileID: 3335679047820468593}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Legs Armor Type 3 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -28951,7 +28976,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8025063892875645676}
   - component: {fileID: 5450444353185403945}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Head Armor Type 5 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29087,7 +29112,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7942491175312952548}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: HAIRS
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29144,7 +29169,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4152702158096502628}
   - component: {fileID: 3099895797970443863}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Head Armor Type 4 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29281,7 +29306,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6301290425624797020}
   - component: {fileID: 229181879379038106}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyes Type 5 Color 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29418,7 +29443,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5907762824768035781}
   - component: {fileID: 3109645109572872537}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Legs Armor Type 4 Color 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29555,7 +29580,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2992463660573930598}
   - component: {fileID: 799630072183081488}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Ears Type 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29692,7 +29717,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6465694666247352508}
   - component: {fileID: 7639888039692872709}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Legs Armor Type 3 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29829,7 +29854,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4500370069195396176}
   - component: {fileID: 4300226319025706419}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyebrow Type 5 Color 5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -29966,7 +29991,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2158504973000125573}
   - component: {fileID: 86834038568397815}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Hair Type 3 Color 4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30103,7 +30128,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4549758112456164945}
   - component: {fileID: 3598107265291918005}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyebrow Type 2 Color 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -30240,7 +30265,7 @@ GameObject:
   m_Component:
   - component: {fileID: 137222745909047398}
   - component: {fileID: 7672118563528751669}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Eyes Type 1 Color 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}

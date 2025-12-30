@@ -10,7 +10,8 @@ public enum EnemyType
     Invisible,
     Reinforced,
     Summoner,
-    Minion
+    Minion,
+    Hexer
 }
 
 public class EnemyBase : MonoBehaviour, IDamageable
