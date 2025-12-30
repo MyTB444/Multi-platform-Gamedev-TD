@@ -12,6 +12,7 @@ public class WaveDetails
     public int enemyReinforced;
     public int enemySummoner;
     public int enemyHexer;
+    public int enemyHerald;
 }
 
 [Serializable]
@@ -165,6 +166,7 @@ public class WaveManager : MonoBehaviour
         AddEnemiesToList(newEnemyList, EnemyType.Reinforced, wave.enemyReinforced);
         AddEnemiesToList(newEnemyList, EnemyType.Summoner, wave.enemySummoner);
         AddEnemiesToList(newEnemyList, EnemyType.Hexer, wave.enemyHexer);
+        AddEnemiesToList(newEnemyList, EnemyType.Herald, wave.enemyHerald);
 
         return newEnemyList;
     }

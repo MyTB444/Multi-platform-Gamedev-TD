@@ -11,7 +11,8 @@ public enum EnemyType
     Reinforced,
     Summoner,
     Minion,
-    Hexer
+    Hexer,
+    Herald
 }
 
 public class EnemyBase : MonoBehaviour, IDamageable
@@ -69,7 +70,19 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private float slowEndTime;
     private bool isSlowed = false;
     private GameObject activeSlowEffect;
-    
+
+    // Speed buff system
+    private bool isSpeedBuffed = false;
+    private float speedBuffEndTime;
+
+    // HoT (Heal over Time) system
+    private bool hasHoT = false;
+    private float hotEndTime;
+    private float hotTotalAmount;
+    private float hotAmountPerTick;
+    private float hotTickInterval;
+    private float lastHotTick;
+
     // Stun system
     private bool isStunned = false;
     private float stunEndTime;
@@ -127,6 +140,26 @@ public class EnemyBase : MonoBehaviour, IDamageable
         if (isSlowed && Time.time >= slowEndTime)
         {
             RemoveSlow();
+        }
+
+        // Handle speed buff expiry
+        if (isSpeedBuffed && Time.time >= speedBuffEndTime)
+        {
+            RemoveSpeedBuff();
+        }
+
+        // Handle HoT
+        if (hasHoT)
+        {
+            if (Time.time >= hotEndTime)
+            {
+                hasHoT = false;
+            }
+            else if (Time.time >= lastHotTick + hotTickInterval)
+            {
+                lastHotTick = Time.time;
+                Heal(hotAmountPerTick);
+            }
         }
 
         // Handle DoT
@@ -194,7 +227,43 @@ public class EnemyBase : MonoBehaviour, IDamageable
             activeSlowEffect = null;
         }
     }
-    
+
+    public void ApplySpeedBuff(float speedMultiplier, float duration)
+    {
+        isSpeedBuffed = true;
+        speedBuffEndTime = Time.time + duration;
+
+        float clampedMultiplier = Mathf.Clamp(speedMultiplier, 1f, 3f);
+        enemySpeed = baseSpeed * clampedMultiplier;
+    }
+
+    private void RemoveSpeedBuff()
+    {
+        isSpeedBuffed = false;
+        enemySpeed = baseSpeed;
+    }
+
+    public void ApplyHoT(float percentOfMaxHp, float duration, float tickInterval = 0.5f)
+    {
+        hasHoT = true;
+        hotEndTime = Time.time + duration;
+        hotTickInterval = tickInterval;
+        lastHotTick = Time.time;
+
+        float totalHeal = enemyMaxHp * percentOfMaxHp;
+        int tickCount = Mathf.CeilToInt(duration / tickInterval);
+        hotAmountPerTick = totalHeal / tickCount;
+    }
+
+    private void Heal(float amount)
+    {
+        enemyCurrentHp += amount;
+        if (enemyCurrentHp > enemyMaxHp)
+        {
+            enemyCurrentHp = enemyMaxHp;
+        }
+    }
+
     public void ApplyStun(float duration)
     {
         isStunned = true;
@@ -443,7 +512,13 @@ public class EnemyBase : MonoBehaviour, IDamageable
         // Reset DoT
         hasDot = false;
         dotCanSpread = false;
-    
+
+        // Reset Speed Buff
+        isSpeedBuffed = false;
+
+        // Reset HoT
+        hasHoT = false;
+
         // Reset Stun
         isStunned = false;
         if (hasSavedColors)
@@ -486,5 +561,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public bool IsSlowed() => isSlowed;
     public bool IsStunned() => isStunned;
     public bool HasDoT() => hasDot;
+    public bool IsSpeedBuffed() => isSpeedBuffed;
+    public bool HasHoT() => hasHoT;
     public ElementType GetElementType() => elementType;
 }
