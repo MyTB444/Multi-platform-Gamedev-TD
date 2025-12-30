@@ -6307,7 +6307,7 @@ Transform:
   m_GameObject: {fileID: 1666991278309154317}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 12.07, y: 5.417, z: 6.753}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -6392,13 +6392,16 @@ MonoBehaviour:
     m_Bits: 64
   disabledColor: {r: 1, g: 0.2, b: 0.2, a: 1}
   pulseSpeed: 4
+  fadeInDuration: 0.3
+  fadeOutDuration: 0.5
   spikeTrapPrefab: {fileID: 427431859011580423, guid: 7a6d196f9ffca6c4b947a00d0617ff7f, type: 3}
   raycastDistance: 10
   roadLayer:
     serializedVersion: 2
     m_Bits: 256
-  downwardAngle: 33
+  downwardAngle: 37.5
   hammerImpactPoint: {fileID: 885937671795851817}
+  spikeTrapAttackSpeedPercent: 0.2
   poisonSpikes: 0
   poisonDamage: 2
   poisonDuration: 3

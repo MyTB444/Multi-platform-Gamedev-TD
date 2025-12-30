@@ -38,9 +38,10 @@ public class TowerStandingBase : MonoBehaviour
         switch (elementType)
         {
             case ElementType.Imaginary:
+            case ElementType.Mechanic:
                 return GetFacingRotation();
-                
-            default:
+            
+            default: // Physical, Magic
                 Transform spawnPoint = GetSpawnPoint(elementType);
                 return spawnPoint != null ? spawnPoint.rotation : transform.rotation;
         }
