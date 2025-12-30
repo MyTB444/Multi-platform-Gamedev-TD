@@ -71,6 +71,7 @@ public class TowerUpgradeTester : MonoBehaviour
         }
         else if (selectedTower is BladeTower)
         {
+            validUpgrades.Add(TowerUpgradeType.BladeSpinSpeed);
             validUpgrades.Add(TowerUpgradeType.BleedChance);
             validUpgrades.Add(TowerUpgradeType.MoreBlades);
             validUpgrades.Add(TowerUpgradeType.ExtendedReach);

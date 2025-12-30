@@ -28503,13 +28503,17 @@ PrefabInstance:
       propertyPath: damage
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 857534486113657836, guid: 624fa53d9337f684c9aebcef0a9bcf17, type: 3}
+      propertyPath: spinSpeedBoostPercent
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 1060176546675274297, guid: 624fa53d9337f684c9aebcef0a9bcf17, type: 3}
       propertyPath: m_Name
       value: TowerBladeTrap
       objectReference: {fileID: 0}
     - target: {fileID: 1060176546675274297, guid: 624fa53d9337f684c9aebcef0a9bcf17, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -52674,7 +52678,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1666991278309154317, guid: f1ec96bd8a2e80d4cb539d7a09e8ca43, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6399124335794961387, guid: f1ec96bd8a2e80d4cb539d7a09e8ca43, type: 3}
       propertyPath: damage

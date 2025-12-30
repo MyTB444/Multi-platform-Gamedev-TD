@@ -37,6 +37,7 @@ public enum TowerUpgradeType
     CripplingSpikes,
     
     // Blade Tower
+    BladeSpinSpeed,
     BleedChance,
     MoreBlades,
     ExtendedReach,
