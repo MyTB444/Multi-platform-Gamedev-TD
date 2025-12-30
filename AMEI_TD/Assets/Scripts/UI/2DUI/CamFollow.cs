@@ -4,25 +4,18 @@ using UnityEngine;
 
 public class CamFollow : MonoBehaviour
 {
-    public class BillboardUI : MonoBehaviour
+    [Header("Setup")]
+    public Vector3 referenceObjectPosition = new Vector3(17.86f, 4.33f, 11.9f);
+    public Vector3 referenceCameraPosition = new Vector3(28.62f, 19f, 11.3f);
+
+    void Start()
     {
-        void Start()
-        {
-            Canvas canvas = GetComponent<Canvas>();
+        // Calculate the look direction from the reference object to the camera
+        Vector3 referenceDirection = referenceCameraPosition - referenceObjectPosition;
 
-            if (canvas.renderMode == RenderMode.WorldSpace && canvas.worldCamera == null)
-            {
-                canvas.worldCamera = Camera.main; 
-            }
-        }
-        void LateUpdate()
-        {
-            Vector3 direction = transform.position - Camera.main.transform.position;
-            direction.y = 0f;
-            transform.rotation = Quaternion.LookRotation(direction);
-
-        }
-
+        // Apply the same direction from THIS object's position
+        Quaternion rotation = Quaternion.LookRotation(referenceDirection.normalized, Vector3.up);
+        transform.rotation = rotation;
     }
-
 }
+
