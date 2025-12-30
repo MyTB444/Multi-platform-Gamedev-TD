@@ -30,6 +30,7 @@ public class VFXDamage : MonoBehaviour
     {
         spellType =   instance.currenSpellType;
         enemyBaseGameObjectRef = null;
+        EnemyDictionary.Clear();    
         stopFlames = false;
         ps = gameObject.GetComponent<ParticleSystem>();
 
@@ -54,40 +55,40 @@ public class VFXDamage : MonoBehaviour
             {
                 case SpellType.Magic:
 
-                    StartCoroutine(EnableLiftDamage());
+                    StartCoroutine(EnableLiftDamage(enemyBaseGameObjectRef));
                
                 break;  
                     
                 case SpellType.Physical:
 
-                   StartCoroutine(EnableFlameDamage(other,2));
+                   StartCoroutine(EnableFlameDamage(other,1));
                     
                 break;
+
+               
+
             }
            
         }
     }
 
-    public void SelectedEnemy(EnemyBase enemyBaseRef)
-    {
-
-    }
+    
 
     private Vector3 ReturnRandomPointOnMesh(Bounds bounds)
     {
-        return new Vector3(Random.Range(bounds.min.x * 2.5f, bounds.max.x / 3.5f), Random.Range(bounds.min.y*2.5f, bounds.max.y/3.5f), Random.Range(bounds.min.z * 2.5f, bounds.max.z / 3.5f));
+        return new Vector3(bounds.center.x, Random.Range(bounds.extents.y, bounds.extents.y / 3f), Random.Range(-bounds.extents.z / 10f, bounds.extents.z / 8f));
     }
 
-    private IEnumerator EnableLiftDamage()
+    private IEnumerator EnableLiftDamage(EnemyBase enemyBase)
     {
-        if (enemyBaseGameObjectRef.gameObject != null && enemyBaseGameObjectRef.gameObject.activeInHierarchy)
+        if (enemyBase.gameObject != null && enemyBase.gameObject.activeInHierarchy)
         {
-            enemyBaseGameObjectRef.enemyBaseRef = enemyBaseGameObjectRef;
-            enemyBaseGameObjectRef.LiftEffectFunction(true);
+            enemyBase.enemyBaseRef = enemyBase;
+            enemyBase.LiftEffectFunction(true,false);
             enemies.Add(enemyBaseGameObjectRef);
-            enemyBaseGameObjectRef.TakeDamage(20f, true);
+            //enemyBaseGameObjectRef.TakeDamage(0f, 1f, true);
 
-            Vector3 startPos = enemyBaseGameObjectRef.transform.position;
+            Vector3 startPos = enemyBase.transform.position;
             Vector3 targetPos = new Vector3(startPos.x, startPos.y + 2, startPos.z);
         
             float duration = 1f;
@@ -100,20 +101,40 @@ public class VFXDamage : MonoBehaviour
                 float t = elapsed / duration;
             
           
-                enemyBaseGameObjectRef.transform.position = Vector3.Lerp(startPos, targetPos, t);
+                enemyBase.transform.position = Vector3.Lerp(startPos, targetPos, t);
             
                 yield return null; 
             }
+            enemyBase.transform.position = targetPos;
+            duration = 2f;
+            elapsed = 0f;
+            
+            if (enemyBase.transform.position != startPos)
+            {
+               
+                while (elapsed < duration)
+                {
+                 
+
+                    elapsed += Time.deltaTime;
+
+
+                    enemyBase.TakeDamage(0f, 0.0000004f, true);
+                    
+                    yield return null;  
+                 
+                }
+            }
         
     
-            enemyBaseGameObjectRef.transform.position = targetPos;
+            
         
         
            
         }
     }
 
-    
+    //fix this //add enemybaseref as parameter in this fucntion
     private IEnumerator EnableFlameDamage(GameObject other,float timeToEnableDamage)
     {
         if (other.gameObject != null && other.gameObject.activeInHierarchy)
@@ -151,7 +172,7 @@ public class VFXDamage : MonoBehaviour
                                         {                                         
                                             tinyFlames.transform.parent = enemyBaseGameObjectRef.vfxContainer.gameObject.transform;
                                             enemyBaseGameObjectRef.vfxContainer.poolType = PoolGameObjectType.TinyFlames;
-                                            tinyFlames.transform.localPosition = ReturnRandomPointOnMesh(skinnedMeshRenderer[i].localBounds);
+                                            tinyFlames.transform.localPosition = ReturnRandomPointOnMesh(skinnedMeshRenderer[i].localBounds) - enemyBaseGameObjectRef.vfxContainer.gameObject.transform.localPosition;
                                             tinyFlames.transform.rotation = Quaternion.Euler(-90, 0, 0);
                                             tinyFlames.SetActive(true);
                                         }
@@ -171,8 +192,13 @@ public class VFXDamage : MonoBehaviour
                 }
                 if (other.gameObject != null && other.gameObject.activeInHierarchy)
                 {
+                    if (enemyBaseGameObjectRef.isDeadProperty)
+                    {
+                        EnemyDictionary.Remove(enemyBaseGameObjectRef);
+                    }
 
-                    enemyBaseGameObjectRef.TakeDamage(0.000003f, true);
+                    enemyBaseGameObjectRef.TakeDamage(0f,0.0000003f, true);
+                   
 
                 }
 
@@ -181,8 +207,12 @@ public class VFXDamage : MonoBehaviour
             else if (gameObject.CompareTag("TinyFlames"))
             {
                 Debug.Log("Takingdamage");
+                if (enemyBaseGameObjectRef.isDeadProperty)
+                {
+                    EnemyDictionary.Remove(enemyBaseGameObjectRef);
+                }
 
-                enemyBaseGameObjectRef.TakeDamage(0.0005f, true);
+                enemyBaseGameObjectRef.TakeDamage(0f,0.00005f, true);
                
                 
                     if (other.gameObject != null && other.gameObject.activeInHierarchy)
@@ -204,7 +234,7 @@ public class VFXDamage : MonoBehaviour
         {
             foreach(EnemyBase o in enemies)
             {
-                o.LiftEffectFunction(false);
+                o.LiftEffectFunction(false,false);
             }
             enemies.Clear();
            

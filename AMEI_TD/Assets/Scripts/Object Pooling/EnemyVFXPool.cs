@@ -23,12 +23,15 @@ public class EnemyVFXPool : MonoBehaviour
         {
             foreach(GameObject o in vfxGameObjects)
             {
-                objectPoolingInstance.ReturnGameObejctToPool(poolType, o);
-                for (int i = 0; i < objectPoolingInstance.listOfPoolInfoRef.Count; i++)
+                if (o != null)
                 {
-                    if (poolType == objectPoolingInstance.listOfPoolInfoRef[i].objectType)
+                    objectPoolingInstance.ReturnGameObejctToPool(poolType, o);
+                    for (int i = 0; i < objectPoolingInstance.listOfPoolInfoRef.Count; i++)
                     {
-                        o.transform.parent = objectPoolingInstance.listOfPoolInfoRef[i].Container.transform;
+                        if (poolType == objectPoolingInstance.listOfPoolInfoRef[i].objectType)
+                        {
+                            o.transform.parent = objectPoolingInstance.listOfPoolInfoRef[i].Container.transform;
+                        }
                     }
                 }
             }

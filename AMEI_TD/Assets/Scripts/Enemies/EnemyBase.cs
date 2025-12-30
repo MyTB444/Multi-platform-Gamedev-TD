@@ -1,3 +1,4 @@
+
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -51,7 +52,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private bool hasSavedColors = false;
 
     private NavMeshAgent NavAgent;
-    private Animator EnemyAnimator;
+    
 
     [SerializeField] protected float enemyCurrentHp;
     protected bool isDead;
@@ -65,7 +66,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     private Vector3 Destination;
     [HideInInspector]public Rigidbody myBody;
-    private bool spellsActivated;
+    
 
     // Slow system
     private float baseSpeed;
@@ -96,8 +97,10 @@ public class EnemyBase : MonoBehaviour, IDamageable
     [SerializeField] private Slider healthBar;
 
     [SerializeField] private EnemyVFXPool enemyVFXPoolScriptRef;
+    private bool enemyHealthBarStatus = false;
+    private Animator EnemyAnimator;
+    private bool spellsActivated = false;
 
-    private bool status = false;
     private void OnEnable()
     {
         enemyHealthDisplayCanvas.enabled  = false;
@@ -412,10 +415,11 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     private void ReachedEnd()
     {
-        Destroy(gameObject);
+
+        ObjectPooling.instance.ReturnGameObejctToPool(GetEnemyTypeForPooling(), gameObject);
     }
 
-    public virtual void TakeDamage(DamageInfo damageInfo, bool spellDamageEnabled = false)
+    public virtual void TakeDamage(DamageInfo damageInfo,float vfxDamage = 0,bool spellDamageEnabled = false )
     {
         DamageCalculator.DamageResult result = DamageCalculator.Calculate(damageInfo, elementType);
         
@@ -447,27 +451,44 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
         
         Debug.Log($"DamageInfo: {damageInfo.elementType} vs {elementType} = {result.finalDamage}");
-        enemyCurrentHp -= result.finalDamage;
-       
+      
+
         if (spellDamageEnabled)
         {
-            healthBar.value -= result.finalDamage * Time.fixedDeltaTime/1000;
+            
+            if (gameObject.activeInHierarchy)
+            {
+                enemyCurrentHp -= vfxDamage * 100;
+                healthBar.value -= enemyCurrentHp * Time.fixedDeltaTime/100;
+               
+             
+           
+            }
+            
 
         }
         else
         {
-           healthBar.value -= result.finalDamage;         
+            healthBar.value -= result.finalDamage;
+            enemyCurrentHp -= result.finalDamage;
+                    
         }
 
-        if (gameObject.activeInHierarchy && gameObject != null)
-        {
+            
             healthBar.onValueChanged.AddListener((value) =>
             {
-
-                StartCoroutine(DisableHealthBar(false));
+                //Debug.Log("123");
+                if (gameObject.activeInHierarchy && gameObject != null)
+                {
+                    enemyHealthBarStatus = true;
+                  
+                    enemyHealthDisplayCanvas.enabled = enemyHealthBarStatus;
+                    
+                    
+                }
             });
 
-        }
+        
         if ((enemyCurrentHp <= 0 || healthBar.value <= 0) && !isDead)
         {
             isDead = true;
@@ -475,36 +496,37 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
         if (gameObject.activeInHierarchy && gameObject != null)
         {
-
-            StartCoroutine(DisableHealthBar(true));
+            enemyHealthBarStatus = false;
+            StartCoroutine(DisableHealthBar());
 
         }
     }
     
-    private IEnumerator DisableHealthBar(bool status)
+   
+    private IEnumerator DisableHealthBar()
     {
         if (gameObject.activeInHierarchy && gameObject != null)
-        {
-            if (this.status)
-            {
-                yield return new WaitForSeconds(8f);
-            }
-            enemyHealthDisplayCanvas.enabled = !status;
+        {            
+            yield return new WaitForSeconds(8f);            
+            enemyHealthDisplayCanvas.enabled = enemyHealthBarStatus;
         }
     }
 
-    public virtual void TakeDamage(float incomingDamage, bool spellDamageEnabled = false)
+    public virtual void TakeDamage(float incomingDamage, float vfxDamage = 0, bool spellDamageEnabled = false)
     {
-        TakeDamage(new DamageInfo(incomingDamage, ElementType.Physical), spellDamageEnabled);
+        TakeDamage(new DamageInfo(incomingDamage, ElementType.Physical),vfxDamage ,spellDamageEnabled);
     }
 
-    private void Die()
+    public void Die()
     {
         if (GameManager.instance != null)
         {
             GameManager.instance.UpdateSkillPoints(reward);
         }
         RemoveEnemy();
+       
+        enemyBaseRef = null;
+
         ObjectPooling.instance.ReturnGameObejctToPool(GetEnemyTypeForPooling(), gameObject);
     }
  
@@ -539,8 +561,11 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
         gameObject.layer = originalLayerIndex;
         enemyCurrentHp = enemyMaxHp;
+        EnemyAnimator.enabled = true;
         isDead = false;
-
+        spellsActivated = false;
+        myBody.useGravity = true;
+        myBody.constraints = RigidbodyConstraints.FreezeRotationX|RigidbodyConstraints.FreezeRotationZ;
         // Reset slow
         isSlowed = false;
         enemySpeed = baseSpeed;
@@ -567,7 +592,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         UpdateVisuals();
     }
     
-    public void LiftEffectFunction(bool status)
+    public void LiftEffectFunction(bool status,bool isMechanicSpellDamage)
     {
         if (gameObject.activeInHierarchy && gameObject != null)
         {
@@ -581,22 +606,16 @@ public class EnemyBase : MonoBehaviour, IDamageable
             {
                 enemyBaseRef.spellsActivated = status;
                 enemyBaseRef.NavAgent.enabled = !status;
-                StartCoroutine(DisableYPos());
+                StartCoroutine(DisableYPos(isMechanicSpellDamage));
             }
         }
     }
 
-    private void OnMouseDown()
-    {
-        if (SpellAbility.instance.MechanicSpellActivated)
-        {
-            vfxDamageScriptRef.SelectedEnemy(this);
-        }
-    }
+   
 
-    private IEnumerator DisableYPos()
+    private IEnumerator DisableYPos(bool isMechanicalSpellDamage)
     {
-        if (gameObject.activeInHierarchy && gameObject != null)
+        if (gameObject.activeInHierarchy && gameObject != null && !isMechanicalSpellDamage)
         {
             yield return new WaitForSeconds(0.5f);
             myBody.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotation;
@@ -613,6 +632,22 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
     }
   
+    public IEnumerator ExplodeEnemy(Vector3 currentMousePosition ,EnemyBase affectedEnemy)
+    {
+        NavAgent.enabled = false;
+        EnemyAnimator.enabled = false;
+        spellsActivated = true;
+        myBody.constraints = RigidbodyConstraints.None;
+       
+        myBody.useGravity = true;
+
+        myBody.AddExplosionForce(0.5f, currentMousePosition, 5, 2, ForceMode.Force);
+
+        yield return new WaitForSeconds(2f);
+        
+        Die();
+      
+    }
     private void UpdateVisuals()
     {
         Renderer r = GetComponent<Renderer>();
@@ -646,4 +681,12 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     public EnemyVFXPool vfxContainer { get; set; }
     public EnemyBase enemyBaseRef { get; set; }
+
+    public bool isDeadProperty => isDead;
+
+    
+
+
+
+
 }

@@ -47,8 +47,9 @@ public class SelectedPath : MonoBehaviour
               
                 mouseWorldPos = hit.point;
                 mouseWorldPos.y += 0.1f;
-                //print($"<color=green> mouseWorldpos </color>" + mouseWorldPos);
+                print($"<color=green> mouseWorldpos </color>" + mouseWorldPos);
                 SpellAbility.instance.SelectedPathFromPlayer(this, mouseWorldPos);
+               
             }
             //Vector3 mousepos = Input.mousePosition - Camera.main.transform.position;
 

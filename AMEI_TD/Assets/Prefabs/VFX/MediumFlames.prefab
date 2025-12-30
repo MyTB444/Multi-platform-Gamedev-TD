@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 198104970619360998}
   - component: {fileID: 199570947319072982}
   - component: {fileID: 8681579370218767243}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: MediumFlames
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3813,7 +3813,7 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     minKillSpeed: 0
-    maxKillSpeed: 10000
+    maxKillSpeed: 1e+12
     radiusScale: 0.12
     collidesWith:
       serializedVersion: 2

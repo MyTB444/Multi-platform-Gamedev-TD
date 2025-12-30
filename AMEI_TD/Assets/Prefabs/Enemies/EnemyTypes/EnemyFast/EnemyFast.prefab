@@ -667,8 +667,8 @@ NavMeshAgent:
   m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.91
-  m_Speed: 3.5
-  m_Acceleration: 1
+  m_Speed: 2
+  m_Acceleration: 0.5
   avoidancePriority: 50
   m_AngularSpeed: 120
   m_StoppingDistance: 0.1
@@ -1301,7 +1301,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5554386400887224635}
   - component: {fileID: 1869571132183754838}
-  m_Layer: 11
+  m_Layer: 0
   m_Name: VFXContainer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1317,7 +1317,7 @@ Transform:
   m_GameObject: {fileID: 6269999994496650892}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.004, y: 0.702, z: 0.08}
+  m_LocalPosition: {x: 0, y: 0.702, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []

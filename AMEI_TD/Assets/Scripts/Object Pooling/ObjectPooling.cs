@@ -4,7 +4,7 @@ using UnityEngine;
 
 public enum PoolGameObjectType
 {
-    EnemyFast,EnemyBasic,EnemyTank,EnemyInvisible,EnemyReinforced,Flames,MagicArea,TinyFlames
+    EnemyFast,EnemyBasic,EnemyTank,EnemyInvisible,EnemyReinforced,Flames,MagicArea,TinyFlames,BombPrefab
 }
 [Serializable]
 public class PoolInfo
@@ -90,7 +90,10 @@ public class ObjectPooling : MonoBehaviour
     {
         PoolInfo selectedPool = GetPoolByType(type);
         List<GameObject> pool = selectedPool.pool;
-        obj.SetActive(false);   
+        if (obj != null)
+        {
+            obj.SetActive(false);
+        }
         if(!pool.Contains(obj))
         {
             pool.Add(obj);
