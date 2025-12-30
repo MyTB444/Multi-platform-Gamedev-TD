@@ -65,6 +65,7 @@ Transform:
   m_Children:
   - {fileID: 6610860206502459288}
   - {fileID: 7158668583991164868}
+  - {fileID: 3303847220282222111}
   m_Father: {fileID: 8328912719474520493}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &164160386281425524
@@ -2139,6 +2140,37 @@ Transform:
   - {fileID: 2174588201269266957}
   m_Father: {fileID: 7653534150863508064}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &5602654711564622917
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3303847220282222111}
+  m_Layer: 0
+  m_Name: MechanicSpawnPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3303847220282222111
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5602654711564622917}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.006, y: 1.008, z: 0.831}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 161253976160381908}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5965166032460889151
 GameObject:
   m_ObjectHideFlags: 0
@@ -2233,9 +2265,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   spawnPointDefault: {fileID: 6610860206502459288}
-  spawnPointMechanic: {fileID: 0}
+  spawnPointMechanic: {fileID: 3303847220282222111}
   spawnPointImaginary: {fileID: 6610860206502459288}
-  roadFacing: 0
+  roadFacing: 2
 --- !u!33 &4379249189958798178
 MeshFilter:
   m_ObjectHideFlags: 0
