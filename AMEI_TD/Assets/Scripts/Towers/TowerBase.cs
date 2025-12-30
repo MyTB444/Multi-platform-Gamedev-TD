@@ -299,7 +299,7 @@ public class TowerBase : MonoBehaviour
     }
 
     // Periodically searches for new targets instead of every frame for performance
-    private void UpdateTarget()
+    protected void UpdateTarget()
     {
         if (Time.time > lastTimeCheckedTarget + targetCheckInterval || currentEnemy == null)
         {

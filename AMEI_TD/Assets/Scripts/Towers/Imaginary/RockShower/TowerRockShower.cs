@@ -59,11 +59,22 @@ public class TowerRockShower : TowerBase
     
     protected override void FixedUpdate()
     {
-        UpdateEnemyVelocity();
+        // Always process debuffs
+        UpdateDebuffs();
+        UpdateDisabledVisual();
     
+        // Don't do anything if disabled
+        if (isDisabled) return;
+    
+        UpdateEnemyVelocity();
+
         if (!isShowering)
         {
-            base.FixedUpdate();
+            ClearTargetOutOfRange();
+            UpdateTarget();
+            HandleRotation();
+
+            if (CanAttack()) AttemptToAttack();
         }
         else
         {
@@ -71,7 +82,7 @@ public class TowerRockShower : TowerBase
             {
                 currentEnemy = null;
             }
-        
+    
             HandleRotation();
         }
     }
@@ -163,22 +174,25 @@ public class TowerRockShower : TowerBase
 
         float elapsed = 0f;
         float finalDuration = longerShower ? showerDuration + bonusShowerDuration : showerDuration;
-    
-        // Calculate time between rocks to fit bonus rocks in same duration
+
         float finalTimeBetweenRocks = moreRocks ? 
             finalDuration / ((finalDuration / timeBetweenRocks) + bonusRocks) : 
             timeBetweenRocks;
 
         while (elapsed < finalDuration)
         {
-            SpawnRock(lockedTargetPosition);
+            // Skip spawning rocks while disabled, but keep waiting
+            if (!isDisabled)
+            {
+                SpawnRock(lockedTargetPosition);
+            }
 
             yield return new WaitForSeconds(finalTimeBetweenRocks);
             elapsed += finalTimeBetweenRocks;
         }
-    
-        // Meteor strike at the end
-        if (meteorStrike)
+
+        // Meteor strike at the end (only if not disabled)
+        if (meteorStrike && !isDisabled)
         {
             SpawnMeteor(lockedTargetPosition);
         }
