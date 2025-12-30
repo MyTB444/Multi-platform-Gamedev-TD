@@ -40,11 +40,9 @@ public class BladeDamage : MonoBehaviour
         {
             yield return new WaitForSeconds(skipStart);
         }
-        
-        GameObject vfx = Instantiate(hitEffectPrefab, hitPoint);
+
+        GameObject vfx = ObjectPooling.instance.GetVFXWithParent(hitEffectPrefab, hitPoint, vfxDuration);
         vfx.transform.localPosition = Vector3.zero;
         vfx.transform.localRotation = Quaternion.Euler(rotationOffset);
-        
-        Destroy(vfx, vfxDuration);
     }
 }

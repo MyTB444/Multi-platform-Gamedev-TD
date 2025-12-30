@@ -47,11 +47,10 @@ public class RockProjectile : TowerProjectileBase
     
             if (impactEffectPrefab != null)
             {
-                GameObject vfx = Instantiate(impactEffectPrefab, transform.position, Quaternion.identity);
-                vfx.transform.localScale *= rockSize;
-                Destroy(vfx, 2f);
+                Vector3 scaledSize = impactEffectPrefab.transform.localScale * rockSize;
+                ObjectPooling.instance.GetVFX(impactEffectPrefab, transform.position, Quaternion.identity, scaledSize, 2f);
             }
-    
+
             ObjectPooling.instance.Return(gameObject);
         }
     }
@@ -84,9 +83,8 @@ public class RockProjectile : TowerProjectileBase
 
             if (impactEffectPrefab != null)
             {
-                GameObject vfx = Instantiate(impactEffectPrefab, transform.position, Quaternion.identity);
-                vfx.transform.localScale *= rockSize;
-                Destroy(vfx, 2f);
+                Vector3 scaledSize = impactEffectPrefab.transform.localScale * rockSize;
+                ObjectPooling.instance.GetVFX(impactEffectPrefab, transform.position, Quaternion.identity, scaledSize, 2f);
             }
 
             ObjectPooling.instance.Return(gameObject);

@@ -52,7 +52,7 @@ public class EnemySplitter : EnemyBase
     {
         if (splitVFXPrefab != null)
         {
-            Instantiate(splitVFXPrefab, transform.position, Quaternion.identity);
+            ObjectPooling.instance.GetVFX(splitVFXPrefab, transform.position, Quaternion.identity, 2f);
         }
 
         for (int i = 0; i < splitCount; i++)

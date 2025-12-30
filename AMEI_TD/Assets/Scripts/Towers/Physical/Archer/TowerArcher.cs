@@ -232,7 +232,7 @@ public class TowerArcher : TowerBase
         // Clear old VFX
         if (activeArrowVisualVFX != null)
         {
-            Destroy(activeArrowVisualVFX);
+            ObjectPooling.instance.Return(activeArrowVisualVFX);
             activeArrowVisualVFX = null;
         }
     
@@ -241,12 +241,12 @@ public class TowerArcher : TowerBase
     
         if (fireArrows && fireArrowVFX != null)
         {
-            activeArrowVisualVFX = Instantiate(fireArrowVFX, spawnPoint);
+            activeArrowVisualVFX = ObjectPooling.instance.GetVFXWithParent(fireArrowVFX, spawnPoint, -1f);
             activeArrowVisualVFX.transform.localPosition = Vector3.zero;
         }
         else if (poisonArrows && poisonArrowVFX != null)
         {
-            activeArrowVisualVFX = Instantiate(poisonArrowVFX, spawnPoint);
+            activeArrowVisualVFX = ObjectPooling.instance.GetVFXWithParent(poisonArrowVFX, spawnPoint, -1f);
             activeArrowVisualVFX.transform.localPosition = Vector3.zero;
         }
     }

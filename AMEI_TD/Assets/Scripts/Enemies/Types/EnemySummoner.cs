@@ -61,7 +61,8 @@ public class EnemySummoner : EnemyBase
         if (magicCirclePrefab != null)
         {
             Vector3 circlePos = transform.position + Vector3.up * magicCircleYOffset;
-            activeMagicCircle = Instantiate(magicCirclePrefab, circlePos, Quaternion.Euler(360, 180, 0), transform);
+            activeMagicCircle = ObjectPooling.instance.GetVFX(magicCirclePrefab, circlePos, Quaternion.Euler(360, 180, 0), -1f);
+            activeMagicCircle.transform.SetParent(transform);
         }
     
         if (summonerAnimator != null)
@@ -85,11 +86,11 @@ public class EnemySummoner : EnemyBase
             if (ps != null)
             {
                 ps.Stop();
-                Destroy(activeMagicCircle, ps.main.startLifetime.constantMax);
+                StartCoroutine(ReturnToPoolAfterDelay(activeMagicCircle, ps.main.startLifetime.constantMax));
             }
             else
             {
-                Destroy(activeMagicCircle);
+                ObjectPooling.instance.Return(activeMagicCircle);
             }
             activeMagicCircle = null;
         }
@@ -131,8 +132,7 @@ public class EnemySummoner : EnemyBase
         
         if (smokeSpawnPrefab != null)
         {
-            GameObject smoke = Instantiate(smokeSpawnPrefab, spawnPos, Quaternion.identity);
-            Destroy(smoke, 2f);
+            ObjectPooling.instance.GetVFX(smokeSpawnPrefab, spawnPos, Quaternion.identity, 2f);
         }
         
         yield return new WaitForSeconds(smokeDelay);
@@ -202,8 +202,14 @@ public class EnemySummoner : EnemyBase
         // Cleanup any active magic circle VFX
         if (activeMagicCircle != null)
         {
-            Destroy(activeMagicCircle);
+            ObjectPooling.instance.Return(activeMagicCircle);
             activeMagicCircle = null;
         }
+    }
+
+    private IEnumerator ReturnToPoolAfterDelay(GameObject obj, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        ObjectPooling.instance.Return(obj);
     }
 }

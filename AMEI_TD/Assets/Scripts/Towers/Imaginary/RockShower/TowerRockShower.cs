@@ -210,8 +210,7 @@ public class TowerRockShower : TowerBase
 
         if (attackSpawnEffectPrefab != null)
         {
-            GameObject vfx = Instantiate(attackSpawnEffectPrefab, spawnPos, Quaternion.identity);
-            Destroy(vfx, 2f);
+            ObjectPooling.instance.GetVFX(attackSpawnEffectPrefab, spawnPos, Quaternion.identity, 2f);
         }
 
         GameObject rock = ObjectPooling.instance.Get(rockPrefab);
@@ -265,9 +264,8 @@ public class TowerRockShower : TowerBase
 
         if (attackSpawnEffectPrefab != null)
         {
-            GameObject vfx = Instantiate(attackSpawnEffectPrefab, spawnPos, Quaternion.identity);
-            vfx.transform.localScale *= 2f;
-            Destroy(vfx, 2f);
+            Vector3 scaledSize = attackSpawnEffectPrefab.transform.localScale * 2f;
+            ObjectPooling.instance.GetVFX(attackSpawnEffectPrefab, spawnPos, Quaternion.identity, scaledSize, 2f);
         }
 
         GameObject meteor = ObjectPooling.instance.Get(rockPrefab);

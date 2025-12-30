@@ -48,8 +48,7 @@ public class TowerPyromancer : TowerBase
     {
         if (attackSpawnEffectPrefab != null && gunPoint != null)
         {
-            GameObject spawnVFX = Instantiate(attackSpawnEffectPrefab, gunPoint.position, Quaternion.identity);
-            Destroy(spawnVFX, .1f);
+            ObjectPooling.instance.GetVFX(attackSpawnEffectPrefab, gunPoint.position, Quaternion.identity, 0.1f);
         }
 
         if (projectilePrefab == null || gunPoint == null) return;

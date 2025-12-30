@@ -201,8 +201,7 @@ public class TowerPhantomKnight : TowerBase
 
             if (spawnVFXPrefab != null)
             {
-                GameObject vfx = Instantiate(spawnVFXPrefab, spawnPos, Quaternion.identity);
-                Destroy(vfx, vfxDuration);
+                ObjectPooling.instance.GetVFX(spawnVFXPrefab, spawnPos, Quaternion.identity, vfxDuration);
             }
 
             Quaternion spawnRot = Quaternion.LookRotation(-enemyForward);
