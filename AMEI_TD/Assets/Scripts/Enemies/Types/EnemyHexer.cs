@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class EnemyHexer : EnemyBase
@@ -99,7 +100,8 @@ public class EnemyHexer : EnemyBase
         if (magicCirclePrefab != null)
         {
             Vector3 circlePos = transform.position + Vector3.up * magicCircleYOffset;
-            activeMagicCircle = Instantiate(magicCirclePrefab, circlePos, Quaternion.Euler(360, 180, 0), transform);
+            activeMagicCircle = ObjectPooling.instance.GetVFX(magicCirclePrefab, circlePos, Quaternion.Euler(360, 180, 0), -1f);
+            activeMagicCircle.transform.SetParent(transform);
         }
 
         // Trigger animation if available
@@ -129,11 +131,11 @@ public class EnemyHexer : EnemyBase
             if (ps != null)
             {
                 ps.Stop();
-                Destroy(activeMagicCircle, ps.main.startLifetime.constantMax);
+                StartCoroutine(ReturnToPoolAfterDelay(activeMagicCircle, ps.main.startLifetime.constantMax));
             }
             else
             {
-                Destroy(activeMagicCircle);
+                ObjectPooling.instance.Return(activeMagicCircle);
             }
             activeMagicCircle = null;
         }
@@ -154,8 +156,8 @@ public class EnemyHexer : EnemyBase
         if (towerSlowVFXPrefab != null)
         {
             Vector3 vfxPos = target.transform.position + Vector3.up * towerVFXYOffset;
-            GameObject slowVFX = Instantiate(towerSlowVFXPrefab, vfxPos, Quaternion.identity, target.transform);
-            Destroy(slowVFX, slowDuration + vfxFadeOutBuffer);
+            GameObject slowVFX = ObjectPooling.instance.GetVFX(towerSlowVFXPrefab, vfxPos, Quaternion.identity, slowDuration + vfxFadeOutBuffer);
+            slowVFX.transform.SetParent(target.transform);
         }
 
         // Chance to disable (1 second longer than slow)
@@ -175,7 +177,7 @@ public class EnemyHexer : EnemyBase
         // Cleanup magic circle if still active
         if (activeMagicCircle != null)
         {
-            Destroy(activeMagicCircle);
+            ObjectPooling.instance.Return(activeMagicCircle);
             activeMagicCircle = null;
         }
     }
@@ -192,9 +194,15 @@ public class EnemyHexer : EnemyBase
         // Cleanup any active magic circle VFX
         if (activeMagicCircle != null)
         {
-            Destroy(activeMagicCircle);
+            ObjectPooling.instance.Return(activeMagicCircle);
             activeMagicCircle = null;
         }
+    }
+
+    private IEnumerator ReturnToPoolAfterDelay(GameObject obj, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        ObjectPooling.instance.Return(obj);
     }
 
     protected virtual void OnDrawGizmosSelected()

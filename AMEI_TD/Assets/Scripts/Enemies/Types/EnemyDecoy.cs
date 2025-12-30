@@ -7,9 +7,9 @@ public class EnemyDecoy : EnemyBase
     [SerializeField] private Material decoyMaterial;
     [SerializeField] private float decoyLifetime = 8f;
     [SerializeField] private float decoySpawnInterval = 5f;
-    [SerializeField] private float decoySpawnDelay = 0.5f; // Delay before spawning decoys after effect
-    [SerializeField] private Vector3 decoySpawnOffset1 = new Vector3(0.5f, 0, 0.5f);  // Front-right
-    [SerializeField] private Vector3 decoySpawnOffset2 = new Vector3(-0.5f, 0, 0.5f); // Front-left
+    [SerializeField] private float decoySpawnDelay = 0.5f;
+    [SerializeField] private Vector3 decoySpawnOffset1 = new Vector3(0.5f, 0, 0.5f);
+    [SerializeField] private Vector3 decoySpawnOffset2 = new Vector3(-0.5f, 0, 0.5f);
     [SerializeField] private GameObject decoySpawnEffectPrefab;
 
     private bool isDecoy = false;
@@ -70,29 +70,22 @@ public class EnemyDecoy : EnemyBase
 
     private IEnumerator SpawnDecoysWithDelay()
     {
-        GameObject spawnEffect = null;
         if (decoySpawnEffectPrefab != null)
         {
             Transform spawnPoint = GetBottomPoint() != null ? GetBottomPoint() : transform;
-            spawnEffect = Instantiate(decoySpawnEffectPrefab, spawnPoint.position, Quaternion.identity, spawnPoint);
+            ObjectPooling.instance.GetVFXWithParent(decoySpawnEffectPrefab, spawnPoint, decoySpawnDelay + 2f);
         }
 
         yield return new WaitForSeconds(decoySpawnDelay);
 
         CreateDecoy(decoySpawnOffset1);
         CreateDecoy(decoySpawnOffset2);
-
-        if (spawnEffect != null)
-        {
-            Destroy(spawnEffect, 2f);
-        }
     }
 
     private void CreateDecoy(Vector3 offset)
     {
         GameObject decoyObject = Instantiate(gameObject, transform.position + offset, transform.rotation);
 
-        // Set layer IMMEDIATELY before deactivating to ensure it's set before any physics calculations
         int decoyLayerIndex = LayerMask.NameToLayer("Decoy");
         if (decoyLayerIndex == -1)
         {
@@ -108,7 +101,6 @@ public class EnemyDecoy : EnemyBase
         {
             decoyScript.isDecoy = true;
 
-            // Remove any copied effects (spawn effects, shields, etc.)
             RemoveCopiedEffects(decoyObject);
 
             if (decoyMaterial != null)
@@ -128,23 +120,18 @@ public class EnemyDecoy : EnemyBase
 
     private void RemoveCopiedEffects(GameObject decoyObject)
     {
-        // Get all children transforms
         Transform[] allChildren = decoyObject.GetComponentsInChildren<Transform>(true);
 
         foreach (Transform child in allChildren)
         {
-            // Skip the root object itself
             if (child == decoyObject.transform) continue;
 
-            // Check if this is a spawn effect
             if (decoySpawnEffectPrefab != null && child.name.Contains(decoySpawnEffectPrefab.name))
             {
                 Destroy(child.gameObject);
                 continue;
             }
 
-            // Check if this is an instantiated effect (contains "Clone" and is not part of the base model)
-            // Shield effects and other VFX are typically instantiated with "(Clone)" suffix
             if (child.name.Contains("(Clone)"))
             {
                 Destroy(child.gameObject);

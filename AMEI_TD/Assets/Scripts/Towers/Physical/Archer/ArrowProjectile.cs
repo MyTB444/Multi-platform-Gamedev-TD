@@ -45,12 +45,12 @@ public class ArrowProjectile : TowerProjectileBase
         applyPoison = false;
         applyFire = false;
     
-        // Destroy any child VFX from previous use
+        // Return any child VFX from previous use to pool
         if (vfxPoint != null)
         {
             foreach (Transform child in vfxPoint)
             {
-                Destroy(child.gameObject);
+                ObjectPooling.instance.Return(child.gameObject);
             }
         }
     
@@ -131,7 +131,7 @@ public class ArrowProjectile : TowerProjectileBase
         if (arrowVFX != null)
         {
             Transform spawnPoint = vfxPoint != null ? vfxPoint : transform;
-            GameObject vfx = Instantiate(arrowVFX, spawnPoint);
+            GameObject vfx = ObjectPooling.instance.GetVFXWithParent(arrowVFX, spawnPoint, -1f);
             vfx.transform.localPosition = Vector3.zero;
         }
     }
@@ -142,11 +142,11 @@ public class ArrowProjectile : TowerProjectileBase
         fireDamage = damage;
         fireDuration = duration;
         fireDamageInfo = new DamageInfo(damage, elementType, true);
-    
+
         if (arrowVFX != null)
         {
             Transform spawnPoint = vfxPoint != null ? vfxPoint : transform;
-            GameObject vfx = Instantiate(arrowVFX, spawnPoint);
+            GameObject vfx = ObjectPooling.instance.GetVFXWithParent(arrowVFX, spawnPoint, -1f);
             vfx.transform.localPosition = Vector3.zero;
         }
     }
@@ -159,8 +159,7 @@ public class ArrowProjectile : TowerProjectileBase
         if (impactEffectPrefab != null)
         {
             Vector3 impactPoint = other.ClosestPoint(transform.position);
-            GameObject impact = Instantiate(impactEffectPrefab, impactPoint, Quaternion.identity);
-            Destroy(impact, 2f);
+            ObjectPooling.instance.GetVFX(impactEffectPrefab, impactPoint, Quaternion.identity, 2f);
         }
 
         EnemyBase enemy = other.GetComponent<EnemyBase>();

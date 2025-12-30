@@ -768,7 +768,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
         if (shieldEffectPrefab != null && activeShieldEffect == null)
         {
-            activeShieldEffect = Instantiate(shieldEffectPrefab, transform.position, Quaternion.identity, transform);
+            activeShieldEffect = ObjectPooling.instance.GetVFXWithParent(shieldEffectPrefab, transform, -1f);
         }
 
         Debug.Log($"Shield applied: {shieldAmount} HP");
@@ -781,7 +781,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
         if (activeShieldEffect != null)
         {
-            Destroy(activeShieldEffect);
+            ObjectPooling.instance.Return(activeShieldEffect);
             activeShieldEffect = null;
         }
 

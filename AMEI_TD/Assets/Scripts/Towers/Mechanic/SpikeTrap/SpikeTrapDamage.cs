@@ -96,10 +96,10 @@ public class SpikeTrapDamage : MonoBehaviour
     private void SpawnVFXOnSpikes(GameObject vfxPrefab)
     {
         if (vfxPrefab == null || spikeVFXPoints == null) return;
-    
+
         foreach (Transform point in spikeVFXPoints)
         {
-            GameObject vfx = Instantiate(vfxPrefab, point);
+            GameObject vfx = ObjectPooling.instance.GetVFXWithParent(vfxPrefab, point, -1f);
             vfx.transform.localPosition = Vector3.zero;
             activeVFXInstances.Add(vfx);
         }
@@ -281,7 +281,7 @@ public class SpikeTrapDamage : MonoBehaviour
         {
             if (vfx != null)
             {
-                Destroy(vfx);
+                ObjectPooling.instance.Return(vfx);
             }
         }
         activeVFXInstances.Clear();

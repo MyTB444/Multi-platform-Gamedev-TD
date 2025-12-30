@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -136,5 +137,67 @@ public class ObjectPooling : MonoBehaviour
             containers[prefab] = containerObj.transform;
         }
         return containers[prefab];
+    }
+
+    // VFX-specific methods
+    public GameObject GetVFX(GameObject prefab, Vector3 position, Quaternion rotation, float lifetime = 2f)
+    {
+        if (prefab == null) return null;
+
+        GameObject vfx = Get(prefab);
+        vfx.transform.position = position;
+        vfx.transform.rotation = rotation;
+        vfx.transform.localScale = prefab.transform.localScale;
+        vfx.SetActive(true);
+
+        if (lifetime > 0)
+        {
+            StartCoroutine(ReturnAfterDelay(vfx, lifetime));
+        }
+
+        return vfx;
+    }
+
+    public GameObject GetVFX(GameObject prefab, Vector3 position, Quaternion rotation, Vector3 scale, float lifetime = 2f)
+    {
+        if (prefab == null) return null;
+
+        GameObject vfx = Get(prefab);
+        vfx.transform.position = position;
+        vfx.transform.rotation = rotation;
+        vfx.transform.localScale = scale;
+        vfx.SetActive(true);
+
+        if (lifetime > 0)
+        {
+            StartCoroutine(ReturnAfterDelay(vfx, lifetime));
+        }
+
+        return vfx;
+    }
+
+    public GameObject GetVFXWithParent(GameObject prefab, Transform parent, float lifetime = -1f)
+    {
+        if (prefab == null) return null;
+
+        GameObject vfx = Get(prefab);
+        vfx.transform.SetParent(parent);
+        vfx.transform.localPosition = Vector3.zero;
+        vfx.transform.localRotation = Quaternion.identity;
+        vfx.transform.localScale = prefab.transform.localScale;
+        vfx.SetActive(true);
+
+        if (lifetime > 0)
+        {
+            StartCoroutine(ReturnAfterDelay(vfx, lifetime));
+        }
+
+        return vfx;
+    }
+
+    private IEnumerator ReturnAfterDelay(GameObject obj, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        Return(obj);
     }
 }
