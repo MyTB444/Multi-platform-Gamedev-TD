@@ -35,12 +35,14 @@ public class TowerGuardian : MonoBehaviour
     [SerializeField] private GameObject spawnEffectPrefab;
     [SerializeField] private float spawnEffectDuration = 3f;
     [SerializeField] private float towerAppearDelay = 1f;
+    [SerializeField] private float towerScaleInDuration = 0.5f;
 
     private float lastLightningTime;
     private float lastBuffUpdateTime;
     private bool isActive = false;
     private List<TowerBase> buffedTowers = new List<TowerBase>();
     private EnemyBase pendingLightningTarget;
+    private Vector3 originalScale;
 
     private void Awake()
     {
@@ -50,6 +52,7 @@ public class TowerGuardian : MonoBehaviour
             return;
         }
         instance = this;
+        originalScale = transform.localScale;
     }
 
     private void Start()
@@ -103,17 +106,23 @@ public class TowerGuardian : MonoBehaviour
     private IEnumerator DelayedActivation()
     {
         // Hide the tower initially
-        SetTowerVisible(false);
+        transform.localScale = Vector3.zero;
 
         yield return new WaitForSeconds(towerAppearDelay);
 
-        // Show the tower
-        SetTowerVisible(true);
+        // Scale in the tower
+        yield return StartCoroutine(ScaleTowerIn());
 
         // Now activate everything
         isActive = true;
         lastLightningTime = Time.time;
         lastBuffUpdateTime = Time.time;
+
+        // Start playing idle animation
+        if (guardianAnimator != null)
+        {
+            guardianAnimator.Play(idleAnimationState);
+        }
 
         ApplyBuffsToAllTowers();
 
@@ -125,13 +134,23 @@ public class TowerGuardian : MonoBehaviour
         Debug.Log("Guardian Tower Activated! Mega Wave incoming!");
     }
 
-    private void SetTowerVisible(bool visible)
+    private IEnumerator ScaleTowerIn()
     {
-        Renderer[] renderers = GetComponentsInChildren<Renderer>();
-        foreach (var r in renderers)
+        float timer = 0f;
+
+        while (timer < towerScaleInDuration)
         {
-            r.enabled = visible;
+            timer += Time.deltaTime;
+            float t = Mathf.Clamp01(timer / towerScaleInDuration);
+            
+            // Ease out for a nice pop effect
+            t = 1f - (1f - t) * (1f - t);
+            
+            transform.localScale = originalScale * t;
+            yield return null;
         }
+
+        transform.localScale = originalScale;
     }
 
     private void HandleBuffUpdate()
