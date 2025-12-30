@@ -395,13 +395,21 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
         NavAgent.speed = enemySpeed;
 
+        // Skip waypoints we've already passed
+        while (currentWaypointIndex < myWaypoints.Length && HasPassedWaypoint(currentWaypointIndex))
+        {
+            currentWaypointIndex++;
+        }
+
+        if (currentWaypointIndex >= myWaypoints.Length) return;
+
         Vector3 targetWaypoint = myWaypoints[currentWaypointIndex];
         NavAgent.SetDestination(targetWaypoint);
 
-        // Smooth rotation towards movement direction
+        // Smooth rotation towards steering target
         Vector3 direction = NavAgent.steeringTarget - transform.position;
         direction.y = 0;
-    
+        
         if (direction.sqrMagnitude > 0.01f)
         {
             Quaternion targetRotation = Quaternion.LookRotation(direction);
@@ -414,6 +422,39 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
     }
 
+    private bool HasPassedWaypoint(int waypointIndex)
+    {
+        if (waypointIndex >= myWaypoints.Length) return false;
+        
+        Vector3 waypoint = myWaypoints[waypointIndex];
+        
+        // Get direction the path is going at this waypoint
+        Vector3 pathDirection;
+        if (waypointIndex < myWaypoints.Length - 1)
+        {
+            pathDirection = (myWaypoints[waypointIndex + 1] - waypoint).normalized;
+        }
+        else
+        {
+            // Last waypoint - use direction from previous
+            if (waypointIndex > 0)
+            {
+                pathDirection = (waypoint - myWaypoints[waypointIndex - 1]).normalized;
+            }
+            else
+            {
+                return false; // Only one waypoint, can't determine
+            }
+        }
+        
+        // Check if enemy is past the waypoint (dot product positive means we've passed it)
+        Vector3 toEnemy = transform.position - waypoint;
+        toEnemy.y = 0;
+        pathDirection.y = 0;
+        
+        return Vector3.Dot(toEnemy, pathDirection) > 0;
+    }
+    
     private void PlayAnimations()
     {
         if (EnemyAnimator == null)
