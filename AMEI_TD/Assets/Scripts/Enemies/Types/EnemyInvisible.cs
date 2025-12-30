@@ -75,4 +75,9 @@ public class EnemyInvisible : EnemyBase
             targetRenderer = GetComponentInChildren<Renderer>();
         }
     }
+
+    public void DisableInvisible()
+    {
+        
+    }
 }

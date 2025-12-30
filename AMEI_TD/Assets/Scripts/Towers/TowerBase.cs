@@ -71,6 +71,9 @@ public class TowerBase : MonoBehaviour
     [SerializeField] protected float projectileSpeed;
     
     [SerializeField] protected ElementType elementType = ElementType.Physical;
+    
+    [Header("Pooling")]
+    [SerializeField] protected int projectilePoolAmount = 20;
 
     [Header(("Tower Pricing"))] 
     [SerializeField] protected int buyPrice = 1;
@@ -110,18 +113,44 @@ public class TowerBase : MonoBehaviour
     private float lastTimeCheckedTarget;
     private Collider[] allocatedColliders = new Collider[100];
 
+    // Debuff system
+    protected bool isSlowed = false;
+    private float slowEndTime;
+    protected float slowMultiplier = 1f;
+
+    protected bool isDisabled = false;
+    private float disableEndTime;
+    private float disableStartTime;
+    private float disableDuration;
+
+    // Debuff visuals
+    [Header("Debuff Visuals")]
+    [SerializeField] private Color disabledColor = new Color(1f, 0.2f, 0.2f, 1f);
+    [SerializeField] private float pulseSpeed = 4f;
+    [SerializeField] private float fadeInDuration = 0.3f;
+    [SerializeField] private float fadeOutDuration = 0.5f;
+    private Renderer[] towerRenderers;
+    private Color[] originalColors;
+    private bool hasSavedColors = false;
+
     protected virtual void Awake()
     {
     }
 
     protected virtual void Start()
     {
+        if (projectilePrefab != null)
+        {
+            ObjectPooling.instance.Register(projectilePrefab, projectilePoolAmount);
+        }
+
         baseDamage = damage;
         baseAttackCooldown = attackCooldown;
         baseAttackRange = attackRange;
-    
+
         ApplyStatUpgrades();
-    
+        SaveOriginalColors();
+
         // Apply any unlocked upgrades from manager
         if (TowerUpgradeManager.instance != null)
         {
@@ -129,15 +158,134 @@ public class TowerBase : MonoBehaviour
         }
     }
 
+    private void SaveOriginalColors()
+    {
+        towerRenderers = GetComponentsInChildren<Renderer>();
+        originalColors = new Color[towerRenderers.Length];
+
+        for (int i = 0; i < towerRenderers.Length; i++)
+        {
+            if (towerRenderers[i].material.HasProperty("_Color"))
+            {
+                originalColors[i] = towerRenderers[i].material.color;
+            }
+        }
+
+        hasSavedColors = true;
+    }
+
     protected virtual void FixedUpdate()
     {
+        UpdateDebuffs();
+        UpdateDisabledVisual();
+
+        if (isDisabled) return;
+
         ClearTargetOutOfRange();
         UpdateTarget();
         HandleRotation();
 
         if (CanAttack()) AttemptToAttack();
     }
-    
+
+    protected void UpdateDebuffs()
+    {
+        if (isSlowed && Time.time >= slowEndTime)
+        {
+            RemoveSlow();
+        }
+
+        if (isDisabled && Time.time >= disableEndTime)
+        {
+            RemoveDisable();
+        }
+    }
+
+    protected void UpdateDisabledVisual()
+    {
+        if (!hasSavedColors) return;
+
+        if (!isDisabled)
+        {
+            return;
+        }
+
+        float elapsed = Time.time - disableStartTime;
+        float remaining = disableEndTime - Time.time;
+
+        // Calculate intensity based on fade in/out
+        float intensity = 1f;
+
+        // Fade in
+        if (elapsed < fadeInDuration)
+        {
+            intensity = elapsed / fadeInDuration;
+        }
+        // Fade out
+        else if (remaining < fadeOutDuration)
+        {
+            intensity = Mathf.Max(0f, remaining / fadeOutDuration);
+        }
+
+        // Pulse effect
+        float pulse = (Mathf.Sin(Time.time * pulseSpeed) + 1f) / 2f;
+
+        // Combine pulse with fade intensity
+        float finalLerp = pulse * intensity;
+
+        for (int i = 0; i < towerRenderers.Length; i++)
+        {
+            if (towerRenderers[i] != null && towerRenderers[i].material.HasProperty("_Color"))
+            {
+                towerRenderers[i].material.color = Color.Lerp(originalColors[i], disabledColor, finalLerp);
+            }
+        }
+    }
+
+    private void RestoreOriginalColors()
+    {
+        if (!hasSavedColors) return;
+
+        for (int i = 0; i < towerRenderers.Length; i++)
+        {
+            if (towerRenderers[i] != null && towerRenderers[i].material.HasProperty("_Color"))
+            {
+                towerRenderers[i].material.color = originalColors[i];
+            }
+        }
+    }
+
+    public void ApplySlow(float slowPercent, float duration)
+    {
+        isSlowed = true;
+        slowEndTime = Time.time + duration;
+        slowMultiplier = 1f - Mathf.Clamp(slowPercent, 0f, 0.9f);
+        Debug.Log($"{gameObject.name} slowed! slowPercent={slowPercent}, slowMultiplier={slowMultiplier}");
+    }
+
+    private void RemoveSlow()
+    {
+        isSlowed = false;
+        slowMultiplier = 1f;
+    }
+
+    public void ApplyDisable(float duration)
+    {
+        isDisabled = true;
+        disableStartTime = Time.time;
+        disableDuration = duration;
+        disableEndTime = Time.time + duration;
+    }
+
+    private void RemoveDisable()
+    {
+        isDisabled = false;
+        RestoreOriginalColors();
+    }
+
+    public bool IsSlowed() => isSlowed;
+    public bool IsDisabled() => isDisabled;
+
     protected DamageInfo CreateDamageInfo()
     {
         return new DamageInfo(damage, elementType);
@@ -151,7 +299,7 @@ public class TowerBase : MonoBehaviour
     }
 
     // Periodically searches for new targets instead of every frame for performance
-    private void UpdateTarget()
+    protected void UpdateTarget()
     {
         if (Time.time > lastTimeCheckedTarget + targetCheckInterval || currentEnemy == null)
         {
@@ -312,7 +460,6 @@ public class TowerBase : MonoBehaviour
         }
     }
 
-    // Raycasts to enemy and spawns projectile with hit information
     protected virtual void FireProjectile()
     {
         if (attackSpawnEffectPrefab != null && gunPoint != null)
@@ -320,7 +467,7 @@ public class TowerBase : MonoBehaviour
             GameObject spawnVFX = Instantiate(attackSpawnEffectPrefab, gunPoint.position, Quaternion.identity);
             Destroy(spawnVFX, 2f);
         }
-    
+
         Vector3 directionToEnemy = DirectionToEnemyFrom(gunPoint);
 
         if (Physics.Raycast(gunPoint.position, directionToEnemy, out RaycastHit hitInfo, Mathf.Infinity, whatIsTargetable))
@@ -330,14 +477,22 @@ public class TowerBase : MonoBehaviour
             if (damageable == null) return;
 
             Vector3 spawnPosition = gunPoint.position + directionToEnemy * 0.1f;
-            GameObject newProjectile = Instantiate(projectilePrefab, spawnPosition, gunPoint.rotation);
+        
+            GameObject newProjectile = ObjectPooling.instance.Get(projectilePrefab);
+            newProjectile.transform.position = spawnPosition;
+            newProjectile.transform.rotation = gunPoint.rotation;
+            newProjectile.SetActive(true);
+        
             newProjectile.GetComponent<TowerProjectileBase>().SetupProjectile(hitInfo.point, damageable, CreateDamageInfo(), projectileSpeed);
         }
     }
 
     protected virtual bool CanAttack()
     {
-        return Time.time > lastTimeAttacked + attackCooldown && currentEnemy != null;
+        // slowMultiplier < 1 means slowed, so divide to increase cooldown
+        // e.g., slowMultiplier = 0.5 means 50% speed, so cooldown takes 2x longer
+        float effectiveCooldown = attackCooldown / slowMultiplier;
+        return Time.time > lastTimeAttacked + effectiveCooldown && currentEnemy != null;
     }
 
     protected virtual void HandleRotation()
@@ -431,4 +586,5 @@ public class TowerBase : MonoBehaviour
     
     public int GetBuyPrice() { return buyPrice; }
     public int GetSellPrice() { return sellPrice; }
+    public float GetSlowMultiplier() => slowMultiplier;
 }

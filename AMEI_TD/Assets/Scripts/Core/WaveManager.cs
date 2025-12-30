@@ -10,7 +10,19 @@ public class WaveDetails
     public int enemyTank;
     public int enemyInvisible;
     public int enemyReinforced;
+    public int enemySummoner;
+    public int enemyHexer;
+    public int enemyHerald;
 }
+
+[Serializable]
+public class EnemyPoolConfig
+{
+    public EnemyType enemyType;
+    public GameObject prefab;
+    public int poolAmount = 10;
+}
+
 public class WaveManager : MonoBehaviour
 {
     [Header("Wave Details")] 
@@ -18,14 +30,10 @@ public class WaveManager : MonoBehaviour
     [SerializeField] private float waveTimer;
     [SerializeField] private WaveDetails[] levelWaves;
 
-    [Header("Enemy Prefabs")] 
-    [SerializeField] private GameObject enemyBasic;
-    [SerializeField] private GameObject enemyFast;
-    [SerializeField] private GameObject enemyTank;
-    [SerializeField] private GameObject enemyInvisible;
-    [SerializeField] private GameObject enemyReinforced;
-    
+    [Header("Enemy Prefabs")]
+    [SerializeField] private List<EnemyPoolConfig> enemyPrefabs;
 
+    private Dictionary<EnemyType, GameObject> enemyPrefabLookup;
     private List<EnemySpawner> enemySpawners;
     private int waveIndex;
     private bool waveTimerEnabled;
@@ -35,6 +43,17 @@ public class WaveManager : MonoBehaviour
     private void Awake()
     {
         enemySpawners = new List<EnemySpawner>(FindObjectsByType<EnemySpawner>(FindObjectsSortMode.None));
+        
+        // Build lookup and register pools
+        enemyPrefabLookup = new Dictionary<EnemyType, GameObject>();
+        foreach (var config in enemyPrefabs)
+        {
+            if (config.prefab != null)
+            {
+                enemyPrefabLookup[config.enemyType] = config.prefab;
+                ObjectPooling.instance.Register(config.prefab, config.poolAmount);
+            }
+        }
     }
 
     private void Update()
@@ -43,7 +62,6 @@ public class WaveManager : MonoBehaviour
 
         HandleWaveTimer();
     }
-    
 
     public void ActivateWaveManager()
     {
@@ -57,7 +75,6 @@ public class WaveManager : MonoBehaviour
         waveTimerEnabled = false;
     }
     
-    // Called when an enemy is defeated to check if wave is complete and trigger next wave
     public void CheckIfWaveCompleted()
     {
         if (gameBegan == false || GameManager.instance.IsGameLost()) return;
@@ -97,7 +114,7 @@ public class WaveManager : MonoBehaviour
         }
 
         waveTimer -= Time.deltaTime;
-        UIBase.instance.UpdateWaveTimerUI(waveTimer);
+        //UIBase.instance.UpdateWaveTimerUI(waveTimer);
 
         if (waveTimer <= 0) StartNewWave();
     }
@@ -111,7 +128,6 @@ public class WaveManager : MonoBehaviour
         makingNextWave = false;
     }
 
-    // Distributes enemies from the current wave across all spawners in round-robin fashion
     private void GiveEnemiesToSpawners()
     {
         List<GameObject> newEnemies = GetNewEnemies();
@@ -128,7 +144,6 @@ public class WaveManager : MonoBehaviour
             
             spawnerIndex++;
             
-            // Cycle back to first spawner if we've used all spawners
             if (spawnerIndex >= enemySpawners.Count) spawnerIndex = 0;
         }
     }
@@ -142,33 +157,29 @@ public class WaveManager : MonoBehaviour
         }
 
         List<GameObject> newEnemyList = new List<GameObject>();
+        WaveDetails wave = levelWaves[waveIndex];
 
-        for (int i = 0; i < levelWaves[waveIndex].enemyBasic; i++)
-        {
-            newEnemyList.Add(enemyBasic);
-        }
-        
-        for (int i = 0; i < levelWaves[waveIndex].enemyFast; i++)
-        {
-            newEnemyList.Add(enemyFast);
-        }
-        
-        for (int i = 0; i < levelWaves[waveIndex].enemyTank; i++)
-        {
-            newEnemyList.Add(enemyTank);
-        }
-        
-        for (int i = 0; i < levelWaves[waveIndex].enemyInvisible; i++)
-        {
-            newEnemyList.Add(enemyInvisible);
-        }
-        
-        for (int i = 0; i < levelWaves[waveIndex].enemyReinforced; i++)
-        {
-            newEnemyList.Add(enemyReinforced);
-        }
+        AddEnemiesToList(newEnemyList, EnemyType.Basic, wave.enemyBasic);
+        AddEnemiesToList(newEnemyList, EnemyType.Fast, wave.enemyFast);
+        AddEnemiesToList(newEnemyList, EnemyType.Tank, wave.enemyTank);
+        AddEnemiesToList(newEnemyList, EnemyType.Invisible, wave.enemyInvisible);
+        AddEnemiesToList(newEnemyList, EnemyType.Reinforced, wave.enemyReinforced);
+        AddEnemiesToList(newEnemyList, EnemyType.Summoner, wave.enemySummoner);
+        AddEnemiesToList(newEnemyList, EnemyType.Hexer, wave.enemyHexer);
+        AddEnemiesToList(newEnemyList, EnemyType.Herald, wave.enemyHerald);
 
         return newEnemyList;
+    }
+
+    private void AddEnemiesToList(List<GameObject> list, EnemyType type, int count)
+    {
+        if (count <= 0) return;
+        if (!enemyPrefabLookup.TryGetValue(type, out GameObject prefab)) return;
+
+        for (int i = 0; i < count; i++)
+        {
+            list.Add(prefab);
+        }
     }
 
     private bool AllEnemiesDefeated()

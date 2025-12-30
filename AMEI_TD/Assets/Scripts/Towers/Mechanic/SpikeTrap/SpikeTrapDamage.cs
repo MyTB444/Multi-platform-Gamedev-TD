@@ -116,19 +116,20 @@ public class SpikeTrapDamage : MonoBehaviour
     {
         if (isOnCooldown) return;
         
+        if (tower != null && tower.IsDisabled()) return;
+    
         // Reset spikes if they're stuck up with no enemies
         if (spikesAreRaised && !HasEnemiesInRange())
         {
             StartCoroutine(ResetSpikes());
             return;
         }
-        
+    
         if (HasEnemiesInRange())
         {
             StartCoroutine(TrapCycle());
         }
     }
-    
     private bool HasEnemiesInRange()
     {
         int enemyCount = Physics.OverlapBoxNonAlloc(
@@ -177,7 +178,12 @@ public class SpikeTrapDamage : MonoBehaviour
         yield return StartCoroutine(MoveSpikes(loweredPosition, lowerSpeed));
         spikesAreRaised = false;
         
-        yield return new WaitForSeconds(cooldown);
+        float effectiveCooldown = cooldown;
+        if (tower != null)
+        {
+            effectiveCooldown = cooldown / tower.GetSlowMultiplier();
+        }
+        yield return new WaitForSeconds(effectiveCooldown);
         
         isOnCooldown = false;
     }
@@ -187,7 +193,12 @@ public class SpikeTrapDamage : MonoBehaviour
         isOnCooldown = true;
         yield return StartCoroutine(MoveSpikes(loweredPosition, lowerSpeed));
         spikesAreRaised = false;
-        yield return new WaitForSeconds(cooldown);
+        float effectiveCooldown = cooldown;
+        if (tower != null)
+        {
+            effectiveCooldown = cooldown / tower.GetSlowMultiplier();
+        }
+        yield return new WaitForSeconds(effectiveCooldown);
         isOnCooldown = false;
     }
     

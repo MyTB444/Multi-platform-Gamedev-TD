@@ -197,28 +197,32 @@ public class SpearTower : TowerBase
     private void FireSpear()
     {
         if (lockedDamageable == null) return;
-    
+
         Vector3 spawnPos = spearVisual.transform.position;
         Quaternion spawnRot = spearVisual.transform.rotation;
-    
+
         Vector3 fireDirection = spawnRot * Vector3.up;
         spawnPos += fireDirection * forwardSpawnOffset;
+
+        GameObject newSpear = ObjectPooling.instance.Get(projectilePrefab);
+        newSpear.transform.position = spawnPos;
+        newSpear.transform.rotation = spawnRot;
+        newSpear.SetActive(true);
     
-        GameObject newSpear = Instantiate(projectilePrefab, spawnPos, spawnRot);
         SpearProjectile spear = newSpear.GetComponent<SpearProjectile>();
-    
+
         spear.SetupSpear(lockedTargetPosition, lockedDamageable, CreateDamageInfo(), projectileSpeed);
-    
+
         if (bleedSpear)
         {
             spear.SetBleedEffect(bleedDamage, bleedDuration, elementType, bleedSpearVFX);
         }
-    
+
         if (explosiveTip)
         {
             spear.SetExplosiveEffect(explosionRadius, explosionDamage, elementType, whatIsEnemy, explosionVFX);
         }
-    
+
         lockedDamageable = null;
     }
 }

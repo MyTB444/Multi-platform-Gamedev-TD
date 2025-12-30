@@ -19,6 +19,9 @@ public class TowerRockShower : TowerBase
     [Header("Prediction")]
     [SerializeField] private float predictionMultiplier = 0.5f;
     
+    [Header("Pooling")]
+    [SerializeField] private int rockPoolAmount = 30;
+    
     [Header("Rock Shower Upgrades")]
     [SerializeField] private bool moreRocks = false;
     [SerializeField] private int bonusRocks = 3;
@@ -40,13 +43,38 @@ public class TowerRockShower : TowerBase
     private Vector3 lastEnemyPosition;
     private Vector3 lockedTargetPosition;
     
+    protected override void Awake()
+    {
+    }
+    
+    protected override void Start()
+    {
+        base.Start();
+    
+        if (rockPrefab != null)
+        {
+            ObjectPooling.instance.Register(rockPrefab, rockPoolAmount);
+        }
+    }
+    
     protected override void FixedUpdate()
     {
-        UpdateEnemyVelocity();
+        // Always process debuffs
+        UpdateDebuffs();
+        UpdateDisabledVisual();
     
+        // Don't do anything if disabled
+        if (isDisabled) return;
+    
+        UpdateEnemyVelocity();
+
         if (!isShowering)
         {
-            base.FixedUpdate();
+            ClearTargetOutOfRange();
+            UpdateTarget();
+            HandleRotation();
+
+            if (CanAttack()) AttemptToAttack();
         }
         else
         {
@@ -54,7 +82,7 @@ public class TowerRockShower : TowerBase
             {
                 currentEnemy = null;
             }
-        
+    
             HandleRotation();
         }
     }
@@ -146,22 +174,25 @@ public class TowerRockShower : TowerBase
 
         float elapsed = 0f;
         float finalDuration = longerShower ? showerDuration + bonusShowerDuration : showerDuration;
-    
-        // Calculate time between rocks to fit bonus rocks in same duration
+
         float finalTimeBetweenRocks = moreRocks ? 
             finalDuration / ((finalDuration / timeBetweenRocks) + bonusRocks) : 
             timeBetweenRocks;
 
         while (elapsed < finalDuration)
         {
-            SpawnRock(lockedTargetPosition);
+            // Skip spawning rocks while disabled, but keep waiting
+            if (!isDisabled)
+            {
+                SpawnRock(lockedTargetPosition);
+            }
 
             yield return new WaitForSeconds(finalTimeBetweenRocks);
             elapsed += finalTimeBetweenRocks;
         }
-    
-        // Meteor strike at the end
-        if (meteorStrike)
+
+        // Meteor strike at the end (only if not disabled)
+        if (meteorStrike && !isDisabled)
         {
             SpawnMeteor(lockedTargetPosition);
         }
@@ -183,9 +214,11 @@ public class TowerRockShower : TowerBase
             Destroy(vfx, 2f);
         }
 
-        GameObject rock = Instantiate(rockPrefab, spawnPos, Random.rotation);
+        GameObject rock = ObjectPooling.instance.Get(rockPrefab);
+        rock.transform.position = spawnPos;
+        rock.transform.rotation = Random.rotation;
+        rock.SetActive(true);
 
-        // Apply bigger rocks bonus
         float sizeMultiplier = biggerRocks ? 1f + rockSizeBonus : 1f;
         float randomSize = Random.Range(rockSizeMin, rockSizeMax) * sizeMultiplier;
         rock.transform.localScale = rockPrefab.transform.localScale * randomSize;
@@ -200,22 +233,20 @@ public class TowerRockShower : TowerBase
     private void SpawnMeteor(Vector3 fallbackPosition)
     {
         float meteorSpeed = rockSpeedMin;
-    
-        // Find a new target for the meteor
+
         Vector3 targetPosition = fallbackPosition;
-    
+
         Collider[] enemies = Physics.OverlapSphere(transform.position, attackRange, whatIsEnemy);
-    
+
         if (enemies.Length > 0)
         {
-            // Find closest enemy
             float closestDist = float.MaxValue;
             Transform closestEnemy = null;
-        
+    
             foreach (Collider col in enemies)
             {
                 if (!col.gameObject.activeSelf) continue;
-            
+        
                 float dist = Vector3.Distance(transform.position, col.transform.position);
                 if (dist < closestDist)
                 {
@@ -223,29 +254,31 @@ public class TowerRockShower : TowerBase
                     closestEnemy = col.transform;
                 }
             }
-        
+    
             if (closestEnemy != null)
             {
-                // Just use enemy's current position - no prediction needed since meteor falls fast
                 targetPosition = closestEnemy.position;
             }
         }
-    
+
         Vector3 spawnPos = targetPosition + Vector3.up * (spawnHeight + meteorHeight);
-    
+
         if (attackSpawnEffectPrefab != null)
         {
             GameObject vfx = Instantiate(attackSpawnEffectPrefab, spawnPos, Quaternion.identity);
             vfx.transform.localScale *= 2f;
             Destroy(vfx, 2f);
         }
-    
-        GameObject meteor = Instantiate(rockPrefab, spawnPos, Random.rotation);
+
+        GameObject meteor = ObjectPooling.instance.Get(rockPrefab);
+        meteor.transform.position = spawnPos;
+        meteor.transform.rotation = Random.rotation;
+        meteor.SetActive(true);
         meteor.transform.localScale = rockPrefab.transform.localScale * meteorSize;
-    
+
         float scaledDamage = damage * meteorSize * meteorDamageMultiplier;
         DamageInfo meteorDamageInfo = new DamageInfo(scaledDamage, elementType);
-    
+
         RockProjectile projectile = meteor.GetComponent<RockProjectile>();
         projectile.Setup(meteorDamageInfo, whatIsEnemy, meteorSpeed, meteorSize);
     }

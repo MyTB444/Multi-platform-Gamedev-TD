@@ -141,8 +141,13 @@ public class BladeTower : TowerBase
     
     protected override void FixedUpdate()
     {
-        CheckForEnemies();
+        UpdateDebuffs();
+        UpdateDisabledVisual();
         
+        if (isDisabled) return;
+    
+        CheckForEnemies();
+    
         if (isActive)
         {
             isReturning = false;
@@ -153,7 +158,7 @@ public class BladeTower : TowerBase
             isReturning = true;
             ReturnToStart();
         }
-        
+    
         CleanupHitList();
     }
     
@@ -171,11 +176,11 @@ public class BladeTower : TowerBase
     private void RotateBlades()
     {
         if (bladeHolder == null) return;
-        
+    
         float adjustedAngle = currentAngle + momentumOffset;
         float momentumMultiplier = 1f + (Mathf.Sin(adjustedAngle * Mathf.Deg2Rad) * momentumStrength);
         
-        float currentSpeed = spinSpeed * momentumMultiplier;
+        float currentSpeed = spinSpeed * momentumMultiplier * slowMultiplier;
         float rotationThisFrame = currentSpeed * Time.fixedDeltaTime;
         
         currentAngle += rotationThisFrame;

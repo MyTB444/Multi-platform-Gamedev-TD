@@ -81,7 +81,15 @@ public class TowerProjectileBase : MonoBehaviour
             Destroy(impact, 2f);
         }
 
-        Destroy(gameObject);
         isActive = false;
+        hasHit = false;
+        ObjectPooling.instance.Return(gameObject);
+    }
+    
+    protected virtual void OnEnable()
+    {
+        isActive = true;
+        hasHit = false;
+        spawnTime = Time.time;
     }
 }
