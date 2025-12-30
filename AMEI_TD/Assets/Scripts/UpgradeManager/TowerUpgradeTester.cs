@@ -32,22 +32,25 @@ public class TowerUpgradeTester : MonoBehaviour
         
         // Common upgrades
         validUpgrades.Add(TowerUpgradeType.DamageBoost);
-        validUpgrades.Add(TowerUpgradeType.AttackSpeedBoost);
-        validUpgrades.Add(TowerUpgradeType.RangeBoost);
-        
+
         // Tower specific
         if (selectedTower is TowerArcher)
         {
+            validUpgrades.Add(TowerUpgradeType.PhysicalAttackSpeed);
+            validUpgrades.Add(TowerUpgradeType.PhysicalRange);
             validUpgrades.Add(TowerUpgradeType.PoisonArrows);
             validUpgrades.Add(TowerUpgradeType.FireArrows);
         }
         else if (selectedTower is SpearTower)
         {
+            validUpgrades.Add(TowerUpgradeType.PhysicalAttackSpeed);
+            validUpgrades.Add(TowerUpgradeType.PhysicalRange);
             validUpgrades.Add(TowerUpgradeType.BarbedSpear);
             validUpgrades.Add(TowerUpgradeType.ExplosiveTip);
         }
         else if (selectedTower is TowerPyromancer)
         {
+            validUpgrades.Add(TowerUpgradeType.PyromancerAttackSpeed);
             validUpgrades.Add(TowerUpgradeType.BurnChance);
             validUpgrades.Add(TowerUpgradeType.BiggerFireball);
             validUpgrades.Add(TowerUpgradeType.BurnSpread);
@@ -61,12 +64,14 @@ public class TowerUpgradeTester : MonoBehaviour
         }
         else if (selectedTower is TowerSpikeTrap)
         {
+            validUpgrades.Add(TowerUpgradeType.SpikeTrapAttackSpeed);
             validUpgrades.Add(TowerUpgradeType.PoisonSpikes);
             validUpgrades.Add(TowerUpgradeType.BleedingSpikes);
             validUpgrades.Add(TowerUpgradeType.CripplingSpikes);
         }
         else if (selectedTower is BladeTower)
         {
+            validUpgrades.Add(TowerUpgradeType.BladeSpinSpeed);
             validUpgrades.Add(TowerUpgradeType.BleedChance);
             validUpgrades.Add(TowerUpgradeType.MoreBlades);
             validUpgrades.Add(TowerUpgradeType.ExtendedReach);

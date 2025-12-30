@@ -25,6 +25,8 @@ public class BladeTower : TowerBase
     [SerializeField] private float vfxDelay = 0.3f;
     
     [Header("Blade Upgrades")]
+    [SerializeField] [Range(0f, 0.5f)] private float spinSpeedBoostPercent = 0.25f;
+    [Space]
     [SerializeField] private bool bleedChance = false;
     [SerializeField] [Range(0f, 1f)] private float bleedChancePercent = 0.3f;
     [SerializeField] private float bleedDamage = 3f;
@@ -46,6 +48,8 @@ public class BladeTower : TowerBase
     private Dictionary<EnemyBase, float> recentlyHitEnemies = new Dictionary<EnemyBase, float>();
     private Quaternion startRotation;
     private bool isActive = false;
+    private float baseSpinSpeed;
+    private bool spinSpeedBoosted = false;
     private bool isReturning = false;
     private float currentAngle = 0f;
     private bool hasTriggeredAnimation = false;
@@ -53,12 +57,14 @@ public class BladeTower : TowerBase
     protected override void Start()
     {
         base.Start();
-    
+
+        baseSpinSpeed = spinSpeed;
+
         if (bladeHolder != null)
         {
             startRotation = bladeHolder.rotation;
         }
-    
+
         ApplyUpgrades();
     }
     
@@ -68,6 +74,17 @@ public class BladeTower : TowerBase
     
         switch (upgradeType)
         {
+            case TowerUpgradeType.BladeSpinSpeed:
+                spinSpeedBoosted = enabled;
+                if (enabled)
+                {
+                    spinSpeed = baseSpinSpeed * (1f + spinSpeedBoostPercent);
+                }
+                else
+                {
+                    spinSpeed = baseSpinSpeed;
+                }
+                break;
             case TowerUpgradeType.BleedChance:
                 bleedChance = enabled;
                 ClearBleedVFX();

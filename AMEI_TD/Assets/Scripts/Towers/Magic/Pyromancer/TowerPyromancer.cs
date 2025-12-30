@@ -22,6 +22,10 @@ public class TowerPyromancer : TowerBase
     
         switch (upgradeType)
         {
+            case TowerUpgradeType.PyromancerAttackSpeed:
+                attackSpeedBoost = enabled;
+                ApplyStatUpgrades();
+                break;
             case TowerUpgradeType.BurnChance:
                 burnChance = enabled;
                 break;

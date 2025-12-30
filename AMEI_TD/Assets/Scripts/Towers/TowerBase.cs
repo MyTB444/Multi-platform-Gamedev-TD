@@ -5,18 +5,21 @@ public enum TowerUpgradeType
 {
     // Common
     DamageBoost,
-    AttackSpeedBoost,
-    RangeBoost,
-    
+
+    // Physical (Archer & Spear)
+    PhysicalAttackSpeed,
+    PhysicalRange,
+
     // Archer
     PoisonArrows,
     FireArrows,
-    
+
     // Spear
     BarbedSpear,
     ExplosiveTip,
     
     // Pyromancer
+    PyromancerAttackSpeed,
     BurnChance,
     BiggerFireball,
     BurnSpread,
@@ -28,11 +31,13 @@ public enum TowerUpgradeType
     FreezeSolid,
     
     // Spike Trap
+    SpikeTrapAttackSpeed,
     PoisonSpikes,
     BleedingSpikes,
     CripplingSpikes,
     
     // Blade Tower
+    BladeSpinSpeed,
     BleedChance,
     MoreBlades,
     ExtendedReach,
@@ -591,14 +596,6 @@ public class TowerBase : MonoBehaviour
         {
             case TowerUpgradeType.DamageBoost:
                 damageBoost = enabled;
-                ApplyStatUpgrades();
-                break;
-            case TowerUpgradeType.AttackSpeedBoost:
-                attackSpeedBoost = enabled;
-                ApplyStatUpgrades();
-                break;
-            case TowerUpgradeType.RangeBoost:
-                rangeBoost = enabled;
                 ApplyStatUpgrades();
                 break;
         }
