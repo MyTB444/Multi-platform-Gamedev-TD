@@ -3215,6 +3215,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1927317023}
     m_Modifications:
+    - target: {fileID: 4027973325404645379, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
+      propertyPath: roadFacing
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4027973325404645379, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
+      propertyPath: showDebugRays
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4027973325404645379, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
+      propertyPath: detectionRadius
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 6142938654885707507, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
       propertyPath: m_Name
       value: TowerStandingBase (13)
@@ -20728,6 +20740,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1927317023}
     m_Modifications:
+    - target: {fileID: 4027973325404645379, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
+      propertyPath: roadFacing
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6142938654885707507, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
       propertyPath: m_Name
       value: TowerStandingBase (15)
@@ -23050,6 +23066,18 @@ PrefabInstance:
     - target: {fileID: 6142938654885707507, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
       propertyPath: m_Name
       value: TowerStandingBase (14)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7158668583991164868, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7158668583991164868, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.00000004470348
+      objectReference: {fileID: 0}
+    - target: {fileID: 7158668583991164868, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8328912719474520493, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
       propertyPath: m_LocalPosition.x
@@ -27782,13 +27810,21 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1927317023}
     m_Modifications:
+    - target: {fileID: 4027973325404645379, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
+      propertyPath: showDebugRays
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4027973325404645379, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
+      propertyPath: detectionRadius
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 6142938654885707507, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
       propertyPath: m_Name
       value: TowerStandingBase (12)
       objectReference: {fileID: 0}
     - target: {fileID: 8328912719474520493, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 68.33023
+      value: 68.49
       objectReference: {fileID: 0}
     - target: {fileID: 8328912719474520493, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
       propertyPath: m_LocalPosition.y
@@ -27796,11 +27832,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8328912719474520493, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -19.021183
+      value: -19.02
       objectReference: {fileID: 0}
     - target: {fileID: 8328912719474520493, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.00000058114523
       objectReference: {fileID: 0}
     - target: {fileID: 8328912719474520493, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
       propertyPath: m_LocalRotation.x
@@ -27808,7 +27844,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8328912719474520493, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8328912719474520493, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
       propertyPath: m_LocalRotation.z
@@ -27820,7 +27856,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8328912719474520493, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 180
       objectReference: {fileID: 0}
     - target: {fileID: 8328912719474520493, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -44862,9 +44898,29 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1927317023}
     m_Modifications:
+    - target: {fileID: 4027973325404645379, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
+      propertyPath: showDebugRays
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4027973325404645379, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
+      propertyPath: detectionRadius
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 6142938654885707507, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
       propertyPath: m_Name
       value: TowerStandingBase (17)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7158668583991164868, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7158668583991164868, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.00000022351739
+      objectReference: {fileID: 0}
+    - target: {fileID: 7158668583991164868, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 360
       objectReference: {fileID: 0}
     - target: {fileID: 8328912719474520493, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
       propertyPath: m_LocalPosition.x
@@ -44880,7 +44936,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8328912719474520493, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: -0.00000035762784
       objectReference: {fileID: 0}
     - target: {fileID: 8328912719474520493, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
       propertyPath: m_LocalRotation.x
@@ -44888,7 +44944,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8328912719474520493, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8328912719474520493, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
       propertyPath: m_LocalRotation.z
@@ -44900,7 +44956,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8328912719474520493, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 180
       objectReference: {fileID: 0}
     - target: {fileID: 8328912719474520493, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -54386,6 +54442,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: TowerStandingBase (18)
       objectReference: {fileID: 0}
+    - target: {fileID: 7158668583991164868, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7158668583991164868, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.00000023841855
+      objectReference: {fileID: 0}
+    - target: {fileID: 7158668583991164868, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 360
+      objectReference: {fileID: 0}
     - target: {fileID: 8328912719474520493, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
       propertyPath: m_LocalPosition.x
       value: 56.300236
@@ -61049,6 +61117,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1927317023}
     m_Modifications:
+    - target: {fileID: 4027973325404645379, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
+      propertyPath: roadFacing
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4027973325404645379, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
+      propertyPath: showDebugRays
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4027973325404645379, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
+      propertyPath: detectionRadius
+      value: 20
+      objectReference: {fileID: 0}
     - target: {fileID: 6142938654885707507, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
       propertyPath: m_Name
       value: TowerStandingBase (16)
@@ -63847,6 +63927,67 @@ Transform:
   - {fileID: 1603431287}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1762453696
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4027973325404645379, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
+      propertyPath: roadFacing
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6142938654885707507, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
+      propertyPath: m_Name
+      value: TowerStandingBase
+      objectReference: {fileID: 0}
+    - target: {fileID: 8328912719474520493, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 26.640415
+      objectReference: {fileID: 0}
+    - target: {fileID: 8328912719474520493, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 4.127
+      objectReference: {fileID: 0}
+    - target: {fileID: 8328912719474520493, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 29.550198
+      objectReference: {fileID: 0}
+    - target: {fileID: 8328912719474520493, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8328912719474520493, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8328912719474520493, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8328912719474520493, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8328912719474520493, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8328912719474520493, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8328912719474520493, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
 --- !u!1 &1762454073
 GameObject:
   m_ObjectHideFlags: 0
@@ -64117,6 +64258,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1927317023}
     m_Modifications:
+    - target: {fileID: 4027973325404645379, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
+      propertyPath: roadFacing
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6142938654885707507, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
       propertyPath: m_Name
       value: TowerStandingBase (19)
@@ -85666,3 +85811,4 @@ SceneRoots:
   - {fileID: 1758156067}
   - {fileID: 956956560}
   - {fileID: 321508391497927795}
+  - {fileID: 1762453696}
