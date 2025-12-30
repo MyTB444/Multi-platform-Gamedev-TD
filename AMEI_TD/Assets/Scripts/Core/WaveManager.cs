@@ -115,18 +115,28 @@ public class WaveManager : MonoBehaviour
     public void CheckIfWaveCompleted()
     {
         if (gameBegan == false || GameManager.instance.IsGameLost()) return;
-
+    
         if (AllEnemiesDefeated() == false || AllSpawnersFinishedSpawning() == false || makingNextWave) return;
-
+    
         makingNextWave = true;
         waveIndex++;
-
+    
         if (HasNoMoreWaves())
         {
-            GameManager.instance.LevelCompleted();
+            // Don't win yet - wait for mega wave to be triggered and completed
+            // If mega wave is already active, let CheckIfMegaWaveCompleted handle it
+            if (megaWaveActive)
+            {
+                CheckIfMegaWaveCompleted();
+            }
+            else
+            {
+                Debug.Log("All normal waves complete! Summon the Guardian to trigger the final Mega Wave!");
+                // Optionally notify UI that guardian can be summoned
+            }
             return;
         }
-
+    
         EnableWaveTimer(true);
     }
 
