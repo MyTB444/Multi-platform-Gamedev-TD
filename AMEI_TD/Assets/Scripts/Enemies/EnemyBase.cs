@@ -362,14 +362,32 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private void BeginMovement()
     {
         currentWaypointIndex = 0;
-    
+
         if (NavAgent != null)
         {
             NavAgent.enabled = true;
-            NavAgent.Warp(transform.position); // Snap to NavMesh
+        
+            // Find a valid NavMesh position near spawn point
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(transform.position, out hit, 5f, NavMesh.AllAreas))
+            {
+                NavAgent.Warp(hit.position);
+            }
+            else
+            {
+                Debug.LogWarning($"[{gameObject.name}] Could not find NavMesh near {transform.position}");
+                NavAgent.Warp(transform.position);
+            }
+        
             NavAgent.speed = enemySpeed;
             NavAgent.isStopped = false;
             NavAgent.updateRotation = false;
+        
+            // Set first destination immediately so it starts moving right away
+            if (myWaypoints != null && myWaypoints.Length > 0)
+            {
+                NavAgent.SetDestination(myWaypoints[0]);
+            }
         }
     }
 
@@ -388,18 +406,18 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
         if (myWaypoints == null || currentWaypointIndex >= myWaypoints.Length) return;
 
-        if (NavAgent == null || !NavAgent.isActiveAndEnabled || !NavAgent.isOnNavMesh) return;
+        if (NavAgent == null || !NavAgent.isActiveAndEnabled) return;
+    
+        // Must be on NavMesh to do anything
+        if (!NavAgent.isOnNavMesh) return;
 
         if (isStunned || !canMove)
         {
             NavAgent.isStopped = true;
             return;
         }
-        else
-        {
-            NavAgent.isStopped = false;
-        }
-
+    
+        NavAgent.isStopped = false;
         NavAgent.speed = enemySpeed;
 
         // Skip waypoints we've already passed
@@ -416,7 +434,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         // Smooth rotation towards steering target
         Vector3 direction = NavAgent.steeringTarget - transform.position;
         direction.y = 0;
-        
+    
         if (direction.sqrMagnitude > 0.01f)
         {
             Quaternion targetRotation = Quaternion.LookRotation(direction);
@@ -631,7 +649,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
         if (NavAgent != null)
         {
             NavAgent.enabled = false;
-            NavAgent.isStopped = false;
             NavAgent.speed = baseSpeed;
         }
 
