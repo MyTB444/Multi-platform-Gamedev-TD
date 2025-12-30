@@ -28513,7 +28513,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1060176546675274297, guid: 624fa53d9337f684c9aebcef0a9bcf17, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -34489,26 +34489,46 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: enemyPrefabs.Array.size
-      value: 8
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: enemyPrefabs.Array.data[7].prefab
       value: 
       objectReference: {fileID: 1691538311006784475, guid: 6f4a467d3766b914c99c1f3554d04189, type: 3}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: enemyPrefabs.Array.data[8].prefab
+      value: 
+      objectReference: {fileID: 5196595418094556024, guid: 611344a797364534f80618cd7bd04c57, type: 3}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: levelWaves.Array.data[0].enemyTank
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: levelWaves.Array.data[0].enemyBasic
-      value: 0
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: levelWaves.Array.data[0].enemyHexer
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: enemyPrefabs.Array.data[7].enemyType
       value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: enemyPrefabs.Array.data[8].enemyType
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: levelWaves.Array.data[0].enemyHerald
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: enemyPrefabs.Array.data[7].poolAmount
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: enemyPrefabs.Array.data[8].poolAmount
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
@@ -39455,7 +39475,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5537941893074787483, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8294430211428561170, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
       propertyPath: m_LocalPosition.x
@@ -42329,7 +42349,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5537941893074787483, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8294430211428561170, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
       propertyPath: m_LocalPosition.x
@@ -69547,7 +69567,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5537941893074787483, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8294430211428561170, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
       propertyPath: m_LocalPosition.x
@@ -72403,7 +72423,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5537941893074787483, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8294430211428561170, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
       propertyPath: m_LocalPosition.x
@@ -80264,17 +80284,13 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 4646495290296104905, guid: 611344a797364534f80618cd7bd04c57, type: 3}
-      propertyPath: enemyHealVFXPrefab
-      value: 
-      objectReference: {fileID: 9017484664307500583, guid: 1245b8d2997d5b34fb1637be70a7eb05, type: 3}
     - target: {fileID: 5196595418094556024, guid: 611344a797364534f80618cd7bd04c57, type: 3}
       propertyPath: m_Name
       value: EnemyHerald
       objectReference: {fileID: 0}
     - target: {fileID: 5196595418094556024, guid: 611344a797364534f80618cd7bd04c57, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

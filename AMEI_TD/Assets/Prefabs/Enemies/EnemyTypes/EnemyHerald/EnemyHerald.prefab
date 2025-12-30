@@ -578,8 +578,8 @@ MonoBehaviour:
   slowEffectPrefab: {fileID: 4259526894524806451, guid: cca859937b8679b49b3fc3dc323ef370, type: 3}
   frozenColor: {r: 0.5, g: 0.8, b: 1, a: 1}
   enemyCurrentHp: 0
-  castRadius: 5
-  castCooldown: 5
+  castRadius: 6
+  castCooldown: 8
   enemyLayer:
     serializedVersion: 2
     m_Bits: 64

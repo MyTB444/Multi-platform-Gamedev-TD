@@ -262,6 +262,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         {
             enemyCurrentHp = enemyMaxHp;
         }
+        enemyCurrentHp = Mathf.Floor(enemyCurrentHp);
     }
 
     public void ApplyStun(float duration)
