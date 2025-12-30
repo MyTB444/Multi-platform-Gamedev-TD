@@ -2,6 +2,19 @@ using UnityEngine;
 
 public class PlayerCastle : MonoBehaviour
 {
+    public static PlayerCastle instance;
+    
+    [Header("Guardian Tower")]
+    [SerializeField] private GameObject guardianTowerPrefab;
+    [SerializeField] private Transform guardianSpawnPoint;
+
+    private TowerGuardian spawnedGuardian;
+    
+    private void Awake()
+    {
+        instance = this;
+    }
+
     // When an enemy reaches the castle, remove it and deduct skill points
     private void OnTriggerEnter(Collider other)
     {
@@ -20,4 +33,35 @@ public class PlayerCastle : MonoBehaviour
             }
         }
     }
+
+    public void SpawnGuardianTower()
+    {
+        if (guardianTowerPrefab == null)
+        {
+            Debug.LogWarning("Guardian Tower prefab not assigned!");
+            return;
+        }
+
+        if (spawnedGuardian != null)
+        {
+            Debug.LogWarning("Guardian Tower already spawned!");
+            return;
+        }
+
+        Vector3 spawnPos = guardianSpawnPoint != null ? guardianSpawnPoint.position : transform.position + Vector3.up * 2f;
+        Quaternion spawnRot = guardianSpawnPoint != null ? guardianSpawnPoint.rotation : Quaternion.identity;
+
+        GameObject guardianObj = Instantiate(guardianTowerPrefab, spawnPos, spawnRot);
+        spawnedGuardian = guardianObj.GetComponent<TowerGuardian>();
+
+        if (spawnedGuardian != null)
+        {
+            spawnedGuardian.ActivateGuardian();
+        }
+
+        Debug.Log("Guardian Tower Spawned!");
+    }
+
+    public bool HasGuardianTower() => spawnedGuardian != null;
+    public TowerGuardian GetGuardianTower() => spawnedGuardian;
 }

@@ -17,37 +17,37 @@ public enum TowerUpgradeType
     // Spear
     BarbedSpear,
     ExplosiveTip,
-    
+
     // Pyromancer
     PyromancerAttackSpeed,
     BurnChance,
     BiggerFireball,
     BurnSpread,
-    
+
     // Ice Mage
     StrongerSlow,
     LongerSlow,
     Frostbite,
     FreezeSolid,
-    
+
     // Spike Trap
     SpikeTrapAttackSpeed,
     PoisonSpikes,
     BleedingSpikes,
     CripplingSpikes,
-    
+
     // Blade Tower
     BladeSpinSpeed,
     BleedChance,
     MoreBlades,
     ExtendedReach,
-    
+
     // Rock Shower
     MoreRocks,
     BiggerRocks,
     LongerShower,
     MeteorStrike,
-    
+
     // Phantom Knight
     MorePhantoms,
     CloserSpawn,
@@ -74,16 +74,16 @@ public class TowerBase : MonoBehaviour
 
     [SerializeField] protected GameObject projectilePrefab;
     [SerializeField] protected float projectileSpeed;
-    
+
     [SerializeField] protected ElementType elementType = ElementType.Physical;
-    
+
     [Header("Pooling")]
     [SerializeField] protected int projectilePoolAmount = 20;
 
-    [Header(("Tower Pricing"))] 
+    [Header(("Tower Pricing"))]
     [SerializeField] protected int buyPrice = 1;
     [SerializeField] protected int sellPrice = 1;
-    
+
     [Header("Stat Upgrades")]
     [SerializeField] protected bool damageBoost = false;
     [SerializeField] protected float damageBoostPercent = 0.25f;
@@ -97,10 +97,10 @@ public class TowerBase : MonoBehaviour
     protected int baseDamage;
     protected float baseAttackCooldown;
     protected float baseAttackRange;
-    
+
     [Header("VFX")]
     [SerializeField] protected GameObject attackSpawnEffectPrefab;
-    
+
     [Header("Animation")]
     [SerializeField] protected Animator characterAnimator;
     [SerializeField] protected string attackAnimationTrigger = "Attack";
@@ -130,6 +130,12 @@ public class TowerBase : MonoBehaviour
     private float disableStartTime;
     private float disableDuration;
 
+    // Guardian buff system
+    protected bool hasGuardianBuff = false;
+    protected float guardianDamageBuffPercent = 0f;
+    protected float guardianAttackSpeedBuffPercent = 0f;
+    protected float guardianRangeBuffPercent = 0f;
+
     // Debuff visuals
     [Header("Debuff Visuals")]
     [SerializeField] private Color disabledColor = new Color(1f, 0.2f, 0.2f, 1f);
@@ -139,6 +145,12 @@ public class TowerBase : MonoBehaviour
     private Renderer[] towerRenderers;
     private Color[] originalColors;
     private bool hasSavedColors = false;
+
+    // Guardian buff visuals
+    [Header("Guardian Buff Visuals")]
+    [SerializeField] private Color guardianBuffColor = new Color(1f, 0.85f, 0.3f, 1f);
+    [SerializeField] private float guardianGlowIntensity = 0.3f;
+    [SerializeField] private float guardianPulseSpeed = 2f;
 
     protected virtual void Awake()
     {
@@ -185,6 +197,7 @@ public class TowerBase : MonoBehaviour
     {
         UpdateDebuffs();
         UpdateDisabledVisual();
+        UpdateGuardianBuffVisual();
 
         if (isDisabled) return;
 
@@ -258,6 +271,24 @@ public class TowerBase : MonoBehaviour
             if (towerRenderers[i] != null && towerRenderers[i].material.HasProperty("_Color"))
             {
                 towerRenderers[i].material.color = originalColors[i];
+            }
+        }
+    }
+
+    protected void UpdateGuardianBuffVisual()
+    {
+        if (!hasSavedColors || isDisabled) return;
+        if (!hasGuardianBuff) return;
+
+        // Gentle golden pulse effect for guardian buff
+        float pulse = (Mathf.Sin(Time.time * guardianPulseSpeed) + 1f) / 2f;
+        float lerpAmount = guardianGlowIntensity * pulse;
+
+        for (int i = 0; i < towerRenderers.Length; i++)
+        {
+            if (towerRenderers[i] != null && towerRenderers[i].material.HasProperty("_Color"))
+            {
+                towerRenderers[i].material.color = Color.Lerp(originalColors[i], guardianBuffColor, lerpAmount);
             }
         }
     }
@@ -389,7 +420,7 @@ public class TowerBase : MonoBehaviour
     private EnemyBase ChooseEnemyToTarget(List<EnemyBase> targets)
     {
         EnemyBase enemyToTarget = null;
-        
+
         if (useRandomTargeting)
         {
             return targets[Random.Range(0, targets.Count)];
@@ -472,13 +503,13 @@ public class TowerBase : MonoBehaviour
     protected virtual void Attack()
     {
         lastTimeAttacked = Time.time;
-    
+
         // Trigger attack animation
         if (characterAnimator != null)
         {
             characterAnimator.SetTrigger(attackAnimationTrigger);
         }
-    
+
         // Fire projectile with delay (0 = immediate)
         if (projectileSpawnDelay > 0)
         {
@@ -507,12 +538,12 @@ public class TowerBase : MonoBehaviour
             if (damageable == null) return;
 
             Vector3 spawnPosition = gunPoint.position + directionToEnemy * 0.1f;
-        
+
             GameObject newProjectile = ObjectPooling.instance.Get(projectilePrefab);
             newProjectile.transform.position = spawnPosition;
             newProjectile.transform.rotation = gunPoint.rotation;
             newProjectile.SetActive(true);
-        
+
             newProjectile.GetComponent<TowerProjectileBase>().SetupProjectile(hitInfo.point, damageable, CreateDamageInfo(), projectileSpeed);
         }
     }
@@ -559,37 +590,43 @@ public class TowerBase : MonoBehaviour
     {
         return (currentEnemy.GetCenterPoint() - startPosition.position).normalized;
     }
-    
+
     protected virtual void ApplyStatUpgrades()
     {
+        // Calculate total buff percentages (tower upgrades + guardian buff)
+        float totalDamageBoost = 0f;
+        float totalAttackSpeedBoost = 0f;
+        float totalRangeBoost = 0f;
+
         if (damageBoost)
         {
-            damage = Mathf.RoundToInt(baseDamage * (1f + damageBoostPercent));
+            totalDamageBoost += damageBoostPercent;
         }
-        else
-        {
-            damage = baseDamage;
-        }
-    
+
         if (attackSpeedBoost)
         {
-            attackCooldown = baseAttackCooldown * (1f - attackSpeedBoostPercent);
+            totalAttackSpeedBoost += attackSpeedBoostPercent;
         }
-        else
-        {
-            attackCooldown = baseAttackCooldown;
-        }
-    
+
         if (rangeBoost)
         {
-            attackRange = baseAttackRange * (1f + rangeBoostPercent);
+            totalRangeBoost += rangeBoostPercent;
         }
-        else
+
+        // Add Guardian buffs
+        if (hasGuardianBuff)
         {
-            attackRange = baseAttackRange;
+            totalDamageBoost += guardianDamageBuffPercent;
+            totalAttackSpeedBoost += guardianAttackSpeedBuffPercent;
+            totalRangeBoost += guardianRangeBuffPercent;
         }
+
+        // Apply calculated stats
+        damage = Mathf.RoundToInt(baseDamage * (1f + totalDamageBoost));
+        attackCooldown = baseAttackCooldown * (1f - totalAttackSpeedBoost);
+        attackRange = baseAttackRange * (1f + totalRangeBoost);
     }
-    
+
     public virtual void SetUpgrade(TowerUpgradeType upgradeType, bool enabled)
     {
         switch (upgradeType)
@@ -605,7 +642,28 @@ public class TowerBase : MonoBehaviour
     {
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
-    
+
+    // Guardian Buff System
+    public void ApplyGuardianBuff(float damagePercent, float attackSpeedPercent, float rangePercent)
+    {
+        hasGuardianBuff = true;
+        guardianDamageBuffPercent = damagePercent;
+        guardianAttackSpeedBuffPercent = attackSpeedPercent;
+        guardianRangeBuffPercent = rangePercent;
+        ApplyStatUpgrades();
+    }
+
+    public void RemoveGuardianBuff()
+    {
+        hasGuardianBuff = false;
+        guardianDamageBuffPercent = 0f;
+        guardianAttackSpeedBuffPercent = 0f;
+        guardianRangeBuffPercent = 0f;
+        ApplyStatUpgrades();
+    }
+
+    public bool HasGuardianBuff() => hasGuardianBuff;
+
     public int GetBuyPrice() { return buyPrice; }
     public int GetSellPrice() { return sellPrice; }
     public float GetSlowMultiplier() => slowMultiplier;

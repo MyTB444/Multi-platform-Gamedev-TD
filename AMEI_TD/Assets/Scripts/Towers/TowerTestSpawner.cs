@@ -37,6 +37,24 @@ public class TowerTestSpawner : MonoBehaviour
         {
             ClearAllTowers();
         }
+        
+        if (Input.GetKeyDown(KeyCode.G))
+        {
+            SpawnGuardian();
+        }
+    }
+    
+    private void SpawnGuardian()
+    {
+        if (PlayerCastle.instance != null)
+        {
+            PlayerCastle.instance.SpawnGuardianTower();
+            Debug.Log("Guardian Tower spawned!");
+        }
+        else
+        {
+            Debug.LogWarning("No PlayerCastle found!");
+        }
     }
     
     private void SpawnTower(int index)
@@ -109,6 +127,7 @@ public class TowerTestSpawner : MonoBehaviour
         GUILayout.Label("1-9: Spawn tower");
         GUILayout.Label("Q/E: Cycle base");
         GUILayout.Label("X: Clear all towers");
+        GUILayout.Label("G: Spawn Guardian");
         
         GUILayout.Space(10);
         
