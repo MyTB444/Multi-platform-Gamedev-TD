@@ -692,7 +692,13 @@ public class EnemyBase : MonoBehaviour, IDamageable
         // Restore layer first
         gameObject.layer = originalLayerIndex;
     
-        enemyCurrentHp = enemyMaxHp;
+        float healthMultiplier = 1f;
+        if (WaveManager.instance != null && WaveManager.instance.IsMegaWaveActive())
+        {
+            healthMultiplier = WaveManager.instance.GetMegaWaveHealthMultiplier();
+        }
+        enemyCurrentHp = enemyMaxHp * healthMultiplier;
+        
         isDead = false;
         canMove = true;
         currentWaypointIndex = 0;

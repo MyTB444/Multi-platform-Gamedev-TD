@@ -33,7 +33,14 @@ public class EnemySpawner : MonoBehaviour
 
         if (spawnTimer <= 0 && enemiesToCreate.Count > 0)
         {
-            spawnTimer = spawnCooldown;
+            // Faster spawns during mega wave
+            float cooldown = spawnCooldown;
+            if (myWaveManager != null && myWaveManager.IsMegaWaveActive())
+            {
+                cooldown /= myWaveManager.GetMegaWaveSpawnRateMultiplier();
+            }
+        
+            spawnTimer = cooldown;
             return true;
         }
 
@@ -52,7 +59,7 @@ public class EnemySpawner : MonoBehaviour
         {
             newEnemy.SetActive(true);
             newEnemy.transform.position = spawnLocation.position;
-    
+
             if (allPathWaypoints.Count > 0 && allPathWaypoints[0].Length > 0)
             {
                 Vector3 directionToWaypoint = (allPathWaypoints[0][0] - spawnLocation.position).normalized;
@@ -126,9 +133,17 @@ public class EnemySpawner : MonoBehaviour
             activeEnemies.Remove(enemyToRemove);
         }
 
-        myWaveManager.CheckIfWaveCompleted();
+        // Check for mega wave completion if active, otherwise check normal wave
+        if (myWaveManager.IsMegaWaveActive())
+        {
+            myWaveManager.CheckIfMegaWaveCompleted();
+        }
+        else
+        {
+            myWaveManager.CheckIfWaveCompleted();
+        }
     }
-    
+
     private void OnDrawGizmos()
     {
         // Draw spawn point
@@ -136,19 +151,19 @@ public class EnemySpawner : MonoBehaviour
         {
             Gizmos.color = Color.green;
             Gizmos.DrawWireSphere(spawnLocation.position, 0.5f);
-        
+
             // Draw forward direction arrow
             Gizmos.color = Color.blue;
             Vector3 forward = spawnLocation.forward * 2f;
             Gizmos.DrawLine(spawnLocation.position, spawnLocation.position + forward);
-        
+
             // Draw arrow head
             Vector3 right = Quaternion.Euler(0, 30, 0) * -forward.normalized * 0.5f;
             Vector3 left = Quaternion.Euler(0, -30, 0) * -forward.normalized * 0.5f;
             Gizmos.DrawLine(spawnLocation.position + forward, spawnLocation.position + forward + right);
             Gizmos.DrawLine(spawnLocation.position + forward, spawnLocation.position + forward + left);
         }
-    
+
         // Draw line to first waypoint
         if (myPaths != null && myPaths.Count > 0 && myPaths[0] != null)
         {

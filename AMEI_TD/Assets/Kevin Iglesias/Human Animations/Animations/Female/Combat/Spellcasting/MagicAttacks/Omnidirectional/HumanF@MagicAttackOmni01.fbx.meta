@@ -1,5 +1,12 @@
 fileFormatVersion: 2
 guid: 6ce5c8cc7157f2542b78acd83e609475
+AssetOrigin:
+  serializedVersion: 1
+  productId: 326043
+  packageName: Human Spellcasting Animations FREE
+  packageVersion: 1.0
+  assetPath: Assets/Kevin Iglesias/Human Animations/Animations/Female/Combat/Spellcasting/MagicAttacks/Omnidirectional/HumanF@MagicAttackOmni01.fbx
+  uploadId: 825286
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -54,7 +61,14 @@ ModelImporter:
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events: []
+      events:
+      - time: 0.25431028
+        functionName: OnLightningStrikeEvent
+        data: 
+        objectReferenceParameter: {instanceID: 0}
+        floatParameter: 0
+        intParameter: 0
+        messageOptions: 0
       transformMask:
       - path: 
         weight: 1
@@ -951,8 +965,7 @@ ModelImporter:
     hasTranslationDoF: 0
     hasExtraRoot: 0
     skeletonHasParents: 1
-  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 1841c298173cdad4db8df8602c8f1c8d,
-    type: 3}
+  lastHumanDescriptionAvatarSource: {fileID: 9000000, guid: 1841c298173cdad4db8df8602c8f1c8d, type: 3}
   autoGenerateAvatarMappingIfUnspecified: 1
   animationType: 3
   humanoidOversampling: 1
@@ -964,10 +977,3 @@ ModelImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
-AssetOrigin:
-  serializedVersion: 1
-  productId: 326043
-  packageName: Human Spellcasting Animations FREE
-  packageVersion: 1.0
-  assetPath: Assets/Kevin Iglesias/Human Animations/Animations/Female/Combat/Spellcasting/MagicAttacks/Omnidirectional/HumanF@MagicAttackOmni01.fbx
-  uploadId: 825286
