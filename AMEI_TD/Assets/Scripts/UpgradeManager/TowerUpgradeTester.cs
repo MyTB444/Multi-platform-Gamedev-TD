@@ -32,22 +32,25 @@ public class TowerUpgradeTester : MonoBehaviour
         
         // Common upgrades
         validUpgrades.Add(TowerUpgradeType.DamageBoost);
-        validUpgrades.Add(TowerUpgradeType.AttackSpeedBoost);
-        validUpgrades.Add(TowerUpgradeType.RangeBoost);
-        
+
         // Tower specific
         if (selectedTower is TowerArcher)
         {
+            validUpgrades.Add(TowerUpgradeType.PhysicalAttackSpeed);
+            validUpgrades.Add(TowerUpgradeType.PhysicalRange);
             validUpgrades.Add(TowerUpgradeType.PoisonArrows);
             validUpgrades.Add(TowerUpgradeType.FireArrows);
         }
         else if (selectedTower is SpearTower)
         {
+            validUpgrades.Add(TowerUpgradeType.PhysicalAttackSpeed);
+            validUpgrades.Add(TowerUpgradeType.PhysicalRange);
             validUpgrades.Add(TowerUpgradeType.BarbedSpear);
             validUpgrades.Add(TowerUpgradeType.ExplosiveTip);
         }
         else if (selectedTower is TowerPyromancer)
         {
+            validUpgrades.Add(TowerUpgradeType.PyromancerAttackSpeed);
             validUpgrades.Add(TowerUpgradeType.BurnChance);
             validUpgrades.Add(TowerUpgradeType.BiggerFireball);
             validUpgrades.Add(TowerUpgradeType.BurnSpread);

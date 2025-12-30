@@ -135,6 +135,8 @@ MonoBehaviour:
     m_Bits: 64
   disabledColor: {r: 1, g: 0.2, b: 0.2, a: 1}
   pulseSpeed: 4
+  fadeInDuration: 0.3
+  fadeOutDuration: 0.5
   burnChance: 0
   burnChancePercent: 0.4
   burnDamage: 3
@@ -20284,7 +20286,7 @@ Transform:
   m_GameObject: {fileID: 6721327698480678518}
   serializedVersion: 2
   m_LocalRotation: {x: -0.00000020946923, y: 0.70710665, z: 0.00000046534558, w: 0.7071069}
-  m_LocalPosition: {x: -0.0285, y: -0.973, z: -0.0262}
+  m_LocalPosition: {x: -0.028, y: -1.413, z: -0.026}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
