@@ -187,4 +187,23 @@ public class EnemySummoner : EnemyBase
     {
         activeMinions.RemoveAll(minion => minion == null || !minion.activeInHierarchy);
     }
+
+    protected override void ResetEnemy()
+    {
+        base.ResetEnemy();
+
+        // Reset summoning state
+        summonTimer = summonCooldown;
+        isSummoning = false;
+
+        // Clear active minions list
+        activeMinions.Clear();
+
+        // Cleanup any active magic circle VFX
+        if (activeMagicCircle != null)
+        {
+            Destroy(activeMagicCircle);
+            activeMagicCircle = null;
+        }
+    }
 }

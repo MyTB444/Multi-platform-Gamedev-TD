@@ -169,6 +169,22 @@ public class EnemyHerald : EnemyBase
         }
     }
 
+    protected override void ResetEnemy()
+    {
+        base.ResetEnemy();
+
+        // Reset to allow casting after cooldown
+        lastCastTime = -castCooldown;
+        isCasting = false;
+
+        // Cleanup any active magic circle VFX
+        if (activeMagicCircle != null)
+        {
+            Destroy(activeMagicCircle);
+            activeMagicCircle = null;
+        }
+    }
+
     protected virtual void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.green;

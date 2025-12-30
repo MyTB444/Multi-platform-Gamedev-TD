@@ -180,6 +180,23 @@ public class EnemyHexer : EnemyBase
         }
     }
 
+    protected override void ResetEnemy()
+    {
+        base.ResetEnemy();
+
+        // Reset to allow immediate casting after cooldown
+        lastAttackTime = -attackCooldown;
+        isCasting = false;
+        currentTarget = null;
+
+        // Cleanup any active magic circle VFX
+        if (activeMagicCircle != null)
+        {
+            Destroy(activeMagicCircle);
+            activeMagicCircle = null;
+        }
+    }
+
     protected virtual void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.magenta;

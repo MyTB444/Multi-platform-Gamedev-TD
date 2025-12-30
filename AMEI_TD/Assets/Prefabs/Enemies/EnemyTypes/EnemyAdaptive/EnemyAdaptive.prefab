@@ -979,7 +979,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d1a710699ed740b2aebaee0dcb25b9f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyType: 5
+  enemyType: 9
   enemySpeed: 2
   damage: 10
   reward: 10

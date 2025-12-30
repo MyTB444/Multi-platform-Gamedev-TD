@@ -252,4 +252,16 @@ public class EnemyDecoy : EnemyBase
         }
         return 0;
     }
+
+    protected override void ResetEnemy()
+    {
+        base.ResetEnemy();
+
+        // Reset decoy state
+        isDecoy = false;
+        lastDecoySpawnTime = Time.time;
+
+        // Stop any active decoy spawn coroutines
+        StopAllCoroutines();
+    }
 }

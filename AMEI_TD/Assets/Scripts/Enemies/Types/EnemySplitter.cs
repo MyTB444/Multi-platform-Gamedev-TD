@@ -5,6 +5,7 @@ public class EnemySplitter : EnemyBase
 {
     [Header("Split Settings")]
     [SerializeField] private GameObject splitVFXPrefab;
+    [SerializeField] private GameObject splitterPrefab; // Reference to own prefab for pooling
     [SerializeField] private int maxSplitLevel = 2;
     [SerializeField] private int currentSplitLevel = 0;
     [SerializeField] private float splitDelayAfterDeath = 0.2f;
@@ -14,6 +15,22 @@ public class EnemySplitter : EnemyBase
     [SerializeField] private float scaleMultiplierPerSplit = 0.7f;
     [SerializeField] private float speedMultiplierPerSplit = 1.2f;
     [SerializeField] private int splitCount = 2;
+
+    private Vector3 originalScale;
+    private float originalMaxHp;
+    private bool hasStoredOriginals = false;
+
+    protected override void Awake()
+    {
+        base.Awake(); // Capture layer and base speed
+    
+        if (!hasStoredOriginals)
+        {
+            originalScale = transform.localScale;
+            originalMaxHp = enemyMaxHp;
+            hasStoredOriginals = true;
+        }
+    }
 
     public override void TakeDamage(DamageInfo damageInfo)
     {
@@ -48,6 +65,12 @@ public class EnemySplitter : EnemyBase
 
     private void SpawnSplitEnemy(int index)
     {
+        if (splitterPrefab == null)
+        {
+            Debug.LogError("[EnemySplitter] splitterPrefab is not assigned! Cannot spawn splits.");
+            return;
+        }
+
         Vector3 spawnOffset = new Vector3(
             Random.Range(-0.5f, 0.5f),
             0,
@@ -55,58 +78,72 @@ public class EnemySplitter : EnemyBase
         );
         Vector3 spawnPosition = transform.position + spawnOffset;
 
-        GameObject newEnemy = Instantiate(gameObject, spawnPosition, transform.rotation);
+        GameObject newEnemy = ObjectPooling.instance.Get(splitterPrefab);
+        if (newEnemy == null) return;
 
+        newEnemy.transform.position = spawnPosition;
+        newEnemy.transform.rotation = transform.rotation;
         newEnemy.SetActive(true);
-
-        float newMaxHp = enemyMaxHp * healthMultiplierPerSplit;
-        float newScale = transform.localScale.x * scaleMultiplierPerSplit;
-
-        newEnemy.transform.localScale = Vector3.one * newScale;
-
+    
+        // Get remaining waypoints
+        Vector3[] remainingWaypoints = GetRemainingWaypoints();
+    
         EnemySplitter splitterScript = newEnemy.GetComponent<EnemySplitter>();
-        if (splitterScript != null)
+    
+        // Call SetupEnemy first (this resets everything)
+        if (splitterScript != null && remainingWaypoints.Length > 0)
         {
+            splitterScript.SetupEnemy(mySpawner, remainingWaypoints);
+        
+            // Set split level AFTER SetupEnemy (since ResetEnemy resets it to 0)
             splitterScript.currentSplitLevel = currentSplitLevel + 1;
+        
+            // Set stats AFTER SetupEnemy
+            float newMaxHp = enemyMaxHp * healthMultiplierPerSplit;
+            float newScale = originalScale.x * Mathf.Pow(scaleMultiplierPerSplit, currentSplitLevel + 1);
+        
+            splitterScript.enemyMaxHp = newMaxHp;
+            splitterScript.enemyCurrentHp = newMaxHp;
+            newEnemy.transform.localScale = Vector3.one * newScale;
         }
 
-        EnemyBase enemyScript = newEnemy.GetComponent<EnemyBase>();
-        if (enemyScript != null)
+        // Add to spawner's active enemies list
+        if (mySpawner != null)
         {
-            enemyScript.enemyMaxHp = newMaxHp;
+            mySpawner.GetActiveEnemies().Add(newEnemy);
+        }
 
-            var baseType = typeof(EnemyBase);
-            var bindingFlags = System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance;
+        Debug.Log($"[EnemySplitter] Spawned split at level {currentSplitLevel + 1}, maxSplitLevel is {maxSplitLevel}");
+    }
+    
+    private Vector3[] GetRemainingWaypoints()
+    {
+        if (myWaypoints == null) return new Vector3[0];
+    
+        int remaining = myWaypoints.Length - currentWaypointIndex;
+        if (remaining <= 0) return new Vector3[0];
 
-            var hpField = baseType.GetField("enemyCurrentHp", bindingFlags);
-            if (hpField != null)
-            {
-                hpField.SetValue(enemyScript, newMaxHp);
-            }
+        Vector3[] remainingWaypoints = new Vector3[remaining];
+        for (int i = 0; i < remaining; i++)
+        {
+            remainingWaypoints[i] = myWaypoints[currentWaypointIndex + i];
+        }
 
-            var isDeadField = baseType.GetField("isDead", bindingFlags);
-            if (isDeadField != null)
-            {
-                isDeadField.SetValue(enemyScript, false);
-            }
+        return remainingWaypoints;
+    }
 
-            var spawnerField = baseType.GetField("mySpawner", bindingFlags);
-            if (spawnerField != null && mySpawner != null)
-            {
-                spawnerField.SetValue(enemyScript, mySpawner);
-            }
+    protected override void ResetEnemy()
+    {
+        base.ResetEnemy();
 
-            var waypointsField = baseType.GetField("myWaypoints", bindingFlags);
-            if (waypointsField != null && myWaypoints != null)
-            {
-                waypointsField.SetValue(enemyScript, myWaypoints);
-            }
+        // Reset split level back to 0
+        currentSplitLevel = 0;
 
-            var waypointIndexField = baseType.GetField("currentWaypointIndex", bindingFlags);
-            if (waypointIndexField != null)
-            {
-                waypointIndexField.SetValue(enemyScript, currentWaypointIndex);
-            }
+        // Reset scale and max HP to original values
+        if (hasStoredOriginals && originalScale != Vector3.zero)
+        {
+            transform.localScale = originalScale;
+            enemyMaxHp = originalMaxHp;
         }
     }
 }

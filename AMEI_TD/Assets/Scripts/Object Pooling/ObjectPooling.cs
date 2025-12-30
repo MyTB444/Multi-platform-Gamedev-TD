@@ -118,6 +118,10 @@ public class ObjectPooling : MonoBehaviour
     {
         Transform container = GetContainer(prefab);
         GameObject obj = Instantiate(prefab, container);
+
+        // Preserve the prefab's original layer (Unity may change it when parenting)
+        obj.layer = prefab.layer;
+
         obj.SetActive(false);
         instanceToPrefab[obj] = prefab;
         return obj;

@@ -136,6 +136,15 @@ public class EnemyReinforced : EnemyBase
         }
     }
 
+    protected override void ResetEnemy()
+    {
+        base.ResetEnemy();
+
+        // Reset shield cooldown to allow shielding after spawn
+        nextShieldTime = 0f;
+        pulseTime = 0f;
+    }
+
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.cyan;

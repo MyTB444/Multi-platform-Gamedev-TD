@@ -64,6 +64,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private float waypointReachDistance = 0.3f;
 
     private int originalLayerIndex;
+    private bool hasStoredLayer = false;
     private float totalDistance;
 
     private Vector3 Destination;
@@ -111,12 +112,18 @@ public class EnemyBase : MonoBehaviour, IDamageable
         UpdateVisuals();
         NavAgent = GetComponent<NavMeshAgent>();
         EnemyAnimator = GetComponentInChildren<Animator>();
+    
+        // Disable NavAgent until SetupEnemy is called
+        if (NavAgent != null)
+        {
+            NavAgent.enabled = false;
+        }
     }
 
-    private void Awake()
+    protected virtual void Awake()
     {
-        originalLayerIndex = gameObject.layer;
         baseSpeed = enemySpeed;
+        originalLayerIndex = gameObject.layer;
     }
 
     protected virtual void Start()
@@ -124,7 +131,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         UpdateVisuals();
         NavAgent = GetComponent<NavMeshAgent>();
         EnemyAnimator = GetComponentInChildren<Animator>();
-    
+
         SaveOriginalColors();
     }
 
@@ -572,11 +579,15 @@ public class EnemyBase : MonoBehaviour, IDamageable
         if (mySpawner != null) mySpawner.RemoveActiveEnemy(gameObject);
     }
 
-    private void ResetEnemy()
+    protected virtual void ResetEnemy()
     {
+        // Restore layer first
         gameObject.layer = originalLayerIndex;
+    
         enemyCurrentHp = enemyMaxHp;
         isDead = false;
+        canMove = true;
+        currentWaypointIndex = 0;
 
         // Reset slow
         isSlowed = false;
@@ -603,12 +614,23 @@ public class EnemyBase : MonoBehaviour, IDamageable
         {
             for (int i = 0; i < enemyRenderers.Length; i++)
             {
-                enemyRenderers[i].material.color = originalColors[i];
+                if (enemyRenderers[i] != null)
+                {
+                    enemyRenderers[i].material.color = originalColors[i];
+                }
             }
         }
-        
+
+        // Reset Shield
+        if (hasShield)
+        {
+            RemoveShield();
+        }
+
+        // Reset NavAgent
         if (NavAgent != null)
         {
+            NavAgent.enabled = false;
             NavAgent.isStopped = false;
             NavAgent.speed = baseSpeed;
         }
