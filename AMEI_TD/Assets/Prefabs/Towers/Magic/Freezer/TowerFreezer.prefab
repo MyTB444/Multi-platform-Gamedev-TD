@@ -1986,6 +1986,12 @@ MonoBehaviour:
   useHpTargeting: 1
   targetHighestHpEnemy: 1
   useRandomTargeting: 0
+  decoyLayer:
+    serializedVersion: 2
+    m_Bits: 2048
+  enemyLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
   disabledColor: {r: 1, g: 0.2, b: 0.2, a: 1}
   pulseSpeed: 4
   visualRotationOffset: {x: 90, y: 0, z: 0}

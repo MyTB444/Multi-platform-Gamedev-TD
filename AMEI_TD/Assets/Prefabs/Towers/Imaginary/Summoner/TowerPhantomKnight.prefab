@@ -21474,6 +21474,12 @@ MonoBehaviour:
   useHpTargeting: 0
   targetHighestHpEnemy: 0
   useRandomTargeting: 0
+  decoyLayer:
+    serializedVersion: 2
+    m_Bits: 2048
+  enemyLayerMask:
+    serializedVersion: 2
+    m_Bits: 64
   disabledColor: {r: 1, g: 0.2, b: 0.2, a: 1}
   pulseSpeed: 4
   phantomPrefab: {fileID: 2537545956604527301, guid: 8b55fb7f86e2bb54a922b5e11b12cae4, type: 3}

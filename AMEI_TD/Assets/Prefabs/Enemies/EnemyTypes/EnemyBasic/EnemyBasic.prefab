@@ -285,7 +285,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyType: 0
-  enemySpeed: 3
+  enemySpeed: 2
   damage: 10
   reward: 10
   enemyMaxHp: 10
@@ -295,7 +295,7 @@ MonoBehaviour:
   enemyColor: {r: 1, g: 1, b: 1, a: 1}
   centerPoint: {fileID: 6340835181720102494}
   bottomPoint: {fileID: 6638083700992160575}
-  slowEffectPrefab: {fileID: 0}
+  slowEffectPrefab: {fileID: 4259526894524806451, guid: cca859937b8679b49b3fc3dc323ef370, type: 3}
   frozenColor: {r: 0.5, g: 0.8, b: 1, a: 1}
   enemyCurrentHp: 0
 --- !u!136 &5952700638257805842

@@ -1021,9 +1021,16 @@ MonoBehaviour:
   enemyColor: {r: 1, g: 1, b: 1, a: 1}
   centerPoint: {fileID: 7984103501130124172}
   bottomPoint: {fileID: 5076463070192780233}
-  slowEffectPrefab: {fileID: 0}
+  slowEffectPrefab: {fileID: 4259526894524806451, guid: cca859937b8679b49b3fc3dc323ef370, type: 3}
   frozenColor: {r: 0.5, g: 0.8, b: 1, a: 1}
   enemyCurrentHp: 0
+  shieldEffectPrefab: {fileID: 1289543790355709915, guid: b99922c2f59b1a542bdd06ae8bee47ae, type: 3}
+  shieldAmount: 10
+  shieldRadius: 5
+  shieldCooldown: 10
+  enemyLayer:
+    serializedVersion: 2
+    m_Bits: 64
   armorTint: {r: 0.7, g: 0.8, b: 1, a: 1}
   pulseColor: {r: 0.3, g: 0.6, b: 1, a: 1}
   pulseSpeed: 1
