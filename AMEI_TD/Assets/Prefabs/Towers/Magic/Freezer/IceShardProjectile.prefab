@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 605073058155007360}
   - component: {fileID: 8666949460083243371}
   - component: {fileID: 7742653442398384043}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Glow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4911,7 +4911,7 @@ GameObject:
   - component: {fileID: 7430714358003884124}
   - component: {fileID: 8068129257036439278}
   - component: {fileID: 7029212784836116004}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Flares
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9760,7 +9760,7 @@ GameObject:
   - component: {fileID: 1236295379836916877}
   - component: {fileID: 2883746275404786238}
   - component: {fileID: 6817176714650241464}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: IceShardProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9801,9 +9801,7 @@ MonoBehaviour:
   maxLifeTime: 10
   impactEffectPrefab: {fileID: 9125597833443693706, guid: 49a9bc166b0f23145b95fa10538dbdc8, type: 3}
   rotationSpeed: 200
-  slowPercent: 0.5
-  slowDuration: 3
-  slowRadius: 2
+  retargetRange: 5
 --- !u!198 &572399922836779470
 ParticleSystem:
   m_ObjectHideFlags: 0
@@ -14718,7 +14716,7 @@ GameObject:
   - component: {fileID: 6475941826318067552}
   - component: {fileID: 595549211834997750}
   - component: {fileID: 8149767194881183793}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Sparks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19555,7 +19553,7 @@ GameObject:
   - component: {fileID: 4793456881378664407}
   - component: {fileID: 8239942886580916228}
   - component: {fileID: 7981862980578900416}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Sparks blue
   m_TagString: Untagged
   m_Icon: {fileID: 0}

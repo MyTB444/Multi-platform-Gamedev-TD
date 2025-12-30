@@ -54590,71 +54590,6 @@ Transform:
   - {fileID: 1967046047}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1525744969
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 843637828774583270, guid: 7231af0e3dc89c64385bea35b4ca1158, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 43.46
-      objectReference: {fileID: 0}
-    - target: {fileID: 843637828774583270, guid: 7231af0e3dc89c64385bea35b4ca1158, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 5.42
-      objectReference: {fileID: 0}
-    - target: {fileID: 843637828774583270, guid: 7231af0e3dc89c64385bea35b4ca1158, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 12.97
-      objectReference: {fileID: 0}
-    - target: {fileID: 843637828774583270, guid: 7231af0e3dc89c64385bea35b4ca1158, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 843637828774583270, guid: 7231af0e3dc89c64385bea35b4ca1158, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 843637828774583270, guid: 7231af0e3dc89c64385bea35b4ca1158, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 843637828774583270, guid: 7231af0e3dc89c64385bea35b4ca1158, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 843637828774583270, guid: 7231af0e3dc89c64385bea35b4ca1158, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 843637828774583270, guid: 7231af0e3dc89c64385bea35b4ca1158, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 90
-      objectReference: {fileID: 0}
-    - target: {fileID: 843637828774583270, guid: 7231af0e3dc89c64385bea35b4ca1158, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4263156015449491111, guid: 7231af0e3dc89c64385bea35b4ca1158, type: 3}
-      propertyPath: damage
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8836886349948865617, guid: 7231af0e3dc89c64385bea35b4ca1158, type: 3}
-      propertyPath: m_Name
-      value: TowerRockShower
-      objectReference: {fileID: 0}
-    - target: {fileID: 8836886349948865617, guid: 7231af0e3dc89c64385bea35b4ca1158, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 7231af0e3dc89c64385bea35b4ca1158, type: 3}
 --- !u!1 &1527250254
 GameObject:
   m_ObjectHideFlags: 0
@@ -69619,7 +69554,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5537941893074787483, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8294430211428561170, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
       propertyPath: m_LocalPosition.x
@@ -85839,7 +85774,6 @@ SceneRoots:
   - {fileID: 1937396610}
   - {fileID: 1886692225}
   - {fileID: 35987033}
-  - {fileID: 1525744969}
   - {fileID: 727666018}
   - {fileID: 1540786711}
   - {fileID: 1463242387}
