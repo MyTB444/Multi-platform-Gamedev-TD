@@ -109,10 +109,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private void OnEnable()
     {
         UpdateVisuals();
-        //Renderer renderer = GetComponent<Renderer>();
         NavAgent = GetComponent<NavMeshAgent>();
         EnemyAnimator = GetComponentInChildren<Animator>();
-        NavAgent.enabled = false;
     }
 
     private void Awake()
@@ -357,6 +355,15 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private void BeginMovement()
     {
         currentWaypointIndex = 0;
+    
+        if (NavAgent != null)
+        {
+            NavAgent.enabled = true;
+            NavAgent.Warp(transform.position); // Snap to NavMesh
+            NavAgent.speed = enemySpeed;
+            NavAgent.isStopped = false;
+            NavAgent.updateRotation = false;
+        }
     }
 
     private void CollectTotalDistance()
@@ -372,37 +379,38 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     private void FollowPath()
     {
-        if (isStunned || !canMove) return;
-    
-        if (myWaypoints == null || currentWaypointIndex >= myWaypoints.Length)
+        if (myWaypoints == null || currentWaypointIndex >= myWaypoints.Length) return;
+
+        if (NavAgent == null || !NavAgent.isActiveAndEnabled || !NavAgent.isOnNavMesh) return;
+
+        if (isStunned || !canMove)
         {
+            NavAgent.isStopped = true;
             return;
         }
+        else
+        {
+            NavAgent.isStopped = false;
+        }
+
+        NavAgent.speed = enemySpeed;
 
         Vector3 targetWaypoint = myWaypoints[currentWaypointIndex];
-        if (!bottomPoint) return;
+        NavAgent.SetDestination(targetWaypoint);
 
-        Vector3 direction = (targetWaypoint - bottomPoint.position).normalized;
-
-        if (direction != Vector3.zero)
+        // Smooth rotation towards movement direction
+        Vector3 direction = NavAgent.steeringTarget - transform.position;
+        direction.y = 0;
+    
+        if (direction.sqrMagnitude > 0.01f)
         {
             Quaternion targetRotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
         }
 
-        // Manual movement
-        Destination = direction * (enemySpeed * Time.deltaTime);
-        transform.position += Destination;
-
-        float distanceToWaypoint = Vector3.Distance(bottomPoint.position, targetWaypoint);
-        if (distanceToWaypoint <= waypointReachDistance)
+        if (!NavAgent.pathPending && NavAgent.remainingDistance <= waypointReachDistance)
         {
             currentWaypointIndex++;
-        }
-        
-        if (NavAgent != null && NavAgent.isActiveAndEnabled && NavAgent.isOnNavMesh)
-        {
-            NavAgent.SetDestination(targetWaypoint);
         }
     }
 
@@ -556,6 +564,12 @@ public class EnemyBase : MonoBehaviour, IDamageable
             {
                 enemyRenderers[i].material.color = originalColors[i];
             }
+        }
+        
+        if (NavAgent != null)
+        {
+            NavAgent.isStopped = false;
+            NavAgent.speed = baseSpeed;
         }
 
         UpdateVisuals();
