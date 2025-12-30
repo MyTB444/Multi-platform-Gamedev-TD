@@ -12,8 +12,7 @@ public enum EnemyType
     Summoner,
     Minion,
     Hexer,
-    Herald
-    Minion,
+    Herald,
     Adaptive,
     Splitter,
     Ghostwalk,
