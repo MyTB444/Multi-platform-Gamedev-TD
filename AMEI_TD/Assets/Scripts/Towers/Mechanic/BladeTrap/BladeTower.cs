@@ -295,7 +295,7 @@ public class BladeTower : TowerBase
         if (bleedChance && Random.value <= bleedChancePercent)
         {
             DamageInfo bleedDamageInfo = new DamageInfo(bleedDamage, elementType, true);
-            enemy.ApplyDoT(bleedDamageInfo, bleedDuration);
+            enemy.ApplyDoT(bleedDamageInfo, bleedDuration, 0.5f, false, 0f, default, DebuffType.Bleed);
         }
 
         recentlyHitEnemies[enemy] = Time.time + damageCooldown;

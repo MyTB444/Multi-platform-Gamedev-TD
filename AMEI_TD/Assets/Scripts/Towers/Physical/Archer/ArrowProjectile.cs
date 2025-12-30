@@ -171,11 +171,11 @@ public class ArrowProjectile : TowerProjectileBase
             // Apply DoT (fire replaces poison)
             if (applyFire)
             {
-                enemy.ApplyDoT(fireDamageInfo, fireDuration);
+                enemy.ApplyDoT(fireDamageInfo, fireDuration, 0.5f, false, 0f, default, DebuffType.Burn);
             }
             else if (applyPoison)
             {
-                enemy.ApplyDoT(poisonDamageInfo, poisonDuration);
+                enemy.ApplyDoT(poisonDamageInfo, poisonDuration, 0.5f, false, 0f, default, DebuffType.Poison);
             }
         }
     }

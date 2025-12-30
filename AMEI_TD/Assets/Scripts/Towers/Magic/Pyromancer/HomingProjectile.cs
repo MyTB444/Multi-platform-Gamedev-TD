@@ -195,7 +195,7 @@ public class HomingProjectile : TowerProjectileBase
             // Burn chance
             if (canBurn && Random.value <= burnChancePercent)
             {
-                enemy.ApplyDoT(burnDamageInfo, burnDuration, 0.5f, canSpreadBurn, spreadRadius, spreadEnemyLayer);
+                enemy.ApplyDoT(burnDamageInfo, burnDuration, 0.5f, canSpreadBurn, spreadRadius, spreadEnemyLayer, DebuffType.Burn);
             }
         
             // AoE damage
