@@ -20,17 +20,6 @@ public class UIBase : MonoBehaviour
         instance = this;
         isPaused = false;
     }
-
-    public void StartButton()
-    {
-        SceneManager.LoadScene("Prototype");
-    }
-    public void Quit()
-    {
-        SceneManager.LoadScene("MainMenu");
-
-    }
-
     public void Pause()
     {
         if (isPaused == false)

@@ -59,7 +59,7 @@ public class InputHandler : MonoBehaviour
         {
             // Only allow restart after game has ended
             if (gameEnd)
-                UIBase.instance.StartButton();
+                Menu.instance.RestartGame();
         }
     }
 }

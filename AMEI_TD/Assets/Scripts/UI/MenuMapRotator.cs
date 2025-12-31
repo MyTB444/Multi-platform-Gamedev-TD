@@ -15,13 +15,14 @@ public class MenuMapRotator : MonoBehaviour
 
     private int currentIndex = 0;
     private GameObject currentCubeInstance;
+    public static MenuMapRotator instance;
+    public Menu menu;
 
     void Start()
     {
+        instance = this;
         leftButton.onClick.AddListener(RotateLeft);
         rightButton.onClick.AddListener(RotateRight);
-        selectButton.onClick.AddListener(SelectCube);
-
         ShowCube(currentIndex);
     }
 
@@ -33,6 +34,7 @@ public class MenuMapRotator : MonoBehaviour
 
         // Instantiate new cube at the center
         currentCubeInstance = Instantiate(cubePrefabs[index], cubeSlot.position, cubeSlot.rotation, cubeSlot);
+        menu.ChangeButtonColours(index);
     }
 
     void RotateLeft()
@@ -45,12 +47,6 @@ public class MenuMapRotator : MonoBehaviour
     {
         currentIndex = (currentIndex + 1) % cubePrefabs.Count;
         ShowCube(currentIndex);
-    }
-
-    void SelectCube()
-    {
-        Debug.Log($"Selected cube index: {currentIndex}");
-        //TODO
     }
     public int ReturnIndex()
     {
