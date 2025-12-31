@@ -60,6 +60,17 @@ public class EnemyBase : MonoBehaviour, IDamageable
     [SerializeField] private float spawnGracePeriod = 0.5f;
     private float spawnTime;
     
+    [Header("Path Variation")]
+    [Tooltip("Random lateral offset from path center (0 = always center, 0.5 = spread across road)")]
+    [SerializeField] private float pathOffsetRange = 0.3f;
+
+    [Tooltip("Random speed variation (0.1 = ±10% speed variation)")]
+    [SerializeField] private float speedVariationPercent = 0.1f;
+    [SerializeField] private bool isHighPriority = false;
+
+    private float myPathOffset;
+    private float mySpeedMultiplier;
+    
     [Header("Stun Effect")]
     [SerializeField] private Color frozenColor = new Color(0.5f, 0.8f, 1f, 1f);
     private Renderer[] enemyRenderers;
@@ -439,7 +450,12 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public void SetupEnemy(EnemySpawner myNewSpawner, Vector3[] pathWaypoints)
     {
         mySpawner = myNewSpawner;
-        spawnTime = Time.time; // Reset spawn time for grace period
+        spawnTime = Time.time;
+    
+        // Randomize path offset and speed variation
+        myPathOffset = Random.Range(-pathOffsetRange, pathOffsetRange);
+        mySpeedMultiplier = Random.Range(1f - speedVariationPercent, 1f + speedVariationPercent);
+    
         UpdateWaypoints(pathWaypoints);
         CollectTotalDistance();
         ResetEnemy();
@@ -449,7 +465,12 @@ public class EnemyBase : MonoBehaviour, IDamageable
     // For minions/summons that spawn without a spawner
     public void SetupEnemyNoGrace(Vector3[] pathWaypoints)
     {
-        spawnTime = -spawnGracePeriod; // Skip grace period
+        spawnTime = -spawnGracePeriod;
+    
+        // Randomize path offset and speed variation
+        myPathOffset = Random.Range(-pathOffsetRange, pathOffsetRange);
+        mySpeedMultiplier = Random.Range(1f - speedVariationPercent, 1f + speedVariationPercent);
+    
         UpdateWaypoints(pathWaypoints);
         CollectTotalDistance();
         ResetEnemy();
@@ -478,7 +499,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         if (NavAgent != null)
         {
             NavAgent.enabled = true;
-        
+    
             // Find a valid NavMesh position near spawn point
             NavMeshHit hit;
             if (NavMesh.SamplePosition(transform.position, out hit, 5f, NavMesh.AllAreas))
@@ -490,12 +511,22 @@ public class EnemyBase : MonoBehaviour, IDamageable
                 Debug.LogWarning($"[{gameObject.name}] Could not find NavMesh near {transform.position}");
                 NavAgent.Warp(transform.position);
             }
-        
-            NavAgent.speed = enemySpeed;
+    
+            NavAgent.speed = enemySpeed * mySpeedMultiplier;
             NavAgent.isStopped = false;
             NavAgent.updateRotation = false;
         
-            // Set first destination immediately so it starts moving right away
+            if (isHighPriority)
+            {
+                NavAgent.avoidancePriority = 1; // Others avoid me
+                NavAgent.obstacleAvoidanceType = ObstacleAvoidanceType.LowQualityObstacleAvoidance;
+            }
+            else
+            {
+                NavAgent.avoidancePriority = Random.Range(30, 70);
+            }
+    
+            // Set first destination immediately
             if (myWaypoints != null && myWaypoints.Length > 0)
             {
                 NavAgent.SetDestination(myWaypoints[0]);
@@ -519,8 +550,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         if (myWaypoints == null || currentWaypointIndex >= myWaypoints.Length) return;
 
         if (NavAgent == null || !NavAgent.isActiveAndEnabled) return;
-    
-        // Must be on NavMesh to do anything
+
         if (!NavAgent.isOnNavMesh) return;
 
         if (isStunned || !canMove)
@@ -528,25 +558,38 @@ public class EnemyBase : MonoBehaviour, IDamageable
             NavAgent.isStopped = true;
             return;
         }
-    
-        NavAgent.isStopped = false;
-        NavAgent.speed = enemySpeed;
 
-        // Skip waypoints we've already passed
+        NavAgent.isStopped = false;
+        NavAgent.speed = enemySpeed * mySpeedMultiplier;
+
+        // Skip waypoints we've already passed - but only if we're close to them
         while (currentWaypointIndex < myWaypoints.Length && HasPassedWaypoint(currentWaypointIndex))
         {
+            float distToWaypoint = Vector3.Distance(transform.position, myWaypoints[currentWaypointIndex]);
+            if (distToWaypoint > 3f) break; // Don't skip if we're far away
+        
             currentWaypointIndex++;
         }
 
         if (currentWaypointIndex >= myWaypoints.Length) return;
 
+        // Calculate offset waypoint
         Vector3 targetWaypoint = myWaypoints[currentWaypointIndex];
+
+        // Get perpendicular direction to path for offset
+        if (currentWaypointIndex < myWaypoints.Length - 1)
+        {
+            Vector3 pathDirection = (myWaypoints[currentWaypointIndex + 1] - targetWaypoint).normalized;
+            Vector3 offsetDirection = Vector3.Cross(pathDirection, Vector3.up);
+            targetWaypoint += offsetDirection * myPathOffset;
+        }
+
         NavAgent.SetDestination(targetWaypoint);
 
         // Smooth rotation towards steering target
         Vector3 direction = NavAgent.steeringTarget - transform.position;
         direction.y = 0;
-    
+
         if (direction.sqrMagnitude > 0.01f)
         {
             Quaternion targetRotation = Quaternion.LookRotation(direction);
