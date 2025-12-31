@@ -29,6 +29,9 @@ public class TowerIceMage : TowerBase
     [SerializeField] [Range(0f, 1f)] private float freezeChance = 0.2f;
     [SerializeField] private float freezeDuration = 1.5f;
     
+    // Locked target for attack
+    private EnemyBase lockedTarget;
+    
     public override void SetUpgrade(TowerUpgradeType upgradeType, bool enabled)
     {
         base.SetUpgrade(upgradeType, enabled);
@@ -50,40 +53,58 @@ public class TowerIceMage : TowerBase
         }
     }
     
+    protected override void Attack()
+    {
+        // Lock target before animation
+        lockedTarget = currentEnemy;
+        base.Attack();
+    }
+    
     protected override void FireProjectile()
     {
         if (attackSpawnEffectPrefab != null && gunPoint != null)
         {
-            GameObject spawnVFX = Instantiate(attackSpawnEffectPrefab, gunPoint.position, Quaternion.identity);
-            Destroy(spawnVFX, 0.5f);
+            ObjectPooling.instance.GetVFX(attackSpawnEffectPrefab, gunPoint.position, Quaternion.identity, 0.5f);
         }
-        
+    
         if (projectilePrefab == null || gunPoint == null) return;
-        if (currentEnemy == null) return;
         
-        IDamageable damageable = currentEnemy.GetComponent<IDamageable>();
-        if (damageable == null) return;
-        
-        Vector3 targetPos = currentEnemy.GetCenterPoint();
-        
+        // Use locked target
+        if (lockedTarget == null || !lockedTarget.gameObject.activeSelf)
+        {
+            lockedTarget = null;
+            return;
+        }
+    
+        IDamageable damageable = lockedTarget.GetComponent<IDamageable>();
+        if (damageable == null)
+        {
+            lockedTarget = null;
+            return;
+        }
+    
+        Vector3 targetPos = lockedTarget.GetCenterPoint();
+    
         Vector3 directionToEnemy = (targetPos - gunPoint.position).normalized;
         Vector3 spawnPosition = gunPoint.position + directionToEnemy * 0.5f;
-        
+    
         Quaternion flightRotation = Quaternion.LookRotation(directionToEnemy);
         Quaternion spawnRotation = flightRotation * Quaternion.Euler(visualRotationOffset);
-        
-        GameObject newProjectile = Instantiate(projectilePrefab, spawnPosition, spawnRotation);
-        
-        // Calculate upgraded values
+    
+        GameObject newProjectile = ObjectPooling.instance.Get(projectilePrefab);
+        newProjectile.transform.position = spawnPosition;
+        newProjectile.transform.rotation = spawnRotation;
+        newProjectile.SetActive(true);
+    
         float finalSlowPercent = slowPercent + (strongerSlow ? bonusSlowPercent : 0f);
         float finalSlowDuration = slowDuration + (longerSlow ? bonusSlowDuration : 0f);
         float finalDotDamage = dotDamagePerTick * (frostbite ? frostbiteDamageMultiplier : 1f);
-        
+    
         IceProjectile ice = newProjectile.GetComponent<IceProjectile>();
         if (ice != null)
         {
             ice.SetupIceProjectile(
-                currentEnemy.transform, 
+                lockedTarget.transform, 
                 damageable, 
                 CreateDamageInfo(), 
                 projectileSpeed, 
@@ -96,11 +117,13 @@ public class TowerIceMage : TowerBase
                 dotTickInterval,
                 visualRotationOffset
             );
-            
+        
             if (freezeSolid)
             {
                 ice.SetFreezeEffect(freezeChance, freezeDuration);
             }
         }
+        
+        lockedTarget = null;
     }
 }

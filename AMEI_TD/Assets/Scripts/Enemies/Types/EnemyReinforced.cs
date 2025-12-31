@@ -5,7 +5,14 @@ using UnityEngine.AI;
 
 public class EnemyReinforced : EnemyBase
 {
-    [Header("Reinforced Effect")]
+    [Header("Shield Settings")]
+    [SerializeField] private GameObject shieldEffectPrefab;
+    [SerializeField] private float shieldAmount = 50f;
+    [SerializeField] private float shieldRadius = 5f;
+    [SerializeField] private float shieldCooldown = 10f;
+    [SerializeField] private LayerMask enemyLayer;
+
+    [Header("Reinforced Visual Effect")]
     [SerializeField] private Color armorTint = new Color(0.7f, 0.8f, 1f, 1f);
     [SerializeField] private Color pulseColor = new Color(0.3f, 0.6f, 1f, 1f);
     [SerializeField] private float pulseSpeed = 2f;
@@ -13,6 +20,7 @@ public class EnemyReinforced : EnemyBase
     [SerializeField] private float smoothnessValue = 0.9f;
     [SerializeField] private Renderer targetRenderer;
 
+    private float nextShieldTime = 0f;
     private Material enemyMaterial;
     private Color originalColor;
     private float pulseTime;
@@ -78,6 +86,7 @@ public class EnemyReinforced : EnemyBase
     {
         base.Update();
         ApplyArmorPulse();
+        TryApplyShieldToNearbyEnemies();
     }
 
     private void ApplyArmorPulse()
@@ -101,6 +110,53 @@ public class EnemyReinforced : EnemyBase
             float metallicPulse = Mathf.Lerp(metallicValue * 0.7f, metallicValue, t);
             enemyMaterial.SetFloat("_Metallic", metallicPulse);
         }
+    }
+
+    private void TryApplyShieldToNearbyEnemies()
+    {
+        if (Time.time < nextShieldTime) return;
+
+        // Always try to shield self
+        if (!HasShield())
+        {
+            ApplyShield(shieldAmount, shieldEffectPrefab);
+        }
+
+        // Then shield nearby enemies
+        Collider[] nearbyColliders = Physics.OverlapSphere(transform.position, shieldRadius, enemyLayer);
+
+        foreach (Collider col in nearbyColliders)
+        {
+            if (col.gameObject == gameObject) continue;
+        
+            EnemyBase enemy = col.GetComponent<EnemyBase>();
+            if (enemy != null && !enemy.HasShield())
+            {
+                enemy.ApplyShield(shieldAmount, shieldEffectPrefab);
+            }
+        }
+
+        // Always reset cooldown after checking (even if nothing needed shielding)
+        nextShieldTime = Time.time + shieldCooldown;
+    }
+
+    protected override void ResetEnemy()
+    {
+        base.ResetEnemy();
+
+        pulseTime = 0f;
+    
+        // Apply shield to self on spawn
+        ApplyShield(shieldAmount, shieldEffectPrefab);
+    
+        // Start cooldown immediately after spawn
+        nextShieldTime = Time.time + shieldCooldown;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawWireSphere(transform.position, shieldRadius);
     }
 
     private void OnDestroy()

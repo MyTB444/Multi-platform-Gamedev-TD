@@ -1154,6 +1154,8 @@ MonoBehaviour:
   slashVFXRotationOffset: {x: 0, y: 0, z: 0}
   slashVFXStartDelay: 0
   slashVFXDuration: 0.4
+  searchRadius: 15
+  maxTimeWithoutTarget: 5
 --- !u!114 &-6523280288289035866
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1177,7 +1179,7 @@ NavMeshAgent:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2537545956604527301}
   m_Enabled: 1
-  m_AgentTypeID: -1372625422
+  m_AgentTypeID: 0
   m_Radius: 0.5
   m_Speed: 5
   m_Acceleration: 20

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3331498729306881265}
   - component: {fileID: 7609787716215933012}
   - component: {fileID: 369873695375615483}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: FireballTrailVFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4712,7 +4712,7 @@ GameObject:
   - component: {fileID: 5677405347047669394}
   - component: {fileID: 5551281975031055851}
   - component: {fileID: 4578838946068885925}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: FireballVFX
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9704,7 +9704,7 @@ GameObject:
   - component: {fileID: 5116906923271891547}
   - component: {fileID: 8796301081372568905}
   - component: {fileID: -7509914871797840605}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: HomingProjectileFireball
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9838,9 +9838,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   maxLifeTime: 10
-  rotationSpeed: 200
-  spawnEffectPrefab: {fileID: 3125467519713422411, guid: cb9d85bd70dafc44bb9bda92fca7a2d5, type: 3}
   impactEffectPrefab: {fileID: 1678293870831196914, guid: 6327b546b3463c849be3a919b44080a0, type: 3}
+  rotationSpeed: 200
+  retargetRange: 5
 --- !u!1 &6827121200050497876
 GameObject:
   m_ObjectHideFlags: 0
@@ -9852,7 +9852,7 @@ GameObject:
   - component: {fileID: 2769263725462558676}
   - component: {fileID: 8202308507255283190}
   - component: {fileID: 1781126488541476127}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Small flames
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14622,7 +14622,7 @@ GameObject:
   - component: {fileID: 5136243806463353464}
   - component: {fileID: 1572009771366284786}
   - component: {fileID: 7448131346907807397}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Ember
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19463,7 +19463,7 @@ GameObject:
   m_Component:
   - component: {fileID: 297131911773753159}
   - component: {fileID: 2521379610113627296}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Point Light
   m_TagString: Untagged
   m_Icon: {fileID: 0}

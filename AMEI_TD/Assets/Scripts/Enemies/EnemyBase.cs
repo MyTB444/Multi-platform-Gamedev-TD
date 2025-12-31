@@ -1,12 +1,8 @@
-
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
-
 
 public enum EnemyType
 {
@@ -15,6 +11,25 @@ public enum EnemyType
     Tank,
     Invisible,
     Reinforced,
+    Summoner,
+    Minion,
+    Hexer,
+    Herald,
+    Adaptive,
+    Splitter,
+    Ghostwalk,
+    Decoy
+}
+
+public enum DebuffType
+{
+    None,
+    Slow,
+    Freeze,
+    Burn,
+    Poison,
+    Bleed,
+    Frostbite 
 }
 
 public class EnemyBase : MonoBehaviour, IDamageable
@@ -41,9 +56,11 @@ public class EnemyBase : MonoBehaviour, IDamageable
     [Header("Path")]
     [SerializeField] private Transform centerPoint;
     [SerializeField] private Transform bottomPoint;
-
-    [Header("Slow Effect")]
-    [SerializeField] private GameObject slowEffectPrefab;
+    
+    [Header("Spawn Settings")]
+    [SerializeField] private bool useSpawnGrace = true;
+    [SerializeField] private float spawnGracePeriod = 0.5f;
+    private float spawnTime;
     
     [Header("Stun Effect")]
     [SerializeField] private Color frozenColor = new Color(0.5f, 0.8f, 1f, 1f);
@@ -52,7 +69,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private bool hasSavedColors = false;
 
     private NavMeshAgent NavAgent;
-    
+    private Animator EnemyAnimator;
 
     [SerializeField] protected float enemyCurrentHp;
     protected bool isDead;
@@ -62,9 +79,11 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private float waypointReachDistance = 0.3f;
 
     private int originalLayerIndex;
+    private bool hasStoredLayer = false;
     private float totalDistance;
 
     private Vector3 Destination;
+    protected bool canMove = true;
     [HideInInspector]public Rigidbody myBody;
     
 
@@ -72,25 +91,57 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private float baseSpeed;
     private float slowEndTime;
     private bool isSlowed = false;
-    private GameObject activeSlowEffect;
-    
+    private bool isIceSlow = false;
+
+    // Speed buff system
+    private bool isSpeedBuffed = false;
+    private float speedBuffEndTime;
+
+    // HoT (Heal over Time) system
+    private bool hasHoT = false;
+    private float hotEndTime;
+    private float hotTotalAmount;
+    private float hotAmountPerTick;
+    private float hotTickInterval;
+    private float lastHotTick;
+
     // Stun system
     private bool isStunned = false;
     private float stunEndTime;
 
     // DoT system
-    private DamageInfo dotDamageInfo;
-    private float dotEndTime;
-    private float dotTickInterval = 0.5f;
-    private float lastDotTick;
-    private bool hasDot = false;
-    private bool dotCanSpread = false;
-    private float dotSpreadRadius;
-    private LayerMask dotSpreadLayer;
+    private bool hasBurn = false;
+    private DamageInfo burnDamageInfo;
+    private float burnEndTime;
+    private float lastBurnTick;
     
+    // Spread settings (for burn spread)
+    private bool burnCanSpread = false;
+    private float burnSpreadRadius;
+    private LayerMask burnSpreadLayer;
 
-   
+    private bool hasPoison = false;
+    private DamageInfo poisonDamageInfo;
+    private float poisonEndTime;
+    private float lastPoisonTick;
 
+    private bool hasBleed = false;
+    private DamageInfo bleedDamageInfo;
+    private float bleedEndTime;
+    private float lastBleedTick;
+    
+    private bool hasFrostbite = false;
+    private DamageInfo frostbiteDamageInfo;
+    private float frostbiteEndTime;
+    private float lastFrostbiteTick;
+
+    private float dotTickInterval = 0.5f;
+    
+    // Shield system
+    private bool hasShield = false;
+    private float shieldHealth = 0f;
+    private GameObject activeShieldEffect;
+    
     private VFXDamage vfxDamageScriptRef;
 
     [SerializeField] private  Canvas enemyHealthDisplayCanvas;
@@ -98,41 +149,30 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     [SerializeField] private EnemyVFXPool enemyVFXPoolScriptRef;
     private bool enemyHealthBarStatus = false;
-    private Animator EnemyAnimator;
     private bool spellsActivated = false;
-  
-
-
-   
-
-
-  
-    private void Awake()
+    
+    private void OnEnable()
     {
-        originalLayerIndex = gameObject.layer;
-        baseSpeed = enemySpeed;
-    }
-
-    private void OnDisable()
-    {
-        healthBar.onValueChanged.RemoveAllListeners();
-    }
-
-    protected virtual void OnEnable()
-    {
-        gameObject.layer = originalLayerIndex;
-        enemyCurrentHp = enemyMaxHp;
+        UpdateVisuals();
+        NavAgent = GetComponent<NavMeshAgent>();
+        EnemyAnimator = GetComponentInChildren<Animator>();
+    
+        // Disable NavAgent until SetupEnemy is called
+        if (NavAgent != null)
+        {
+            NavAgent.enabled = false;
+        }
+        
         if (enemyBaseRef == null)
         {
             enemyBaseRef = this;
         }
-       if(vfxDamageScriptRef != null)
-       {
+        if(vfxDamageScriptRef != null)
+        {
            
-           vfxDamageScriptRef.enemies.Remove(this);
+            vfxDamageScriptRef.enemies.Remove(this);
             
         }
-
         enemyHealthDisplayCanvas.enabled = false;
         
         vfxContainer = enemyVFXPoolScriptRef;
@@ -140,33 +180,37 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
         enemyHealthDisplayCanvas.worldCamera = Camera.main;
         healthBar.value = 1;
-
-
-        //Renderer renderer = GetComponent<Renderer>();
-        NavAgent = GetComponent<NavMeshAgent>();
-        EnemyAnimator = GetComponent<Animator>();
         myBody = GetComponent<Rigidbody>();
-        NavAgent.enabled = false;
-
         EnemyAnimator.enabled = true;
-        isDead = false;
         spellsActivated = false;
         myBody.useGravity = true;
         myBody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+    }
+    
+    private void OnDisable()
+    {
+        healthBar.onValueChanged.RemoveAllListeners();
+    }
 
-        SaveOriginalColors();
+    protected virtual void Awake()
+    {
+        baseSpeed = enemySpeed;
+        originalLayerIndex = gameObject.layer;
     }
 
     protected virtual void Start()
     {
         UpdateVisuals();
         NavAgent = GetComponent<NavMeshAgent>();
-        EnemyAnimator = GetComponent<Animator>();
-        SaveOriginalColors();
-    
-    }
+        EnemyAnimator = GetComponentInChildren<Animator>();
 
-   
+        SaveOriginalColors();
+        
+        if (GetComponent<EnemyDebuffDisplay>() == null)
+        {
+            gameObject.AddComponent<EnemyDebuffDisplay>();
+        }
+    }
     
     public void GetRefOfVfxDamageScript(VFXDamage vfxDamageScriptRef)
     {
@@ -203,72 +247,160 @@ public class EnemyBase : MonoBehaviour, IDamageable
             RemoveSlow();
         }
 
-        // Handle DoT
-        if (hasDot)
+        // Handle speed buff expiry
+        if (isSpeedBuffed && Time.time >= speedBuffEndTime)
         {
-            if (Time.time >= dotEndTime)
+            RemoveSpeedBuff();
+        }
+
+        // Handle HoT
+        if (hasHoT)
+        {
+            if (Time.time >= hotEndTime)
             {
-                hasDot = false;
-                dotCanSpread = false;
+                hasHoT = false;
             }
-            else if (Time.time >= lastDotTick + dotTickInterval)
+            else if (Time.time >= lastHotTick + hotTickInterval)
             {
-                lastDotTick = Time.time;
-                TakeDamage(dotDamageInfo);
-    
-                if (dotCanSpread)
+                lastHotTick = Time.time;
+                Heal(hotAmountPerTick);
+            }
+        }
+
+        // Handle Burn DoT
+        if (hasBurn)
+        {
+            if (Time.time >= burnEndTime)
+            {
+                hasBurn = false;
+                burnCanSpread = false;
+            }
+            else if (Time.time >= lastBurnTick + dotTickInterval)
+            {
+                lastBurnTick = Time.time;
+                TakeDamage(burnDamageInfo);
+
+                if (burnCanSpread)
                 {
-                    SpreadDoT();
+                    SpreadBurn();
                 }
             }
         }
+
+        // Handle Poison DoT
+        if (hasPoison)
+        {
+            if (Time.time >= poisonEndTime)
+            {
+                hasPoison = false;
+            }
+            else if (Time.time >= lastPoisonTick + dotTickInterval)
+            {
+                lastPoisonTick = Time.time;
+                TakeDamage(poisonDamageInfo);
+            }
+        }
+
+        // Handle Bleed DoT
+        if (hasBleed)
+        {
+            if (Time.time >= bleedEndTime)
+            {
+                hasBleed = false;
+            }
+            else if (Time.time >= lastBleedTick + dotTickInterval)
+            {
+                lastBleedTick = Time.time;
+                TakeDamage(bleedDamageInfo);
+            }
+        }
+        
+        // Handle Frostbite DoT
+        if (hasFrostbite)
+        {
+            if (Time.time >= frostbiteEndTime)
+            {
+                hasFrostbite = false;
+            }
+            else if (Time.time >= lastFrostbiteTick + dotTickInterval)
+            {
+                lastFrostbiteTick = Time.time;
+                TakeDamage(frostbiteDamageInfo);
+            }
+        }
     }
     
-    private void SpreadDoT()
+    private void SpreadBurn()
     {
         Vector3 spreadCenter = centerPoint != null ? centerPoint.position : transform.position;
-        Collider[] nearbyEnemies = Physics.OverlapSphere(spreadCenter, dotSpreadRadius, dotSpreadLayer);
-    
+        Collider[] nearbyEnemies = Physics.OverlapSphere(spreadCenter, burnSpreadRadius, burnSpreadLayer);
+
         foreach (Collider col in nearbyEnemies)
         {
             if (col.gameObject == gameObject) continue;
-        
+    
             EnemyBase enemy = col.GetComponent<EnemyBase>();
-            if (enemy != null && !enemy.HasDoT())
+            if (enemy != null && !enemy.HasBurn())
             {
-                enemy.ApplyDoT(dotDamageInfo, dotEndTime - Time.time, dotTickInterval, false, 0f);
+                enemy.ApplyDoT(burnDamageInfo, burnEndTime - Time.time, dotTickInterval, false, 0f, default, DebuffType.Burn);
             }
         }
     }
 
-    public void ApplySlow(float slowPercent, float duration, bool showVFX = true)
+    public void ApplySlow(float slowPercent, float duration, bool fromIce = false)
     {
         isSlowed = true;
         slowEndTime = Time.time + duration;
+        isIceSlow = fromIce;
 
         float clampedSlow = Mathf.Clamp(slowPercent, 0f, 0.9f);
         enemySpeed = baseSpeed * (1f - clampedSlow);
-
-        if (showVFX && activeSlowEffect == null && slowEffectPrefab != null)
-        {
-            activeSlowEffect = Instantiate(slowEffectPrefab, transform);
-            activeSlowEffect.transform.localPosition = Vector3.up * 0.5f;
-            Debug.Log($"Spawned slow effect: {activeSlowEffect.name}");
-        }
     }
 
     private void RemoveSlow()
     {
         isSlowed = false;
+        isIceSlow = false;
         enemySpeed = baseSpeed;
-
-        if (activeSlowEffect != null)
-        {
-            Destroy(activeSlowEffect);
-            activeSlowEffect = null;
-        }
     }
-    
+
+    public void ApplySpeedBuff(float speedMultiplier, float duration)
+    {
+        isSpeedBuffed = true;
+        speedBuffEndTime = Time.time + duration;
+
+        float clampedMultiplier = Mathf.Clamp(speedMultiplier, 1f, 3f);
+        enemySpeed = baseSpeed * clampedMultiplier;
+    }
+
+    private void RemoveSpeedBuff()
+    {
+        isSpeedBuffed = false;
+        enemySpeed = baseSpeed;
+    }
+
+    public void ApplyHoT(float percentOfMaxHp, float duration, float tickInterval = 0.5f)
+    {
+        hasHoT = true;
+        hotEndTime = Time.time + duration;
+        hotTickInterval = tickInterval;
+        lastHotTick = Time.time;
+
+        float totalHeal = enemyMaxHp * percentOfMaxHp;
+        int tickCount = Mathf.CeilToInt(duration / tickInterval);
+        hotAmountPerTick = totalHeal / tickCount;
+    }
+
+    private void Heal(float amount)
+    {
+        enemyCurrentHp += amount;
+        if (enemyCurrentHp > enemyMaxHp)
+        {
+            enemyCurrentHp = enemyMaxHp;
+        }
+        enemyCurrentHp = Mathf.Floor(enemyCurrentHp);
+    }
+
     public void ApplyStun(float duration)
     {
         isStunned = true;
@@ -309,36 +441,80 @@ public class EnemyBase : MonoBehaviour, IDamageable
         hasSavedColors = true;
     }
 
-    public void ApplyDoT(DamageInfo damagePerTick, float duration, float tickInterval = 0.5f, bool canSpread = false, float spreadRadius = 0f, LayerMask spreadLayer = default)
+    public void ApplyDoT(DamageInfo damagePerTick, float duration, float tickInterval = 0.5f, bool canSpread = false, float spreadRadius = 0f, LayerMask spreadLayer = default, DebuffType dotType = DebuffType.None)
     {
         DamageCalculator.DamageResult testResult = DamageCalculator.Calculate(damagePerTick, elementType);
-    
+
         if (testResult.wasImmune)
         {
             return;
         }
-    
-        hasDot = true;
-        dotDamageInfo = damagePerTick;
-        dotDamageInfo.isDoT = true;
-        dotEndTime = Time.time + duration;
+
         dotTickInterval = tickInterval;
-        lastDotTick = Time.time;
-    
-        // Spread settings
-        dotCanSpread = canSpread;
-        dotSpreadRadius = spreadRadius;
-        dotSpreadLayer = spreadLayer;
+
+        switch (dotType)
+        {
+            case DebuffType.Burn:
+                hasBurn = true;
+                burnDamageInfo = damagePerTick;
+                burnDamageInfo.isDoT = true;
+                burnEndTime = Time.time + duration;
+                lastBurnTick = Time.time;
+                burnCanSpread = canSpread;
+                burnSpreadRadius = spreadRadius;
+                burnSpreadLayer = spreadLayer;
+                break;
+            
+            case DebuffType.Poison:
+                hasPoison = true;
+                poisonDamageInfo = damagePerTick;
+                poisonDamageInfo.isDoT = true;
+                poisonEndTime = Time.time + duration;
+                lastPoisonTick = Time.time;
+                break;
+            
+            case DebuffType.Bleed:
+                hasBleed = true;
+                bleedDamageInfo = damagePerTick;
+                bleedDamageInfo.isDoT = true;
+                bleedEndTime = Time.time + duration;
+                lastBleedTick = Time.time;
+                break;
+            
+            case DebuffType.Frostbite:
+                hasFrostbite = true;
+                frostbiteDamageInfo = damagePerTick;
+                frostbiteDamageInfo.isDoT = true;
+                frostbiteEndTime = Time.time + duration;
+                lastFrostbiteTick = Time.time;
+                break;
+        }
     }
 
-    public void SetupEnemy(EnemySpawner myNewSpawner)
+    public void SetupEnemy(EnemySpawner myNewSpawner, Vector3[] pathWaypoints)
     {
         mySpawner = myNewSpawner;
-     
-        UpdateWaypoints(myNewSpawner.currentWaypoints);
+        spawnTime = Time.time; // Reset spawn time for grace period
+        UpdateWaypoints(pathWaypoints);
         CollectTotalDistance();
         ResetEnemy();
         BeginMovement();
+    }
+    
+    // For minions/summons that spawn without a spawner
+    public void SetupEnemyNoGrace(Vector3[] pathWaypoints)
+    {
+        spawnTime = -spawnGracePeriod; // Skip grace period
+        UpdateWaypoints(pathWaypoints);
+        CollectTotalDistance();
+        ResetEnemy();
+        BeginMovement();
+    }
+    
+    public bool IsTargetable()
+    {
+        if (!useSpawnGrace) return true;
+        return Time.time > spawnTime + spawnGracePeriod;
     }
 
     private void UpdateWaypoints(Vector3[] newWaypoints)
@@ -353,8 +529,35 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private void BeginMovement()
     {
         currentWaypointIndex = 0;
+
+        if (NavAgent != null)
+        {
+            NavAgent.enabled = true;
+        
+            // Find a valid NavMesh position near spawn point
+            NavMeshHit hit;
+            if (NavMesh.SamplePosition(transform.position, out hit, 5f, NavMesh.AllAreas))
+            {
+                NavAgent.Warp(hit.position);
+            }
+            else
+            {
+                Debug.LogWarning($"[{gameObject.name}] Could not find NavMesh near {transform.position}");
+                NavAgent.Warp(transform.position);
+            }
+        
+            NavAgent.speed = enemySpeed;
+            NavAgent.isStopped = false;
+            NavAgent.updateRotation = false;
+        
+            // Set first destination immediately so it starts moving right away
+            if (myWaypoints != null && myWaypoints.Length > 0)
+            {
+                NavAgent.SetDestination(myWaypoints[0]);
+            }
+        }
     }
-  
+
     private void CollectTotalDistance()
     {
         totalDistance = 0;
@@ -368,48 +571,90 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     private void FollowPath()
     {
-        if (isStunned) return;
+        if (myWaypoints == null || currentWaypointIndex >= myWaypoints.Length) return;
+
+        if (NavAgent == null || !NavAgent.isActiveAndEnabled) return;
     
-        if (myWaypoints == null || currentWaypointIndex >= myWaypoints.Length)
+        // Must be on NavMesh to do anything
+        if (!NavAgent.isOnNavMesh) return;
+
+        if (isStunned || !canMove)
         {
-            ReachedEnd();
+            NavAgent.isStopped = true;
             return;
         }
+    
+        NavAgent.isStopped = false;
+        NavAgent.speed = enemySpeed;
+
+        // Skip waypoints we've already passed
+        while (currentWaypointIndex < myWaypoints.Length && HasPassedWaypoint(currentWaypointIndex))
+        {
+            currentWaypointIndex++;
+        }
+
+        if (currentWaypointIndex >= myWaypoints.Length) return;
 
         Vector3 targetWaypoint = myWaypoints[currentWaypointIndex];
-        if (!bottomPoint) return;
+        NavAgent.SetDestination(targetWaypoint);
 
-        Vector3 direction = (targetWaypoint - bottomPoint.position).normalized;
-
-        if (direction != Vector3.zero)
+        // Smooth rotation towards steering target
+        Vector3 direction = NavAgent.steeringTarget - transform.position;
+        direction.y = 0;
+    
+        if (direction.sqrMagnitude > 0.01f)
         {
             Quaternion targetRotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
         }
 
-        // Manual movement
-        Destination = direction * (enemySpeed * Time.deltaTime);
-        transform.position += Destination;
-
-        float distanceToWaypoint = Vector3.Distance(bottomPoint.position, targetWaypoint);
-        if (distanceToWaypoint <= waypointReachDistance)
+        if (!NavAgent.pathPending && NavAgent.remainingDistance <= waypointReachDistance)
         {
             currentWaypointIndex++;
         }
-       
-            NavAgent.enabled = true;
-        
-        if (NavAgent != null && NavAgent.isActiveAndEnabled && NavAgent.isOnNavMesh)
-        {
-            NavAgent.SetDestination(targetWaypoint);
-        }
     }
 
+    private bool HasPassedWaypoint(int waypointIndex)
+    {
+        if (waypointIndex >= myWaypoints.Length) return false;
+        
+        Vector3 waypoint = myWaypoints[waypointIndex];
+        
+        // Get direction the path is going at this waypoint
+        Vector3 pathDirection;
+        if (waypointIndex < myWaypoints.Length - 1)
+        {
+            pathDirection = (myWaypoints[waypointIndex + 1] - waypoint).normalized;
+        }
+        else
+        {
+            // Last waypoint - use direction from previous
+            if (waypointIndex > 0)
+            {
+                pathDirection = (waypoint - myWaypoints[waypointIndex - 1]).normalized;
+            }
+            else
+            {
+                return false; // Only one waypoint, can't determine
+            }
+        }
+        
+        // Check if enemy is past the waypoint (dot product positive means we've passed it)
+        Vector3 toEnemy = transform.position - waypoint;
+        toEnemy.y = 0;
+        pathDirection.y = 0;
+        
+        return Vector3.Dot(toEnemy, pathDirection) > 0;
+    }
+    
     private void PlayAnimations()
     {
-        if (EnemyAnimator == null) return;
+        if (EnemyAnimator == null)
+        {
+            Debug.Log($"{gameObject.name}: Animator is NULL");
+            return;
+        }
 
-        // Don't walk if stunned
         if (isStunned)
         {
             EnemyAnimator.SetBool("Walk", false);
@@ -429,7 +674,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
            
         }
     }
-   
 
     public float GetRemainingDistance()
     {
@@ -447,14 +691,13 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     private void ReachedEnd()
     {
-
-        ObjectPooling.instance.ReturnGameObejctToPool(GetEnemyTypeForPooling(), gameObject);
+        Destroy(gameObject);
     }
 
     public virtual void TakeDamage(DamageInfo damageInfo,float vfxDamage = 0,bool spellDamageEnabled = false )
     {
         DamageCalculator.DamageResult result = DamageCalculator.Calculate(damageInfo, elementType);
-        
+
         if (DamageNumberSpawner.instance != null)
         {
             Vector3 spawnPos = centerPoint != null ? centerPoint.position : transform.position;
@@ -481,46 +724,56 @@ public class EnemyBase : MonoBehaviour, IDamageable
         {
             Debug.Log($"Super effective! {damageInfo.elementType} vs {elementType} = {result.finalDamage}");
         }
-        
-        Debug.Log($"DamageInfo: {damageInfo.elementType} vs {elementType} = {result.finalDamage}");
-      
 
+        Debug.Log($"DamageInfo: {damageInfo.elementType} vs {elementType} = {result.finalDamage}");
         if (spellDamageEnabled)
         {
-            
             if (gameObject.activeInHierarchy)
             {
                 enemyCurrentHp -= vfxDamage * 100;
-                healthBar.value -= enemyCurrentHp * Time.fixedDeltaTime/100;
-               
-             
-           
+                healthBar.value -= enemyCurrentHp * Time.fixedDeltaTime / 100;
             }
-            
-
         }
+        // Normal damage path
         else
         {
-            healthBar.value -= result.finalDamage;
-            enemyCurrentHp -= result.finalDamage;
-                    
-        }
-
-            
-            healthBar.onValueChanged.AddListener((value) =>
-            {
-                //Debug.Log("123");
-                if (gameObject.activeInHierarchy && gameObject != null)
-                {
-                    enemyHealthBarStatus = true;
-                  
-                    enemyHealthDisplayCanvas.enabled = enemyHealthBarStatus;
-                    
-                    
-                }
-            });
-
+            float damageToApply = result.finalDamage;
         
+            // Shield absorbs damage first
+            if (hasShield && shieldHealth > 0)
+            {
+                if (shieldHealth >= damageToApply)
+                {
+                    shieldHealth -= damageToApply;
+                    damageToApply = 0;
+                    Debug.Log($"Shield absorbed all damage. Shield remaining: {shieldHealth}");
+                }
+                else
+                {
+                    damageToApply -= shieldHealth;
+                    Debug.Log($"Shield broken");
+                    shieldHealth = 0;
+                    RemoveShield();
+                }
+            }
+
+            enemyCurrentHp -= damageToApply;
+            healthBar.value -= damageToApply;
+        }
+        
+        healthBar.onValueChanged.AddListener((value) =>
+        {
+            //Debug.Log("123");
+            if (gameObject.activeInHierarchy && gameObject != null)
+            {
+                enemyHealthBarStatus = true;
+                  
+                enemyHealthDisplayCanvas.enabled = enemyHealthBarStatus;
+                    
+                    
+            }
+        });
+
         if ((enemyCurrentHp <= 0 || healthBar.value <= 0) && !isDead)
         {
             isDead = true;
@@ -535,8 +788,12 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
         }
     }
+
+    public virtual void TakeDamage(float incomingDamage, float vfxDamage = 0, bool spellDamageEnabled = false)
+    {
+        TakeDamage(new DamageInfo(incomingDamage, ElementType.Physical),vfxDamage ,spellDamageEnabled);
+    }
     
-   
     private IEnumerator DisableHealthBar(bool status)
     {
         if (gameObject.activeInHierarchy && gameObject != null)
@@ -549,78 +806,81 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
     }
 
-    public virtual void TakeDamage(float incomingDamage, float vfxDamage = 0, bool spellDamageEnabled = false)
-    {
-        TakeDamage(new DamageInfo(incomingDamage, ElementType.Physical),vfxDamage ,spellDamageEnabled);
-    }
-
-    public void Die()
+    private void Die()
     {
         if (GameManager.instance != null)
         {
             GameManager.instance.UpdateSkillPoints(reward);
         }
         RemoveEnemy();
-       
         enemyBaseRef = null;
-
-        ObjectPooling.instance.ReturnGameObejctToPool(GetEnemyTypeForPooling(), gameObject);
+        ObjectPooling.instance.Return(gameObject);
     }
- 
     
-    private PoolGameObjectType GetEnemyTypeForPooling()
-    {
-        switch (enemyType)
-        {
-            case EnemyType.Basic:
-                return PoolGameObjectType.EnemyBasic;
-
-            case EnemyType.Fast:
-                return PoolGameObjectType.EnemyFast;
-
-            case EnemyType.Tank:
-                return PoolGameObjectType.EnemyTank;
-
-            case EnemyType.Invisible:
-                return PoolGameObjectType.EnemyInvisible;
-
-            case EnemyType.Reinforced:
-                return PoolGameObjectType.EnemyReinforced;
-        }
-        return 0;
-    }
     public void RemoveEnemy()
     {
         if (mySpawner != null) mySpawner.RemoveActiveEnemy(gameObject);
     }
 
-    private void ResetEnemy()
+    protected virtual void ResetEnemy()
     {
+        // Restore layer first
+        gameObject.layer = originalLayerIndex;
     
+        float healthMultiplier = 1f;
+        if (WaveManager.instance != null && WaveManager.instance.IsMegaWaveActive())
+        {
+            healthMultiplier = WaveManager.instance.GetMegaWaveHealthMultiplier();
+        }
+        enemyCurrentHp = enemyMaxHp * healthMultiplier;
+        
+        isDead = false;
+        canMove = true;
+        currentWaypointIndex = 0;
+
         // Reset slow
         isSlowed = false;
+        isIceSlow = false;
         enemySpeed = baseSpeed;
-        if (activeSlowEffect != null)
-        {
-            Destroy(activeSlowEffect);
-            activeSlowEffect = null;
-        }
 
         // Reset DoT
-        hasDot = false;
-        dotCanSpread = false;
-    
+        hasBurn = false;
+        hasPoison = false;
+        hasBleed = false;
+        hasFrostbite = false;
+        burnCanSpread = false;
+        // Reset Speed Buff
+        isSpeedBuffed = false;
+
+        // Reset HoT
+        hasHoT = false;
+
         // Reset Stun
         isStunned = false;
         if (hasSavedColors)
         {
             for (int i = 0; i < enemyRenderers.Length; i++)
             {
-                enemyRenderers[i].material.color = originalColors[i];
+                if (enemyRenderers[i] != null)
+                {
+                    enemyRenderers[i].material.color = originalColors[i];
+                }
             }
         }
 
-    
+        // Reset Shield
+        if (hasShield)
+        {
+            RemoveShield();
+        }
+
+        // Reset NavAgent
+        if (NavAgent != null)
+        {
+            NavAgent.enabled = false;
+            NavAgent.speed = baseSpeed;
+        }
+
         UpdateVisuals();
     }
     
@@ -680,9 +940,10 @@ public class EnemyBase : MonoBehaviour, IDamageable
         Die();
       
     }
-    public void UpdateVisuals()
+
+    private void UpdateVisuals()
     {
-        Renderer r = GetComponentInChildren<Renderer>();
+        Renderer r = GetComponent<Renderer>();
         if (r == null) return;
 
         Color finalColor = enemyColor;
@@ -697,6 +958,33 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
         r.material.color = finalColor;
     }
+    
+    public void ApplyShield(float shieldAmount, GameObject shieldEffectPrefab)
+    {
+        hasShield = true;
+        shieldHealth = shieldAmount;
+
+        if (shieldEffectPrefab != null && activeShieldEffect == null)
+        {
+            activeShieldEffect = ObjectPooling.instance.GetVFXWithParent(shieldEffectPrefab, transform, -1f);
+        }
+
+        Debug.Log($"Shield applied: {shieldAmount} HP");
+    }
+
+    private void RemoveShield()
+    {
+        hasShield = false;
+        shieldHealth = 0f;
+
+        if (activeShieldEffect != null)
+        {
+            ObjectPooling.instance.Return(activeShieldEffect);
+            activeShieldEffect = null;
+        }
+
+        Debug.Log("Shield removed");
+    }
 
     // Getters
     public Vector3 GetCenterPoint() => centerPoint.position;
@@ -704,23 +992,53 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public float GetEnemyHp() => enemyCurrentHp;
     public Transform GetBottomPoint() => bottomPoint;
     public bool IsInvisible() => isInvisible;
-
-   
-
     public bool IsReinforced() => isReinforced;
     public int GetDamage() => damage;
     public bool IsSlowed() => isSlowed;
     public bool IsStunned() => isStunned;
-    public bool HasDoT() => hasDot;
+    public bool IsSpeedBuffed() => isSpeedBuffed;
+    public bool HasHoT() => hasHoT;
     public ElementType GetElementType() => elementType;
+    public bool IsFrozen() => isStunned;  // Freeze uses stun system
+    public bool HasIceSlow() => isSlowed && isIceSlow;
+    public bool HasBurn() => hasBurn;
+    public bool HasPoison() => hasPoison;
+    public bool HasBleed() => hasBleed;
+    public bool HasFrostbite() => hasFrostbite;
+    public bool HasDoT() => hasBurn || hasPoison || hasBleed || hasFrostbite;
+    public bool HasShield() => hasShield && shieldHealth > 0;
+    public float GetShieldHealth() => shieldHealth;
+    public float GetSlowDurationNormalized(float maxDuration = 3f) => isSlowed ? Mathf.Clamp01((slowEndTime - Time.time) / maxDuration) : 0f;
+    public float GetFreezeDurationNormalized(float maxDuration = 2f) => isStunned ? Mathf.Clamp01((stunEndTime - Time.time) / maxDuration) : 0f;
+    public float GetBurnDurationNormalized(float maxDuration = 4f) => hasBurn ? Mathf.Clamp01((burnEndTime - Time.time) / maxDuration) : 0f;
+    public float GetPoisonDurationNormalized(float maxDuration = 4f) => hasPoison ? Mathf.Clamp01((poisonEndTime - Time.time) / maxDuration) : 0f;
+    public float GetBleedDurationNormalized(float maxDuration = 4f) => hasBleed ? Mathf.Clamp01((bleedEndTime - Time.time) / maxDuration) : 0f;
+    public float GetFrostbiteDurationNormalized(float maxDuration = 3f) => hasFrostbite ? Mathf.Clamp01((frostbiteEndTime - Time.time) / maxDuration) : 0f;
     public EnemyVFXPool vfxContainer { get; set; }
     public EnemyBase enemyBaseRef { get; set; }
-
     public bool isDeadProperty => isDead;
+    public float GetDistanceToNextWaypoint()
+    {
+        if (myWaypoints == null || currentWaypointIndex >= myWaypoints.Length) return 0f;
+        return Vector3.Distance(transform.position, myWaypoints[currentWaypointIndex]);
+    }
 
+    public Vector3 GetNextWaypointPosition()
+    {
+        if (myWaypoints == null || currentWaypointIndex >= myWaypoints.Length) return transform.position;
+        return myWaypoints[currentWaypointIndex];
+    }
+
+    public Vector3 GetDirectionAfterNextWaypoint()
+    {
+        if (myWaypoints == null) return transform.forward;
     
-
-
-
-
+        // Need at least 2 more waypoints to know direction after turn
+        if (currentWaypointIndex + 1 >= myWaypoints.Length) return transform.forward;
+    
+        Vector3 currentWaypoint = myWaypoints[currentWaypointIndex];
+        Vector3 nextWaypoint = myWaypoints[currentWaypointIndex + 1];
+    
+        return (nextWaypoint - currentWaypoint).normalized;
+    }
 }

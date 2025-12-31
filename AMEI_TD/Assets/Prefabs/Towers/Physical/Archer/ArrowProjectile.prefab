@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1219065220683405368}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: VFXPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   - component: {fileID: 4584438332710927688}
   - component: {fileID: 809605938821188092}
   - component: {fileID: 1238512463346104981}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: ArrowMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -127,7 +127,7 @@ GameObject:
   - component: {fileID: 6333415391087858138}
   - component: {fileID: 5166148121310787836}
   - component: {fileID: 2053550748891943816}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: ArrowProjectile
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -170,6 +170,8 @@ MonoBehaviour:
   curveStrength: 5
   gravityMultiplier: 2
   maxCurveDuration: 0.5
+  closeRangeGravityBoost: 4.5
+  closeRangeThreshold: 7.6
   vfxPoint: {fileID: 1219065220683405368}
 --- !u!135 &5166148121310787836
 SphereCollider:
@@ -229,7 +231,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8263186996026083288}
   - component: {fileID: 2312962183981141932}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: ArrowTrail
   m_TagString: Untagged
   m_Icon: {fileID: 0}

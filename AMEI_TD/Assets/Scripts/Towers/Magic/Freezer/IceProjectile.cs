@@ -26,6 +26,15 @@ public class IceProjectile : TowerProjectileBase
     private float freezeChance;
     private float freezeDuration;
     
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        target = null;
+        isHoming = true;
+        targetLost = false;
+        canFreeze = false;
+    }
+    
     public void SetupIceProjectile(
         Transform enemyTarget, 
         IDamageable newDamageable, 
@@ -130,13 +139,12 @@ public class IceProjectile : TowerProjectileBase
             {
                 // Reached destination - apply AoE and destroy
                 ApplyEffectsInRadius();
-                
+
                 if (impactEffectPrefab != null)
                 {
-                    GameObject impact = Instantiate(impactEffectPrefab, transform.position, Quaternion.identity);
-                    Destroy(impact, 2f);
+                    ObjectPooling.instance.GetVFX(impactEffectPrefab, transform.position, Quaternion.identity, 2f);
                 }
-                
+
                 DestroyProjectile();
             }
         }
@@ -189,13 +197,13 @@ public class IceProjectile : TowerProjectileBase
     private void ApplyEffectsInRadius()
     {
         Collider[] enemies = Physics.OverlapSphere(transform.position, effectRadius, enemyLayer);
-    
+
         foreach (Collider col in enemies)
         {
             EnemyBase enemy = col.GetComponent<EnemyBase>();
             if (enemy != null)
             {
-                enemy.ApplySlow(slowPercent, slowDuration);
+                enemy.ApplySlow(slowPercent, slowDuration, true);
                 enemy.ApplyDoT(dotDamageInfo, dotDuration, dotTickInterval);
             }
         }

@@ -12,6 +12,8 @@ public class TowerSpikeTrap : TowerBase
     [SerializeField] private Transform hammerImpactPoint;
     
     [Header("Spike Upgrades")]
+    [SerializeField] [Range(0f, 0.5f)] private float spikeTrapAttackSpeedPercent = 0.20f;
+    [Space]
     [SerializeField] private bool poisonSpikes = false;
     [SerializeField] private float poisonDamage = 2f;
     [SerializeField] private float poisonDuration = 3f;
@@ -42,6 +44,15 @@ public class TowerSpikeTrap : TowerBase
     
         switch (upgradeType)
         {
+            case TowerUpgradeType.SpikeTrapAttackSpeed:
+                attackSpeedBoost = enabled;
+                attackSpeedBoostPercent = spikeTrapAttackSpeedPercent;
+                ApplyStatUpgrades();
+                if (spikeTrap != null)
+                {
+                    spikeTrap.SetCooldown(attackCooldown);
+                }
+                break;
             case TowerUpgradeType.PoisonSpikes:
                 poisonSpikes = enabled;
                 UpdateTrapEffects();
@@ -129,8 +140,7 @@ public class TowerSpikeTrap : TowerBase
     {
         if (attackSpawnEffectPrefab != null && hammerImpactPoint != null)
         {
-            GameObject vfx = Instantiate(attackSpawnEffectPrefab, hammerImpactPoint.position, Quaternion.identity);
-            Destroy(vfx, 2f);
+            ObjectPooling.instance.GetVFX(attackSpawnEffectPrefab, hammerImpactPoint.position, Quaternion.identity, 2f);
         }
     }
     

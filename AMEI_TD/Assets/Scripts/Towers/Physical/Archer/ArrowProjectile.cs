@@ -8,6 +8,8 @@ public class ArrowProjectile : TowerProjectileBase
     [SerializeField] private float curveStrength = 8f;
     [SerializeField] private float gravityMultiplier = 3f;
     [SerializeField] private float maxCurveDuration = 0.5f;
+    [SerializeField] private float closeRangeGravityBoost = 3f;
+    [SerializeField] private float closeRangeThreshold = 6f;
     
     [Header("VFX")]
     [SerializeField] private Transform vfxPoint;
@@ -37,6 +39,35 @@ public class ArrowProjectile : TowerProjectileBase
         rb = GetComponent<Rigidbody>();
     }
     
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        launched = false;
+        curving = true;
+        applyPoison = false;
+        applyFire = false;
+    
+        // Return any child VFX from previous use to pool
+        if (vfxPoint != null)
+        {
+            foreach (Transform child in vfxPoint)
+            {
+                ObjectPooling.instance.Return(child.gameObject);
+            }
+        }
+    
+        if (rb != null)
+        {
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+    
+        if (trail != null)
+        {
+            trail.Clear();
+        }
+    }
+    
     public void SetupArcProjectile(Vector3 targetPos, IDamageable newDamageable, DamageInfo newDamageInfo, float newSpeed, float distance)
     {
         damageInfo = newDamageInfo;
@@ -45,10 +76,21 @@ public class ArrowProjectile : TowerProjectileBase
         launchTime = Time.time;
         targetPosition = targetPos;
         initialForward = transform.forward;
-        
+    
         arrowSpeed = newSpeed + (distance * 0.5f);
         maxCurveDuration = 0.3f + (distance * 0.05f);
-        
+    
+        if (distance < closeRangeThreshold)
+        {
+            gravityMultiplier = 3f + closeRangeGravityBoost;
+            Debug.Log($"[Arrow] CLOSE RANGE - Distance: {distance:F2} | Threshold: {closeRangeThreshold} | Gravity: {gravityMultiplier:F2}");
+        }
+        else
+        {
+            gravityMultiplier = 3f;
+            Debug.Log($"[Arrow] NORMAL RANGE - Distance: {distance:F2} | Gravity: {gravityMultiplier:F2}");
+        }
+    
         rb.useGravity = false;
         rb.velocity = initialForward * arrowSpeed;
         launched = true;
@@ -102,7 +144,7 @@ public class ArrowProjectile : TowerProjectileBase
         if (arrowVFX != null)
         {
             Transform spawnPoint = vfxPoint != null ? vfxPoint : transform;
-            GameObject vfx = Instantiate(arrowVFX, spawnPoint);
+            GameObject vfx = ObjectPooling.instance.GetVFXWithParent(arrowVFX, spawnPoint, -1f);
             vfx.transform.localPosition = Vector3.zero;
         }
     }
@@ -113,11 +155,11 @@ public class ArrowProjectile : TowerProjectileBase
         fireDamage = damage;
         fireDuration = duration;
         fireDamageInfo = new DamageInfo(damage, elementType, true);
-    
+
         if (arrowVFX != null)
         {
             Transform spawnPoint = vfxPoint != null ? vfxPoint : transform;
-            GameObject vfx = Instantiate(arrowVFX, spawnPoint);
+            GameObject vfx = ObjectPooling.instance.GetVFXWithParent(arrowVFX, spawnPoint, -1f);
             vfx.transform.localPosition = Vector3.zero;
         }
     }
@@ -130,8 +172,7 @@ public class ArrowProjectile : TowerProjectileBase
         if (impactEffectPrefab != null)
         {
             Vector3 impactPoint = other.ClosestPoint(transform.position);
-            GameObject impact = Instantiate(impactEffectPrefab, impactPoint, Quaternion.identity);
-            Destroy(impact, 2f);
+            ObjectPooling.instance.GetVFX(impactEffectPrefab, impactPoint, Quaternion.identity, 2f);
         }
 
         EnemyBase enemy = other.GetComponent<EnemyBase>();
@@ -142,11 +183,11 @@ public class ArrowProjectile : TowerProjectileBase
             // Apply DoT (fire replaces poison)
             if (applyFire)
             {
-                enemy.ApplyDoT(fireDamageInfo, fireDuration);
+                enemy.ApplyDoT(fireDamageInfo, fireDuration, 0.5f, false, 0f, default, DebuffType.Burn);
             }
             else if (applyPoison)
             {
-                enemy.ApplyDoT(poisonDamageInfo, poisonDuration);
+                enemy.ApplyDoT(poisonDamageInfo, poisonDuration, 0.5f, false, 0f, default, DebuffType.Poison);
             }
         }
     }
@@ -159,10 +200,15 @@ public class ArrowProjectile : TowerProjectileBase
     {
         if (trail != null)
         {
-            trail.transform.SetParent(null);
-            Destroy(trail.gameObject, trail.time);
+            trail.Clear();
         }
-        
+    
+        if (rb != null)
+        {
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+    
         base.DestroyProjectile();
     }
 }

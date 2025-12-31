@@ -8,6 +8,23 @@ public class RockProjectile : TowerProjectileBase
     private float rockSize = 1f;
     private LayerMask whatIsEnemy;
     
+    private Vector3 originalScale;
+    private float baseDamageRadius;
+
+    private void Awake()
+    {
+        originalScale = transform.localScale;
+        baseDamageRadius = damageRadius;
+    }
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        transform.localScale = originalScale;
+        damageRadius = baseDamageRadius;
+        rockSize = 1f;
+    }
+    
     public void Setup(DamageInfo newDamageInfo, LayerMask enemyLayer, float fallSpeed, float size = 1f)
     {
         damageInfo = newDamageInfo;
@@ -22,20 +39,19 @@ public class RockProjectile : TowerProjectileBase
     protected override void OnHit(Collider other)
     {
         if (hasHit) return;
-    
+
         if (((1 << other.gameObject.layer) & groundLayer) != 0)
         {
             hasHit = true;
             DealAOEDamage();
-        
+    
             if (impactEffectPrefab != null)
             {
-                GameObject vfx = Instantiate(impactEffectPrefab, transform.position, Quaternion.identity);
-                vfx.transform.localScale *= rockSize;
-                Destroy(vfx, 2f);
+                Vector3 scaledSize = impactEffectPrefab.transform.localScale * rockSize;
+                ObjectPooling.instance.GetVFX(impactEffectPrefab, transform.position, Quaternion.identity, scaledSize, 2f);
             }
-        
-            Destroy(gameObject);
+
+            ObjectPooling.instance.Return(gameObject);
         }
     }
     
@@ -64,15 +80,14 @@ public class RockProjectile : TowerProjectileBase
         {
             hasHit = true;
             DealAOEDamage();
-    
+
             if (impactEffectPrefab != null)
             {
-                GameObject vfx = Instantiate(impactEffectPrefab, transform.position, Quaternion.identity);
-                vfx.transform.localScale *= rockSize;
-                Destroy(vfx, 2f);
+                Vector3 scaledSize = impactEffectPrefab.transform.localScale * rockSize;
+                ObjectPooling.instance.GetVFX(impactEffectPrefab, transform.position, Quaternion.identity, scaledSize, 2f);
             }
-    
-            Destroy(gameObject);
+
+            ObjectPooling.instance.Return(gameObject);
         }
     }
     

@@ -34,6 +34,11 @@ public class TowerArcher : TowerBase
     private Vector3 predictedPosition;
     private Vector3 lastEnemyPosition;
     
+    // Locked target data
+    private EnemyBase lockedTarget;
+    private Vector3 lockedVelocity;
+    private Vector3 lockedPosition;
+    
     protected override void Awake()
     {
         base.Awake();
@@ -56,16 +61,8 @@ public class TowerArcher : TowerBase
             {
                 arrowVisual.SetActive(true);
             }
-        }
-    
-        // Debug what's blocking attack
-        if (Input.GetKeyDown(KeyCode.F))
-        {
-            Debug.Log($"currentEnemy: {currentEnemy}");
-            Debug.Log($"isAttacking: {isAttacking}");
-            Debug.Log($"Time since attack: {Time.time - lastTimeAttacked}");
-            Debug.Log($"attackCooldown: {attackCooldown}");
-            Debug.Log($"base.CanAttack(): {base.CanAttack()}");
+            
+            ClearLockedTarget();
         }
     }
     
@@ -101,14 +98,17 @@ public class TowerArcher : TowerBase
     
     private void UpdateEnemyVelocity()
     {
-        if (currentEnemy == null)
+        // Use locked target if attacking, otherwise current enemy
+        EnemyBase targetToTrack = isAttacking && lockedTarget != null ? lockedTarget : currentEnemy;
+        
+        if (targetToTrack == null || !targetToTrack.gameObject.activeSelf)
         {
             enemyVelocity = Vector3.zero;
             lastEnemyPosition = Vector3.zero;
             return;
         }
         
-        Vector3 currentPos = currentEnemy.transform.position;
+        Vector3 currentPos = targetToTrack.transform.position;
         
         if (lastEnemyPosition != Vector3.zero)
         {
@@ -120,25 +120,65 @@ public class TowerArcher : TowerBase
     
     private void UpdatePredictedPosition()
     {
-        if (currentEnemy == null)
+        EnemyBase targetToPredict = isAttacking && lockedTarget != null ? lockedTarget : currentEnemy;
+    
+        if (targetToPredict == null || !targetToPredict.gameObject.activeSelf)
         {
             predictedPosition = Vector3.zero;
             return;
         }
-        
-        Vector3 currentTargetPos = currentEnemy.transform.position;
+    
         float enemySpeed = enemyVelocity.magnitude;
-        
         float predictionTime = baseFlightTime + (enemySpeed * speedMultiplier);
-        
-        predictedPosition = currentTargetPos + (enemyVelocity * predictionTime);
+    
+        // Scale prediction based on distance (less prediction at close range)
+        float distance = Vector3.Distance(transform.position, targetToPredict.transform.position);
+        float predictionScale = Mathf.Clamp01(distance / attackRange); // 0 at close, 1 at max range
+        predictionTime *= predictionScale;
+    
+        predictedPosition = GetPathAwarePrediction(targetToPredict, predictionTime);
+    }
+    
+    private Vector3 GetPathAwarePrediction(EnemyBase target, float predictionTime)
+    {
+        if (target == null) return Vector3.zero;
+    
+        Vector3 currentPos = target.transform.position;
+        float speed = enemyVelocity.magnitude;
+    
+        if (speed < 0.1f) return currentPos;
+    
+        // How far enemy travels in prediction time
+        float travelDistance = speed * predictionTime;
+    
+        // Get remaining distance to next waypoint
+        float distanceToWaypoint = target.GetDistanceToNextWaypoint();
+    
+        // If enemy won't reach waypoint, use simple prediction
+        if (distanceToWaypoint <= 0 || travelDistance < distanceToWaypoint)
+        {
+            return currentPos + (enemyVelocity * predictionTime);
+        }
+    
+        // Enemy WILL turn - predict in two parts
+        // Part 1: Travel to waypoint
+        float timeToWaypoint = distanceToWaypoint / speed;
+        Vector3 waypointPos = target.GetNextWaypointPosition();
+    
+        // Part 2: Travel along new direction after turn
+        float remainingTime = predictionTime - timeToWaypoint;
+        Vector3 directionAfterTurn = target.GetDirectionAfterNextWaypoint();
+    
+        return waypointPos + (directionAfterTurn * speed * remainingTime);
     }
     
     protected override void HandleRotation()
     {
-        if (currentEnemy == null || towerBody == null) return;
+        EnemyBase targetToFace = isAttacking && lockedTarget != null ? lockedTarget : currentEnemy;
         
-        Vector3 targetPos = predictedPosition != Vector3.zero ? predictedPosition : currentEnemy.transform.position;
+        if (targetToFace == null || towerBody == null) return;
+        
+        Vector3 targetPos = predictedPosition != Vector3.zero ? predictedPosition : targetToFace.transform.position;
         
         Vector3 direction = targetPos - towerBody.position;
         direction.y = 0;
@@ -160,13 +200,38 @@ public class TowerArcher : TowerBase
     
     protected override bool CanAttack()
     {
+        if (currentEnemy == null) return false;
+    
+        // Check if facing enemy (within 15 degrees)
+        if (!IsFacingEnemy(15f)) return false;
+    
         return base.CanAttack() && !isAttacking;
+    }
+
+    private bool IsFacingEnemy(float maxAngle)
+    {
+        if (currentEnemy == null || towerBody == null) return false;
+    
+        Vector3 directionToEnemy = currentEnemy.transform.position - towerBody.position;
+        directionToEnemy.y = 0;
+    
+        float angle = Vector3.Angle(towerBody.forward, directionToEnemy);
+    
+        return angle <= maxAngle;
     }
     
     protected override void Attack()
     {
         lastTimeAttacked = Time.time;
         isAttacking = true;
+        
+        // Lock target data at attack start
+        if (currentEnemy != null)
+        {
+            lockedTarget = currentEnemy;
+            lockedVelocity = enemyVelocity;
+            lockedPosition = currentEnemy.transform.position;
+        }
     
         if (characterAnimator != null)
         {
@@ -202,6 +267,7 @@ public class TowerArcher : TowerBase
         }
         
         isAttacking = false;
+        ClearLockedTarget();
         
         Invoke("OnArrowReady", arrowRespawnDelay);
     }
@@ -219,7 +285,7 @@ public class TowerArcher : TowerBase
         // Clear old VFX
         if (activeArrowVisualVFX != null)
         {
-            Destroy(activeArrowVisualVFX);
+            ObjectPooling.instance.Return(activeArrowVisualVFX);
             activeArrowVisualVFX = null;
         }
     
@@ -228,35 +294,47 @@ public class TowerArcher : TowerBase
     
         if (fireArrows && fireArrowVFX != null)
         {
-            activeArrowVisualVFX = Instantiate(fireArrowVFX, spawnPoint);
+            activeArrowVisualVFX = ObjectPooling.instance.GetVFXWithParent(fireArrowVFX, spawnPoint, -1f);
             activeArrowVisualVFX.transform.localPosition = Vector3.zero;
         }
         else if (poisonArrows && poisonArrowVFX != null)
         {
-            activeArrowVisualVFX = Instantiate(poisonArrowVFX, spawnPoint);
+            activeArrowVisualVFX = ObjectPooling.instance.GetVFXWithParent(poisonArrowVFX, spawnPoint, -1f);
             activeArrowVisualVFX.transform.localPosition = Vector3.zero;
         }
     }
     
     private void FireArrow()
     {
-        if (currentEnemy == null) return;
-    
+        // Use locked target
+        if (lockedTarget == null || !lockedTarget.gameObject.activeSelf)
+        {
+            ClearLockedTarget();
+            return;
+        }
+
+        // Calculate prediction using locked/updated data
+        Vector3 targetPos = lockedTarget.transform.position;
+        float enemySpeed = enemyVelocity.magnitude;
+        float predictionTime = baseFlightTime + (enemySpeed * speedMultiplier);
+        Vector3 finalPredictedPosition = targetPos + (enemyVelocity * predictionTime);
+
         Vector3 spawnPos = arrowVisual.transform.position;
         Quaternion spawnRot = arrowVisual.transform.rotation;
-    
-        float distance = Vector3.Distance(spawnPos, predictedPosition);
-    
-        GameObject newArrow = Instantiate(projectilePrefab, spawnPos, spawnRot);
-    
+        float distance = Vector3.Distance(spawnPos, finalPredictedPosition);
+
+        GameObject newArrow = ObjectPooling.instance.Get(projectilePrefab);
+        newArrow.transform.position = spawnPos;
+        newArrow.transform.rotation = spawnRot;
+        newArrow.SetActive(true);
+
         ArrowProjectile arrow = newArrow.GetComponent<ArrowProjectile>();
-    
-        IDamageable damageable = currentEnemy.GetComponent<IDamageable>();
-    
+        IDamageable damageable = lockedTarget.GetComponent<IDamageable>();
+
         if (damageable != null)
         {
-            arrow.SetupArcProjectile(predictedPosition, damageable, CreateDamageInfo(), projectileSpeed, distance);
-        
+            arrow.SetupArcProjectile(finalPredictedPosition, damageable, CreateDamageInfo(), projectileSpeed, distance);
+
             if (fireArrows)
             {
                 arrow.SetFireEffect(fireDamage, fireDuration, elementType, fireArrowVFX);
@@ -266,5 +344,12 @@ public class TowerArcher : TowerBase
                 arrow.SetPoisonEffect(poisonDamage, poisonDuration, elementType, poisonArrowVFX);
             }
         }
+    }
+    
+    private void ClearLockedTarget()
+    {
+        lockedTarget = null;
+        lockedVelocity = Vector3.zero;
+        lockedPosition = Vector3.zero;
     }
 }

@@ -29,6 +29,9 @@ public class PhantomKnight : MonoBehaviour
     [SerializeField] private float searchRadius = 15f;
     [SerializeField] private float maxTimeWithoutTarget = 5f;
     
+    [Header("Lifetime")]
+    [SerializeField] private float maxLifetime = 8f;
+    
     private bool canDoubleSlash = false;
     private int attackCount = 0;
     private EnemyBase lastHitEnemy;
@@ -47,6 +50,7 @@ public class PhantomKnight : MonoBehaviour
     private Transform targetEnemy;
     
     private float timeWithoutTarget = 0f;
+    private float spawnTime;
     
     private GhostEffect ghostEffect;
     private PhantomSwordDamage swordDamage;
@@ -63,6 +67,23 @@ public class PhantomKnight : MonoBehaviour
         }
         
         agent = GetComponent<NavMeshAgent>();
+    }
+    
+    private void OnEnable()
+    {
+        hasAttacked = false;
+        isFading = false;
+        isReady = false;
+        targetEnemy = null;
+        timeWithoutTarget = 0f;
+        attackCount = 0;
+        lastHitEnemy = null;
+        spawnTime = Time.time;
+    }
+
+    private void OnDisable()
+    {
+        StopAllCoroutines();
     }
     
     public void Setup(float newSpeed, DamageInfo newDamageInfo, float newAttackRadius, float newStoppingDistance, float newFadeOutTime, LayerMask newEnemyLayer, Transform enemy, bool doubleSlash = false, bool applySlow = false, float slowPercent = 0f, float slowDuration = 0f)
@@ -90,6 +111,7 @@ public class PhantomKnight : MonoBehaviour
         {
             ghostEffect = gameObject.AddComponent<GhostEffect>();
         }
+        ghostEffect.SetAlpha(0.6f);
         
         if (agent != null)
         {
@@ -120,6 +142,7 @@ public class PhantomKnight : MonoBehaviour
                 agent.enabled = false;
                 transform.position = hit.position;
                 agent.enabled = true;
+                agent.Warp(hit.position);
             }
             
             attempts++;
@@ -128,7 +151,7 @@ public class PhantomKnight : MonoBehaviour
         
         if (!agent.isOnNavMesh)
         {
-            Destroy(gameObject);
+            ObjectPooling.instance.Return(gameObject);
             yield break;
         }
         
@@ -166,14 +189,19 @@ public class PhantomKnight : MonoBehaviour
     {
         if (!isReady || hasAttacked || isFading) return;
         
-        // Check if target is valid
+        // Check lifetime
+        if (Time.time - spawnTime >= maxLifetime)
+        {
+            StartCoroutine(FadeOut());
+            return;
+        }
+        
         bool hasValidTarget = targetEnemy != null && targetEnemy.gameObject.activeSelf;
         
         if (hasValidTarget)
         {
             timeWithoutTarget = 0f;
             
-            // Move toward target
             if (agent != null && agent.isOnNavMesh)
             {
                 agent.isStopped = false;
@@ -182,7 +210,6 @@ public class PhantomKnight : MonoBehaviour
             
             StartWalking();
             
-            // Check distance to target
             float distToTarget = Vector3.Distance(transform.position, targetEnemy.position);
             if (distToTarget <= attackRadius)
             {
@@ -191,12 +218,10 @@ public class PhantomKnight : MonoBehaviour
         }
         else
         {
-            // No valid target - find new one
             timeWithoutTarget += Time.deltaTime;
             
             FindNewTarget();
             
-            // Stop moving while searching
             if (agent != null && agent.isOnNavMesh)
             {
                 agent.isStopped = true;
@@ -204,7 +229,6 @@ public class PhantomKnight : MonoBehaviour
             
             StopWalking();
             
-            // Fade out if no target found for too long
             if (timeWithoutTarget >= maxTimeWithoutTarget)
             {
                 StartCoroutine(FadeOut());
@@ -223,7 +247,6 @@ public class PhantomKnight : MonoBehaviour
             
             foreach (Collider col in enemies)
             {
-                // Make sure enemy is active
                 if (!col.gameObject.activeSelf) continue;
                 
                 float dist = Vector3.Distance(transform.position, col.transform.position);
@@ -287,14 +310,12 @@ public class PhantomKnight : MonoBehaviour
     
         attackCount++;
     
-        // Double slash - find new target after first attack
         if (canDoubleSlash && attackCount < 2)
         {
             FindNewTargetExcluding(lastHitEnemy);
         
             if (targetEnemy != null && targetEnemy.gameObject.activeSelf)
             {
-                // Reset to chase new target
                 hasAttacked = false;
                 StartWalking();
             
@@ -325,7 +346,6 @@ public class PhantomKnight : MonoBehaviour
         {
             if (!col.gameObject.activeSelf) continue;
         
-            // Skip the enemy we just hit
             EnemyBase enemy = col.GetComponent<EnemyBase>();
             if (enemy != null && enemy == excludeEnemy) continue;
         
@@ -337,7 +357,6 @@ public class PhantomKnight : MonoBehaviour
             }
         }
     
-        // If no new target found, attack the same enemy again
         if (closest == null && excludeEnemy != null && excludeEnemy.gameObject.activeSelf)
         {
             closest = excludeEnemy.transform;
@@ -372,7 +391,7 @@ public class PhantomKnight : MonoBehaviour
             yield return null;
         }
         
-        Destroy(gameObject);
+        ObjectPooling.instance.Return(gameObject);
     }
     
     public bool HasAttacked()

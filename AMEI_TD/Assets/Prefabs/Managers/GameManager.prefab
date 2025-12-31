@@ -1,0 +1,68 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3326486789653429567
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2379833100791306736}
+  - component: {fileID: 6576796619599666300}
+  - component: {fileID: 240844272392965744}
+  m_Layer: 0
+  m_Name: GameManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2379833100791306736
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3326486789653429567}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 34.54026, y: -10.155842, z: 29.426134}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6576796619599666300
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3326486789653429567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3c5efc04b3d1b44628e2332266381850, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  points: 5
+  waveManager: {fileID: 0}
+  typeMatchupDatabase: {fileID: 11400000, guid: d344d67bd351206468b13acd5da88ebd, type: 2}
+--- !u!114 &240844272392965744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3326486789653429567}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2190d2fe81259a843bd968cb146676a9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slowSprite: {fileID: 21300000, guid: 8c2c672388eaf5c4681272a47ab1583b, type: 3}
+  freezeSprite: {fileID: 21300000, guid: 19971338c82dba440b2e12ef20135ddc, type: 3}
+  burnSprite: {fileID: 21300000, guid: d74594899977cee489d6a70f905bd962, type: 3}
+  poisonSprite: {fileID: 21300000, guid: 8dfdd0ffd685785479d7bdebc1a229eb, type: 3}
+  bleedSprite: {fileID: 21300000, guid: 3b1cb0bfab0e56e4a96335d7f26a048b, type: 3}
+  frostbiteSprite: {fileID: 21300000, guid: 4dc15810485f14448981400ea8fddb28, type: 3}

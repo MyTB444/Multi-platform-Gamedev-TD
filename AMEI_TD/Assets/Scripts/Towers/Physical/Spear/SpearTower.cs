@@ -34,7 +34,9 @@ public class SpearTower : TowerBase
     
     // Locked at attack time
     private Vector3 lockedTargetPosition;
+    private Vector3 lockedVelocity;
     private IDamageable lockedDamageable;
+    private EnemyBase lockedTarget;
     
     
     protected override void Start()
@@ -48,6 +50,7 @@ public class SpearTower : TowerBase
         UpdateEnemyVelocity();
         base.FixedUpdate();
     }
+    
     public override void SetUpgrade(TowerUpgradeType upgradeType, bool enabled)
     {
         base.SetUpgrade(upgradeType, enabled);
@@ -66,7 +69,10 @@ public class SpearTower : TowerBase
     
     private void UpdateEnemyVelocity()
     {
-        if (currentEnemy == null)
+        // Use locked target if attacking
+        EnemyBase targetToTrack = isAttacking && lockedTarget != null ? lockedTarget : currentEnemy;
+        
+        if (targetToTrack == null || !targetToTrack.gameObject.activeSelf)
         {
             enemyVelocity = Vector3.zero;
             lastEnemyPosition = Vector3.zero;
@@ -74,7 +80,7 @@ public class SpearTower : TowerBase
             return;
         }
         
-        Vector3 currentPos = currentEnemy.transform.position;
+        Vector3 currentPos = targetToTrack.transform.position;
         
         if (lastEnemyPosition != Vector3.zero)
         {
@@ -94,50 +100,72 @@ public class SpearTower : TowerBase
     {
         if (activeSpearVisualVFX != null)
         {
-            Destroy(activeSpearVisualVFX);
+            ObjectPooling.instance.Return(activeSpearVisualVFX);
             activeSpearVisualVFX = null;
         }
     
         if (bleedSpear && bleedSpearVFX != null)
         {
             Transform spawnPoint = spearVisualVFXPoint != null ? spearVisualVFXPoint : spearVisual.transform;
-            activeSpearVisualVFX = Instantiate(bleedSpearVFX, spawnPoint);
+            activeSpearVisualVFX = ObjectPooling.instance.GetVFXWithParent(bleedSpearVFX, spawnPoint, -1f);
             activeSpearVisualVFX.transform.localPosition = Vector3.zero;
         }
     }
     
     private Vector3 PredictTargetPosition()
     {
-        if (currentEnemy == null) return Vector3.zero;
-        
+        EnemyBase targetToPredict = isAttacking && lockedTarget != null ? lockedTarget : currentEnemy;
+    
+        if (targetToPredict == null || !targetToPredict.gameObject.activeSelf) return Vector3.zero;
+    
         Vector3 spawnPos = spearVisual.transform.position;
-        Vector3 enemyCenter = currentEnemy.GetCenterPoint();
-        
-        Vector3 predictedPos = enemyCenter;
-        
-        for (int i = 0; i < 3; i++)
-        {
-            float distance = Vector3.Distance(spawnPos, predictedPos);
-            float flightTime = distance / projectileSpeed;
-            float totalTime = throwAnimationDelay + flightTime;
-            
-            Vector3 movement = enemyVelocity * totalTime;
-            predictedPos = new Vector3(
-                enemyCenter.x + movement.x,
-                enemyCenter.y,
-                enemyCenter.z + movement.z
-            );
-        }
-        
+        Vector3 enemyCenter = targetToPredict.GetCenterPoint();
+    
+        float distance = Vector3.Distance(spawnPos, enemyCenter);
+        float flightTime = distance / projectileSpeed;
+        float totalTime = throwAnimationDelay + flightTime;
+    
+        // Scale prediction based on distance (less prediction at close range)
+        float predictionScale = Mathf.Clamp01(distance / attackRange);
+        totalTime *= predictionScale;
+    
+        Vector3 predictedPos = GetPathAwarePrediction(targetToPredict, totalTime);
+        predictedPos.y = enemyCenter.y;
+    
         return predictedPos;
+    }
+
+    private Vector3 GetPathAwarePrediction(EnemyBase target, float predictionTime)
+    {
+        Vector3 currentPos = target.transform.position;
+        float speed = enemyVelocity.magnitude;
+    
+        if (speed < 0.1f) return target.GetCenterPoint();
+    
+        float travelDistance = speed * predictionTime;
+        float distanceToWaypoint = target.GetDistanceToNextWaypoint();
+    
+        if (distanceToWaypoint <= 0 || travelDistance < distanceToWaypoint)
+        {
+            return currentPos + (enemyVelocity * predictionTime);
+        }
+    
+        float timeToWaypoint = distanceToWaypoint / speed;
+        Vector3 waypointPos = target.GetNextWaypointPosition();
+        float remainingTime = predictionTime - timeToWaypoint;
+        Vector3 directionAfterTurn = target.GetDirectionAfterNextWaypoint();
+    
+        return waypointPos + (directionAfterTurn * speed * remainingTime);
     }
     
     protected override void HandleRotation()
     {
-        if (currentEnemy == null || towerBody == null) return;
+        EnemyBase targetToFace = isAttacking && lockedTarget != null ? lockedTarget : currentEnemy;
+        
+        if (targetToFace == null || towerBody == null) return;
         
         Vector3 targetPos = PredictTargetPosition();
-        if (targetPos == Vector3.zero) targetPos = currentEnemy.GetCenterPoint();
+        if (targetPos == Vector3.zero) targetPos = targetToFace.GetCenterPoint();
         
         Vector3 direction = targetPos - towerBody.position;
         direction.y = 0;
@@ -151,8 +179,25 @@ public class SpearTower : TowerBase
     
     protected override bool CanAttack()
     {
+        if (currentEnemy == null) return false;
+    
+        // Check if facing enemy (within 15 degrees)
+        if (!IsFacingEnemy(15f)) return false;
+    
         bool hasValidTracking = velocityFrameCount > 1;
         return base.CanAttack() && !isAttacking && hasValidTracking;
+    }
+
+    private bool IsFacingEnemy(float maxAngle)
+    {
+        if (currentEnemy == null || towerBody == null) return false;
+    
+        Vector3 directionToEnemy = currentEnemy.transform.position - towerBody.position;
+        directionToEnemy.y = 0;
+    
+        float angle = Vector3.Angle(towerBody.forward, directionToEnemy);
+    
+        return angle <= maxAngle;
     }
     
     protected override void Attack()
@@ -162,6 +207,8 @@ public class SpearTower : TowerBase
         
         if (currentEnemy != null)
         {
+            lockedTarget = currentEnemy;
+            lockedVelocity = enemyVelocity;
             lockedTargetPosition = PredictTargetPosition();
             lockedDamageable = currentEnemy.GetComponent<IDamageable>();
         }
@@ -192,33 +239,54 @@ public class SpearTower : TowerBase
         }
         
         isAttacking = false;
+        ClearLockedTarget();
     }
     
     private void FireSpear()
     {
-        if (lockedDamageable == null) return;
-    
+        if (lockedDamageable == null)
+        {
+            ClearLockedTarget();
+            return;
+        }
+        
+        // Recalculate prediction if target still valid
+        if (lockedTarget != null && lockedTarget.gameObject.activeSelf)
+        {
+            lockedTargetPosition = PredictTargetPosition();
+        }
+
         Vector3 spawnPos = spearVisual.transform.position;
         Quaternion spawnRot = spearVisual.transform.rotation;
-    
+
         Vector3 fireDirection = spawnRot * Vector3.up;
         spawnPos += fireDirection * forwardSpawnOffset;
+
+        GameObject newSpear = ObjectPooling.instance.Get(projectilePrefab);
+        newSpear.transform.position = spawnPos;
+        newSpear.transform.rotation = spawnRot;
+        newSpear.SetActive(true);
     
-        GameObject newSpear = Instantiate(projectilePrefab, spawnPos, spawnRot);
         SpearProjectile spear = newSpear.GetComponent<SpearProjectile>();
-    
+
         spear.SetupSpear(lockedTargetPosition, lockedDamageable, CreateDamageInfo(), projectileSpeed);
-    
+
         if (bleedSpear)
         {
             spear.SetBleedEffect(bleedDamage, bleedDuration, elementType, bleedSpearVFX);
         }
-    
+
         if (explosiveTip)
         {
             spear.SetExplosiveEffect(explosionRadius, explosionDamage, elementType, whatIsEnemy, explosionVFX);
         }
+    }
     
+    private void ClearLockedTarget()
+    {
+        lockedTarget = null;
         lockedDamageable = null;
+        lockedVelocity = Vector3.zero;
+        lockedTargetPosition = Vector3.zero;
     }
 }

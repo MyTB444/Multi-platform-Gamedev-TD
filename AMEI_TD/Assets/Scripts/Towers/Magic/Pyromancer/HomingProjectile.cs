@@ -27,6 +27,25 @@ public class HomingProjectile : TowerProjectileBase
     private Vector3 lastKnownTargetPos;
     private bool targetLost = false;
     private LayerMask enemyLayer;
+    
+    private Vector3 originalScale;
+
+    private void Awake()
+    {
+        originalScale = transform.localScale;
+    }
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        transform.localScale = originalScale;
+        target = null;
+        isHoming = true;
+        targetLost = false;
+        canBurn = false;
+        hasAoE = false;
+        canSpreadBurn = false;
+    }
 
     public void SetupHomingProjectile(Transform enemyTarget, IDamageable newDamageable, DamageInfo newDamageInfo, float newSpeed, LayerMask whatIsEnemy)
     {
@@ -121,10 +140,9 @@ public class HomingProjectile : TowerProjectileBase
             {
                 if (impactEffectPrefab != null)
                 {
-                    GameObject impact = Instantiate(impactEffectPrefab, transform.position, Quaternion.identity);
-                    Destroy(impact, 2f);
+                    ObjectPooling.instance.GetVFX(impactEffectPrefab, transform.position, Quaternion.identity, 2f);
                 }
-                
+
                 DestroyProjectile();
             }
         }
@@ -163,8 +181,7 @@ public class HomingProjectile : TowerProjectileBase
         if (impactEffectPrefab != null)
         {
             Vector3 impactPoint = other.ClosestPoint(transform.position);
-            GameObject impact = Instantiate(impactEffectPrefab, impactPoint, Quaternion.identity);
-            Destroy(impact, 2f);
+            ObjectPooling.instance.GetVFX(impactEffectPrefab, impactPoint, Quaternion.identity, 2f);
         }
     
         EnemyBase enemy = other.GetComponent<EnemyBase>();
@@ -176,7 +193,7 @@ public class HomingProjectile : TowerProjectileBase
             // Burn chance
             if (canBurn && Random.value <= burnChancePercent)
             {
-                enemy.ApplyDoT(burnDamageInfo, burnDuration, 0.5f, canSpreadBurn, spreadRadius, spreadEnemyLayer);
+                enemy.ApplyDoT(burnDamageInfo, burnDuration, 0.5f, canSpreadBurn, spreadRadius, spreadEnemyLayer, DebuffType.Burn);
             }
         
             // AoE damage

@@ -1,105 +1,203 @@
-using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum PoolGameObjectType
-{
-    EnemyFast,EnemyBasic,EnemyTank,EnemyInvisible,EnemyReinforced,Flames,MagicArea,TinyFlames,BombPrefab
-}
-[Serializable]
-public class PoolInfo
-{
-    public PoolGameObjectType objectType;
-    public int amount = 0;
-    public GameObject gameObjectPrefab;
-    public GameObject Container;
-
-    [HideInInspector]
-    public List<GameObject> pool = new();
-
-    
-    
-    
-
-}
 public class ObjectPooling : MonoBehaviour
 {
     public static ObjectPooling instance;
-  
+
+    [System.Serializable]
+    public class PrewarmItem
+    {
+        public GameObject prefab;
+        public int amount;
+    }
+
+    [Header("Prewarm Overrides (edit amounts here)")]
+    [SerializeField] private List<PrewarmItem> prewarmList = new List<PrewarmItem>();
+
+    private Dictionary<GameObject, Queue<GameObject>> pools = new Dictionary<GameObject, Queue<GameObject>>();
+    private Dictionary<GameObject, GameObject> instanceToPrefab = new Dictionary<GameObject, GameObject>();
+    private Dictionary<GameObject, Transform> containers = new Dictionary<GameObject, Transform>();
+    private Dictionary<GameObject, int> registeredPrefabs = new Dictionary<GameObject, int>();
+    private bool hasPrewarmed = false;
 
     private void Awake()
     {
         instance = this;
-        
     }
 
-    [SerializeField] private List<PoolInfo> listOfPool = new();
-    public List<PoolInfo> listOfPoolInfoRef => listOfPool;
     private void Start()
     {
-        for (int i = 0; i < listOfPool.Count; i++)
+        DoPrewarm();
+    }
+
+    public void Register(GameObject prefab, int defaultAmount)
+    {
+        if (prefab == null) return;
+
+        // Check if already in inspector list (user override)
+        foreach (var item in prewarmList)
         {
-            FillPool(listOfPool[i]);
+            if (item.prefab == prefab)
+            {
+                registeredPrefabs[prefab] = item.amount;
+                return;
+            }
+        }
+
+        // Not in list, use script default
+        if (!registeredPrefabs.ContainsKey(prefab))
+        {
+            registeredPrefabs[prefab] = defaultAmount;
+            
+            // Add to inspector list so user can see/edit it
+            prewarmList.Add(new PrewarmItem { prefab = prefab, amount = defaultAmount });
         }
     }
 
-    private void FillPool(PoolInfo info)
+    private void DoPrewarm()
     {
-        for (int i = 0; i < info.amount; i++)
+        if (hasPrewarmed) return;
+        hasPrewarmed = true;
+
+        foreach (var item in prewarmList)
         {
-            GameObject instance = null;
-            instance = Instantiate(info.gameObjectPrefab, info.Container.transform);
-            instance.SetActive(false);
-            info.pool.Add(instance);
+            if (item.prefab == null) continue;
+
+            for (int i = 0; i < item.amount; i++)
+            {
+                GameObject obj = CreateNewInstance(item.prefab);
+                Return(obj);
+            }
         }
     }
 
-
-    public GameObject GetPoolObject(PoolGameObjectType type)
+    public GameObject Get(GameObject prefab)
     {
-        PoolInfo selectedPool = GetPoolByType(type);
-        List<GameObject> pool = selectedPool.pool;
-        GameObject instance = null;
+        if (prefab == null) return null;
 
-        if (pool.Count > 0)
+        if (!pools.ContainsKey(prefab))
         {
-            instance = pool[pool.Count - 1];
-            pool.Remove(instance);
+            pools[prefab] = new Queue<GameObject>();
+        }
+
+        GameObject obj;
+        if (pools[prefab].Count > 0)
+        {
+            obj = pools[prefab].Dequeue();
         }
         else
         {
-           instance = Instantiate(selectedPool.gameObjectPrefab,selectedPool.Container.transform);
-            instance.SetActive(false);
+            obj = CreateNewInstance(prefab);
         }
-        return instance;
+
+        return obj;
     }
 
-    private PoolInfo GetPoolByType(PoolGameObjectType type)
+    public void Return(GameObject obj)
     {
-        for (int i = 0; i < listOfPool.Count; i++)
+        if (obj == null) return;
+
+        obj.SetActive(false);
+
+        if (instanceToPrefab.TryGetValue(obj, out GameObject prefab))
         {
-            if (type == listOfPool[i].objectType)
+            if (!pools.ContainsKey(prefab))
             {
-                return listOfPool[i];
+                pools[prefab] = new Queue<GameObject>();
+            }
+
+            if (!pools[prefab].Contains(obj))
+            {
+                pools[prefab].Enqueue(obj);
             }
         }
-        return null;
     }
 
-    public void ReturnGameObejctToPool(PoolGameObjectType type, GameObject obj)
+    private GameObject CreateNewInstance(GameObject prefab)
     {
-        PoolInfo selectedPool = GetPoolByType(type);
-        List<GameObject> pool = selectedPool.pool;
-        if (obj != null)
-        {
-            obj.SetActive(false);
-        }
-        if(!pool.Contains(obj))
-        {
-            pool.Add(obj);
-        }
+        Transform container = GetContainer(prefab);
+        GameObject obj = Instantiate(prefab, container);
 
+        // Preserve the prefab's original layer (Unity may change it when parenting)
+        obj.layer = prefab.layer;
+
+        obj.SetActive(false);
+        instanceToPrefab[obj] = prefab;
+        return obj;
     }
 
+    private Transform GetContainer(GameObject prefab)
+    {
+        if (!containers.ContainsKey(prefab))
+        {
+            GameObject containerObj = new GameObject($"Pool_{prefab.name}");
+            containerObj.transform.SetParent(transform);
+            containers[prefab] = containerObj.transform;
+        }
+        return containers[prefab];
+    }
 
+    // VFX-specific methods
+    public GameObject GetVFX(GameObject prefab, Vector3 position, Quaternion rotation, float lifetime = 2f)
+    {
+        if (prefab == null) return null;
+
+        GameObject vfx = Get(prefab);
+        vfx.transform.position = position;
+        vfx.transform.rotation = rotation;
+        vfx.transform.localScale = prefab.transform.localScale;
+        vfx.SetActive(true);
+
+        if (lifetime > 0)
+        {
+            StartCoroutine(ReturnAfterDelay(vfx, lifetime));
+        }
+
+        return vfx;
+    }
+
+    public GameObject GetVFX(GameObject prefab, Vector3 position, Quaternion rotation, Vector3 scale, float lifetime = 2f)
+    {
+        if (prefab == null) return null;
+
+        GameObject vfx = Get(prefab);
+        vfx.transform.position = position;
+        vfx.transform.rotation = rotation;
+        vfx.transform.localScale = scale;
+        vfx.SetActive(true);
+
+        if (lifetime > 0)
+        {
+            StartCoroutine(ReturnAfterDelay(vfx, lifetime));
+        }
+
+        return vfx;
+    }
+
+    public GameObject GetVFXWithParent(GameObject prefab, Transform parent, float lifetime = -1f)
+    {
+        if (prefab == null) return null;
+
+        GameObject vfx = Get(prefab);
+        vfx.transform.SetParent(parent);
+        vfx.transform.localPosition = Vector3.zero;
+        vfx.transform.localRotation = Quaternion.identity;
+        vfx.transform.localScale = prefab.transform.localScale;
+        vfx.SetActive(true);
+
+        if (lifetime > 0)
+        {
+            StartCoroutine(ReturnAfterDelay(vfx, lifetime));
+        }
+
+        return vfx;
+    }
+
+    private IEnumerator ReturnAfterDelay(GameObject obj, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        Return(obj);
+    }
 }

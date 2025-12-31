@@ -30,6 +30,35 @@ public class SpearProjectile : TowerProjectileBase
         rb = GetComponent<Rigidbody>();
     }
     
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        launched = false;
+        applyBleed = false;
+        isExplosive = false;
+        explosionVFX = null;
+    
+        // Return any child VFX from previous use to pool
+        if (vfxPoint != null)
+        {
+            foreach (Transform child in vfxPoint)
+            {
+                ObjectPooling.instance.Return(child.gameObject);
+            }
+        }
+    
+        if (rb != null)
+        {
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+    
+        if (trail != null)
+        {
+            trail.Clear();
+        }
+    }
+    
     public void SetupSpear(Vector3 targetPos, IDamageable newDamageable, DamageInfo newDamageInfo, float newSpeed)
     {
         damageInfo = newDamageInfo;
@@ -71,7 +100,7 @@ public class SpearProjectile : TowerProjectileBase
         if (spearVFX != null)
         {
             Transform spawnPoint = vfxPoint != null ? vfxPoint : transform;
-            GameObject vfx = Instantiate(spearVFX, spawnPoint);
+            GameObject vfx = ObjectPooling.instance.GetVFXWithParent(spearVFX, spawnPoint, -1f);
             vfx.transform.localPosition = Vector3.zero;
         }
     }
@@ -104,8 +133,7 @@ public class SpearProjectile : TowerProjectileBase
 
         if (impactEffectPrefab != null)
         {
-            GameObject impact = Instantiate(impactEffectPrefab, impactPoint, Quaternion.identity);
-            Destroy(impact, 2f);
+            ObjectPooling.instance.GetVFX(impactEffectPrefab, impactPoint, Quaternion.identity, 2f);
         }
 
         // Deal impact damage
@@ -117,7 +145,7 @@ public class SpearProjectile : TowerProjectileBase
         // Apply bleed
         if (applyBleed)
         {
-            enemy.ApplyDoT(bleedDamageInfo, bleedDuration);
+            enemy.ApplyDoT(bleedDamageInfo, bleedDuration, 0.5f, false, 0f, default, DebuffType.Bleed);
         }
 
         // Explosion
@@ -127,8 +155,7 @@ public class SpearProjectile : TowerProjectileBase
         
             if (explosionVFX != null)
             {
-                GameObject vfx = Instantiate(explosionVFX, impactPoint, Quaternion.identity);
-                Destroy(vfx, 2f);
+                ObjectPooling.instance.GetVFX(explosionVFX, impactPoint, Quaternion.identity, 2f);
             }
 
             Collider[] enemies = Physics.OverlapSphere(explosionCenter, explosionRadius, enemyLayer);
@@ -141,18 +168,21 @@ public class SpearProjectile : TowerProjectileBase
                 }
             }
         }
-
-        DestroyProjectile();
     }
     
     protected override void DestroyProjectile()
     {
         if (trail != null)
         {
-            trail.transform.SetParent(null);
-            Destroy(trail.gameObject, trail.time);
+            trail.Clear();
         }
-        
+    
+        if (rb != null)
+        {
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+    
         base.DestroyProjectile();
     }
 }
