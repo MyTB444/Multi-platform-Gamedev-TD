@@ -24,5 +24,7 @@ MonoBehaviour:
   skillPointCost: 5
   prerequisites:
   - {fileID: 11400000, guid: 1ca0c83bc7c014a83b93f7ee9aa49e5f, type: 2}
-  type: 15
-  type2: 18
+  function: 17
+  function2: 21
+  swapType: 0
+  spellEnableType: 0
