@@ -17,13 +17,13 @@ public class VFXDamage : MonoBehaviour
     public bool stopFlames = false;
     private Dictionary<EnemyBase, GameObject> EnemyDictionary = new();
    
-   
+    public bool stopMagic = false;
     private List<SkinnedMeshRenderer> skinnedMeshRenderer = new();
     private ParticleSystem ps;
 
-    private List<EnemyBase> enemies = new();
+    public List<EnemyBase> enemies = new();
 
- 
+   
 
  
     private void OnEnable()
@@ -42,33 +42,63 @@ public class VFXDamage : MonoBehaviour
     }
 
     
-   
+    private void DisableTinyFlames(GameObject other)
+    {
+        if (gameObject != null)
+        {
+            if (gameObject.CompareTag("TinyFlames"))
+            {
+           
+                Debug.Log("Takingdamage");
+                if (enemyBaseGameObjectRef.isDeadProperty)
+                {
+                    EnemyDictionary.Remove(enemyBaseGameObjectRef);
+                }
+
+                enemyBaseGameObjectRef.TakeDamage(0f, 0.00005f, true);
+
+
+                if (other.gameObject != null && other.gameObject.activeInHierarchy)
+                {
+                    StartCoroutine(DisableVFXGameObject(5f, PoolGameObjectType.TinyFlames));
+                }
+            }
+        }
+    }
 
     private void OnParticleCollision(GameObject other)
     {
+      
         if (other.gameObject.CompareTag("Enemy"))
         {
            
             enemyBaseGameObjectRef = other.gameObject.GetComponent<EnemyBase>();
             enemyBaseGameObjectRef.GetRefOfVfxDamageScript(this);
-            switch (spellType)
-            {
-                case SpellType.Magic:
-
-                    StartCoroutine(EnableLiftDamage(enemyBaseGameObjectRef));
-               
-                break;  
-                    
-                case SpellType.Physical:
-
-                   StartCoroutine(EnableFlameDamage(other,1));
-                    
-                break;
-
-               
-
-            }
            
+
+ ;          if (!enemyBaseGameObjectRef.isInvisible)
+            {
+                switch (spellType)
+                {
+                    case SpellType.Magic:
+                        if (gameObject != null)
+                        {
+                            StartCoroutine(EnableLiftDamage(enemyBaseGameObjectRef));
+                        }
+                        break;
+
+                    case SpellType.Physical:
+                        if (gameObject != null)
+                        {
+                            StartCoroutine(EnableFlameDamage(other, 1));
+                        }
+                        break;
+
+
+
+                }
+            }
+            DisableTinyFlames(other);
         }
     }
 
@@ -79,9 +109,10 @@ public class VFXDamage : MonoBehaviour
         return new Vector3(bounds.center.x, Random.Range(bounds.extents.y, bounds.extents.y / 3f), Random.Range(-bounds.extents.z / 10f, bounds.extents.z / 8f));
     }
 
-    private IEnumerator EnableLiftDamage(EnemyBase enemyBase)
+    public IEnumerator EnableLiftDamage(EnemyBase enemyBase)
     {
-        if (enemyBase.gameObject != null && enemyBase.gameObject.activeInHierarchy)
+        
+        if (enemyBase.gameObject != null && enemyBase.gameObject.activeInHierarchy && enemyBase != null)
         {
             enemyBase.enemyBaseRef = enemyBase;
             enemyBase.LiftEffectFunction(true,false);
@@ -117,27 +148,38 @@ public class VFXDamage : MonoBehaviour
                  
 
                     elapsed += Time.deltaTime;
+                    if (enemyBase != null)
+                    {
+                        if (!enemyBase.isDeadProperty)
+                        {
+                            Debug.Log("123");
+                            enemyBase.TakeDamage(0f, 0.0000004f, true);
+                        }
+                    }
+                    if(enemyBase.isDeadProperty)
+                    { 
+                        enemyBase = null;
+                        enemies.Remove(enemyBase);
+                        break;
 
-
-                    enemyBase.TakeDamage(0f, 0.0000004f, true);
-                    
-                    yield return null;  
+                    }
+                        yield return null;  
                  
                 }
             }
-        
-    
-            
-        
-        
-           
+
+
+
+
+       
+
         }
     }
 
-    //fix this //add enemybaseref as parameter in this fucntion
-    private IEnumerator EnableFlameDamage(GameObject other,float timeToEnableDamage)
+
+    public IEnumerator EnableFlameDamage(GameObject other,float timeToEnableDamage)
     {
-        if (other.gameObject != null && other.gameObject.activeInHierarchy)
+        if (other.gameObject != null && other.gameObject.activeInHierarchy && gameObject != null)
         {
             if (!gameObject.CompareTag("TinyFlames"))
             {
@@ -204,23 +246,7 @@ public class VFXDamage : MonoBehaviour
 
             }
 
-            else if (gameObject.CompareTag("TinyFlames"))
-            {
-                Debug.Log("Takingdamage");
-                if (enemyBaseGameObjectRef.isDeadProperty)
-                {
-                    EnemyDictionary.Remove(enemyBaseGameObjectRef);
-                }
-
-                enemyBaseGameObjectRef.TakeDamage(0f,0.00005f, true);
-               
-                
-                    if (other.gameObject != null && other.gameObject.activeInHierarchy)
-                    {
-                        StartCoroutine(DisableVFXGameObject(5f, PoolGameObjectType.TinyFlames));
-                    }
-                
-            }
+           
         }
     }
 
@@ -232,8 +258,10 @@ public class VFXDamage : MonoBehaviour
         yield return new WaitForSeconds(disableTime);
         if (gameObject != null && gameObject.activeInHierarchy)
         {
+           
             foreach(EnemyBase o in enemies)
             {
+                StopCoroutine(EnableLiftDamage(o));
                 o.LiftEffectFunction(false,false);
             }
             enemies.Clear();

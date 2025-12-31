@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 9002776762884013407}
   - component: {fileID: 7853955250906817890}
   - component: {fileID: -7668046749501932195}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: Magic-Ring
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3501,7 +3501,7 @@ ParticleSystem:
     colliderForce: 0
     multiplyColliderForceByParticleSize: 0
     multiplyColliderForceByParticleSpeed: 0
-    multiplyColliderForceByCollisionAngle: 1
+    multiplyColliderForceByCollisionAngle: 0
     m_Planes:
     - {fileID: 0}
     - {fileID: 0}
@@ -3670,11 +3670,11 @@ ParticleSystem:
         m_RotationOrder: 4
     minKillSpeed: 0
     maxKillSpeed: 10000
-    radiusScale: 0.5
+    radiusScale: 0.1
     collidesWith:
       serializedVersion: 2
       m_Bits: 2048
-    maxCollisionShapes: 256
+    maxCollisionShapes: 2
     quality: 0
     voxelSize: 0.5
     collisionMessages: 1

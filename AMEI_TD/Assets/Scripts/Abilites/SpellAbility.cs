@@ -26,24 +26,27 @@ public class SpellAbility : MonoBehaviour
     private void OnEnable()
     {
         FireSpellActivated = false;
-        MiracleSpellActivated = false;
+        MagicSpellActivated = false;
 
        
     }
 
     private void Update()
     {
-     
-        if(Input.GetKeyDown(KeyCode.A))
+        //for testing only
+
+        //disable this 
+        if (Input.GetKeyDown(KeyCode.A))
         {
-            FireSpellActivated = false;//for testing only
-            MiracleSpellActivated = false;
+            FireSpellActivated = false;
+            MagicSpellActivated = false;
+            MechanicSpellActivated = false;
             CanSelectPaths = false;
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
 
-            FireSpellActivated = true;//Eren has to enable this spell and this variable (bool) in skill tree //for testing only
+            FireSpellActivated = true;
             currenSpellType = SpellType.Physical;
             stopFire = false;
 
@@ -51,43 +54,42 @@ public class SpellAbility : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.B))
         {
             currenSpellType = SpellType.Magic;
-            MiracleSpellActivated = true;
+            MagicSpellActivated = true;
             stopMagic = false;
         }
 
-        if(Input.GetKeyDown(KeyCode.D))
+        if (Input.GetKeyDown(KeyCode.D))
         {
             currenSpellType = SpellType.Mechanic;
             MechanicSpellActivated = true;
 
         }
 
+        if(Input.GetKeyDown(KeyCode.E))
+        {
+            currenSpellType = SpellType.Imaginary;
+            ImaginarySpellActivated = true;
+        }
+
         #region FireSpell
 
 
-        if (FireSpellActivated)
+        if (FireSpellActivated && currenSpellType == SpellType.Physical)
         {
             CanSelectPaths = true;
             FireSpell();
 
         }
-        else
-        {
-            if (currenSpellType == SpellType.Physical)
-            {
-                selectedPath = null;
-            }
-        }
         #endregion
 
-        #region MiracleSpell
+        #region MagicSpell
         
 
-        if(MiracleSpellActivated)
+        if(MagicSpellActivated)
         {
            
             CanSelectPaths = true;
-            MiracleSpell();
+            MagicSpell();
         }
         #endregion
 
@@ -103,7 +105,40 @@ public class SpellAbility : MonoBehaviour
             
         }
         #endregion
+
+        #region ImaginarySpell
+        
+        if(ImaginarySpellActivated)
+        {
+            EnemyBase[] enemies = FindObjectsByType<EnemyBase>(FindObjectsInactive.Exclude,FindObjectsSortMode.None);
+            if (enemies != null)
+            {
+        
+                if (enemies.Length > 0)
+                {
+                    foreach (EnemyBase enemy in enemies)
+                    {
+                        if (enemy != null)
+                        {
+                            if (enemy.isInvisible)
+                            {
+                               
+                                enemy.isInvisible = false;
+                                enemy.UpdateVisuals();
+                                
+                            }
+                        }
+                    }
+                }
+            }
+            ImaginarySpellActivated = false;
+        }
+
+        #endregion
     }
+
+
+
 
     #region FireSpell
 
@@ -142,12 +177,16 @@ public class SpellAbility : MonoBehaviour
             }
         }
     }
+    private Vector3 GiveRandomPointOnMesh(Bounds bounds)
+    {
+        return new Vector3(bounds.center.x, bounds.center.y, Random.Range(bounds.min.z, bounds.max.z));
+    }
 
     #endregion
 
-    #region MiracleSpell
+    #region MagicSpell
 
-    public void MiracleSpell()
+    public void MagicSpell()
     {
         
         if (selectedPath != null)
@@ -183,12 +222,14 @@ public class SpellAbility : MonoBehaviour
                         {
                             Debug.Log("Here");
                             stopMagic = true;
+                            CanSelectPaths = false;
                             StartCoroutine(DisableVFX(5));
                             CanSelectPaths = true;
                             mousePositionDictionary.Clear();
                             break;
                         }
                     }
+                   
                 }
                
             }
@@ -216,9 +257,18 @@ public class SpellAbility : MonoBehaviour
                 if (hit.collider.gameObject.GetComponent<EnemyBase>() != null)
                 {
                     enemyBaseGameObjectRef = hit.collider.gameObject.GetComponent<EnemyBase>();
-                    StartCoroutine(LiftSelectedEnemy(enemyBaseGameObjectRef,false));
-                    print($"<color=red> mouseWorldpos </color>" + hit.point);
-                    MechanicSpellActivated = false;
+                    if (!enemyBaseGameObjectRef.isInvisible)
+                    {
+                        if (enemyBaseGameObjectRef.gameObject.GetComponentInChildren<SkinnedMeshRenderer>() != null)
+                        {
+                            enemyBaseGameObjectRef.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().material.color = new(0, 1, 0, 0.5f);
+                        }
+
+
+                        StartCoroutine(LiftSelectedEnemy(enemyBaseGameObjectRef, false));
+                        print($"<color=red> mouseWorldpos </color>" + hit.point);
+                        MechanicSpellActivated = false;
+                    }
 
                 }
                     
@@ -282,19 +332,32 @@ public class SpellAbility : MonoBehaviour
             else
             {
                 CanSelectPaths = true;
-                while (true)
+                elapsed = 0f;
+                duration = 5f;
+               
+                while (elapsed < duration)
                 {
-                    
-                    Debug.Log(selectedPath);
+                  
                     if (selectedPath != null)
                     {
-                        
+                       
                         EnableExplosiveDamage(enemyBase);
-                        break;
+                        yield break; 
                     }
-                    yield return null;
+
+                    elapsed += Time.deltaTime;
+                    yield return null; 
+                }
+
+              
+                if (selectedPath == null)
+                {
+                    CanSelectPaths = false;
+                    enemyBase.LiftEffectFunction(false, false);
                 }
             }
+
+        
         }
 
 
@@ -337,9 +400,9 @@ public class SpellAbility : MonoBehaviour
                             enemyBase.Die();
                            
                             StartCoroutine(affectedEnemyBaseRef.ExplodeEnemy(currentMousePosition,affectedEnemyBaseRef));
-                            
+                            selectedPath = null;
                         }
-                        //affectedEnemyBaseRef.Die();
+                        
                     }
                 }
 
@@ -349,59 +412,98 @@ public class SpellAbility : MonoBehaviour
         
         
     }
-   
+
 
 
     #endregion
 
 
-
-
-    private Vector3 GiveRandomPointOnMesh(Bounds bounds)
-    {           
-        return new Vector3(bounds.center.x, bounds.center.y, Random.Range(bounds.min.z, bounds.max.z));
+    #region ActivateSpells
+    public void ActivateFireSpell()
+    {
+        FireSpellActivated = true;//Eren has to enable this spell and this variable (bool) in skill tree //for testing only
+        currenSpellType = SpellType.Physical;
+        stopFire = false;
     }
 
+    public void ActivateMagicSpell()
+    {
+        currenSpellType = SpellType.Magic;
+        MagicSpellActivated = true;
+        stopMagic = false;
+    }
+
+    public void ActivateMechanicSpell()
+    {
+        currenSpellType = SpellType.Mechanic;
+        MechanicSpellActivated = true;
+
+    }
+
+    public void ActivateImaginarySpell()
+    {
+        currenSpellType = SpellType.Mechanic;
+        ImaginarySpellActivated = true;
+    }
+
+    #endregion
+
+
+    #region SelectedPath
     public void SelectedPathFromPlayer(SelectedPath path,Vector3 mousePosition)
     {
-        Debug.Log("127");
+       
         selectedPath = path;       
         currentMousePosition = mousePosition;
         CanSelectPaths = false;
     }
+    #endregion
+
+
     #region DisableVFX
     private IEnumerator DisableVFX(float WaitTime)
     {
        
         yield return new WaitForSeconds(WaitTime);
-        switch(currenSpellType)
+        selectedPath = null;
+        switch (currenSpellType)
         {
             case SpellType.Physical:
-            foreach (GameObject o in flames)
-            {
-                yield return new WaitForSeconds(0.3f);//for disbaling fire in a gradual way
-                ObjectPooling.instance.ReturnGameObejctToPool(PoolGameObjectType.Flames, o);
-            }
-            flames.Clear();
+                foreach (GameObject o in flames)
+                {
+                    yield return new WaitForSeconds(0.3f);//for disbaling fire in a gradual way
+                    ObjectPooling.instance.ReturnGameObejctToPool(PoolGameObjectType.Flames, o);
+                }
+                flames.Clear();
+                CanSelectPaths = false;
+                FireSpellActivated = false;
+               
             break;
             case SpellType.Magic:                
                
-                currentMousePosition = Vector3.zero;
+                currentMousePosition = Vector3.zero;             
                 stopMagic = false;
-                break;
+                CanSelectPaths = false;
+                MagicSpellActivated = false;
+            break;
+
         }
        
     }
     #endregion
 
-
+    #region Getters
     public bool FireSpellActivated {  get; set; }
 
-    public bool MiracleSpellActivated { get; set; }
+    public bool MagicSpellActivated { get; set; }
 
     public bool MechanicSpellActivated { get; set; }
+
+    public bool ImaginarySpellActivated { get; set; }
 
     public bool CanSelectPaths { get; internal set; }
 
     public SpellType currenSpellType { get; internal set; }
+
+    #endregion
 }

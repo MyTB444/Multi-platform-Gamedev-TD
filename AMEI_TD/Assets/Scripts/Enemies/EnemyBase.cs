@@ -32,7 +32,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     [SerializeField] private ElementType elementType;
 
     [Header("Ability")]
-    [SerializeField] private bool isInvisible;
+    public bool isInvisible;
     [SerializeField] private bool isReinforced;
 
     [Header("Visuals")]
@@ -93,39 +93,68 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     private VFXDamage vfxDamageScriptRef;
 
-    [SerializeField] private Canvas enemyHealthDisplayCanvas;
-    [SerializeField] private Slider healthBar;
+    [SerializeField] private  Canvas enemyHealthDisplayCanvas;
+    [SerializeField] private  Slider healthBar;
 
     [SerializeField] private EnemyVFXPool enemyVFXPoolScriptRef;
     private bool enemyHealthBarStatus = false;
     private Animator EnemyAnimator;
     private bool spellsActivated = false;
+  
 
-    private void OnEnable()
+
+   
+
+
+  
+    private void Awake()
     {
-        enemyHealthDisplayCanvas.enabled  = false;
+        originalLayerIndex = gameObject.layer;
+        baseSpeed = enemySpeed;
+    }
+
+    private void OnDisable()
+    {
+        healthBar.onValueChanged.RemoveAllListeners();
+    }
+
+    protected virtual void OnEnable()
+    {
+        gameObject.layer = originalLayerIndex;
+        enemyCurrentHp = enemyMaxHp;
         if (enemyBaseRef == null)
         {
             enemyBaseRef = this;
         }
+       if(vfxDamageScriptRef != null)
+       {
+           
+           vfxDamageScriptRef.enemies.Remove(this);
+            
+        }
+
+        enemyHealthDisplayCanvas.enabled = false;
+        
         vfxContainer = enemyVFXPoolScriptRef;
         vfxContainer.PoolVFXGameObjects();
 
-        enemyHealthDisplayCanvas.worldCamera = Camera.main; 
+        enemyHealthDisplayCanvas.worldCamera = Camera.main;
         healthBar.value = 1;
-       
-        UpdateVisuals();
+
+
         //Renderer renderer = GetComponent<Renderer>();
         NavAgent = GetComponent<NavMeshAgent>();
         EnemyAnimator = GetComponent<Animator>();
         myBody = GetComponent<Rigidbody>();
         NavAgent.enabled = false;
-    }
 
-    private void Awake()
-    {
-        originalLayerIndex = gameObject.layer;
-        baseSpeed = enemySpeed;
+        EnemyAnimator.enabled = true;
+        isDead = false;
+        spellsActivated = false;
+        myBody.useGravity = true;
+        myBody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+
+        SaveOriginalColors();
     }
 
     protected virtual void Start()
@@ -133,26 +162,29 @@ public class EnemyBase : MonoBehaviour, IDamageable
         UpdateVisuals();
         NavAgent = GetComponent<NavMeshAgent>();
         EnemyAnimator = GetComponent<Animator>();
-    
         SaveOriginalColors();
+    
     }
+
+   
     
     public void GetRefOfVfxDamageScript(VFXDamage vfxDamageScriptRef)
     {
         this.vfxDamageScriptRef = vfxDamageScriptRef;
-        if (this.vfxDamageScriptRef != null)
-        {
-            this.vfxDamageScriptRef.stopFlames = false;
-        }
+        this.vfxDamageScriptRef.stopFlames = false;
+       
     }
 
     protected virtual void Update()
     {
         UpdateStatusEffects();
-        if (!enemyBaseRef.spellsActivated)
+        if (enemyBaseRef != null)
         {
-            FollowPath();
-          
+            if (!enemyBaseRef.spellsActivated)
+            {
+                FollowPath();
+
+            }
         }
         PlayAnimations();
     }
@@ -492,22 +524,27 @@ public class EnemyBase : MonoBehaviour, IDamageable
         if ((enemyCurrentHp <= 0 || healthBar.value <= 0) && !isDead)
         {
             isDead = true;
+            enemyHealthBarStatus = false;
+            StartCoroutine(DisableHealthBar(false));
             Die();
         }
         if (gameObject.activeInHierarchy && gameObject != null)
         {
             enemyHealthBarStatus = false;
-            StartCoroutine(DisableHealthBar());
+            StartCoroutine(DisableHealthBar(true));
 
         }
     }
     
    
-    private IEnumerator DisableHealthBar()
+    private IEnumerator DisableHealthBar(bool status)
     {
         if (gameObject.activeInHierarchy && gameObject != null)
-        {            
-            yield return new WaitForSeconds(8f);            
+        {
+            if (status)
+            {
+                yield return new WaitForSeconds(5f);
+            }
             enemyHealthDisplayCanvas.enabled = enemyHealthBarStatus;
         }
     }
@@ -559,13 +596,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     private void ResetEnemy()
     {
-        gameObject.layer = originalLayerIndex;
-        enemyCurrentHp = enemyMaxHp;
-        EnemyAnimator.enabled = true;
-        isDead = false;
-        spellsActivated = false;
-        myBody.useGravity = true;
-        myBody.constraints = RigidbodyConstraints.FreezeRotationX|RigidbodyConstraints.FreezeRotationZ;
+    
         // Reset slow
         isSlowed = false;
         enemySpeed = baseSpeed;
@@ -589,6 +620,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
             }
         }
 
+    
         UpdateVisuals();
     }
     
@@ -648,9 +680,9 @@ public class EnemyBase : MonoBehaviour, IDamageable
         Die();
       
     }
-    private void UpdateVisuals()
+    public void UpdateVisuals()
     {
-        Renderer r = GetComponent<Renderer>();
+        Renderer r = GetComponentInChildren<Renderer>();
         if (r == null) return;
 
         Color finalColor = enemyColor;
@@ -672,13 +704,15 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public float GetEnemyHp() => enemyCurrentHp;
     public Transform GetBottomPoint() => bottomPoint;
     public bool IsInvisible() => isInvisible;
+
+   
+
     public bool IsReinforced() => isReinforced;
     public int GetDamage() => damage;
     public bool IsSlowed() => isSlowed;
     public bool IsStunned() => isStunned;
     public bool HasDoT() => hasDot;
     public ElementType GetElementType() => elementType;
-
     public EnemyVFXPool vfxContainer { get; set; }
     public EnemyBase enemyBaseRef { get; set; }
 
