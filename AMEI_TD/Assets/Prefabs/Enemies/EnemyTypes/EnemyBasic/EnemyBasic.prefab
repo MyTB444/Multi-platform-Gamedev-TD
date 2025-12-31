@@ -288,14 +288,15 @@ MonoBehaviour:
   enemySpeed: 2
   damage: 10
   reward: 10
-  enemyMaxHp: 1000
+  enemyMaxHp: 20
   elementType: 0
   isInvisible: 0
   isReinforced: 0
   enemyColor: {r: 1, g: 1, b: 1, a: 1}
   centerPoint: {fileID: 6340835181720102494}
   bottomPoint: {fileID: 6638083700992160575}
-  slowEffectPrefab: {fileID: 4259526894524806451, guid: cca859937b8679b49b3fc3dc323ef370, type: 3}
+  useSpawnGrace: 1
+  spawnGracePeriod: 0.5
   frozenColor: {r: 0.5, g: 0.8, b: 1, a: 1}
   enemyCurrentHp: 0
 --- !u!136 &5952700638257805842
