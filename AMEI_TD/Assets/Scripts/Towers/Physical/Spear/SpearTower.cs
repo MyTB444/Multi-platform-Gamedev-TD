@@ -121,15 +121,15 @@ public class SpearTower : TowerBase
         Vector3 spawnPos = spearVisual.transform.position;
         Vector3 enemyCenter = targetToPredict.GetCenterPoint();
     
-        // Calculate prediction time
         float distance = Vector3.Distance(spawnPos, enemyCenter);
         float flightTime = distance / projectileSpeed;
         float totalTime = throwAnimationDelay + flightTime;
     
-        // Use path-aware prediction
-        Vector3 predictedPos = GetPathAwarePrediction(targetToPredict, totalTime);
+        // Scale prediction based on distance (less prediction at close range)
+        float predictionScale = Mathf.Clamp01(distance / attackRange);
+        totalTime *= predictionScale;
     
-        // Keep Y at enemy center height
+        Vector3 predictedPos = GetPathAwarePrediction(targetToPredict, totalTime);
         predictedPos.y = enemyCenter.y;
     
         return predictedPos;

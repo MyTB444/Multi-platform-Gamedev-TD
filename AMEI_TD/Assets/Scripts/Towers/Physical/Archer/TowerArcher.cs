@@ -131,7 +131,11 @@ public class TowerArcher : TowerBase
         float enemySpeed = enemyVelocity.magnitude;
         float predictionTime = baseFlightTime + (enemySpeed * speedMultiplier);
     
-        // Use path-aware prediction instead of simple velocity
+        // Scale prediction based on distance (less prediction at close range)
+        float distance = Vector3.Distance(transform.position, targetToPredict.transform.position);
+        float predictionScale = Mathf.Clamp01(distance / attackRange); // 0 at close, 1 at max range
+        predictionTime *= predictionScale;
+    
         predictedPosition = GetPathAwarePrediction(targetToPredict, predictionTime);
     }
     
