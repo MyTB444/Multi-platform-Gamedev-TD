@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 1596815373774662834}
   - component: {fileID: 8981695632123615926}
   - component: {fileID: 9198655541595196929}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: decor 8
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 3524844358188126975}
   - component: {fileID: 7723302912325203125}
   - component: {fileID: 6013468435260424469}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: blade 10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -177,7 +177,7 @@ GameObject:
   - component: {fileID: 656272133886828259}
   - component: {fileID: 7835471025343923896}
   - component: {fileID: 8958587802795982219}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: ribon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -260,7 +260,7 @@ GameObject:
   - component: {fileID: 7688501849547658679}
   - component: {fileID: 7481540897522965294}
   - component: {fileID: 4897022661856286862}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: handle 6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -343,7 +343,7 @@ GameObject:
   - component: {fileID: 1700219512968822572}
   - component: {fileID: 5411948345510868837}
   - component: {fileID: 6960841145975995332}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: decor 2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -426,7 +426,7 @@ GameObject:
   - component: {fileID: 4204559999915596462}
   - component: {fileID: 3593342944715327035}
   - component: {fileID: 6417210609268813545}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: blade 1 (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -509,7 +509,7 @@ GameObject:
   - component: {fileID: 1421466768469755462}
   - component: {fileID: 4356090416774356882}
   - component: {fileID: 5632692129976181651}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: decor 10
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -593,7 +593,7 @@ GameObject:
   - component: {fileID: 1905129778856200072}
   - component: {fileID: 2324157478279201440}
   - component: {fileID: 3814217233004262316}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Spear
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -639,7 +639,6 @@ MonoBehaviour:
   maxLifeTime: 10
   impactEffectPrefab: {fileID: 1296919836167789391, guid: 8e1918be94ee3be49ab9961549eab334, type: 3}
   trail: {fileID: 0}
-  debugExplosion: 1
   vfxPoint: {fileID: 2640574473869826520}
 --- !u!54 &2324157478279201440
 Rigidbody:
@@ -698,7 +697,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2640574473869826520}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: VfxPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -731,7 +730,7 @@ GameObject:
   - component: {fileID: 7656521844068787418}
   - component: {fileID: 3001519640625483072}
   - component: {fileID: 4325463289563662687}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: blade 1
   m_TagString: Untagged
   m_Icon: {fileID: 0}

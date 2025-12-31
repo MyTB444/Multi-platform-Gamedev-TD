@@ -25,6 +25,8 @@ public class BladeTower : TowerBase
     [SerializeField] private float vfxDelay = 0.3f;
     
     [Header("Blade Upgrades")]
+    [SerializeField] [Range(0f, 0.5f)] private float spinSpeedBoostPercent = 0.25f;
+    [Space]
     [SerializeField] private bool bleedChance = false;
     [SerializeField] [Range(0f, 1f)] private float bleedChancePercent = 0.3f;
     [SerializeField] private float bleedDamage = 3f;
@@ -46,6 +48,8 @@ public class BladeTower : TowerBase
     private Dictionary<EnemyBase, float> recentlyHitEnemies = new Dictionary<EnemyBase, float>();
     private Quaternion startRotation;
     private bool isActive = false;
+    private float baseSpinSpeed;
+    private bool spinSpeedBoosted = false;
     private bool isReturning = false;
     private float currentAngle = 0f;
     private bool hasTriggeredAnimation = false;
@@ -53,12 +57,14 @@ public class BladeTower : TowerBase
     protected override void Start()
     {
         base.Start();
-    
+
+        baseSpinSpeed = spinSpeed;
+
         if (bladeHolder != null)
         {
             startRotation = bladeHolder.rotation;
         }
-    
+
         ApplyUpgrades();
     }
     
@@ -68,6 +74,17 @@ public class BladeTower : TowerBase
     
         switch (upgradeType)
         {
+            case TowerUpgradeType.BladeSpinSpeed:
+                spinSpeedBoosted = enabled;
+                if (enabled)
+                {
+                    spinSpeed = baseSpinSpeed * (1f + spinSpeedBoostPercent);
+                }
+                else
+                {
+                    spinSpeed = baseSpinSpeed;
+                }
+                break;
             case TowerUpgradeType.BleedChance:
                 bleedChance = enabled;
                 ClearBleedVFX();
@@ -141,8 +158,13 @@ public class BladeTower : TowerBase
     
     protected override void FixedUpdate()
     {
-        CheckForEnemies();
+        UpdateDebuffs();
+        UpdateDisabledVisual();
         
+        if (isDisabled) return;
+    
+        CheckForEnemies();
+    
         if (isActive)
         {
             isReturning = false;
@@ -153,7 +175,7 @@ public class BladeTower : TowerBase
             isReturning = true;
             ReturnToStart();
         }
-        
+    
         CleanupHitList();
     }
     
@@ -171,11 +193,11 @@ public class BladeTower : TowerBase
     private void RotateBlades()
     {
         if (bladeHolder == null) return;
-        
+    
         float adjustedAngle = currentAngle + momentumOffset;
         float momentumMultiplier = 1f + (Mathf.Sin(adjustedAngle * Mathf.Deg2Rad) * momentumStrength);
         
-        float currentSpeed = spinSpeed * momentumMultiplier;
+        float currentSpeed = spinSpeed * momentumMultiplier * slowMultiplier;
         float rotationThisFrame = currentSpeed * Time.fixedDeltaTime;
         
         currentAngle += rotationThisFrame;
@@ -273,7 +295,7 @@ public class BladeTower : TowerBase
         if (bleedChance && Random.value <= bleedChancePercent)
         {
             DamageInfo bleedDamageInfo = new DamageInfo(bleedDamage, elementType, true);
-            enemy.ApplyDoT(bleedDamageInfo, bleedDuration);
+            enemy.ApplyDoT(bleedDamageInfo, bleedDuration, 0.5f, false, 0f, default, DebuffType.Bleed);
         }
 
         recentlyHitEnemies[enemy] = Time.time + damageCooldown;

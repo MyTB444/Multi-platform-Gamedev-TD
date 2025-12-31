@@ -46,10 +46,57 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeBetweenWaves: 2
   waveTimer: 0
-  levelWaves: []
-  enemyBasic: {fileID: 8663543207204576051, guid: e3c65aa6917ec5744b5fbb6f58025d78, type: 3}
-  enemyFast: {fileID: 1812659917213882, guid: c68e7ecf54453e247816a0362e922e0c, type: 3}
-  enemyTank: {fileID: 3155058319838657794, guid: 5683b0ddd461bba46886a7db5fff0655, type: 3}
-  enemyInvisible: {fileID: 1931298151966786, guid: 928a1377c1cd4515b208fef3a396b8ea, type: 3}
-  enemyReinforced: {fileID: 6753617674297473082, guid: 24a0663f813d4beb91fc0c6b1e8fef36, type: 3}
+  levelWaves:
+  - enemyBasic: 1
+    enemyFast: 1
+    enemyTank: 1
+    enemyInvisible: 1
+    enemyReinforced: 1
+    enemySummoner: 1
+    enemyHexer: 1
+    enemyHerald: 1
+    enemyAdaptive: 1
+    enemySplitter: 1
+    enemyGhostwalk: 1
+    enemyDecoy: 1
+  enemyPrefabs:
+  - enemyType: 0
+    prefab: {fileID: 8663543207204576051, guid: e3c65aa6917ec5744b5fbb6f58025d78, type: 3}
+    poolAmount: 5
+  - enemyType: 1
+    prefab: {fileID: 1812659917213882, guid: c68e7ecf54453e247816a0362e922e0c, type: 3}
+    poolAmount: 5
+  - enemyType: 2
+    prefab: {fileID: 3155058319838657794, guid: 5683b0ddd461bba46886a7db5fff0655, type: 3}
+    poolAmount: 5
+  - enemyType: 3
+    prefab: {fileID: 1931298151966786, guid: 928a1377c1cd4515b208fef3a396b8ea, type: 3}
+    poolAmount: 5
+  - enemyType: 4
+    prefab: {fileID: 6753617674297473082, guid: 24a0663f813d4beb91fc0c6b1e8fef36, type: 3}
+    poolAmount: 5
+  - enemyType: 5
+    prefab: {fileID: 8624495124000836869, guid: 5b00d19b6dfe0384ea9a601bf195465a, type: 3}
+    poolAmount: 5
+  - enemyType: 6
+    prefab: {fileID: 6586906181002933634, guid: 6f08c320511f7f349ba7981a64a3525a, type: 3}
+    poolAmount: 5
+  - enemyType: 7
+    prefab: {fileID: 1691538311006784475, guid: 6f4a467d3766b914c99c1f3554d04189, type: 3}
+    poolAmount: 5
+  - enemyType: 8
+    prefab: {fileID: 5196595418094556024, guid: 611344a797364534f80618cd7bd04c57, type: 3}
+    poolAmount: 5
+  - enemyType: 9
+    prefab: {fileID: 1319517528997712, guid: 1543549dcdf638d488bd40cb68dd9b8e, type: 3}
+    poolAmount: 5
+  - enemyType: 10
+    prefab: {fileID: 1067925524328404, guid: 6bbfea6690ef7724ba495c866081f855, type: 3}
+    poolAmount: 5
+  - enemyType: 11
+    prefab: {fileID: 498253721416304272, guid: f6ab88624626d1249bd73bcb4a1c7d59, type: 3}
+    poolAmount: 5
+  - enemyType: 12
+    prefab: {fileID: 8422892626600285392, guid: 214e08cd5e5d74c458e2a81b7ec2c84c, type: 3}
+    poolAmount: 5
   gameBegan: 1

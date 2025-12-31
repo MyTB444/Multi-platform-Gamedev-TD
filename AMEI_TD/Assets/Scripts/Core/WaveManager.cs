@@ -10,22 +10,65 @@ public class WaveDetails
     public int enemyTank;
     public int enemyInvisible;
     public int enemyReinforced;
+    public int enemySummoner;
+    public int enemyHexer;
+    public int enemyHerald;
+    public int enemyAdaptive;
+    public int enemySplitter;
+    public int enemyGhostwalk;
+    public int enemyDecoy;
 }
+
+[Serializable]
+public class MegaWaveDetails
+{
+    [Header("Mega Wave Enemy Counts")]
+    public int enemyBasic;
+    public int enemyFast;
+    public int enemyTank;
+    public int enemyInvisible;
+    public int enemyReinforced;
+    public int enemySummoner;
+    public int enemyHexer;
+    public int enemyHerald;
+    public int enemyAdaptive;
+    public int enemySplitter;
+    public int enemyGhostwalk;
+    public int enemyDecoy;
+
+    [Header("Mega Wave Settings")]
+    public float spawnRateMultiplier = 2f;
+    public float enemyHealthMultiplier = 1.5f;
+}
+
+[Serializable]
+public class EnemyPoolConfig
+{
+    public EnemyType enemyType;
+    public GameObject prefab;
+    public int poolAmount = 10;
+}
+
 public class WaveManager : MonoBehaviour
 {
-    [Header("Wave Details")] 
+    public static WaveManager instance;
+
+    [Header("Wave Details")]
     [SerializeField] private float timeBetweenWaves;
     [SerializeField] private float waveTimer;
     [SerializeField] private WaveDetails[] levelWaves;
 
-    [Header("Enemy Prefabs")] 
-    [SerializeField] private GameObject enemyBasic;
-    [SerializeField] private GameObject enemyFast;
-    [SerializeField] private GameObject enemyTank;
-    [SerializeField] private GameObject enemyInvisible;
-    [SerializeField] private GameObject enemyReinforced;
-    
+    [Header("Mega Wave")]
+    [SerializeField] private MegaWaveDetails megaWave;
+    [SerializeField] private float megaWaveDelay = 3f;
+    private bool megaWaveTriggered = false;
+    private bool megaWaveActive = false;
+    private float megaWaveStartTime;
 
+    [Header("Enemy Prefabs")]
+    [SerializeField] private List<EnemyPoolConfig> enemyPrefabs;
+
+    private Dictionary<EnemyType, GameObject> enemyPrefabLookup;
     private List<EnemySpawner> enemySpawners;
     private int waveIndex;
     private bool waveTimerEnabled;
@@ -34,7 +77,19 @@ public class WaveManager : MonoBehaviour
 
     private void Awake()
     {
+        instance = this;
         enemySpawners = new List<EnemySpawner>(FindObjectsByType<EnemySpawner>(FindObjectsSortMode.None));
+
+        // Build lookup and register pools
+        enemyPrefabLookup = new Dictionary<EnemyType, GameObject>();
+        foreach (var config in enemyPrefabs)
+        {
+            if (config.prefab != null)
+            {
+                enemyPrefabLookup[config.enemyType] = config.prefab;
+                ObjectPooling.instance.Register(config.prefab, config.poolAmount);
+            }
+        }
     }
 
     private void Update()
@@ -42,8 +97,8 @@ public class WaveManager : MonoBehaviour
         if (gameBegan == false) return;
 
         HandleWaveTimer();
+        HandleMegaWaveDelay();
     }
-    
 
     public void ActivateWaveManager()
     {
@@ -56,36 +111,45 @@ public class WaveManager : MonoBehaviour
         gameBegan = false;
         waveTimerEnabled = false;
     }
-    
-    // Called when an enemy is defeated to check if wave is complete and trigger next wave
+
     public void CheckIfWaveCompleted()
     {
         if (gameBegan == false || GameManager.instance.IsGameLost()) return;
-
+    
         if (AllEnemiesDefeated() == false || AllSpawnersFinishedSpawning() == false || makingNextWave) return;
-
+    
         makingNextWave = true;
         waveIndex++;
-
+    
         if (HasNoMoreWaves())
         {
-            GameManager.instance.LevelCompleted();
+            // Don't win yet - wait for mega wave to be triggered and completed
+            // If mega wave is already active, let CheckIfMegaWaveCompleted handle it
+            if (megaWaveActive)
+            {
+                CheckIfMegaWaveCompleted();
+            }
+            else
+            {
+                Debug.Log("All normal waves complete! Summon the Guardian to trigger the final Mega Wave!");
+                // Optionally notify UI that guardian can be summoned
+            }
             return;
         }
-        
+    
         EnableWaveTimer(true);
     }
 
     private void EnableWaveTimer(bool enable)
     {
         if (enable && GameManager.instance.IsGameLost()) return;
-        
+
         if (waveTimerEnabled == enable) return;
 
         waveTimer = timeBetweenWaves;
         waveTimerEnabled = enable;
     }
-    
+
     private void HandleWaveTimer()
     {
         if (waveTimerEnabled == false) return;
@@ -97,7 +161,7 @@ public class WaveManager : MonoBehaviour
         }
 
         waveTimer -= Time.deltaTime;
-        UIBase.instance.UpdateWaveTimerUI(waveTimer);
+        //UIBase.instance.UpdateWaveTimerUI(waveTimer);
 
         if (waveTimer <= 0) StartNewWave();
     }
@@ -105,13 +169,12 @@ public class WaveManager : MonoBehaviour
     private void StartNewWave()
     {
         if (GameManager.instance.IsGameLost()) return;
-        
+
         GiveEnemiesToSpawners();
         EnableWaveTimer(false);
         makingNextWave = false;
     }
 
-    // Distributes enemies from the current wave across all spawners in round-robin fashion
     private void GiveEnemiesToSpawners()
     {
         List<GameObject> newEnemies = GetNewEnemies();
@@ -123,12 +186,11 @@ public class WaveManager : MonoBehaviour
         {
             GameObject enemyToAdd = newEnemies[i];
             EnemySpawner spawnerToReceiveEnemy = enemySpawners[spawnerIndex];
-            
+
             spawnerToReceiveEnemy.AddEnemy(enemyToAdd);
-            
+
             spawnerIndex++;
-            
-            // Cycle back to first spawner if we've used all spawners
+
             if (spawnerIndex >= enemySpawners.Count) spawnerIndex = 0;
         }
     }
@@ -142,33 +204,33 @@ public class WaveManager : MonoBehaviour
         }
 
         List<GameObject> newEnemyList = new List<GameObject>();
+        WaveDetails wave = levelWaves[waveIndex];
 
-        for (int i = 0; i < levelWaves[waveIndex].enemyBasic; i++)
-        {
-            newEnemyList.Add(enemyBasic);
-        }
-        
-        for (int i = 0; i < levelWaves[waveIndex].enemyFast; i++)
-        {
-            newEnemyList.Add(enemyFast);
-        }
-        
-        for (int i = 0; i < levelWaves[waveIndex].enemyTank; i++)
-        {
-            newEnemyList.Add(enemyTank);
-        }
-        
-        for (int i = 0; i < levelWaves[waveIndex].enemyInvisible; i++)
-        {
-            newEnemyList.Add(enemyInvisible);
-        }
-        
-        for (int i = 0; i < levelWaves[waveIndex].enemyReinforced; i++)
-        {
-            newEnemyList.Add(enemyReinforced);
-        }
+        AddEnemiesToList(newEnemyList, EnemyType.Basic, wave.enemyBasic);
+        AddEnemiesToList(newEnemyList, EnemyType.Fast, wave.enemyFast);
+        AddEnemiesToList(newEnemyList, EnemyType.Tank, wave.enemyTank);
+        AddEnemiesToList(newEnemyList, EnemyType.Invisible, wave.enemyInvisible);
+        AddEnemiesToList(newEnemyList, EnemyType.Reinforced, wave.enemyReinforced);
+        AddEnemiesToList(newEnemyList, EnemyType.Summoner, wave.enemySummoner);
+        AddEnemiesToList(newEnemyList, EnemyType.Adaptive, wave.enemyAdaptive);
+        AddEnemiesToList(newEnemyList, EnemyType.Splitter, wave.enemySplitter);
+        AddEnemiesToList(newEnemyList, EnemyType.Ghostwalk, wave.enemyGhostwalk);
+        AddEnemiesToList(newEnemyList, EnemyType.Decoy, wave.enemyDecoy);
+        AddEnemiesToList(newEnemyList, EnemyType.Hexer, wave.enemyHexer);
+        AddEnemiesToList(newEnemyList, EnemyType.Herald, wave.enemyHerald);
 
         return newEnemyList;
+    }
+
+    private void AddEnemiesToList(List<GameObject> list, EnemyType type, int count)
+    {
+        if (count <= 0) return;
+        if (!enemyPrefabLookup.TryGetValue(type, out GameObject prefab)) return;
+
+        for (int i = 0; i < count; i++)
+        {
+            list.Add(prefab);
+        }
     }
 
     private bool AllEnemiesDefeated()
@@ -183,7 +245,7 @@ public class WaveManager : MonoBehaviour
 
         return true;
     }
-    
+
     private bool AllSpawnersFinishedSpawning()
     {
         foreach (EnemySpawner spawner in enemySpawners)
@@ -195,6 +257,100 @@ public class WaveManager : MonoBehaviour
         }
         return true;
     }
-    
+
     private bool HasNoMoreWaves() => waveIndex >= levelWaves.Length;
+
+    // Mega Wave System
+    public void TriggerMegaWave()
+    {
+        if (megaWaveTriggered) return;
+
+        megaWaveTriggered = true;
+        megaWaveStartTime = Time.time;
+
+        // Stop normal wave progression
+        EnableWaveTimer(false);
+
+        Debug.Log("Mega Wave triggered! Starting in " + megaWaveDelay + " seconds...");
+    }
+
+    private void HandleMegaWaveDelay()
+    {
+        if (!megaWaveTriggered || megaWaveActive) return;
+
+        if (Time.time >= megaWaveStartTime + megaWaveDelay)
+        {
+            StartMegaWave();
+        }
+    }
+
+    private void StartMegaWave()
+    {
+        megaWaveActive = true;
+        GiveMegaWaveEnemiesToSpawners();
+        Debug.Log("MEGA WAVE STARTED!");
+    }
+
+    private void GiveMegaWaveEnemiesToSpawners()
+    {
+        if (megaWave == null) return;
+
+        List<GameObject> megaEnemies = GetMegaWaveEnemies();
+        int spawnerIndex = 0;
+
+        if (megaEnemies == null || megaEnemies.Count == 0) return;
+
+        for (int i = 0; i < megaEnemies.Count; i++)
+        {
+            GameObject enemyToAdd = megaEnemies[i];
+            EnemySpawner spawnerToReceiveEnemy = enemySpawners[spawnerIndex];
+
+            spawnerToReceiveEnemy.AddEnemy(enemyToAdd);
+
+            spawnerIndex++;
+
+            if (spawnerIndex >= enemySpawners.Count) spawnerIndex = 0;
+        }
+    }
+
+    private List<GameObject> GetMegaWaveEnemies()
+    {
+        List<GameObject> newEnemyList = new List<GameObject>();
+
+        AddEnemiesToList(newEnemyList, EnemyType.Basic, megaWave.enemyBasic);
+        AddEnemiesToList(newEnemyList, EnemyType.Fast, megaWave.enemyFast);
+        AddEnemiesToList(newEnemyList, EnemyType.Tank, megaWave.enemyTank);
+        AddEnemiesToList(newEnemyList, EnemyType.Invisible, megaWave.enemyInvisible);
+        AddEnemiesToList(newEnemyList, EnemyType.Reinforced, megaWave.enemyReinforced);
+        AddEnemiesToList(newEnemyList, EnemyType.Summoner, megaWave.enemySummoner);
+        AddEnemiesToList(newEnemyList, EnemyType.Adaptive, megaWave.enemyAdaptive);
+        AddEnemiesToList(newEnemyList, EnemyType.Splitter, megaWave.enemySplitter);
+        AddEnemiesToList(newEnemyList, EnemyType.Ghostwalk, megaWave.enemyGhostwalk);
+        AddEnemiesToList(newEnemyList, EnemyType.Decoy, megaWave.enemyDecoy);
+        AddEnemiesToList(newEnemyList, EnemyType.Hexer, megaWave.enemyHexer);
+        AddEnemiesToList(newEnemyList, EnemyType.Herald, megaWave.enemyHerald);
+
+        return newEnemyList;
+    }
+
+    public void CheckIfMegaWaveCompleted()
+    {
+        if (!megaWaveActive || GameManager.instance.IsGameLost()) return;
+
+        if (AllEnemiesDefeated() && AllSpawnersFinishedSpawning())
+        {
+            MegaWaveCompleted();
+        }
+    }
+
+    private void MegaWaveCompleted()
+    {
+        Debug.Log("MEGA WAVE COMPLETED! Level Victory!");
+        GameManager.instance.LevelCompleted();
+    }
+
+    public bool IsMegaWaveActive() => megaWaveActive;
+    public bool IsMegaWaveTriggered() => megaWaveTriggered;
+    public float GetMegaWaveHealthMultiplier() => megaWave != null ? Mathf.Clamp(megaWave.enemyHealthMultiplier, 0.1f, 10f) : 1f;
+    public float GetMegaWaveSpawnRateMultiplier() => megaWave != null ? Mathf.Clamp(megaWave.spawnRateMultiplier, 0.1f, 10f) : 1f;
 }

@@ -34,7 +34,9 @@ public class SpearTower : TowerBase
     
     // Locked at attack time
     private Vector3 lockedTargetPosition;
+    private Vector3 lockedVelocity;
     private IDamageable lockedDamageable;
+    private EnemyBase lockedTarget;
     
     
     protected override void Start()
@@ -48,6 +50,7 @@ public class SpearTower : TowerBase
         UpdateEnemyVelocity();
         base.FixedUpdate();
     }
+    
     public override void SetUpgrade(TowerUpgradeType upgradeType, bool enabled)
     {
         base.SetUpgrade(upgradeType, enabled);
@@ -66,7 +69,10 @@ public class SpearTower : TowerBase
     
     private void UpdateEnemyVelocity()
     {
-        if (currentEnemy == null)
+        // Use locked target if attacking
+        EnemyBase targetToTrack = isAttacking && lockedTarget != null ? lockedTarget : currentEnemy;
+        
+        if (targetToTrack == null || !targetToTrack.gameObject.activeSelf)
         {
             enemyVelocity = Vector3.zero;
             lastEnemyPosition = Vector3.zero;
@@ -74,7 +80,7 @@ public class SpearTower : TowerBase
             return;
         }
         
-        Vector3 currentPos = currentEnemy.transform.position;
+        Vector3 currentPos = targetToTrack.transform.position;
         
         if (lastEnemyPosition != Vector3.zero)
         {
@@ -108,10 +114,12 @@ public class SpearTower : TowerBase
     
     private Vector3 PredictTargetPosition()
     {
-        if (currentEnemy == null) return Vector3.zero;
+        EnemyBase targetToPredict = isAttacking && lockedTarget != null ? lockedTarget : currentEnemy;
+        
+        if (targetToPredict == null || !targetToPredict.gameObject.activeSelf) return Vector3.zero;
         
         Vector3 spawnPos = spearVisual.transform.position;
-        Vector3 enemyCenter = currentEnemy.GetCenterPoint();
+        Vector3 enemyCenter = targetToPredict.GetCenterPoint();
         
         Vector3 predictedPos = enemyCenter;
         
@@ -134,10 +142,12 @@ public class SpearTower : TowerBase
     
     protected override void HandleRotation()
     {
-        if (currentEnemy == null || towerBody == null) return;
+        EnemyBase targetToFace = isAttacking && lockedTarget != null ? lockedTarget : currentEnemy;
+        
+        if (targetToFace == null || towerBody == null) return;
         
         Vector3 targetPos = PredictTargetPosition();
-        if (targetPos == Vector3.zero) targetPos = currentEnemy.GetCenterPoint();
+        if (targetPos == Vector3.zero) targetPos = targetToFace.GetCenterPoint();
         
         Vector3 direction = targetPos - towerBody.position;
         direction.y = 0;
@@ -162,6 +172,8 @@ public class SpearTower : TowerBase
         
         if (currentEnemy != null)
         {
+            lockedTarget = currentEnemy;
+            lockedVelocity = enemyVelocity;
             lockedTargetPosition = PredictTargetPosition();
             lockedDamageable = currentEnemy.GetComponent<IDamageable>();
         }
@@ -192,33 +204,54 @@ public class SpearTower : TowerBase
         }
         
         isAttacking = false;
+        ClearLockedTarget();
     }
     
     private void FireSpear()
     {
-        if (lockedDamageable == null) return;
-    
+        if (lockedDamageable == null)
+        {
+            ClearLockedTarget();
+            return;
+        }
+        
+        // Recalculate prediction if target still valid
+        if (lockedTarget != null && lockedTarget.gameObject.activeSelf)
+        {
+            lockedTargetPosition = PredictTargetPosition();
+        }
+
         Vector3 spawnPos = spearVisual.transform.position;
         Quaternion spawnRot = spearVisual.transform.rotation;
-    
+
         Vector3 fireDirection = spawnRot * Vector3.up;
         spawnPos += fireDirection * forwardSpawnOffset;
+
+        GameObject newSpear = ObjectPooling.instance.Get(projectilePrefab);
+        newSpear.transform.position = spawnPos;
+        newSpear.transform.rotation = spawnRot;
+        newSpear.SetActive(true);
     
-        GameObject newSpear = Instantiate(projectilePrefab, spawnPos, spawnRot);
         SpearProjectile spear = newSpear.GetComponent<SpearProjectile>();
-    
+
         spear.SetupSpear(lockedTargetPosition, lockedDamageable, CreateDamageInfo(), projectileSpeed);
-    
+
         if (bleedSpear)
         {
             spear.SetBleedEffect(bleedDamage, bleedDuration, elementType, bleedSpearVFX);
         }
-    
+
         if (explosiveTip)
         {
             spear.SetExplosiveEffect(explosionRadius, explosionDamage, elementType, whatIsEnemy, explosionVFX);
         }
+    }
     
+    private void ClearLockedTarget()
+    {
+        lockedTarget = null;
         lockedDamageable = null;
+        lockedVelocity = Vector3.zero;
+        lockedTargetPosition = Vector3.zero;
     }
 }

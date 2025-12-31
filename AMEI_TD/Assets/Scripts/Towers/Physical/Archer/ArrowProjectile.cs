@@ -37,6 +37,35 @@ public class ArrowProjectile : TowerProjectileBase
         rb = GetComponent<Rigidbody>();
     }
     
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+        launched = false;
+        curving = true;
+        applyPoison = false;
+        applyFire = false;
+    
+        // Destroy any child VFX from previous use
+        if (vfxPoint != null)
+        {
+            foreach (Transform child in vfxPoint)
+            {
+                Destroy(child.gameObject);
+            }
+        }
+    
+        if (rb != null)
+        {
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+    
+        if (trail != null)
+        {
+            trail.Clear();
+        }
+    }
+    
     public void SetupArcProjectile(Vector3 targetPos, IDamageable newDamageable, DamageInfo newDamageInfo, float newSpeed, float distance)
     {
         damageInfo = newDamageInfo;
@@ -142,11 +171,11 @@ public class ArrowProjectile : TowerProjectileBase
             // Apply DoT (fire replaces poison)
             if (applyFire)
             {
-                enemy.ApplyDoT(fireDamageInfo, fireDuration);
+                enemy.ApplyDoT(fireDamageInfo, fireDuration, 0.5f, false, 0f, default, DebuffType.Burn);
             }
             else if (applyPoison)
             {
-                enemy.ApplyDoT(poisonDamageInfo, poisonDuration);
+                enemy.ApplyDoT(poisonDamageInfo, poisonDuration, 0.5f, false, 0f, default, DebuffType.Poison);
             }
         }
     }
@@ -159,10 +188,15 @@ public class ArrowProjectile : TowerProjectileBase
     {
         if (trail != null)
         {
-            trail.transform.SetParent(null);
-            Destroy(trail.gameObject, trail.time);
+            trail.Clear();
         }
-        
+    
+        if (rb != null)
+        {
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
+    
         base.DestroyProjectile();
     }
 }

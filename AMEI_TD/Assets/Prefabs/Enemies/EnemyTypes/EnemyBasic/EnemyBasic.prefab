@@ -284,18 +284,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3929c037d26756d42bf18ec49537527a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyType: 1
-  enemySpeed: 3
+  enemyType: 0
+  enemySpeed: 2
   damage: 10
   reward: 10
-  enemyMaxHp: 10
+  enemyMaxHp: 1000
   elementType: 0
   isInvisible: 0
   isReinforced: 0
   enemyColor: {r: 1, g: 1, b: 1, a: 1}
   centerPoint: {fileID: 6340835181720102494}
   bottomPoint: {fileID: 6638083700992160575}
-  slowEffectPrefab: {fileID: 0}
+  slowEffectPrefab: {fileID: 4259526894524806451, guid: cca859937b8679b49b3fc3dc323ef370, type: 3}
   frozenColor: {r: 0.5, g: 0.8, b: 1, a: 1}
   enemyCurrentHp: 0
 --- !u!136 &5952700638257805842
@@ -328,8 +328,8 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8663543207204576051}
-  m_Enabled: 0
-  m_AgentTypeID: -1372625422
+  m_Enabled: 1
+  m_AgentTypeID: 0
   m_Radius: 0.4
   m_Speed: 3.5
   m_Acceleration: 1.5

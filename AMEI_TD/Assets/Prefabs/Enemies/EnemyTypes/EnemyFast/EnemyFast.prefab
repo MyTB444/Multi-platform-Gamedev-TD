@@ -602,7 +602,7 @@ MonoBehaviour:
   enemyColor: {r: 1, g: 1, b: 1, a: 1}
   centerPoint: {fileID: 2311393132620224175}
   bottomPoint: {fileID: 4060315245288129876}
-  slowEffectPrefab: {fileID: 0}
+  slowEffectPrefab: {fileID: 4259526894524806451, guid: cca859937b8679b49b3fc3dc323ef370, type: 3}
   frozenColor: {r: 0.5, g: 0.8, b: 1, a: 1}
   enemyCurrentHp: 0
 --- !u!95 &95640295303221614
@@ -657,10 +657,10 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1812659917213882}
-  m_Enabled: 0
-  m_AgentTypeID: -334000983
+  m_Enabled: 1
+  m_AgentTypeID: 0
   m_Radius: 0.91
-  m_Speed: 3.5
+  m_Speed: 2
   m_Acceleration: 1
   avoidancePriority: 50
   m_AngularSpeed: 120

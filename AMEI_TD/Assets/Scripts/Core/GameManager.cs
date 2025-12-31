@@ -47,8 +47,8 @@ public class GameManager : MonoBehaviour
     
     private void GameOverOutcomeUI(bool playerWon)
     {
-        InputHandler.instance.EnableRestart();
-        UIBase.instance.GameWon(playerWon);
+        // InputHandler.instance.EnableRestart();
+        // UIBase.instance.GameWon(playerWon);
     }
 
     private void StopWaveProgression()

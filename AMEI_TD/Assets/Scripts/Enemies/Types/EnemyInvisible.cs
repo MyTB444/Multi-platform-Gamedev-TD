@@ -75,4 +75,15 @@ public class EnemyInvisible : EnemyBase
             targetRenderer = GetComponentInChildren<Renderer>();
         }
     }
+
+    public void DisableInvisible()
+    {
+
+    }
+
+    protected override void ResetEnemy()
+    {
+        base.ResetEnemy();
+        flickerTime = 0f;
+    }
 }
