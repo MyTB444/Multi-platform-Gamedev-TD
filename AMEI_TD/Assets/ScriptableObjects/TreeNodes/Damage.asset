@@ -19,5 +19,8 @@ MonoBehaviour:
   irreversible: 0
   skillPointCost: 5
   prerequisites: []
-  type: 1
-  type2: 0
+  function: 1
+  function2: 0
+  swapType: 0
+  spellEnableType: 0
+  noah: 0

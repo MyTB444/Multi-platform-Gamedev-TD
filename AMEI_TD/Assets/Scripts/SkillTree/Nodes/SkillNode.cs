@@ -42,6 +42,7 @@ public class SkillNode : ScriptableObject
     public TowerUpgradeType function2;
     public SwapType swapType;
     public SpellEnableType spellEnableType;
+    public bool noah;
     public event Action<SwapType> EventRaised;
 
     public void ApplyEffect()
@@ -55,6 +56,8 @@ public class SkillNode : ScriptableObject
         Raise(swapType);
         if(spellEnableType != SpellEnableType.Null)
         EnableSpell(spellEnableType);
+        if(noah)
+        EnableNoah();
         
     }
     public void RemoveEffect()
@@ -72,5 +75,9 @@ public class SkillNode : ScriptableObject
     public void EnableSpell(SpellEnableType type)
     {
         SpellFunctionality.instance.EnableButton(type);
+    }
+    public void EnableNoah()
+    {
+        PlayerCastle.instance.SpawnGuardianTower();
     }
 }
