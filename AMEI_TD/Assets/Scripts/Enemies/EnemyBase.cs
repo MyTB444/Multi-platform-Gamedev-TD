@@ -67,6 +67,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
     [Tooltip("Random speed variation (0.1 = ±10% speed variation)")]
     [SerializeField] private float speedVariationPercent = 0.1f;
     [SerializeField] private bool isHighPriority = false;
+    [Tooltip("How close enemy must get to waypoint before moving to next (lower = tighter corners)")]
+    [SerializeField] private float waypointReachThreshold = 0.3f;
 
     private float myPathOffset;
     private float mySpeedMultiplier;
@@ -596,7 +598,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
         }
 
-        if (!NavAgent.pathPending && NavAgent.remainingDistance <= waypointReachDistance)
+        if (!NavAgent.pathPending && NavAgent.remainingDistance <= waypointReachThreshold)
         {
             currentWaypointIndex++;
         }

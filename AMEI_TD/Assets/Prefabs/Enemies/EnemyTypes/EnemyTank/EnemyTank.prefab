@@ -342,6 +342,7 @@ MonoBehaviour:
   pathOffsetRange: 0
   speedVariationPercent: 0.1
   isHighPriority: 1
+  waypointReachThreshold: 0.1
   frozenColor: {r: 0.5, g: 0.8, b: 1, a: 1}
   enemyCurrentHp: 0
 --- !u!195 &-8885097792820811004
