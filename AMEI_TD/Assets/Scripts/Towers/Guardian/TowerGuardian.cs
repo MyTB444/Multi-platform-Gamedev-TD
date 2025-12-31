@@ -71,6 +71,10 @@ public class TowerGuardian : MonoBehaviour
         {
             ObjectPooling.instance.Register(lightningImpactPrefab, 3);
         }
+        if (spawnEffectPrefab != null)
+        {
+            ObjectPooling.instance.Register(spawnEffectPrefab, 1);
+        }
     }
 
     private void Update()
@@ -95,8 +99,20 @@ public class TowerGuardian : MonoBehaviour
         // Spawn VFX first
         if (spawnEffectPrefab != null)
         {
-            GameObject spawnVFX = Instantiate(spawnEffectPrefab, transform.position, Quaternion.identity);
-            Destroy(spawnVFX, spawnEffectDuration);
+            GameObject spawnVFX = ObjectPooling.instance.Get(spawnEffectPrefab);
+            spawnVFX.transform.position = transform.position;
+            spawnVFX.transform.rotation = Quaternion.identity;
+            spawnVFX.SetActive(true);
+
+            // Restart particles
+            ParticleSystem[] particles = spawnVFX.GetComponentsInChildren<ParticleSystem>();
+            foreach (var ps in particles)
+            {
+                ps.Clear();
+                ps.Play();
+            }
+
+            StartCoroutine(ReturnToPoolAfterDelay(spawnVFX, spawnEffectDuration));
         }
 
         // Delay the tower activation
