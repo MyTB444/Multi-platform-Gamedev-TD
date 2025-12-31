@@ -992,6 +992,8 @@ MonoBehaviour:
   bottomPoint: {fileID: 4598871752029273715}
   useSpawnGrace: 1
   spawnGracePeriod: 0.5
+  pathOffsetRange: 0.5
+  speedVariationPercent: 0.1
   frozenColor: {r: 0.5, g: 0.8, b: 1, a: 1}
   enemyCurrentHp: 0
   myBody: {fileID: 0}
@@ -1033,7 +1035,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 1319517528997712}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.4
+  m_Radius: 0.6
   m_Speed: 3.5
   m_Acceleration: 1.5
   avoidancePriority: 50

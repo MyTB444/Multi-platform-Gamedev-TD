@@ -83,12 +83,10 @@ public class ArrowProjectile : TowerProjectileBase
         if (distance < closeRangeThreshold)
         {
             gravityMultiplier = 3f + closeRangeGravityBoost;
-            Debug.Log($"[Arrow] CLOSE RANGE - Distance: {distance:F2} | Threshold: {closeRangeThreshold} | Gravity: {gravityMultiplier:F2}");
         }
         else
         {
             gravityMultiplier = 3f;
-            Debug.Log($"[Arrow] NORMAL RANGE - Distance: {distance:F2} | Gravity: {gravityMultiplier:F2}");
         }
     
         rb.useGravity = false;
