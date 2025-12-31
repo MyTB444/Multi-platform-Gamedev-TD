@@ -55,6 +55,11 @@ public class EnemyBase : MonoBehaviour, IDamageable
     [SerializeField] private Transform centerPoint;
     [SerializeField] private Transform bottomPoint;
     
+    [Header("Spawn Settings")]
+    [SerializeField] private bool useSpawnGrace = true;
+    [SerializeField] private float spawnGracePeriod = 0.5f;
+    private float spawnTime;
+    
     [Header("Stun Effect")]
     [SerializeField] private Color frozenColor = new Color(0.5f, 0.8f, 1f, 1f);
     private Renderer[] enemyRenderers;
@@ -434,10 +439,27 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public void SetupEnemy(EnemySpawner myNewSpawner, Vector3[] pathWaypoints)
     {
         mySpawner = myNewSpawner;
+        spawnTime = Time.time; // Reset spawn time for grace period
         UpdateWaypoints(pathWaypoints);
         CollectTotalDistance();
         ResetEnemy();
         BeginMovement();
+    }
+    
+    // For minions/summons that spawn without a spawner
+    public void SetupEnemyNoGrace(Vector3[] pathWaypoints)
+    {
+        spawnTime = -spawnGracePeriod; // Skip grace period
+        UpdateWaypoints(pathWaypoints);
+        CollectTotalDistance();
+        ResetEnemy();
+        BeginMovement();
+    }
+    
+    public bool IsTargetable()
+    {
+        if (!useSpawnGrace) return true;
+        return Time.time > spawnTime + spawnGracePeriod;
     }
 
     private void UpdateWaypoints(Vector3[] newWaypoints)
@@ -822,4 +844,28 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public float GetPoisonDurationNormalized(float maxDuration = 4f) => hasPoison ? Mathf.Clamp01((poisonEndTime - Time.time) / maxDuration) : 0f;
     public float GetBleedDurationNormalized(float maxDuration = 4f) => hasBleed ? Mathf.Clamp01((bleedEndTime - Time.time) / maxDuration) : 0f;
     public float GetFrostbiteDurationNormalized(float maxDuration = 3f) => hasFrostbite ? Mathf.Clamp01((frostbiteEndTime - Time.time) / maxDuration) : 0f;
+    public float GetDistanceToNextWaypoint()
+    {
+        if (myWaypoints == null || currentWaypointIndex >= myWaypoints.Length) return 0f;
+        return Vector3.Distance(transform.position, myWaypoints[currentWaypointIndex]);
+    }
+
+    public Vector3 GetNextWaypointPosition()
+    {
+        if (myWaypoints == null || currentWaypointIndex >= myWaypoints.Length) return transform.position;
+        return myWaypoints[currentWaypointIndex];
+    }
+
+    public Vector3 GetDirectionAfterNextWaypoint()
+    {
+        if (myWaypoints == null) return transform.forward;
+    
+        // Need at least 2 more waypoints to know direction after turn
+        if (currentWaypointIndex + 1 >= myWaypoints.Length) return transform.forward;
+    
+        Vector3 currentWaypoint = myWaypoints[currentWaypointIndex];
+        Vector3 nextWaypoint = myWaypoints[currentWaypointIndex + 1];
+    
+        return (nextWaypoint - currentWaypoint).normalized;
+    }
 }

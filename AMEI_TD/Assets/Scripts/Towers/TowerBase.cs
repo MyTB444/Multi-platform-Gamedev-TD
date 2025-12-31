@@ -361,6 +361,9 @@ public class TowerBase : MonoBehaviour
                 EnemyBase decoy = allocatedColliders[i].GetComponent<EnemyBase>();
 
                 if (decoy == null) continue;
+                
+                // Skip enemies in spawn grace period
+                if (!decoy.IsTargetable()) continue;
 
                 float distanceToDecoy = Vector3.Distance(transform.position, decoy.transform.position);
 
@@ -385,6 +388,9 @@ public class TowerBase : MonoBehaviour
             EnemyBase newEnemy = allocatedColliders[i].GetComponent<EnemyBase>();
 
             if (newEnemy == null) continue;
+            
+            // Skip enemies in spawn grace period
+            if (!newEnemy.IsTargetable()) continue;
 
             float distanceToEnemy = Vector3.Distance(transform.position, newEnemy.transform.position);
 

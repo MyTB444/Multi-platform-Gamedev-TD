@@ -8,6 +8,8 @@ public class ArrowProjectile : TowerProjectileBase
     [SerializeField] private float curveStrength = 8f;
     [SerializeField] private float gravityMultiplier = 3f;
     [SerializeField] private float maxCurveDuration = 0.5f;
+    [SerializeField] private float closeRangeGravityBoost = 3f;
+    [SerializeField] private float closeRangeThreshold = 6f;
     
     [Header("VFX")]
     [SerializeField] private Transform vfxPoint;
@@ -74,10 +76,21 @@ public class ArrowProjectile : TowerProjectileBase
         launchTime = Time.time;
         targetPosition = targetPos;
         initialForward = transform.forward;
-        
+    
         arrowSpeed = newSpeed + (distance * 0.5f);
         maxCurveDuration = 0.3f + (distance * 0.05f);
-        
+    
+        if (distance < closeRangeThreshold)
+        {
+            gravityMultiplier = 3f + closeRangeGravityBoost;
+            Debug.Log($"[Arrow] CLOSE RANGE - Distance: {distance:F2} | Threshold: {closeRangeThreshold} | Gravity: {gravityMultiplier:F2}");
+        }
+        else
+        {
+            gravityMultiplier = 3f;
+            Debug.Log($"[Arrow] NORMAL RANGE - Distance: {distance:F2} | Gravity: {gravityMultiplier:F2}");
+        }
+    
         rb.useGravity = false;
         rb.velocity = initialForward * arrowSpeed;
         launched = true;

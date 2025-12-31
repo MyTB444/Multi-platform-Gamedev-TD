@@ -115,29 +115,47 @@ public class SpearTower : TowerBase
     private Vector3 PredictTargetPosition()
     {
         EnemyBase targetToPredict = isAttacking && lockedTarget != null ? lockedTarget : currentEnemy;
-        
+    
         if (targetToPredict == null || !targetToPredict.gameObject.activeSelf) return Vector3.zero;
-        
+    
         Vector3 spawnPos = spearVisual.transform.position;
         Vector3 enemyCenter = targetToPredict.GetCenterPoint();
-        
-        Vector3 predictedPos = enemyCenter;
-        
-        for (int i = 0; i < 3; i++)
-        {
-            float distance = Vector3.Distance(spawnPos, predictedPos);
-            float flightTime = distance / projectileSpeed;
-            float totalTime = throwAnimationDelay + flightTime;
-            
-            Vector3 movement = enemyVelocity * totalTime;
-            predictedPos = new Vector3(
-                enemyCenter.x + movement.x,
-                enemyCenter.y,
-                enemyCenter.z + movement.z
-            );
-        }
-        
+    
+        float distance = Vector3.Distance(spawnPos, enemyCenter);
+        float flightTime = distance / projectileSpeed;
+        float totalTime = throwAnimationDelay + flightTime;
+    
+        // Scale prediction based on distance (less prediction at close range)
+        float predictionScale = Mathf.Clamp01(distance / attackRange);
+        totalTime *= predictionScale;
+    
+        Vector3 predictedPos = GetPathAwarePrediction(targetToPredict, totalTime);
+        predictedPos.y = enemyCenter.y;
+    
         return predictedPos;
+    }
+
+    private Vector3 GetPathAwarePrediction(EnemyBase target, float predictionTime)
+    {
+        Vector3 currentPos = target.transform.position;
+        float speed = enemyVelocity.magnitude;
+    
+        if (speed < 0.1f) return target.GetCenterPoint();
+    
+        float travelDistance = speed * predictionTime;
+        float distanceToWaypoint = target.GetDistanceToNextWaypoint();
+    
+        if (distanceToWaypoint <= 0 || travelDistance < distanceToWaypoint)
+        {
+            return currentPos + (enemyVelocity * predictionTime);
+        }
+    
+        float timeToWaypoint = distanceToWaypoint / speed;
+        Vector3 waypointPos = target.GetNextWaypointPosition();
+        float remainingTime = predictionTime - timeToWaypoint;
+        Vector3 directionAfterTurn = target.GetDirectionAfterNextWaypoint();
+    
+        return waypointPos + (directionAfterTurn * speed * remainingTime);
     }
     
     protected override void HandleRotation()
@@ -161,8 +179,25 @@ public class SpearTower : TowerBase
     
     protected override bool CanAttack()
     {
+        if (currentEnemy == null) return false;
+    
+        // Check if facing enemy (within 15 degrees)
+        if (!IsFacingEnemy(15f)) return false;
+    
         bool hasValidTracking = velocityFrameCount > 1;
         return base.CanAttack() && !isAttacking && hasValidTracking;
+    }
+
+    private bool IsFacingEnemy(float maxAngle)
+    {
+        if (currentEnemy == null || towerBody == null) return false;
+    
+        Vector3 directionToEnemy = currentEnemy.transform.position - towerBody.position;
+        directionToEnemy.y = 0;
+    
+        float angle = Vector3.Angle(towerBody.forward, directionToEnemy);
+    
+        return angle <= maxAngle;
     }
     
     protected override void Attack()
