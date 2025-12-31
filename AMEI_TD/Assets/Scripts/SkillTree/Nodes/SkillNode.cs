@@ -12,6 +12,15 @@ public enum SwapType
     BladeTower
 }
 
+public enum SpellEnableType
+{
+    Null,
+    Physical,
+    Magical,
+    Mechanical,
+    Imaginary
+}
+
 [CreateAssetMenu(fileName = "NewSkill", menuName = "Skill Tree/Skill Node")]
 public class SkillNode : ScriptableObject
 {
@@ -32,6 +41,7 @@ public class SkillNode : ScriptableObject
     public TowerUpgradeType function;
     public TowerUpgradeType function2;
     public SwapType swapType;
+    public SpellEnableType spellEnableType;
     public event Action<SwapType> EventRaised;
 
     public void ApplyEffect()
@@ -43,6 +53,8 @@ public class SkillNode : ScriptableObject
         }
         if(swapType != SwapType.Null)
         Raise(swapType);
+        if(spellEnableType != SpellEnableType.Null)
+        EnableSpell(spellEnableType);
         
     }
     public void RemoveEffect()
@@ -56,5 +68,9 @@ public class SkillNode : ScriptableObject
     public void Raise(SwapType type)
     {
         EventRaised.Invoke(type);
+    }
+    public void EnableSpell(SpellEnableType type)
+    {
+        SpellFunctionality.instance.EnableButton(type);
     }
 }
