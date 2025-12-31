@@ -531,8 +531,7 @@ public class TowerBase : MonoBehaviour
     {
         if (attackSpawnEffectPrefab != null && gunPoint != null)
         {
-            GameObject spawnVFX = Instantiate(attackSpawnEffectPrefab, gunPoint.position, Quaternion.identity);
-            Destroy(spawnVFX, 2f);
+            ObjectPooling.instance.GetVFX(attackSpawnEffectPrefab, gunPoint.position, Quaternion.identity, 2f);
         }
 
         Vector3 directionToEnemy = DirectionToEnemyFrom(gunPoint);

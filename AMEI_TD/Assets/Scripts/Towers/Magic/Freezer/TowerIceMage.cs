@@ -64,8 +64,7 @@ public class TowerIceMage : TowerBase
     {
         if (attackSpawnEffectPrefab != null && gunPoint != null)
         {
-            GameObject spawnVFX = Instantiate(attackSpawnEffectPrefab, gunPoint.position, Quaternion.identity);
-            Destroy(spawnVFX, 0.5f);
+            ObjectPooling.instance.GetVFX(attackSpawnEffectPrefab, gunPoint.position, Quaternion.identity, 0.5f);
         }
     
         if (projectilePrefab == null || gunPoint == null) return;

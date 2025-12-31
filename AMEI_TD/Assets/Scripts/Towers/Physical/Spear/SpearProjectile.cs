@@ -38,12 +38,12 @@ public class SpearProjectile : TowerProjectileBase
         isExplosive = false;
         explosionVFX = null;
     
-        // Destroy any child VFX from previous use
+        // Return any child VFX from previous use to pool
         if (vfxPoint != null)
         {
             foreach (Transform child in vfxPoint)
             {
-                Destroy(child.gameObject);
+                ObjectPooling.instance.Return(child.gameObject);
             }
         }
     
@@ -100,7 +100,7 @@ public class SpearProjectile : TowerProjectileBase
         if (spearVFX != null)
         {
             Transform spawnPoint = vfxPoint != null ? vfxPoint : transform;
-            GameObject vfx = Instantiate(spearVFX, spawnPoint);
+            GameObject vfx = ObjectPooling.instance.GetVFXWithParent(spearVFX, spawnPoint, -1f);
             vfx.transform.localPosition = Vector3.zero;
         }
     }
@@ -133,8 +133,7 @@ public class SpearProjectile : TowerProjectileBase
 
         if (impactEffectPrefab != null)
         {
-            GameObject impact = Instantiate(impactEffectPrefab, impactPoint, Quaternion.identity);
-            Destroy(impact, 2f);
+            ObjectPooling.instance.GetVFX(impactEffectPrefab, impactPoint, Quaternion.identity, 2f);
         }
 
         // Deal impact damage
@@ -156,8 +155,7 @@ public class SpearProjectile : TowerProjectileBase
         
             if (explosionVFX != null)
             {
-                GameObject vfx = Instantiate(explosionVFX, impactPoint, Quaternion.identity);
-                Destroy(vfx, 2f);
+                ObjectPooling.instance.GetVFX(explosionVFX, impactPoint, Quaternion.identity, 2f);
             }
 
             Collider[] enemies = Physics.OverlapSphere(explosionCenter, explosionRadius, enemyLayer);

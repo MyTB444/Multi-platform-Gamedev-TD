@@ -100,14 +100,14 @@ public class SpearTower : TowerBase
     {
         if (activeSpearVisualVFX != null)
         {
-            Destroy(activeSpearVisualVFX);
+            ObjectPooling.instance.Return(activeSpearVisualVFX);
             activeSpearVisualVFX = null;
         }
     
         if (bleedSpear && bleedSpearVFX != null)
         {
             Transform spawnPoint = spearVisualVFXPoint != null ? spearVisualVFXPoint : spearVisual.transform;
-            activeSpearVisualVFX = Instantiate(bleedSpearVFX, spawnPoint);
+            activeSpearVisualVFX = ObjectPooling.instance.GetVFXWithParent(bleedSpearVFX, spawnPoint, -1f);
             activeSpearVisualVFX.transform.localPosition = Vector3.zero;
         }
     }

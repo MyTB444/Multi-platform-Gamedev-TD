@@ -139,13 +139,12 @@ public class IceProjectile : TowerProjectileBase
             {
                 // Reached destination - apply AoE and destroy
                 ApplyEffectsInRadius();
-                
+
                 if (impactEffectPrefab != null)
                 {
-                    GameObject impact = Instantiate(impactEffectPrefab, transform.position, Quaternion.identity);
-                    Destroy(impact, 2f);
+                    ObjectPooling.instance.GetVFX(impactEffectPrefab, transform.position, Quaternion.identity, 2f);
                 }
-                
+
                 DestroyProjectile();
             }
         }
