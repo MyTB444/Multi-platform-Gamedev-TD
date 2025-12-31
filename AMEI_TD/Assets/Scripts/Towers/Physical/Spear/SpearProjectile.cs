@@ -170,8 +170,6 @@ public class SpearProjectile : TowerProjectileBase
                 }
             }
         }
-
-        DestroyProjectile();
     }
     
     protected override void DestroyProjectile()
