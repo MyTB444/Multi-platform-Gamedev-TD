@@ -52,7 +52,7 @@ public class EnemyDecoy : EnemyBase
         }
     }
 
-    public override void TakeDamage(DamageInfo damageInfo)
+    public override void TakeDamage(DamageInfo damageInfo,float vfxDamage = 0,bool spellDamageEnabled = false)
     {
         if (isDecoy)
         {
@@ -63,7 +63,7 @@ public class EnemyDecoy : EnemyBase
         base.TakeDamage(damageInfo);
     }
 
-    public override void TakeDamage(float incomingDamage)
+    public override void TakeDamage(float incomingDamage, float vfxDamage = 0, bool spellDamageEnabled = false)
     {
         TakeDamage(new DamageInfo(incomingDamage, ElementType.Physical));
     }

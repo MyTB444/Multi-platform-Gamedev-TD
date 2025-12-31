@@ -1,43 +1,31 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyVFXPool : MonoBehaviour
 {
-
     private List<GameObject> vfxGameObjects = new();
-    private ObjectPooling objectPoolingInstance = null;
-
-    private void OnEnable()
-    {
-        objectPoolingInstance = ObjectPooling.instance;
-    }
 
     public void PoolVFXGameObjects()
     {
-        for(int i = 0; i < transform.childCount;i++)
+        // Collect all child VFX objects
+        vfxGameObjects.Clear();
+        for (int i = 0; i < transform.childCount; i++)
         {
             vfxGameObjects.Add(transform.GetChild(i).gameObject);
         }
-        if(vfxGameObjects.Count > 0)
+
+        // Return them all to pool
+        if (vfxGameObjects.Count > 0)
         {
-            foreach(GameObject o in vfxGameObjects)
+            foreach (GameObject o in vfxGameObjects)
             {
                 if (o != null)
                 {
-                    objectPoolingInstance.ReturnGameObejctToPool(poolType, o);
-                    for (int i = 0; i < objectPoolingInstance.listOfPoolInfoRef.Count; i++)
-                    {
-                        if (poolType == objectPoolingInstance.listOfPoolInfoRef[i].objectType)
-                        {
-                            o.transform.parent = objectPoolingInstance.listOfPoolInfoRef[i].Container.transform;
-                        }
-                    }
+                    o.transform.parent = null;
+                    ObjectPooling.instance.Return(o);
                 }
             }
+            vfxGameObjects.Clear();
         }
-
     }
-   
-    public PoolGameObjectType poolType { get; set; }
 }

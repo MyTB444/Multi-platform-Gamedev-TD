@@ -151,7 +151,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private bool enemyHealthBarStatus = false;
     private bool spellsActivated = false;
     
-    private void OnEnable()
+    protected virtual void OnEnable()
     {
         UpdateVisuals();
         NavAgent = GetComponent<NavMeshAgent>();
@@ -806,7 +806,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
     }
 
-    private void Die()
+    public void Die()
     {
         if (GameManager.instance != null)
         {
@@ -941,10 +941,14 @@ public class EnemyBase : MonoBehaviour, IDamageable
       
     }
 
-    private void UpdateVisuals()
+    public void UpdateVisuals()
     {
-        Renderer r = GetComponent<Renderer>();
-        if (r == null) return;
+        Renderer r = GetComponentInChildren<Renderer>();
+        if (r == null)
+        {
+            Debug.LogWarning($"[{gameObject.name}] No Renderer found on root object!");
+            return;
+        }
 
         Color finalColor = enemyColor;
 

@@ -305,7 +305,7 @@ GameObject:
   - component: {fileID: 2636003380119713654}
   m_Layer: 6
   m_Name: EnemyGhostwalk
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -398,9 +398,14 @@ MonoBehaviour:
   enemyColor: {r: 1, g: 1, b: 1, a: 1}
   centerPoint: {fileID: 6089701425207453296}
   bottomPoint: {fileID: 1001565865313448867}
-  slowEffectPrefab: {fileID: 0}
+  useSpawnGrace: 1
+  spawnGracePeriod: 0.5
   frozenColor: {r: 0.5, g: 0.8, b: 1, a: 1}
   enemyCurrentHp: 0
+  myBody: {fileID: 0}
+  enemyHealthDisplayCanvas: {fileID: 0}
+  healthBar: {fileID: 0}
+  enemyVFXPoolScriptRef: {fileID: 0}
 --- !u!195 &2636003380119713654
 NavMeshAgent:
   m_ObjectHideFlags: 0

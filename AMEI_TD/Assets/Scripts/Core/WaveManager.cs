@@ -128,8 +128,12 @@ public class WaveManager : MonoBehaviour
     {
         instance = this;
         enemySpawners = new List<EnemySpawner>(FindObjectsByType<EnemySpawner>(FindObjectsSortMode.None));
-
         enemyPrefabLookup = new Dictionary<EnemyType, GameObject>();
+    }
+
+    private void Start()
+    {
+        // Register enemy prefabs with pool
         foreach (var config in enemyPrefabs)
         {
             if (config.prefab != null)

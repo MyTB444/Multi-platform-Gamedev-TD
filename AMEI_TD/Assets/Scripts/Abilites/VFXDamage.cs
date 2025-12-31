@@ -1,10 +1,7 @@
-
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization;
 using UnityEngine;
 using static SpellAbility;
 using Random = UnityEngine.Random;
@@ -23,12 +20,24 @@ public class VFXDamage : MonoBehaviour
 
     public List<EnemyBase> enemies = new();
 
-   
+    [Header("VFX Prefabs")]
+    [SerializeField] private GameObject tinyFlamesPrefab;
 
- 
+    [Header("Settings")]
+    [SerializeField] private float magicDisableTime = 5f;
+    [SerializeField] private float tinyFlamesDisableTime = 5f;
+
+    private void Start()
+    {
+        if (tinyFlamesPrefab != null)
+        {
+            ObjectPooling.instance.Register(tinyFlamesPrefab, 20);
+        }
+    }
+    
     private void OnEnable()
     {
-        spellType =   instance.currenSpellType;
+        spellType = instance.currenSpellType;
         enemyBaseGameObjectRef = null;
         EnemyDictionary.Clear();    
         stopFlames = false;
@@ -36,19 +45,16 @@ public class VFXDamage : MonoBehaviour
 
         if (spellType == SpellType.Magic)
         {
-            StartCoroutine(DisableVFXGameObject(5f,PoolGameObjectType.MagicArea));
-
+            StartCoroutine(DisableVFXGameObject(magicDisableTime));
         }
     }
 
-    
     private void DisableTinyFlames(GameObject other)
     {
         if (gameObject != null)
         {
             if (gameObject.CompareTag("TinyFlames"))
             {
-           
                 Debug.Log("Takingdamage");
                 if (enemyBaseGameObjectRef.isDeadProperty)
                 {
@@ -57,26 +63,31 @@ public class VFXDamage : MonoBehaviour
 
                 enemyBaseGameObjectRef.TakeDamage(0f, 0.00005f, true);
 
-
                 if (other.gameObject != null && other.gameObject.activeInHierarchy)
                 {
-                    StartCoroutine(DisableVFXGameObject(5f, PoolGameObjectType.TinyFlames));
+                    StartCoroutine(DisableTinyFlamesAfterDelay(tinyFlamesDisableTime));
                 }
             }
         }
     }
 
+    private IEnumerator DisableTinyFlamesAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (gameObject != null && gameObject.activeInHierarchy)
+        {
+            ObjectPooling.instance.Return(gameObject);
+        }
+    }
+
     private void OnParticleCollision(GameObject other)
     {
-      
         if (other.gameObject.CompareTag("Enemy"))
         {
-           
             enemyBaseGameObjectRef = other.gameObject.GetComponent<EnemyBase>();
             enemyBaseGameObjectRef.GetRefOfVfxDamageScript(this);
-           
 
- ;          if (!enemyBaseGameObjectRef.isInvisible)
+            if (!enemyBaseGameObjectRef.isInvisible)
             {
                 switch (spellType)
                 {
@@ -93,16 +104,11 @@ public class VFXDamage : MonoBehaviour
                             StartCoroutine(EnableFlameDamage(other, 1));
                         }
                         break;
-
-
-
                 }
             }
             DisableTinyFlames(other);
         }
     }
-
-    
 
     private Vector3 ReturnRandomPointOnMesh(Bounds bounds)
     {
@@ -111,29 +117,23 @@ public class VFXDamage : MonoBehaviour
 
     public IEnumerator EnableLiftDamage(EnemyBase enemyBase)
     {
-        
         if (enemyBase.gameObject != null && enemyBase.gameObject.activeInHierarchy && enemyBase != null)
         {
             enemyBase.enemyBaseRef = enemyBase;
-            enemyBase.LiftEffectFunction(true,false);
+            enemyBase.LiftEffectFunction(true, false);
             enemies.Add(enemyBaseGameObjectRef);
-            //enemyBaseGameObjectRef.TakeDamage(0f, 1f, true);
 
             Vector3 startPos = enemyBase.transform.position;
             Vector3 targetPos = new Vector3(startPos.x, startPos.y + 2, startPos.z);
         
             float duration = 1f;
             float elapsed = 0f;
-        
-      
+
             while (elapsed < duration)
             {
                 elapsed += Time.deltaTime;
                 float t = elapsed / duration;
-            
-          
                 enemyBase.transform.position = Vector3.Lerp(startPos, targetPos, t);
-            
                 yield return null; 
             }
             enemyBase.transform.position = targetPos;
@@ -142,11 +142,8 @@ public class VFXDamage : MonoBehaviour
             
             if (enemyBase.transform.position != startPos)
             {
-               
                 while (elapsed < duration)
                 {
-                 
-
                     elapsed += Time.deltaTime;
                     if (enemyBase != null)
                     {
@@ -156,28 +153,19 @@ public class VFXDamage : MonoBehaviour
                             enemyBase.TakeDamage(0f, 0.0000004f, true);
                         }
                     }
-                    if(enemyBase.isDeadProperty)
+                    if (enemyBase.isDeadProperty)
                     { 
                         enemyBase = null;
                         enemies.Remove(enemyBase);
                         break;
-
                     }
-                        yield return null;  
-                 
+                    yield return null;  
                 }
             }
-
-
-
-
-       
-
         }
     }
 
-
-    public IEnumerator EnableFlameDamage(GameObject other,float timeToEnableDamage)
+    public IEnumerator EnableFlameDamage(GameObject other, float timeToEnableDamage)
     {
         if (other.gameObject != null && other.gameObject.activeInHierarchy && gameObject != null)
         {
@@ -191,40 +179,28 @@ public class VFXDamage : MonoBehaviour
 
                     GameObject tinyFlames;
 
-                   
-
                     for (int i = 0; i < skinnedMeshRenderer.Count; i++)
                     {
-
                         if (!EnemyDictionary.ContainsKey(enemyBaseGameObjectRef))
                         {
-
                             if (!stopFlames)
                             {
-                               
-                               
                                 if (skinnedMeshRenderer[i] != null && enemyBaseGameObjectRef.vfxContainer.gameObject != null)
                                 {
-
                                     Debug.Log("found");
                                     for (int j = 0; j <= 4; j++)
                                     {
-                                        tinyFlames = ObjectPooling.instance.GetPoolObject(PoolGameObjectType.TinyFlames);
+                                        tinyFlames = ObjectPooling.instance.Get(tinyFlamesPrefab);
                                         if (tinyFlames != null)
                                         {                                         
                                             tinyFlames.transform.parent = enemyBaseGameObjectRef.vfxContainer.gameObject.transform;
-                                            enemyBaseGameObjectRef.vfxContainer.poolType = PoolGameObjectType.TinyFlames;
                                             tinyFlames.transform.localPosition = ReturnRandomPointOnMesh(skinnedMeshRenderer[i].localBounds) - enemyBaseGameObjectRef.vfxContainer.gameObject.transform.localPosition;
                                             tinyFlames.transform.rotation = Quaternion.Euler(-90, 0, 0);
                                             tinyFlames.SetActive(true);
                                         }
                                     }
                                 }
-
-                                
-
                             }
-
                         }
                         if (!EnemyDictionary.ContainsKey(enemyBaseGameObjectRef))
                         {
@@ -239,34 +215,25 @@ public class VFXDamage : MonoBehaviour
                         EnemyDictionary.Remove(enemyBaseGameObjectRef);
                     }
 
-                    enemyBaseGameObjectRef.TakeDamage(0f,0.0000003f, true);
-                   
-
+                    enemyBaseGameObjectRef.TakeDamage(0f, 0.0000003f, true);
                 }
-
             }
-
-           
         }
     }
 
-    
-
-
-    private IEnumerator DisableVFXGameObject(float disableTime,PoolGameObjectType type)
+    private IEnumerator DisableVFXGameObject(float disableTime)
     {
         yield return new WaitForSeconds(disableTime);
         if (gameObject != null && gameObject.activeInHierarchy)
         {
-           
-            foreach(EnemyBase o in enemies)
+            foreach (EnemyBase o in enemies)
             {
                 StopCoroutine(EnableLiftDamage(o));
-                o.LiftEffectFunction(false,false);
+                o.LiftEffectFunction(false, false);
             }
             enemies.Clear();
            
-            ObjectPooling.instance.ReturnGameObejctToPool(type, this.gameObject);
+            ObjectPooling.instance.Return(gameObject);
         }
     }
 }

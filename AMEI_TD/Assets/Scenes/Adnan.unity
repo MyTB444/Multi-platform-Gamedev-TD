@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.18028504, g: 0.22571605, b: 0.30692485, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -921,6 +921,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9caf9a10882248f1aa030ba0e9b958f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  guardianTowerPrefab: {fileID: 0}
+  guardianSpawnPoint: {fileID: 0}
 --- !u!54 &97172827
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2053,6 +2055,10 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: difficultyTiers.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: levelWaves.Array.data[0].enemyFast
       value: 0
       objectReference: {fileID: 0}
@@ -2065,12 +2071,76 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: levelWaves.Array.data[0].enemyDecoy
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: levelWaves.Array.data[0].enemyHexer
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: levelWaves.Array.data[0].enemyHerald
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: difficultyTiers.Array.data[0].endWave
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: difficultyTiers.Array.data[0].tierName
+      value: easy
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: levelWaves.Array.data[0].enemyAdaptive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: levelWaves.Array.data[0].enemySplitter
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: levelWaves.Array.data[0].enemySummoner
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: difficultyTiers.Array.data[0].startWave
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: levelWaves.Array.data[0].enemyGhostwalk
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: levelWaves.Array.data[0].enemyInvisible
-      value: 15
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: levelWaves.Array.data[0].enemyReinforced
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: difficultyTiers.Array.data[0].baseEnemyCount
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: difficultyTiers.Array.data[0].spawnRateMultiplier
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: difficultyTiers.Array.data[0].enemyWeights.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: difficultyTiers.Array.data[0].enemyWeights.Array.data[0].weight
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: difficultyTiers.Array.data[0].enemyWeights.Array.data[0].minCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: difficultyTiers.Array.data[0].enemyWeights.Array.data[0].enemyType
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4039,52 +4109,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98e50094162c9f748a3f3d5bec406e41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  listOfPool:
-  - objectType: 0
-    amount: 5
-    gameObjectPrefab: {fileID: 1812659917213882, guid: c68e7ecf54453e247816a0362e922e0c, type: 3}
-    Container: {fileID: 2122774838}
-    pool: []
-  - objectType: 1
-    amount: 5
-    gameObjectPrefab: {fileID: 8663543207204576051, guid: e3c65aa6917ec5744b5fbb6f58025d78, type: 3}
-    Container: {fileID: 63298847}
-    pool: []
-  - objectType: 2
-    amount: 5
-    gameObjectPrefab: {fileID: 3155058319838657794, guid: 5683b0ddd461bba46886a7db5fff0655, type: 3}
-    Container: {fileID: 8405838}
-    pool: []
-  - objectType: 3
-    amount: 5
-    gameObjectPrefab: {fileID: 1931298151966786, guid: 928a1377c1cd4515b208fef3a396b8ea, type: 3}
-    Container: {fileID: 468316635}
-    pool: []
-  - objectType: 4
-    amount: 5
-    gameObjectPrefab: {fileID: 6753617674297473082, guid: 24a0663f813d4beb91fc0c6b1e8fef36, type: 3}
-    Container: {fileID: 2007826587}
-    pool: []
-  - objectType: 5
-    amount: 5
-    gameObjectPrefab: {fileID: 1478314613700728, guid: 224a1998458f53046ac1d128a2e36871, type: 3}
-    Container: {fileID: 516912011}
-    pool: []
-  - objectType: 6
-    amount: 5
-    gameObjectPrefab: {fileID: 1691079832961232890, guid: 1e1134ee9e549224c9dc871b0651dcf2, type: 3}
-    Container: {fileID: 402781434}
-    pool: []
-  - objectType: 7
-    amount: 5
-    gameObjectPrefab: {fileID: 1972207730512856, guid: 3cbf6e6c4aae0e6418e9f176d49eb910, type: 3}
-    Container: {fileID: 2044749091}
-    pool: []
-  - objectType: 8
-    amount: 5
-    gameObjectPrefab: {fileID: 2433282508537954060, guid: 596ba3c68872fa04680c3545016bfaa6, type: 3}
-    Container: {fileID: 221535493}
-    pool: []
+  prewarmList: []
 --- !u!114 &696942726
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -4097,6 +4122,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6db54654d435bb844b22dae64f6bd0fe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  flamesPrefab: {fileID: 1478314613700728, guid: 224a1998458f53046ac1d128a2e36871, type: 3}
+  magicAreaPrefab: {fileID: 1691079832961232890, guid: 1e1134ee9e549224c9dc871b0651dcf2, type: 3}
+  bombPrefab: {fileID: 2433282508537954060, guid: 596ba3c68872fa04680c3545016bfaa6, type: 3}
+  flamesPoolSize: 20
+  magicAreaPoolSize: 5
+  bombPoolSize: 3
 --- !u!1 &735185501
 GameObject:
   m_ObjectHideFlags: 0
@@ -9944,6 +9975,14 @@ PrefabInstance:
       propertyPath: myWaveManager
       value: 
       objectReference: {fileID: 21444031}
+    - target: {fileID: 50270837286503495, guid: 210cb4476c27d0e41a846c27c876e029, type: 3}
+      propertyPath: myPaths.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 50270837286503495, guid: 210cb4476c27d0e41a846c27c876e029, type: 3}
+      propertyPath: 'myPaths.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1978539555}
     - target: {fileID: 1935223657795649038, guid: 210cb4476c27d0e41a846c27c876e029, type: 3}
       propertyPath: m_LocalPosition.y
       value: -0.83

@@ -921,7 +921,7 @@ GameObject:
   - component: {fileID: 6103288044349779554}
   m_Layer: 6
   m_Name: EnemyAdaptive
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -990,9 +990,14 @@ MonoBehaviour:
   enemyColor: {r: 1, g: 1, b: 1, a: 1}
   centerPoint: {fileID: 5776650510235100290}
   bottomPoint: {fileID: 4598871752029273715}
-  slowEffectPrefab: {fileID: 4259526894524806451, guid: cca859937b8679b49b3fc3dc323ef370, type: 3}
+  useSpawnGrace: 1
+  spawnGracePeriod: 0.5
   frozenColor: {r: 0.5, g: 0.8, b: 1, a: 1}
   enemyCurrentHp: 0
+  myBody: {fileID: 0}
+  enemyHealthDisplayCanvas: {fileID: 0}
+  healthBar: {fileID: 0}
+  enemyVFXPoolScriptRef: {fileID: 0}
   defaultElementType: 2
   visualObject: {fileID: 1179448459918566}
   colorTransitionSpeed: 1

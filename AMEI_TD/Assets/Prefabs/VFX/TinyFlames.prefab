@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 198714429152696258}
   - component: {fileID: 199604171885040012}
   - component: {fileID: 8341444781433430922}
-  m_Layer: 10
+  m_Layer: 11
   m_Name: TinyFlames
   m_TagString: TinyFlames
   m_Icon: {fileID: 0}
@@ -3799,7 +3799,7 @@ ParticleSystem:
     radiusScale: 0.01
     collidesWith:
       serializedVersion: 2
-      m_Bits: 2048
+      m_Bits: 64
     maxCollisionShapes: 2
     quality: 0
     voxelSize: 0.5
@@ -4856,3 +4856,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stopFlames: 0
+  stopMagic: 0
+  enemies: []
+  tinyFlamesPrefab: {fileID: 1972207730512856}
+  magicDisableTime: 5
+  tinyFlamesDisableTime: 5

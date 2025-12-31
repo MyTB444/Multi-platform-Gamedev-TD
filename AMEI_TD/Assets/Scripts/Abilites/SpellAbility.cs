@@ -13,22 +13,48 @@ public class SpellAbility : MonoBehaviour
     private Vector3 currentMousePosition;
     private Dictionary<Vector3, Vector3> mousePositionDictionary = new();
 
-    public enum SpellType {Physical,Magic,Mechanic,Imaginary}
+    public enum SpellType { Physical, Magic, Mechanic, Imaginary }
     private EnemyBase enemyBaseGameObjectRef;
     private Collider[] colliders = new Collider[20];
     private int MaxResizeArray = 3;
     private int resizeCount;
 
+    [Header("VFX Prefabs")]
+    [SerializeField] private GameObject flamesPrefab;
+    [SerializeField] private GameObject magicAreaPrefab;
+    [SerializeField] private GameObject bombPrefab;
+
+    [Header("Pool Settings")]
+    [SerializeField] private int flamesPoolSize = 20;
+    [SerializeField] private int magicAreaPoolSize = 5;
+    [SerializeField] private int bombPoolSize = 3;
+
     private void Awake()
     {
         instance = this;
     }
+
+    private void Start()
+    {
+        // Register prefabs with pool
+        if (flamesPrefab != null)
+        {
+            ObjectPooling.instance.Register(flamesPrefab, flamesPoolSize);
+        }
+        if (magicAreaPrefab != null)
+        {
+            ObjectPooling.instance.Register(magicAreaPrefab, magicAreaPoolSize);
+        }
+        if (bombPrefab != null)
+        {
+            ObjectPooling.instance.Register(bombPrefab, bombPoolSize);
+        }
+    }
+
     private void OnEnable()
     {
         FireSpellActivated = false;
         MagicSpellActivated = false;
-
-       
     }
 
     private void Update()
@@ -45,11 +71,9 @@ public class SpellAbility : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
-
             FireSpellActivated = true;
             currenSpellType = SpellType.Physical;
             stopFire = false;
-
         }
         if (Input.GetKeyDown(KeyCode.B))
         {
@@ -62,10 +86,9 @@ public class SpellAbility : MonoBehaviour
         {
             currenSpellType = SpellType.Mechanic;
             MechanicSpellActivated = true;
-
         }
 
-        if(Input.GetKeyDown(KeyCode.E))
+        if (Input.GetKeyDown(KeyCode.E))
         {
             currenSpellType = SpellType.Imaginary;
             ImaginarySpellActivated = true;
@@ -73,21 +96,17 @@ public class SpellAbility : MonoBehaviour
 
         #region FireSpell
 
-
         if (FireSpellActivated && currenSpellType == SpellType.Physical)
         {
             CanSelectPaths = true;
             FireSpell();
-
         }
         #endregion
 
         #region MagicSpell
-        
 
-        if(MagicSpellActivated)
+        if (MagicSpellActivated)
         {
-           
             CanSelectPaths = true;
             MagicSpell();
         }
@@ -97,35 +116,35 @@ public class SpellAbility : MonoBehaviour
 
         if (MechanicSpellActivated)
         {
-
             if (Input.GetMouseButton(0))
             {
                 EnableMechanicDamage();
             }
-            
         }
         #endregion
 
         #region ImaginarySpell
-        
-        if(ImaginarySpellActivated)
+
+        if (ImaginarySpellActivated)
         {
-            EnemyBase[] enemies = FindObjectsByType<EnemyBase>(FindObjectsInactive.Exclude,FindObjectsSortMode.None);
+            EnemyBase[] enemies = FindObjectsByType<EnemyBase>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
+            Debug.Log($"[Imaginary Spell] Found {enemies.Length} enemies");
+    
             if (enemies != null)
             {
-        
                 if (enemies.Length > 0)
                 {
                     foreach (EnemyBase enemy in enemies)
                     {
                         if (enemy != null)
                         {
+                            Debug.Log($"[Imaginary Spell] Enemy: {enemy.name} | isInvisible: {enemy.isInvisible}");
+                    
                             if (enemy.isInvisible)
                             {
-                               
                                 enemy.isInvisible = false;
                                 enemy.UpdateVisuals();
-                                
+                                Debug.Log($"[Imaginary Spell] Revealed {enemy.name}");
                             }
                         }
                     }
@@ -137,33 +156,23 @@ public class SpellAbility : MonoBehaviour
         #endregion
     }
 
-
-
-
     #region FireSpell
 
     public void FireSpell()
     {
-
         if (selectedPath != null)
         {
-            
             if (!stopFire)
             {
                 for (int i = 0; i <= (int)selectedPath.FlameArea.bounds.size.magnitude * 3; i++)
                 {
-
-
-                    flames.Add(ObjectPooling.instance.GetPoolObject(PoolGameObjectType.Flames));                 
-                    if (flames.Count > 0 && flames[i] != null)
+                    GameObject flame = ObjectPooling.instance.Get(flamesPrefab);
+                    if (flame != null)
                     {
-
-                        flames[i].SetActive(true);
-                        flames[i].transform.position = GiveRandomPointOnMesh(selectedPath.FlameArea.bounds);
-                        flames[i].transform.rotation = Quaternion.identity;
-
-
-
+                        flame.transform.position = GiveRandomPointOnMesh(selectedPath.FlameArea.bounds);
+                        flame.transform.rotation = Quaternion.identity;
+                        flame.SetActive(true);
+                        flames.Add(flame);
                     }
 
                     if (i >= ((int)selectedPath.FlameArea.bounds.size.magnitude) - 1)
@@ -177,6 +186,7 @@ public class SpellAbility : MonoBehaviour
             }
         }
     }
+
     private Vector3 GiveRandomPointOnMesh(Bounds bounds)
     {
         return new Vector3(bounds.center.x, bounds.center.y, Random.Range(bounds.min.z, bounds.max.z));
@@ -188,32 +198,23 @@ public class SpellAbility : MonoBehaviour
 
     public void MagicSpell()
     {
-        
         if (selectedPath != null)
         {
-            
             if (!stopMagic)
             {
-              
                 for (int i = 0; i <= 3; i++)
                 {
-                                         
                     if (!mousePositionDictionary.ContainsKey(currentMousePosition) && currentMousePosition != Vector3.zero)
                     {
-                        magicAreas = ObjectPooling.instance.GetPoolObject(PoolGameObjectType.MagicArea);
+                        magicAreas = ObjectPooling.instance.Get(magicAreaPrefab);
                         if (magicAreas != null)
                         {
-                            
                             mousePositionDictionary.Add(currentMousePosition, magicAreas.transform.position);
                             magicAreas.transform.localPosition = currentMousePosition;
                             magicAreas.transform.rotation = Quaternion.Euler(-90, 0, 0);
                             magicAreas.SetActive(true);
                             selectedPath = null;
-                           
-                        
                         }
-
-
                     }
 
                     if (i >= 2)
@@ -229,11 +230,8 @@ public class SpellAbility : MonoBehaviour
                             break;
                         }
                     }
-                   
                 }
-               
             }
-
         }
     }
 
@@ -249,11 +247,9 @@ public class SpellAbility : MonoBehaviour
             Ray ray = Camera.main.ScreenPointToRay(mousepos);
 
             RaycastHit hit;
-           
-            if (Physics.Raycast(ray,out hit,400f) & hit.collider != null)
-            {
 
-             
+            if (Physics.Raycast(ray, out hit, 400f) & hit.collider != null)
+            {
                 if (hit.collider.gameObject.GetComponent<EnemyBase>() != null)
                 {
                     enemyBaseGameObjectRef = hit.collider.gameObject.GetComponent<EnemyBase>();
@@ -264,28 +260,21 @@ public class SpellAbility : MonoBehaviour
                             enemyBaseGameObjectRef.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().material.color = new(0, 1, 0, 0.5f);
                         }
 
-
                         StartCoroutine(LiftSelectedEnemy(enemyBaseGameObjectRef, false));
                         print($"<color=red> mouseWorldpos </color>" + hit.point);
                         MechanicSpellActivated = false;
                     }
-
                 }
-                    
-               
             }
-
         }
     }
 
-    private IEnumerator LiftSelectedEnemy(EnemyBase enemyBase ,bool isExplosiveDamage)
+    private IEnumerator LiftSelectedEnemy(EnemyBase enemyBase, bool isExplosiveDamage)
     {
         if (enemyBase.gameObject != null && enemyBase.gameObject.activeInHierarchy && enemyBaseGameObjectRef != null)
         {
             enemyBase.enemyBaseRef = enemyBase;
-            enemyBase.LiftEffectFunction(true,true);
-           
-            //enemyBaseGameObjectRef.TakeDamage(0f, 1f, true);
+            enemyBase.LiftEffectFunction(true, true);
 
             Vector3 startPos = enemyBase.transform.position;
             Vector3 targetPos = Vector3.zero;
@@ -295,21 +284,16 @@ public class SpellAbility : MonoBehaviour
             }
             else
             {
-               
-                
                 targetPos = currentMousePosition;
-                
             }
 
             float duration = 1f;
             float elapsed = 0f;
 
-
             while (elapsed < duration)
             {
-                elapsed += Time.deltaTime*2.5f;
+                elapsed += Time.deltaTime * 2.5f;
                 float t = elapsed / duration;
-
 
                 enemyBase.transform.position = Vector3.Lerp(startPos, targetPos, t);
 
@@ -319,109 +303,97 @@ public class SpellAbility : MonoBehaviour
 
             if (isExplosiveDamage)
             {
-               
-
                 CanSelectPaths = false;
                 selectedPath = null;
                 enemyBase.myBody.isKinematic = true;
                 EnableExplosiveDamage(enemyBase);
                 yield break;
-
-                
             }
             else
             {
                 CanSelectPaths = true;
                 elapsed = 0f;
                 duration = 5f;
-               
+
                 while (elapsed < duration)
                 {
-                  
                     if (selectedPath != null)
                     {
-                       
                         EnableExplosiveDamage(enemyBase);
-                        yield break; 
+                        yield break;
                     }
 
                     elapsed += Time.deltaTime;
-                    yield return null; 
+                    yield return null;
                 }
 
-              
                 if (selectedPath == null)
                 {
                     CanSelectPaths = false;
                     enemyBase.LiftEffectFunction(false, false);
                 }
             }
-
-        
         }
-
-
     }
 
     private void EnableExplosiveDamage(EnemyBase enemyBase)
     {
-        if(selectedPath != null)
+        if (selectedPath != null)
         {
             StartCoroutine(LiftSelectedEnemy(enemyBase, true));
         }
         else
         {
-            GameObject ExplosionBomb = ObjectPooling.instance.GetPoolObject(PoolGameObjectType.BombPrefab);
-            if (ExplosionBomb != null)
+            GameObject explosionBomb = ObjectPooling.instance.Get(bombPrefab);
+            if (explosionBomb != null)
             {
-                ExplosionBomb.transform.position = currentMousePosition;
-                ExplosionBomb.transform.rotation = Quaternion.identity;
-                ExplosionBomb.SetActive(true);
+                explosionBomb.transform.position = currentMousePosition;
+                explosionBomb.transform.rotation = Quaternion.identity;
+                explosionBomb.SetActive(true);
 
-           
-                
                 int i = Physics.OverlapSphereNonAlloc(currentMousePosition, 5, colliders);
                 Debug.Log(i);
-                if( i > colliders.Length && resizeCount <= MaxResizeArray)
+                if (i > colliders.Length && resizeCount <= MaxResizeArray)
                 {
-                    colliders = new Collider[colliders.Length*2];
+                    colliders = new Collider[colliders.Length * 2];
                     resizeCount++;
                     i = Physics.OverlapSphereNonAlloc(currentMousePosition, 5, colliders);
                 }
-                for(int j = 0;j< i;j++)
+                for (int j = 0; j < i; j++)
                 {
                     GameObject affectedEnemy = colliders[j].gameObject;
                     if (affectedEnemy != null)
                     {
-                        EnemyBase affectedEnemyBaseRef  = affectedEnemy.GetComponent<EnemyBase>();
+                        EnemyBase affectedEnemyBaseRef = affectedEnemy.GetComponent<EnemyBase>();
                         if (affectedEnemyBaseRef != null)
                         {
-                            
                             enemyBase.Die();
-                           
-                            StartCoroutine(affectedEnemyBaseRef.ExplodeEnemy(currentMousePosition,affectedEnemyBaseRef));
+
+                            StartCoroutine(affectedEnemyBaseRef.ExplodeEnemy(currentMousePosition, affectedEnemyBaseRef));
                             selectedPath = null;
                         }
-                        
                     }
                 }
 
-
+                // Return bomb to pool after duration
+                StartCoroutine(ReturnToPoolAfterDelay(explosionBomb, 2f));
             }
         }
-        
-        
     }
 
-
+    private IEnumerator ReturnToPoolAfterDelay(GameObject obj, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        ObjectPooling.instance.Return(obj);
+    }
 
     #endregion
 
-
     #region ActivateSpells
+
     public void ActivateFireSpell()
     {
-        FireSpellActivated = true;//Eren has to enable this spell and this variable (bool) in skill tree //for testing only
+        FireSpellActivated = true;
         currenSpellType = SpellType.Physical;
         stopFire = false;
     }
@@ -437,72 +409,65 @@ public class SpellAbility : MonoBehaviour
     {
         currenSpellType = SpellType.Mechanic;
         MechanicSpellActivated = true;
-
     }
 
     public void ActivateImaginarySpell()
     {
-        currenSpellType = SpellType.Mechanic;
+        currenSpellType = SpellType.Imaginary;
         ImaginarySpellActivated = true;
     }
 
     #endregion
 
-
     #region SelectedPath
-    public void SelectedPathFromPlayer(SelectedPath path,Vector3 mousePosition)
+
+    public void SelectedPathFromPlayer(SelectedPath path, Vector3 mousePosition)
     {
-       
-        selectedPath = path;       
+        selectedPath = path;
         currentMousePosition = mousePosition;
         CanSelectPaths = false;
     }
+
     #endregion
 
-
     #region DisableVFX
+
     private IEnumerator DisableVFX(float WaitTime)
     {
-       
         yield return new WaitForSeconds(WaitTime);
         selectedPath = null;
+        
         switch (currenSpellType)
         {
             case SpellType.Physical:
                 foreach (GameObject o in flames)
                 {
-                    yield return new WaitForSeconds(0.3f);//for disbaling fire in a gradual way
-                    ObjectPooling.instance.ReturnGameObejctToPool(PoolGameObjectType.Flames, o);
+                    yield return new WaitForSeconds(0.3f);
+                    ObjectPooling.instance.Return(o);
                 }
                 flames.Clear();
                 CanSelectPaths = false;
                 FireSpellActivated = false;
-               
-            break;
-            case SpellType.Magic:                
-               
-                currentMousePosition = Vector3.zero;             
+                break;
+                
+            case SpellType.Magic:
+                currentMousePosition = Vector3.zero;
                 stopMagic = false;
                 CanSelectPaths = false;
                 MagicSpellActivated = false;
-            break;
-
+                break;
         }
-       
     }
+
     #endregion
 
     #region Getters
-    public bool FireSpellActivated {  get; set; }
 
+    public bool FireSpellActivated { get; set; }
     public bool MagicSpellActivated { get; set; }
-
     public bool MechanicSpellActivated { get; set; }
-
     public bool ImaginarySpellActivated { get; set; }
-
     public bool CanSelectPaths { get; internal set; }
-
     public SpellType currenSpellType { get; internal set; }
 
     #endregion
