@@ -844,4 +844,28 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public float GetPoisonDurationNormalized(float maxDuration = 4f) => hasPoison ? Mathf.Clamp01((poisonEndTime - Time.time) / maxDuration) : 0f;
     public float GetBleedDurationNormalized(float maxDuration = 4f) => hasBleed ? Mathf.Clamp01((bleedEndTime - Time.time) / maxDuration) : 0f;
     public float GetFrostbiteDurationNormalized(float maxDuration = 3f) => hasFrostbite ? Mathf.Clamp01((frostbiteEndTime - Time.time) / maxDuration) : 0f;
+    public float GetDistanceToNextWaypoint()
+    {
+        if (myWaypoints == null || currentWaypointIndex >= myWaypoints.Length) return 0f;
+        return Vector3.Distance(transform.position, myWaypoints[currentWaypointIndex]);
+    }
+
+    public Vector3 GetNextWaypointPosition()
+    {
+        if (myWaypoints == null || currentWaypointIndex >= myWaypoints.Length) return transform.position;
+        return myWaypoints[currentWaypointIndex];
+    }
+
+    public Vector3 GetDirectionAfterNextWaypoint()
+    {
+        if (myWaypoints == null) return transform.forward;
+    
+        // Need at least 2 more waypoints to know direction after turn
+        if (currentWaypointIndex + 1 >= myWaypoints.Length) return transform.forward;
+    
+        Vector3 currentWaypoint = myWaypoints[currentWaypointIndex];
+        Vector3 nextWaypoint = myWaypoints[currentWaypointIndex + 1];
+    
+        return (nextWaypoint - currentWaypoint).normalized;
+    }
 }

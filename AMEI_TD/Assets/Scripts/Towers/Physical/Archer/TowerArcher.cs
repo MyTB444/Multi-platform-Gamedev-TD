@@ -121,19 +121,51 @@ public class TowerArcher : TowerBase
     private void UpdatePredictedPosition()
     {
         EnemyBase targetToPredict = isAttacking && lockedTarget != null ? lockedTarget : currentEnemy;
-        
+    
         if (targetToPredict == null || !targetToPredict.gameObject.activeSelf)
         {
             predictedPosition = Vector3.zero;
             return;
         }
-        
-        Vector3 currentTargetPos = targetToPredict.transform.position;
+    
         float enemySpeed = enemyVelocity.magnitude;
-        
         float predictionTime = baseFlightTime + (enemySpeed * speedMultiplier);
-        
-        predictedPosition = currentTargetPos + (enemyVelocity * predictionTime);
+    
+        // Use path-aware prediction instead of simple velocity
+        predictedPosition = GetPathAwarePrediction(targetToPredict, predictionTime);
+    }
+    
+    private Vector3 GetPathAwarePrediction(EnemyBase target, float predictionTime)
+    {
+        if (target == null) return Vector3.zero;
+    
+        Vector3 currentPos = target.transform.position;
+        float speed = enemyVelocity.magnitude;
+    
+        if (speed < 0.1f) return currentPos;
+    
+        // How far enemy travels in prediction time
+        float travelDistance = speed * predictionTime;
+    
+        // Get remaining distance to next waypoint
+        float distanceToWaypoint = target.GetDistanceToNextWaypoint();
+    
+        // If enemy won't reach waypoint, use simple prediction
+        if (distanceToWaypoint <= 0 || travelDistance < distanceToWaypoint)
+        {
+            return currentPos + (enemyVelocity * predictionTime);
+        }
+    
+        // Enemy WILL turn - predict in two parts
+        // Part 1: Travel to waypoint
+        float timeToWaypoint = distanceToWaypoint / speed;
+        Vector3 waypointPos = target.GetNextWaypointPosition();
+    
+        // Part 2: Travel along new direction after turn
+        float remainingTime = predictionTime - timeToWaypoint;
+        Vector3 directionAfterTurn = target.GetDirectionAfterNextWaypoint();
+    
+        return waypointPos + (directionAfterTurn * speed * remainingTime);
     }
     
     protected override void HandleRotation()
