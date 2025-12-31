@@ -55,6 +55,11 @@ public class EnemyBase : MonoBehaviour, IDamageable
     [SerializeField] private Transform centerPoint;
     [SerializeField] private Transform bottomPoint;
     
+    [Header("Spawn Settings")]
+    [SerializeField] private bool useSpawnGrace = true;
+    [SerializeField] private float spawnGracePeriod = 0.5f;
+    private float spawnTime;
+    
     [Header("Stun Effect")]
     [SerializeField] private Color frozenColor = new Color(0.5f, 0.8f, 1f, 1f);
     private Renderer[] enemyRenderers;
@@ -434,10 +439,27 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public void SetupEnemy(EnemySpawner myNewSpawner, Vector3[] pathWaypoints)
     {
         mySpawner = myNewSpawner;
+        spawnTime = Time.time; // Reset spawn time for grace period
         UpdateWaypoints(pathWaypoints);
         CollectTotalDistance();
         ResetEnemy();
         BeginMovement();
+    }
+    
+    // For minions/summons that spawn without a spawner
+    public void SetupEnemyNoGrace(Vector3[] pathWaypoints)
+    {
+        spawnTime = -spawnGracePeriod; // Skip grace period
+        UpdateWaypoints(pathWaypoints);
+        CollectTotalDistance();
+        ResetEnemy();
+        BeginMovement();
+    }
+    
+    public bool IsTargetable()
+    {
+        if (!useSpawnGrace) return true;
+        return Time.time > spawnTime + spawnGracePeriod;
     }
 
     private void UpdateWaypoints(Vector3[] newWaypoints)
