@@ -196,7 +196,24 @@ public class TowerArcher : TowerBase
     
     protected override bool CanAttack()
     {
+        if (currentEnemy == null) return false;
+    
+        // Check if facing enemy (within 15 degrees)
+        if (!IsFacingEnemy(15f)) return false;
+    
         return base.CanAttack() && !isAttacking;
+    }
+
+    private bool IsFacingEnemy(float maxAngle)
+    {
+        if (currentEnemy == null || towerBody == null) return false;
+    
+        Vector3 directionToEnemy = currentEnemy.transform.position - towerBody.position;
+        directionToEnemy.y = 0;
+    
+        float angle = Vector3.Angle(towerBody.forward, directionToEnemy);
+    
+        return angle <= maxAngle;
     }
     
     protected override void Attack()
