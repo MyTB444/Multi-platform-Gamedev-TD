@@ -5,8 +5,8 @@ using UnityEngine.UI;
 public class MenuMapRotator : MonoBehaviour
 {
     [Header("Cubes")]
-    public List<GameObject> cubePrefabs;         
-    public Transform cubeSlot;                  
+    public List<GameObject> cubePrefabs;
+    public Transform cubeSlot;
 
     [Header("UI Buttons")]
     public Button leftButton;
@@ -28,9 +28,10 @@ public class MenuMapRotator : MonoBehaviour
 
     void ShowCube(int index)
     {
-        // Destroy existing cube
         if (currentCubeInstance != null)
+        {
             Destroy(currentCubeInstance);
+        }
 
         // Instantiate new cube at the center
         currentCubeInstance = Instantiate(cubePrefabs[index], cubeSlot.position, cubeSlot.rotation, cubeSlot);

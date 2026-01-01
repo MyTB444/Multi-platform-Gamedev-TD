@@ -81,4 +81,8 @@ public class UIBase : MonoBehaviour
         if (a) winUI.SetActive(true);
         else lostUI.SetActive(true);
     }
+    public void RestartGame()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
 }

@@ -3931,7 +3931,7 @@ MonoBehaviour:
     m_NormalColor: {r: 0.7372549, g: 0.5568628, b: 0.30980393, a: 1}
     m_HighlightedColor: {r: 0.5471698, g: 0.5471698, b: 0.5471698, a: 1}
     m_PressedColor: {r: 0.7372549, g: 0.5568628, b: 0.30980393, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_SelectedColor: {r: 0.7372549, g: 0.5568628, b: 0.30980393, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -14577,7 +14577,7 @@ MonoBehaviour:
     m_NormalColor: {r: 0.7372549, g: 0.5568628, b: 0.30980393, a: 1}
     m_HighlightedColor: {r: 0.54901963, g: 0.54901963, b: 0.54901963, a: 1}
     m_PressedColor: {r: 0.7372549, g: 0.5568628, b: 0.30980393, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_SelectedColor: {r: 0.7372549, g: 0.5568628, b: 0.30980393, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1
@@ -14599,7 +14599,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1715409133}
         m_TargetAssemblyTypeName: UIBase, Assembly-CSharp
-        m_MethodName: StartButton
+        m_MethodName: RestartGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -55611,7 +55611,7 @@ MonoBehaviour:
     m_NormalColor: {r: 0.735849, g: 0.5540079, b: 0.30891773, a: 1}
     m_HighlightedColor: {r: 0.54901963, g: 0.54901963, b: 0.54901963, a: 1}
     m_PressedColor: {r: 0.7372549, g: 0.5568628, b: 0.30980393, a: 1}
-    m_SelectedColor: {r: 0.9607843, g: 0.9607843, b: 0.9607843, a: 1}
+    m_SelectedColor: {r: 0.7372549, g: 0.5568628, b: 0.30980393, a: 1}
     m_DisabledColor: {r: 0.78431374, g: 0.78431374, b: 0.78431374, a: 0.5019608}
     m_ColorMultiplier: 1
     m_FadeDuration: 0.1

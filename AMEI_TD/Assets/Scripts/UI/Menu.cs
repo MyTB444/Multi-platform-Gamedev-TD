@@ -11,6 +11,7 @@ public class Menu : MonoBehaviour
     public GameObject[] levelButtons;
     public Image[] images;
     public Color[] colors;
+    public GameObject[] texts;
     void Start()
     {
         instance = this;
@@ -90,6 +91,8 @@ public class Menu : MonoBehaviour
     }
     public void ChangeButtonColours(int i)
     {
+        DisableAllText();
+        texts[i].SetActive(true);
         switch (i)
         {
             case 0:
@@ -106,6 +109,13 @@ public class Menu : MonoBehaviour
                 break;
         }
     }
+    private void DisableAllText()
+    {
+        for (int i = 0; i < texts.Length; i++)
+        {
+            texts[i].SetActive(false);
+        }
+    }
     public void ColorLoop(Color colour)
     {
         for (int i = 0; i < images.Length; i++)
@@ -117,5 +127,9 @@ public class Menu : MonoBehaviour
     public void RestartGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+    public void Quit()
+    {
+        Application.Quit();
     }
 }
