@@ -25,14 +25,12 @@ public class EnemyHerald : EnemyBase
     private bool isCasting = false;
     private Animator heraldAnimator;
     private Collider[] detectedEnemies = new Collider[20];
-    private Rigidbody rb;
 
     protected override void Start()
     {
         base.Start();
         heraldAnimator = GetComponent<Animator>();
         lastCastTime = Time.time;
-        rb = GetComponent<Rigidbody>();
     }
 
     protected override void Update()
@@ -80,11 +78,6 @@ public class EnemyHerald : EnemyBase
     {
         isCasting = true;
         canMove = false;
-
-        if (rb != null)
-        {
-            rb.isKinematic = true;
-        }
 
         if (magicCirclePrefab != null)
         {
@@ -172,11 +165,6 @@ public class EnemyHerald : EnemyBase
         isCasting = false;
         canMove = true;
         lastCastTime = Time.time;
-
-        if (rb != null)
-        {
-            rb.isKinematic = false;
-        }
 
         if (activeMagicCircle != null)
         {

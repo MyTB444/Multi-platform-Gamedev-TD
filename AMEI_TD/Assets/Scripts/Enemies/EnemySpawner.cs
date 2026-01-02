@@ -15,13 +15,6 @@ public class EnemySpawner : MonoBehaviour
 
     private List<GameObject> enemiesToCreate = new List<GameObject>();
     private List<GameObject> activeEnemies = new List<GameObject>();
-    
-    [Header("Spawn Area Check")]
-    [SerializeField] private Vector3 spawnAreaSize = new Vector3(2f, 2f, 3f);
-    [SerializeField] private List<EnemyType> bigEnemyTypes = new List<EnemyType>();
-    [SerializeField] private LayerMask enemyLayer;
-
-    private bool waitingForAreaClear = false;
 
     private void Start()
     {
@@ -32,47 +25,6 @@ public class EnemySpawner : MonoBehaviour
     private void Update()
     {
         if (CanMakeNewEnemy()) CreateEnemy();
-    }
-    
-    private bool IsSpawnAreaBlocked()
-    {
-        if (!waitingForAreaClear) return false;
-    
-        Vector3 checkCenter = spawnLocation.position;
-        Quaternion checkRotation = spawnLocation.rotation;
-    
-        if (allPathWaypoints.Count > 0 && allPathWaypoints[0].Length > 0)
-        {
-            Vector3 roadDirection = (allPathWaypoints[0][0] - spawnLocation.position).normalized;
-            checkCenter += roadDirection * (spawnAreaSize.z * 0.5f);
-            checkRotation = Quaternion.LookRotation(roadDirection);
-        }
-    
-        Collider[] enemies = Physics.OverlapBox(checkCenter, spawnAreaSize * 0.5f, checkRotation, enemyLayer);
-    
-        Debug.Log($"[SpawnCheck] Found {enemies.Length} colliders in box");
-    
-        foreach (Collider col in enemies)
-        {
-            EnemyBase enemy = col.GetComponent<EnemyBase>();
-            if (enemy != null)
-            {
-                Debug.Log($"[SpawnCheck] Enemy: {enemy.name} | Type: {enemy.GetEnemyType()} | IsBigType: {bigEnemyTypes.Contains(enemy.GetEnemyType())}");
-            
-                if (bigEnemyTypes.Contains(enemy.GetEnemyType()))
-                {
-                    return true;
-                }
-            }
-            else
-            {
-                Debug.Log($"[SpawnCheck] Collider {col.name} has no EnemyBase");
-            }
-        }
-    
-        Debug.Log("[SpawnCheck] Area clear, resuming spawns");
-        waitingForAreaClear = false;
-        return false;
     }
 
     private bool CanMakeNewEnemy()
@@ -98,10 +50,6 @@ public class EnemySpawner : MonoBehaviour
     private void CreateEnemy()
     {
         if (!canCreateEnemies) return;
-        if (enemiesToCreate.Count == 0) return;
-    
-        // Wait if spawn area is blocked by big enemy
-        if (IsSpawnAreaBlocked()) return;
 
         GameObject randomEnemyPrefab = GetRandomEnemy();
         if (randomEnemyPrefab == null) return;
@@ -127,12 +75,6 @@ public class EnemySpawner : MonoBehaviour
             enemyScript.SetupEnemy(this, randomPath);
 
             activeEnemies.Add(newEnemy);
-        
-            // If big enemy just spawned, enable area check
-            if (enemyScript != null && bigEnemyTypes.Contains(enemyScript.GetEnemyType()))
-            {
-                waitingForAreaClear = true;
-            }
         }
     }
 
@@ -215,32 +157,11 @@ public class EnemySpawner : MonoBehaviour
             Vector3 forward = spawnLocation.forward * 2f;
             Gizmos.DrawLine(spawnLocation.position, spawnLocation.position + forward);
 
+            // Draw arrow head
             Vector3 right = Quaternion.Euler(0, 30, 0) * -forward.normalized * 0.5f;
             Vector3 left = Quaternion.Euler(0, -30, 0) * -forward.normalized * 0.5f;
             Gizmos.DrawLine(spawnLocation.position + forward, spawnLocation.position + forward + right);
             Gizmos.DrawLine(spawnLocation.position + forward, spawnLocation.position + forward + left);
-            
-            // Draw spawn area box
-            Gizmos.color = waitingForAreaClear ? Color.red : Color.cyan;
-            
-            Vector3 checkCenter = spawnLocation.position;
-            Quaternion checkRotation = spawnLocation.rotation;
-            
-            if (myPaths != null && myPaths.Count > 0 && myPaths[0] != null)
-            {
-                Transform[] waypoints = myPaths[0].GetWaypoints();
-                if (waypoints != null && waypoints.Length > 0)
-                {
-                    Vector3 roadDirection = (waypoints[0].position - spawnLocation.position).normalized;
-                    checkCenter += roadDirection * (spawnAreaSize.z * 0.5f);
-                    checkRotation = Quaternion.LookRotation(roadDirection);
-                }
-            }
-            
-            Matrix4x4 oldMatrix = Gizmos.matrix;
-            Gizmos.matrix = Matrix4x4.TRS(checkCenter, checkRotation, Vector3.one);
-            Gizmos.DrawWireCube(Vector3.zero, spawnAreaSize);
-            Gizmos.matrix = oldMatrix;
         }
 
         // Draw line to first waypoint

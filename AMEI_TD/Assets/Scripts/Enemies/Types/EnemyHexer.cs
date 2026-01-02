@@ -30,14 +30,12 @@ public class EnemyHexer : EnemyBase
     private Animator hexerAnimator;
     private Collider[] detectedTowers = new Collider[20];
     private TowerBase currentTarget;
-    private Rigidbody rb;
 
     protected override void Start()
     {
         base.Start();
         hexerAnimator = GetComponent<Animator>();
         lastAttackTime = Time.time;
-        rb = GetComponent<Rigidbody>();
     }
 
     protected override void Update()
@@ -97,11 +95,6 @@ public class EnemyHexer : EnemyBase
         isCasting = true;
         canMove = false;
         currentTarget = target;
-
-        if (rb != null)
-        {
-            rb.isKinematic = true;
-        }
 
         // Spawn magic circle VFX (like Summoner)
         if (magicCirclePrefab != null)
@@ -180,11 +173,6 @@ public class EnemyHexer : EnemyBase
         canMove = true;
         currentTarget = null;
         lastAttackTime = Time.time;
-
-        if (rb != null)
-        {
-            rb.isKinematic = false;
-        }
 
         // Cleanup magic circle if still active
         if (activeMagicCircle != null)
