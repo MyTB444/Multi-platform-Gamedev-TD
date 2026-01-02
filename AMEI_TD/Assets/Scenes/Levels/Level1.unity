@@ -109252,9 +109252,25 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8599770145798600391, guid: e7be6da9476904441a4429b86801a2bc, type: 3}
+      propertyPath: m_VoxelSize
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8599770145798600391, guid: e7be6da9476904441a4429b86801a2bc, type: 3}
       propertyPath: m_NavMeshData
       value: 
       objectReference: {fileID: 23800000, guid: faced50e40f64454b9aabc06ebb0d5b5, type: 2}
+    - target: {fileID: 8599770145798600391, guid: e7be6da9476904441a4429b86801a2bc, type: 3}
+      propertyPath: m_UseGeometry
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8599770145798600391, guid: e7be6da9476904441a4429b86801a2bc, type: 3}
+      propertyPath: m_OverrideTileSize
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8599770145798600391, guid: e7be6da9476904441a4429b86801a2bc, type: 3}
+      propertyPath: m_OverrideVoxelSize
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
