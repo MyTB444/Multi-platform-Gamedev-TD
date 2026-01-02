@@ -16,7 +16,7 @@ public class NodeButton : MonoBehaviour, IPointerEnterHandler
 
     [Header("UI References")]
     public Button button;
-    public Image backgroundImage;
+    public Image[] backgroundImage;
     public TextMeshProUGUI descriptionText;
     public GameObject lockedOverlay;
     public GameObject unlockedIndicator;
@@ -24,15 +24,15 @@ public class NodeButton : MonoBehaviour, IPointerEnterHandler
     [Header("Colors")]
     public Color lockedColor = new Color(0.5f, 0.5f, 0.5f);
     public Color availableColor = new Color(1f, 1f, 1f);
-    public Color unlockedColor = new Color(0.3f, 1f, 0.3f);
+    public Color unlockerrColor = new Color(1f, 0.2196f, 0f);
 
     private void Start()
     {
         // Auto-find components if not assigned
         if (button == null)
             button = GetComponent<Button>();
-        if (backgroundImage == null)
-            backgroundImage = GetComponent<Image>();
+        
+        backgroundImage = GetComponentsInChildren<Image>();
         // Setup initial state
         SetupVisuals();
         UpdateVisuals();
@@ -59,7 +59,7 @@ public class NodeButton : MonoBehaviour, IPointerEnterHandler
         // Set icon
         if (backgroundImage != null && skill.icon != null)
         {
-            backgroundImage.sprite = skill.icon;
+            backgroundImage[0].sprite = skill.icon;
         }
     }
 
@@ -80,11 +80,21 @@ public class NodeButton : MonoBehaviour, IPointerEnterHandler
         if (backgroundImage != null)
         {
             if (isUnlocked)
-                backgroundImage.color = unlockedColor;
+            {
+                backgroundImage[0].color = unlockerrColor;
+                backgroundImage[1].color = unlockerrColor;
+            }
             else if (canUnlock)
-                backgroundImage.color = availableColor;
+            {
+                backgroundImage[0].color = availableColor;
+                backgroundImage[1].color = Color.white;
+            }
             else
-                backgroundImage.color = lockedColor;
+            {
+                backgroundImage[0].color = lockedColor;
+                backgroundImage[1].color = Color.white;
+            }
+
         }
 
         // Update overlays

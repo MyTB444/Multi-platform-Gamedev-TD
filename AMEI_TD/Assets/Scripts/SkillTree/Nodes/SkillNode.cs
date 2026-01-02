@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Microsoft.Unity.VisualStudio.Editor;
 using UnityEngine;
 
 public enum SwapType
@@ -30,7 +31,6 @@ public class SkillNode : ScriptableObject
     [TextArea(2, 4)]
     public string description;
     public Sprite icon;
-
     public bool irreversible;
 
     [Header("Requirements")]
@@ -44,7 +44,6 @@ public class SkillNode : ScriptableObject
     public SpellEnableType spellEnableType;
     public bool noah;
     public event Action<SwapType> EventRaised;
-
     public void ApplyEffect()
     {
         TowerUpgradeManager.instance.UnlockUpgrade(function);
