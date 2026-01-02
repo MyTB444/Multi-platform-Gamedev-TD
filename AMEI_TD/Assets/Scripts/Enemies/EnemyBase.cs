@@ -84,6 +84,15 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private Renderer[] enemyRenderers;
     private Color[] originalColors;
     private bool hasSavedColors = false;
+    
+    [Header("Stuck Detection")]
+    [SerializeField] private float stuckCheckInterval = 0.5f;
+    [SerializeField] private float stuckDistanceThreshold = 0.2f;
+    [SerializeField] private float stuckSkipDistance = 2f; // Skip waypoint if stuck but close enough
+
+    private Vector3 lastStuckCheckPosition;
+    private float lastStuckCheckTime;
+    private float stuckDuration;
 
     private NavMeshAgent NavAgent;
     private Animator EnemyAnimator;
@@ -503,6 +512,11 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private void BeginMovement()
     {
         currentWaypointIndex = 0;
+        
+        // Reset stuck detection
+        lastStuckCheckPosition = transform.position;
+        lastStuckCheckTime = Time.time;
+        stuckDuration = 0f;
 
         if (NavAgent != null)
         {
@@ -580,11 +594,14 @@ public class EnemyBase : MonoBehaviour, IDamageable
         NavAgent.isStopped = false;
         NavAgent.speed = enemySpeed * mySpeedMultiplier;
 
+        // Stuck detection
+        HandleStuckDetection();
+
         // Skip waypoints we've already passed - but only if we're close to them
         while (currentWaypointIndex < myWaypoints.Length && HasPassedWaypoint(currentWaypointIndex))
         {
             float distToWaypoint = Vector3.Distance(transform.position, myWaypoints[currentWaypointIndex]);
-            if (distToWaypoint > 3f) break; // Don't skip if we're far away
+            if (distToWaypoint > 3f) break;
         
             currentWaypointIndex++;
         }
@@ -611,15 +628,76 @@ public class EnemyBase : MonoBehaviour, IDamageable
         if (direction.sqrMagnitude > 0.01f)
         {
             Quaternion targetRotation = Quaternion.LookRotation(direction);
-            float speedFactor = enemySpeed / 3f; // 3 = baseline speed
+            float speedFactor = enemySpeed / 3f;
             float adjustedRotationSpeed = rotationSpeed * Mathf.Max(1f, speedFactor);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * adjustedRotationSpeed);
         }
 
-        if (!NavAgent.pathPending && NavAgent.remainingDistance <= waypointReachThreshold)
+        // Dynamic waypoint reach threshold - larger when moving fast or when path is clear ahead
+        float dynamicThreshold = waypointReachThreshold;
+        if (currentWaypointIndex < myWaypoints.Length - 1)
+        {
+            // Increase threshold if next waypoint is roughly in same direction (not a sharp turn)
+            Vector3 toCurrentWaypoint = (targetWaypoint - transform.position).normalized;
+            Vector3 toNextWaypoint = (myWaypoints[currentWaypointIndex + 1] - targetWaypoint).normalized;
+            float turnAngle = Vector3.Angle(toCurrentWaypoint, toNextWaypoint);
+            
+            if (turnAngle < 45f)
+            {
+                dynamicThreshold = waypointReachThreshold * 2f; // Can cut corner on gentle turns
+            }
+        }
+
+        if (!NavAgent.pathPending && NavAgent.remainingDistance <= dynamicThreshold)
         {
             currentWaypointIndex++;
+            stuckDuration = 0f; // Reset stuck timer on waypoint reached
         }
+    }
+    
+    private void HandleStuckDetection()
+    {
+        if (Time.time < lastStuckCheckTime + stuckCheckInterval) return;
+
+        float movedDistance = Vector3.Distance(transform.position, lastStuckCheckPosition);
+    
+        if (movedDistance < stuckDistanceThreshold)
+        {
+            stuckDuration += stuckCheckInterval;
+        
+            // If stuck for over 1 second, try to recover
+            if (stuckDuration >= 1f)
+            {
+                float distToWaypoint = Vector3.Distance(transform.position, myWaypoints[currentWaypointIndex]);
+            
+                // If close enough to waypoint, skip it
+                if (distToWaypoint <= stuckSkipDistance)
+                {
+                    currentWaypointIndex++;
+                    stuckDuration = 0f;
+                }
+                // If stuck but not close, try to reposition slightly
+                else if (stuckDuration >= 2f)
+                {
+                    NavMeshHit hit;
+                    Vector3 randomOffset = Random.insideUnitSphere * 0.5f;
+                    randomOffset.y = 0;
+                
+                    if (NavMesh.SamplePosition(transform.position + randomOffset, out hit, 1f, NavMesh.AllAreas))
+                    {
+                        NavAgent.Warp(hit.position);
+                    }
+                    stuckDuration = 0f;
+                }
+            }
+        }
+        else
+        {
+            stuckDuration = 0f; // Moving fine, reset
+        }
+
+        lastStuckCheckPosition = transform.position;
+        lastStuckCheckTime = Time.time;
     }
 
     private bool HasPassedWaypoint(int waypointIndex)
@@ -833,6 +911,10 @@ public class EnemyBase : MonoBehaviour, IDamageable
             NavAgent.speed = baseSpeed;
         }
 
+        stuckDuration = 0f;
+        lastStuckCheckTime = Time.time;
+        lastStuckCheckPosition = transform.position;
+        
         UpdateVisuals();
     }
 
