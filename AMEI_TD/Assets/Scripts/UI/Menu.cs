@@ -12,6 +12,7 @@ public class Menu : MonoBehaviour
     public Image[] images;
     public Color[] colors;
     public GameObject[] texts;
+    public GameObject infoUI;
     void Start()
     {
         instance = this;
@@ -121,6 +122,15 @@ public class Menu : MonoBehaviour
         for (int i = 0; i < images.Length; i++)
         {
             images[i].color = colour;
+        }
+    }
+    public void InfoUI()
+    {
+        if(!infoUI.activeSelf)
+        infoUI.SetActive(true);
+        else
+        {
+            infoUI.SetActive(false);
         }
     }
 
