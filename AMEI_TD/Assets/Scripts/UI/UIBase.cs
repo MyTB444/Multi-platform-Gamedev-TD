@@ -13,6 +13,7 @@ public class UIBase : MonoBehaviour
     [SerializeField] private GameObject winUI;
     [SerializeField] private GameObject lostUI;
     [SerializeField] private GameObject treeUI;
+    [SerializeField] private GameObject infoUI;
     [SerializeField] private TextMeshProUGUI pointsUI;
 
     void Awake()
@@ -34,6 +35,7 @@ public class UIBase : MonoBehaviour
             Time.timeScale = 1;
             isPaused = false;
             pauseUI.SetActive(false);
+            infoUI.SetActive(false);
             Debug.Log("Unpaused");
         }
     }
@@ -84,5 +86,13 @@ public class UIBase : MonoBehaviour
     public void RestartGame()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+    }
+    public void EnableInfo()
+    {
+        infoUI.SetActive(true);
+    }
+    public void DisableInfo()
+    {
+        infoUI.SetActive(false);
     }
 }
