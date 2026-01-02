@@ -55,16 +55,55 @@ public class EnemyBase : MonoBehaviour, IDamageable
     [SerializeField] private Transform centerPoint;
     [SerializeField] private Transform bottomPoint;
     
+    [Header("Movement Settings")]
+    [SerializeField] private float rotationSpeed = 12f;
+    [SerializeField] private float acceleration = 8f;
+    [SerializeField] private float angularSpeed = 360f;
+    [SerializeField] private float animationSpeedMultiplier = 1f;
+    [SerializeField] private float cornerDetectionDistance = 3f;
+    [SerializeField] private float cornerSlowdownAmount = 0.6f;
+    [SerializeField] private float cornerRotationSmoothing = 0.3f;
+    
     [Header("Spawn Settings")]
     [SerializeField] private bool useSpawnGrace = true;
     [SerializeField] private float spawnGracePeriod = 0.5f;
     private float spawnTime;
+    
+    [Header("Path Variation")]
+    [Tooltip("Random lateral offset from path center (0 = always center, 0.5 = spread across road)")]
+    [SerializeField] private float pathOffsetRange = 1f;
+
+    [Tooltip("Random speed variation (0.1 = ±10% speed variation)")]
+    [SerializeField] private float speedVariationPercent = 0.1f;
+    [SerializeField] private bool isHighPriority = false;
+    [Tooltip("How close enemy must get to waypoint before moving to next (lower = tighter corners)")]
+    [SerializeField] private float waypointReachThreshold = 0.3f;
+
+    [Tooltip("Variation in corner cutting (0.2 = ±20% threshold variation)")]
+    [SerializeField] private float cornerCutVariation = 0.8f;
+
+    [Tooltip("How much path offset changes per waypoint (0 = consistent, 0.3 = drifts across path)")]
+    [SerializeField] private float pathDriftAmount = 0.3f;
+
+    private float myPathOffset;
+    private float mySpeedMultiplier;
+    private float myCornerCutMultiplier;
+    private float myPathDrift;
     
     [Header("Stun Effect")]
     [SerializeField] private Color frozenColor = new Color(0.5f, 0.8f, 1f, 1f);
     private Renderer[] enemyRenderers;
     private Color[] originalColors;
     private bool hasSavedColors = false;
+    
+    [Header("Stuck Detection")]
+    [SerializeField] private float stuckCheckInterval = 0.5f;
+    [SerializeField] private float stuckDistanceThreshold = 0.2f;
+    [SerializeField] private float stuckSkipDistance = 2f; // Skip waypoint if stuck but close enough
+
+    private Vector3 lastStuckCheckPosition;
+    private float lastStuckCheckTime;
+    private float stuckDuration;
 
     private NavMeshAgent NavAgent;
     private Animator EnemyAnimator;
@@ -439,17 +478,34 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public void SetupEnemy(EnemySpawner myNewSpawner, Vector3[] pathWaypoints)
     {
         mySpawner = myNewSpawner;
-        spawnTime = Time.time; // Reset spawn time for grace period
+        spawnTime = Time.time;
+
+        // Randomize path offset and speed variation
+        myPathOffset = Random.Range(-pathOffsetRange, pathOffsetRange);
+        mySpeedMultiplier = Random.Range(1f - speedVariationPercent, 1f + speedVariationPercent);
+        myCornerCutMultiplier = Random.Range(1f - cornerCutVariation, 1f + cornerCutVariation);
+        myPathDrift = Random.Range(-pathDriftAmount, pathDriftAmount);
+
         UpdateWaypoints(pathWaypoints);
         CollectTotalDistance();
         ResetEnemy();
         BeginMovement();
+    
+        // DEBUG - add this line
+        Debug.Log($"[{gameObject.name}] PathOffset: {myPathOffset:F2} | Drift: {myPathDrift:F2} | CornerCut: {myCornerCutMultiplier:F2}");
     }
     
     // For minions/summons that spawn without a spawner
     public void SetupEnemyNoGrace(Vector3[] pathWaypoints)
     {
-        spawnTime = -spawnGracePeriod; // Skip grace period
+        spawnTime = -spawnGracePeriod;
+    
+        // Randomize path offset and speed variation
+        myPathOffset = Random.Range(-pathOffsetRange, pathOffsetRange);
+        mySpeedMultiplier = Random.Range(1f - speedVariationPercent, 1f + speedVariationPercent);
+        myCornerCutMultiplier = Random.Range(1f - cornerCutVariation, 1f + cornerCutVariation);
+        myPathDrift = Random.Range(-pathDriftAmount, pathDriftAmount);
+    
         UpdateWaypoints(pathWaypoints);
         CollectTotalDistance();
         ResetEnemy();
@@ -474,11 +530,16 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private void BeginMovement()
     {
         currentWaypointIndex = 0;
+        
+        // Reset stuck detection
+        lastStuckCheckPosition = transform.position;
+        lastStuckCheckTime = Time.time;
+        stuckDuration = 0f;
 
         if (NavAgent != null)
         {
             NavAgent.enabled = true;
-        
+
             // Find a valid NavMesh position near spawn point
             NavMeshHit hit;
             if (NavMesh.SamplePosition(transform.position, out hit, 5f, NavMesh.AllAreas))
@@ -490,12 +551,32 @@ public class EnemyBase : MonoBehaviour, IDamageable
                 Debug.LogWarning($"[{gameObject.name}] Could not find NavMesh near {transform.position}");
                 NavAgent.Warp(transform.position);
             }
-        
-            NavAgent.speed = enemySpeed;
+
+            float speedFactor = Mathf.Max(1f, enemySpeed / 3f);
+
+            NavAgent.speed = enemySpeed * mySpeedMultiplier;
+            NavAgent.acceleration = acceleration * speedFactor;
+            NavAgent.angularSpeed = angularSpeed * speedFactor;
+            
             NavAgent.isStopped = false;
             NavAgent.updateRotation = false;
-        
-            // Set first destination immediately so it starts moving right away
+
+            if (isHighPriority)
+            {
+                NavAgent.avoidancePriority = 1;
+                NavAgent.obstacleAvoidanceType = ObstacleAvoidanceType.LowQualityObstacleAvoidance;
+            }
+            else if (enemySpeed > 2.5f)
+            {
+                NavAgent.avoidancePriority = 80;
+                NavAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
+            }
+            else
+            {
+                NavAgent.avoidancePriority = Random.Range(30, 70);
+            }
+
+            // Set first destination immediately
             if (myWaypoints != null && myWaypoints.Length > 0)
             {
                 NavAgent.SetDestination(myWaypoints[0]);
@@ -519,8 +600,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         if (myWaypoints == null || currentWaypointIndex >= myWaypoints.Length) return;
 
         if (NavAgent == null || !NavAgent.isActiveAndEnabled) return;
-    
-        // Must be on NavMesh to do anything
+
         if (!NavAgent.isOnNavMesh) return;
 
         if (isStunned || !canMove)
@@ -528,35 +608,143 @@ public class EnemyBase : MonoBehaviour, IDamageable
             NavAgent.isStopped = true;
             return;
         }
-    
-        NavAgent.isStopped = false;
-        NavAgent.speed = enemySpeed;
 
-        // Skip waypoints we've already passed
+        NavAgent.isStopped = false;
+
+        // Calculate speed with corner slowdown
+        float currentSpeed = enemySpeed * mySpeedMultiplier;
+
+        if (currentWaypointIndex < myWaypoints.Length)
+        {
+            float distToWaypoint = Vector3.Distance(transform.position, myWaypoints[currentWaypointIndex]);
+    
+            if (distToWaypoint < cornerDetectionDistance && currentWaypointIndex < myWaypoints.Length - 1)
+            {
+                // Check if it's actually a corner (not straight path)
+                Vector3 currentDir = (myWaypoints[currentWaypointIndex] - transform.position).normalized;
+                Vector3 nextDir = (myWaypoints[currentWaypointIndex + 1] - myWaypoints[currentWaypointIndex]).normalized;
+                float turnAngle = Vector3.Angle(currentDir, nextDir);
+        
+                if (turnAngle > 30f)
+                {
+                    // Slow down based on distance to corner and turn sharpness
+                    float slowFactor = distToWaypoint / cornerDetectionDistance;
+                    float turnFactor = turnAngle / 90f;
+                    currentSpeed *= Mathf.Lerp(cornerSlowdownAmount, 1f, slowFactor);
+                }
+            }
+        }
+
+        NavAgent.speed = currentSpeed;
+
+        // Stuck detection
+        HandleStuckDetection();
+
+        // Skip waypoints we've already passed - but only if we're close to them
         while (currentWaypointIndex < myWaypoints.Length && HasPassedWaypoint(currentWaypointIndex))
         {
+            float dist = Vector3.Distance(transform.position, myWaypoints[currentWaypointIndex]);
+            if (dist > 3f) break;
+
             currentWaypointIndex++;
         }
 
         if (currentWaypointIndex >= myWaypoints.Length) return;
 
+        // Calculate offset waypoint
         Vector3 targetWaypoint = myWaypoints[currentWaypointIndex];
+
+        if (currentWaypointIndex < myWaypoints.Length - 1)
+        {
+            Vector3 nextWaypoint = myWaypoints[currentWaypointIndex + 1];
+            Vector3 pathDirection = (nextWaypoint - targetWaypoint).normalized;
+            Vector3 offsetDirection = Vector3.Cross(pathDirection, Vector3.up);
+
+            float waypointOffset = myPathOffset + (myPathDrift * currentWaypointIndex);
+            waypointOffset = Mathf.Clamp(waypointOffset, -pathOffsetRange, pathOffsetRange);
+
+            targetWaypoint += offsetDirection * waypointOffset;
+        }
+
         NavAgent.SetDestination(targetWaypoint);
 
-        // Smooth rotation towards steering target
-        Vector3 direction = NavAgent.steeringTarget - transform.position;
-        direction.y = 0;
-    
-        if (direction.sqrMagnitude > 0.01f)
+        // Smooth rotation with corner anticipation
+        Vector3 currentDirection = NavAgent.steeringTarget - transform.position;
+        currentDirection.y = 0;
+
+        if (currentDirection.sqrMagnitude > 0.01f)
         {
-            Quaternion targetRotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
+            Vector3 targetDirection = currentDirection.normalized;
+            float distToWaypoint = Vector3.Distance(transform.position, targetWaypoint);
+    
+            // Blend toward next waypoint direction when approaching corner
+            if (distToWaypoint < cornerDetectionDistance && currentWaypointIndex < myWaypoints.Length - 1)
+            {
+                Vector3 nextDirection = (myWaypoints[currentWaypointIndex + 1] - targetWaypoint).normalized;
+                float blendFactor = 1f - (distToWaypoint / cornerDetectionDistance);
+                blendFactor *= cornerRotationSmoothing;
+                targetDirection = Vector3.Slerp(targetDirection, nextDirection, blendFactor);
+            }
+    
+            Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
+            float speedFactor = enemySpeed / 3f;
+            float adjustedRotationSpeed = rotationSpeed * Mathf.Max(1f, speedFactor);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * adjustedRotationSpeed);
         }
 
-        if (!NavAgent.pathPending && NavAgent.remainingDistance <= waypointReachDistance)
+        // Dynamic reach threshold based on corner cut multiplier
+        float dynamicThreshold = waypointReachThreshold * myCornerCutMultiplier;
+        
+        if (!NavAgent.pathPending && NavAgent.remainingDistance <= dynamicThreshold)
         {
             currentWaypointIndex++;
+            stuckDuration = 0f;
         }
+    }
+    
+    private void HandleStuckDetection()
+    {
+        if (Time.time < lastStuckCheckTime + stuckCheckInterval) return;
+
+        float movedDistance = Vector3.Distance(transform.position, lastStuckCheckPosition);
+    
+        if (movedDistance < stuckDistanceThreshold)
+        {
+            stuckDuration += stuckCheckInterval;
+        
+            // If stuck for over 1 second, try to recover
+            if (stuckDuration >= 1f)
+            {
+                float distToWaypoint = Vector3.Distance(transform.position, myWaypoints[currentWaypointIndex]);
+            
+                // If close enough to waypoint, skip it
+                if (distToWaypoint <= stuckSkipDistance)
+                {
+                    currentWaypointIndex++;
+                    stuckDuration = 0f;
+                }
+                // If stuck but not close, try to reposition slightly
+                else if (stuckDuration >= 2f)
+                {
+                    NavMeshHit hit;
+                    Vector3 randomOffset = Random.insideUnitSphere * 0.5f;
+                    randomOffset.y = 0;
+                
+                    if (NavMesh.SamplePosition(transform.position + randomOffset, out hit, 1f, NavMesh.AllAreas))
+                    {
+                        NavAgent.Warp(hit.position);
+                    }
+                    stuckDuration = 0f;
+                }
+            }
+        }
+        else
+        {
+            stuckDuration = 0f; // Moving fine, reset
+        }
+
+        lastStuckCheckPosition = transform.position;
+        lastStuckCheckTime = Time.time;
     }
 
     private bool HasPassedWaypoint(int waypointIndex)
@@ -594,20 +782,22 @@ public class EnemyBase : MonoBehaviour, IDamageable
     
     private void PlayAnimations()
     {
-        if (EnemyAnimator == null)
-        {
-            Debug.Log($"{gameObject.name}: Animator is NULL");
-            return;
-        }
+        if (EnemyAnimator == null) return;
 
-        if (isStunned)
+        if (isStunned || !canMove)
         {
             EnemyAnimator.SetBool("Walk", false);
             return;
         }
 
-        Debug.Log($"{gameObject.name}: Setting Walk to true");
         EnemyAnimator.SetBool("Walk", true);
+    
+        // Match animation speed to movement speed
+        if (NavAgent != null && NavAgent.isOnNavMesh && NavAgent.enabled)
+        {
+            float speedRatio = NavAgent.velocity.magnitude / (enemySpeed * mySpeedMultiplier);
+            EnemyAnimator.SetFloat("WalkSpeed", animationSpeedMultiplier * Mathf.Clamp(speedRatio, 0.8f, 1.2f));
+        }
     }
 
     public float GetRemainingDistance()
@@ -768,6 +958,10 @@ public class EnemyBase : MonoBehaviour, IDamageable
             NavAgent.speed = baseSpeed;
         }
 
+        stuckDuration = 0f;
+        lastStuckCheckTime = Time.time;
+        lastStuckCheckPosition = transform.position;
+        
         UpdateVisuals();
     }
 
