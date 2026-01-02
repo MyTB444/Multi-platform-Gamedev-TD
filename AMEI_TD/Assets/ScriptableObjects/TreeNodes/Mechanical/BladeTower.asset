@@ -18,7 +18,7 @@ MonoBehaviour:
     spinning damage.
 
 
-    Unleash!'
+    UNLEASH!'
   icon: {fileID: 21300000, guid: 912f2333824ee3946814a450e92ab11a, type: 3}
   irreversible: 1
   skillPointCost: 5
@@ -28,3 +28,4 @@ MonoBehaviour:
   function2: 0
   swapType: 4
   spellEnableType: 3
+  noah: 0

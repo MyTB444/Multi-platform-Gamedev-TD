@@ -24,7 +24,7 @@ public class NodeButton : MonoBehaviour, IPointerEnterHandler
     [Header("Colors")]
     public Color lockedColor = new Color(0.5f, 0.5f, 0.5f);
     public Color availableColor = new Color(1f, 1f, 1f);
-    public Color unlockerrColor = new Color(1f, 0.2196f, 0f);
+    public Color unlockedColor = new Color(1f, 0.2196f, 0f);
 
     private void Start()
     {
@@ -81,8 +81,8 @@ public class NodeButton : MonoBehaviour, IPointerEnterHandler
         {
             if (isUnlocked)
             {
-                backgroundImage[0].color = unlockerrColor;
-                backgroundImage[1].color = unlockerrColor;
+                backgroundImage[0].color = unlockedColor;
+                backgroundImage[1].color = unlockedColor;
             }
             else if (canUnlock)
             {

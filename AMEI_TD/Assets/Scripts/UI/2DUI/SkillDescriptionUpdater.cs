@@ -27,7 +27,7 @@ public class SkillDescriptionUpdater : MonoBehaviour
     public void UpdateTexts(SkillNode node)
     {
         texts[0].text = node.skillName;
-        texts[1].text = node.skillCost;
+        texts[1].text = "Cost: " + node.skillCost;
         texts[2].text = node.description;
     }
 }

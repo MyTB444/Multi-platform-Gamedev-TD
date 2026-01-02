@@ -17,7 +17,7 @@ MonoBehaviour:
   description: 'Pyromancers are replaced with Ice Mages; their attacks apply Frostbite.
 
 
-    Unleash!'
+    UNLEASH!'
   icon: {fileID: 21300000, guid: f5ab3f534c1138f4786f23cd74103223, type: 3}
   irreversible: 1
   skillPointCost: 5
@@ -27,3 +27,4 @@ MonoBehaviour:
   function2: 0
   swapType: 3
   spellEnableType: 2
+  noah: 0

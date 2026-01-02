@@ -18,7 +18,7 @@ MonoBehaviour:
     powerful units. Knights slow enemies hit by 30% for 2 seconds.
 
 
-    Unleash!'
+    UNLEASH!'
   icon: {fileID: 21300000, guid: b066c869b51f9384fa8ac9cce36b4648, type: 3}
   irreversible: 1
   skillPointCost: 5
@@ -28,3 +28,4 @@ MonoBehaviour:
   function2: 0
   swapType: 2
   spellEnableType: 4
+  noah: 0

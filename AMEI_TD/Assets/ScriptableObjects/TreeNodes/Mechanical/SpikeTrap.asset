@@ -17,7 +17,7 @@ MonoBehaviour:
   description: 'Spike Traps are enhanced and have a chance to apply Bleed.
 
 
-    Unleash!'
+    UNLEASH!'
   icon: {fileID: 21300000, guid: 7184252199212cf4a9288a2a2d70dee1, type: 3}
   irreversible: 1
   skillPointCost: 5
@@ -27,3 +27,4 @@ MonoBehaviour:
   function2: 0
   swapType: 0
   spellEnableType: 3
+  noah: 0

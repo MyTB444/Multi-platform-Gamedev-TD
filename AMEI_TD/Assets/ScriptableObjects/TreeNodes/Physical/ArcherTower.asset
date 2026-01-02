@@ -17,7 +17,7 @@ MonoBehaviour:
   description: 'The Archer Tower is upgraded; its attacks apply Poison.
 
 
-    Unleash! '
+    UNLEASH!'
   icon: {fileID: 21300000, guid: 8d95bcf261f259f4786a397bc66e3705, type: 3}
   irreversible: 1
   skillPointCost: 5
@@ -27,3 +27,4 @@ MonoBehaviour:
   function2: 0
   swapType: 0
   spellEnableType: 1
+  noah: 0

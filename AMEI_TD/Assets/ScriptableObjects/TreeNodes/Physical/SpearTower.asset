@@ -18,7 +18,7 @@ MonoBehaviour:
     Bleed.
 
 
-    Unleash!'
+    UNLEASH!'
   icon: {fileID: 21300000, guid: 530bcabb1501d8148a19a77465ecac03, type: 3}
   irreversible: 1
   skillPointCost: 5
@@ -28,3 +28,4 @@ MonoBehaviour:
   function2: 0
   swapType: 1
   spellEnableType: 1
+  noah: 0
