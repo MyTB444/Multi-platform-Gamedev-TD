@@ -592,7 +592,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyType: 1
-  enemySpeed: 2
+  enemySpeed: 3.5
   damage: 10
   reward: 10
   enemyMaxHp: 10
@@ -602,7 +602,15 @@ MonoBehaviour:
   enemyColor: {r: 1, g: 1, b: 1, a: 1}
   centerPoint: {fileID: 2311393132620224175}
   bottomPoint: {fileID: 4060315245288129876}
-  slowEffectPrefab: {fileID: 4259526894524806451, guid: cca859937b8679b49b3fc3dc323ef370, type: 3}
+  rotationSpeed: 10
+  acceleration: 40
+  angularSpeed: 360
+  useSpawnGrace: 1
+  spawnGracePeriod: 0.5
+  pathOffsetRange: 0.3
+  speedVariationPercent: 0.1
+  isHighPriority: 0
+  waypointReachThreshold: 0.3
   frozenColor: {r: 0.5, g: 0.8, b: 1, a: 1}
   enemyCurrentHp: 0
 --- !u!95 &95640295303221614

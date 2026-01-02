@@ -55,6 +55,11 @@ public class EnemyBase : MonoBehaviour, IDamageable
     [SerializeField] private Transform centerPoint;
     [SerializeField] private Transform bottomPoint;
     
+    [Header("Movement Settings")]
+    [SerializeField] private float rotationSpeed = 12f;
+    [SerializeField] private float acceleration = 8f;
+    [SerializeField] private float angularSpeed = 360f;
+    
     [Header("Spawn Settings")]
     [SerializeField] private bool useSpawnGrace = true;
     [SerializeField] private float spawnGracePeriod = 0.5f;
@@ -501,7 +506,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         if (NavAgent != null)
         {
             NavAgent.enabled = true;
-    
+
             // Find a valid NavMesh position near spawn point
             NavMeshHit hit;
             if (NavMesh.SamplePosition(transform.position, out hit, 5f, NavMesh.AllAreas))
@@ -513,21 +518,26 @@ public class EnemyBase : MonoBehaviour, IDamageable
                 Debug.LogWarning($"[{gameObject.name}] Could not find NavMesh near {transform.position}");
                 NavAgent.Warp(transform.position);
             }
-    
+
+            float speedFactor = Mathf.Max(1f, enemySpeed / 3f);
+
             NavAgent.speed = enemySpeed * mySpeedMultiplier;
+            NavAgent.acceleration = acceleration * speedFactor;
+            NavAgent.angularSpeed = angularSpeed * speedFactor;
+            
             NavAgent.isStopped = false;
             NavAgent.updateRotation = false;
-        
+
             if (isHighPriority)
             {
-                NavAgent.avoidancePriority = 1; // Others avoid me
+                NavAgent.avoidancePriority = 1;
                 NavAgent.obstacleAvoidanceType = ObstacleAvoidanceType.LowQualityObstacleAvoidance;
             }
             else
             {
                 NavAgent.avoidancePriority = Random.Range(30, 70);
             }
-    
+
             // Set first destination immediately
             if (myWaypoints != null && myWaypoints.Length > 0)
             {
@@ -595,7 +605,9 @@ public class EnemyBase : MonoBehaviour, IDamageable
         if (direction.sqrMagnitude > 0.01f)
         {
             Quaternion targetRotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
+            float speedFactor = enemySpeed / 3f; // 3 = baseline speed
+            float adjustedRotationSpeed = rotationSpeed * Mathf.Max(1f, speedFactor);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * adjustedRotationSpeed);
         }
 
         if (!NavAgent.pathPending && NavAgent.remainingDistance <= waypointReachThreshold)
