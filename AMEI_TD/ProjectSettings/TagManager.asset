@@ -8,6 +8,7 @@ TagManager:
   - FxTemporaire
   - Enemy
   - TinyFlames
+  - SelectedPath
   layers:
   - Default
   - TransparentFX
@@ -23,7 +24,6 @@ TagManager:
   - vfx
   - Decoy
   - TowerProjectile
-  - 
   - 
   - 
   - 

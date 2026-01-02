@@ -1363,7 +1363,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4770736095411100475}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0.7119776, z: -0, w: -0.70220214}
+  m_LocalRotation: {x: 0, y: 0.71197695, z: 0, w: 0.70220286}
   m_LocalPosition: {x: 4.44, y: 1.1300001, z: 18.07}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1445,7 +1445,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9caf9a10882248f1aa030ba0e9b958f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  guardianTowerPrefab: {fileID: 0}
+  guardianTowerPrefab: {fileID: 1644645679636176077, guid: 7ac96144da586a5499646a712c2fd5ab, type: 3}
   guardianSpawnPoint: {fileID: 2919640243356614027}
 --- !u!1 &4786508179566884282
 GameObject:

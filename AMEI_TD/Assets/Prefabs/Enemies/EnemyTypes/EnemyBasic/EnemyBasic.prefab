@@ -779,6 +779,10 @@ MonoBehaviour:
   bottomPoint: {fileID: 6638083700992160575}
   useSpawnGrace: 1
   spawnGracePeriod: 0.5
+  pathOffsetRange: 0.3
+  speedVariationPercent: 0.1
+  isHighPriority: 0
+  waypointReachThreshold: 0.3
   frozenColor: {r: 0.5, g: 0.8, b: 1, a: 1}
   enemyCurrentHp: 0
   myBody: {fileID: 0}
@@ -815,7 +819,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8663543207204576051}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.4
   m_Speed: 3.5

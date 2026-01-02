@@ -8,9 +8,9 @@ public class SelectedPath : MonoBehaviour
     private Material PathMat;
     private Color InitialColor;
 
-    
+    [SerializeField] private bool isOnXAxis;
 
-   
+    public bool isOnAxisProperty => isOnXAxis;
 
     private void OnEnable()
     {
@@ -37,19 +37,24 @@ public class SelectedPath : MonoBehaviour
     {
         if (SpellAbility.instance.CanSelectPaths)
         {
-            Vector3 mousepos = Input.mousePosition - Camera.main.transform.position;
+            
+            Vector3 mousepos = (Input.mousePosition);
+
             Ray ray = Camera.main.ScreenPointToRay(mousepos);
+
 
             RaycastHit hit;
             Vector3 mouseWorldPos = Vector3.zero;
-            if (Physics.Raycast(ray, out hit) & hit.collider != null)
+           
+            if (Physics.Raycast(ray.origin,ray.direction ,out hit,300f) & hit.collider != null)
             {
-              
+                
                 mouseWorldPos = hit.point;
                 mouseWorldPos.y += 0.1f;
                 print($"<color=green> mouseWorldpos </color>" + mouseWorldPos);
                 SpellAbility.instance.SelectedPathFromPlayer(this, mouseWorldPos);
-               
+                Debug.DrawRay(ray.origin,ray.direction*300f, Color.red,10f);
+
             }
             //Vector3 mousepos = Input.mousePosition - Camera.main.transform.position;
 

@@ -78,7 +78,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     [Header("Stun Effect")]
     [SerializeField] private Color frozenColor = new Color(0.5f, 0.8f, 1f, 1f);
     private Renderer[] enemyRenderers;
-    private Color[] originalColors;
+    
     private bool hasSavedColors = false;
 
     private NavMeshAgent NavAgent;
@@ -199,10 +199,13 @@ public class EnemyBase : MonoBehaviour, IDamageable
         myBody.useGravity = true;
         myBody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
     }
-    
+
     private void OnDisable()
     {
-        healthBar.onValueChanged.RemoveAllListeners();
+        if (healthBar != null)
+        {
+            healthBar.onValueChanged.RemoveAllListeners();
+        }
     }
 
     protected virtual void Awake()
@@ -978,7 +981,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
        
         myBody.useGravity = true;
 
-        myBody.AddExplosionForce(0.5f, currentMousePosition, 5, 2, ForceMode.Force);
+        myBody.AddExplosionForce(0.5f, currentMousePosition, 10, 2, ForceMode.Force);
 
         yield return new WaitForSeconds(2f);
         
@@ -1090,4 +1093,27 @@ public class EnemyBase : MonoBehaviour, IDamageable
     
         return (nextWaypoint - currentWaypoint).normalized;
     }
+
+    private void OnMouseEnter()
+    {
+        if (SpellAbility.instance.MechanicSpellActivated)
+        {
+            SkinnedMeshRenderer skinnedMeshRenderer = gameObject.GetComponentInChildren<SkinnedMeshRenderer>();
+            skinnedMeshRenderer.material.color = new Color(1, 0, 0, 0.7f);
+        }
+    }
+
+    private void OnMouseExit()
+    {
+        if (SpellAbility.instance.MechanicSpellActivated)
+        {
+            SkinnedMeshRenderer skinnedMeshRenderer = gameObject.GetComponentInChildren<SkinnedMeshRenderer>();
+            foreach (Color o in originalColors)
+            {
+                skinnedMeshRenderer.material.color = o;
+            }
+        }
+    }
+
+    public Color[] originalColors { get; private set; }
 }

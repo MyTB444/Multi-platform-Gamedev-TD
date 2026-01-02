@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SpellAbility : MonoBehaviour
@@ -15,10 +16,8 @@ public class SpellAbility : MonoBehaviour
 
     public enum SpellType { Physical, Magic, Mechanic, Imaginary }
     private EnemyBase enemyBaseGameObjectRef;
-    private Collider[] colliders = new Collider[20];
-    private int MaxResizeArray = 3;
-    private int resizeCount;
-
+    private Collider[] colliders = new Collider[800];
+   
     [Header("VFX Prefabs")]
     [SerializeField] private GameObject flamesPrefab;
     [SerializeField] private GameObject magicAreaPrefab;
@@ -28,6 +27,8 @@ public class SpellAbility : MonoBehaviour
     [SerializeField] private int flamesPoolSize = 20;
     [SerializeField] private int magicAreaPoolSize = 5;
     [SerializeField] private int bombPoolSize = 3;
+
+   
 
     private void Awake()
     {
@@ -164,7 +165,7 @@ public class SpellAbility : MonoBehaviour
         {
             if (!stopFire)
             {
-                for (int i = 0; i <= (int)selectedPath.FlameArea.bounds.size.magnitude * 3; i++)
+                for (int i = 0; i <= (int)selectedPath.FlameArea.bounds.size.magnitude * 7; i++)
                 {
                     GameObject flame = ObjectPooling.instance.Get(flamesPrefab);
                     if (flame != null)
@@ -189,7 +190,12 @@ public class SpellAbility : MonoBehaviour
 
     private Vector3 GiveRandomPointOnMesh(Bounds bounds)
     {
-        return new Vector3(bounds.center.x, bounds.center.y, Random.Range(bounds.min.z, bounds.max.z));
+        if (selectedPath.isOnAxisProperty)
+        {
+            
+            return new Vector3(Random.Range(bounds.min.x + 0.1f, bounds.max.x + 0.1f), bounds.center.y, bounds.center.z);
+        }
+        return new Vector3(bounds.center.x, bounds.center.y, Random.Range(bounds.min.z + 0.1f, bounds.max.z + 0.1f));
     }
 
     #endregion
@@ -243,7 +249,7 @@ public class SpellAbility : MonoBehaviour
     {
         if (MechanicSpellActivated)
         {
-            Vector3 mousepos = Input.mousePosition - Camera.main.transform.position;
+            Vector3 mousepos = Input.mousePosition;
             Ray ray = Camera.main.ScreenPointToRay(mousepos);
 
             RaycastHit hit;
@@ -330,6 +336,15 @@ public class SpellAbility : MonoBehaviour
                 if (selectedPath == null)
                 {
                     CanSelectPaths = false;
+
+                    foreach (Color o in enemyBase.originalColors)
+                    {
+                        enemyBase.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().material.color = o;
+                    }
+                    enemyBase.isInvisible = false;
+                    enemyBase.UpdateVisuals();
+                   
+                    
                     enemyBase.LiftEffectFunction(false, false);
                 }
             }
@@ -351,14 +366,10 @@ public class SpellAbility : MonoBehaviour
                 explosionBomb.transform.rotation = Quaternion.identity;
                 explosionBomb.SetActive(true);
 
-                int i = Physics.OverlapSphereNonAlloc(currentMousePosition, 5, colliders);
-                Debug.Log(i);
-                if (i > colliders.Length && resizeCount <= MaxResizeArray)
-                {
-                    colliders = new Collider[colliders.Length * 2];
-                    resizeCount++;
-                    i = Physics.OverlapSphereNonAlloc(currentMousePosition, 5, colliders);
-                }
+                
+                int i = Physics.OverlapSphereNonAlloc(currentMousePosition, 10, colliders);
+                
+              
                 for (int j = 0; j < i; j++)
                 {
                     GameObject affectedEnemy = colliders[j].gameObject;
@@ -368,7 +379,7 @@ public class SpellAbility : MonoBehaviour
                         if (affectedEnemyBaseRef != null)
                         {
                             enemyBase.Die();
-
+                            
                             StartCoroutine(affectedEnemyBaseRef.ExplodeEnemy(currentMousePosition, affectedEnemyBaseRef));
                             selectedPath = null;
                         }
