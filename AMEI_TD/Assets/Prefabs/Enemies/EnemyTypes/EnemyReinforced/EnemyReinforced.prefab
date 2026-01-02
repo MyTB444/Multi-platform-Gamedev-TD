@@ -1021,11 +1021,22 @@ MonoBehaviour:
   enemyColor: {r: 1, g: 1, b: 1, a: 1}
   centerPoint: {fileID: 7984103501130124172}
   bottomPoint: {fileID: 5076463070192780233}
+  rotationSpeed: 12
+  acceleration: 8
+  angularSpeed: 360
+  animationSpeedMultiplier: 1
   useSpawnGrace: 1
   spawnGracePeriod: 0.5
   pathOffsetRange: 0.5
   speedVariationPercent: 0.1
+  isHighPriority: 0
+  waypointReachThreshold: 0.3
+  cornerCutVariation: 0.8
+  pathDriftAmount: 0.15
   frozenColor: {r: 0.5, g: 0.8, b: 1, a: 1}
+  stuckCheckInterval: 0.5
+  stuckDistanceThreshold: 0.2
+  stuckSkipDistance: 2
   enemyCurrentHp: 0
   shieldEffectPrefab: {fileID: 1289543790355709915, guid: b99922c2f59b1a542bdd06ae8bee47ae, type: 3}
   shieldAmount: 10

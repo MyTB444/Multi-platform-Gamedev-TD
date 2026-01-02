@@ -398,11 +398,22 @@ MonoBehaviour:
   enemyColor: {r: 1, g: 1, b: 1, a: 1}
   centerPoint: {fileID: 6089701425207453296}
   bottomPoint: {fileID: 1001565865313448867}
+  rotationSpeed: 12
+  acceleration: 8
+  angularSpeed: 360
+  animationSpeedMultiplier: 1
   useSpawnGrace: 1
   spawnGracePeriod: 0.5
-  pathOffsetRange: 0.5
+  pathOffsetRange: 1.8
   speedVariationPercent: 0.1
+  isHighPriority: 0
+  waypointReachThreshold: 0.3
+  cornerCutVariation: 0.8
+  pathDriftAmount: 0.15
   frozenColor: {r: 0.5, g: 0.8, b: 1, a: 1}
+  stuckCheckInterval: 0.5
+  stuckDistanceThreshold: 0.2
+  stuckSkipDistance: 2
   enemyCurrentHp: 0
 --- !u!195 &2636003380119713654
 NavMeshAgent:

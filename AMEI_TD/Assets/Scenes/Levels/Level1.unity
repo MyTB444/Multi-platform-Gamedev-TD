@@ -34081,7 +34081,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: difficultyTiers.Array.data[0].enemyWeights.Array.size
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: difficultyTiers.Array.data[1].enemyWeights.Array.size
@@ -34133,7 +34133,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: difficultyTiers.Array.data[0].enemyWeights.Array.data[0].maxCount
-      value: 3
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: difficultyTiers.Array.data[0].enemyWeights.Array.data[0].minCount
@@ -34221,11 +34221,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: difficultyTiers.Array.data[0].enemyWeights.Array.data[0].enemyType
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: difficultyTiers.Array.data[0].enemyWeights.Array.data[1].enemyType
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: difficultyTiers.Array.data[0].enemyWeights.Array.data[2].enemyType
@@ -48834,6 +48834,10 @@ PrefabInstance:
       propertyPath: myWaveManager
       value: 
       objectReference: {fileID: 936385994}
+    - target: {fileID: 2864346829862581412, guid: 210cb4476c27d0e41a846c27c876e029, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -30.89
+      objectReference: {fileID: 0}
     - target: {fileID: 3917432715566831095, guid: 210cb4476c27d0e41a846c27c876e029, type: 3}
       propertyPath: m_LocalPosition.x
       value: 46.241
@@ -48877,6 +48881,10 @@ PrefabInstance:
     - target: {fileID: 6818338449513766528, guid: 210cb4476c27d0e41a846c27c876e029, type: 3}
       propertyPath: m_Name
       value: EnemySpawner
+      objectReference: {fileID: 0}
+    - target: {fileID: 8771285641503427246, guid: 210cb4476c27d0e41a846c27c876e029, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -31
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

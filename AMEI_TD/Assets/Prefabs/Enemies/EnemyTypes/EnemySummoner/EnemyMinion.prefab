@@ -25842,7 +25842,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyType: 0
-  enemySpeed: 2
+  enemySpeed: 1.5
   damage: 0
   reward: 0
   enemyMaxHp: 15
@@ -25852,8 +25852,22 @@ MonoBehaviour:
   enemyColor: {r: 1, g: 1, b: 1, a: 1}
   centerPoint: {fileID: 522137270217962571}
   bottomPoint: {fileID: 8359927919855344150}
-  slowEffectPrefab: {fileID: 0}
+  rotationSpeed: 12
+  acceleration: 8
+  angularSpeed: 360
+  animationSpeedMultiplier: 1
+  useSpawnGrace: 1
+  spawnGracePeriod: 0.5
+  pathOffsetRange: 1.2
+  speedVariationPercent: 0.1
+  isHighPriority: 0
+  waypointReachThreshold: 0.3
+  cornerCutVariation: 0.8
+  pathDriftAmount: 0.15
   frozenColor: {r: 0.5, g: 0.8, b: 1, a: 1}
+  stuckCheckInterval: 0.5
+  stuckDistanceThreshold: 0.2
+  stuckSkipDistance: 2
   enemyCurrentHp: 0
 --- !u!195 &1930399838623818289
 NavMeshAgent:

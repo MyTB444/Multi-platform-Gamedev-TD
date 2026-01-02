@@ -68,7 +68,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     
     [Header("Path Variation")]
     [Tooltip("Random lateral offset from path center (0 = always center, 0.5 = spread across road)")]
-    [SerializeField] private float pathOffsetRange = 0.3f;
+    [SerializeField] private float pathOffsetRange = 1f;
 
     [Tooltip("Random speed variation (0.1 = ±10% speed variation)")]
     [SerializeField] private float speedVariationPercent = 0.1f;
@@ -76,8 +76,16 @@ public class EnemyBase : MonoBehaviour, IDamageable
     [Tooltip("How close enemy must get to waypoint before moving to next (lower = tighter corners)")]
     [SerializeField] private float waypointReachThreshold = 0.3f;
 
+    [Tooltip("Variation in corner cutting (0.2 = ±20% threshold variation)")]
+    [SerializeField] private float cornerCutVariation = 0.8f;
+
+    [Tooltip("How much path offset changes per waypoint (0 = consistent, 0.3 = drifts across path)")]
+    [SerializeField] private float pathDriftAmount = 0.3f;
+
     private float myPathOffset;
     private float mySpeedMultiplier;
+    private float myCornerCutMultiplier;
+    private float myPathDrift;
     
     [Header("Stun Effect")]
     [SerializeField] private Color frozenColor = new Color(0.5f, 0.8f, 1f, 1f);
@@ -468,15 +476,20 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
         mySpawner = myNewSpawner;
         spawnTime = Time.time;
-    
+
         // Randomize path offset and speed variation
         myPathOffset = Random.Range(-pathOffsetRange, pathOffsetRange);
         mySpeedMultiplier = Random.Range(1f - speedVariationPercent, 1f + speedVariationPercent);
-    
+        myCornerCutMultiplier = Random.Range(1f - cornerCutVariation, 1f + cornerCutVariation);
+        myPathDrift = Random.Range(-pathDriftAmount, pathDriftAmount);
+
         UpdateWaypoints(pathWaypoints);
         CollectTotalDistance();
         ResetEnemy();
         BeginMovement();
+    
+        // DEBUG - add this line
+        Debug.Log($"[{gameObject.name}] PathOffset: {myPathOffset:F2} | Drift: {myPathDrift:F2} | CornerCut: {myCornerCutMultiplier:F2}");
     }
     
     // For minions/summons that spawn without a spawner
@@ -487,6 +500,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
         // Randomize path offset and speed variation
         myPathOffset = Random.Range(-pathOffsetRange, pathOffsetRange);
         mySpeedMultiplier = Random.Range(1f - speedVariationPercent, 1f + speedVariationPercent);
+        myCornerCutMultiplier = Random.Range(1f - cornerCutVariation, 1f + cornerCutVariation);
+        myPathDrift = Random.Range(-pathDriftAmount, pathDriftAmount);
     
         UpdateWaypoints(pathWaypoints);
         CollectTotalDistance();
@@ -600,9 +615,9 @@ public class EnemyBase : MonoBehaviour, IDamageable
         // Skip waypoints we've already passed - but only if we're close to them
         while (currentWaypointIndex < myWaypoints.Length && HasPassedWaypoint(currentWaypointIndex))
         {
-            float distToWaypoint = Vector3.Distance(transform.position, myWaypoints[currentWaypointIndex]);
-            if (distToWaypoint > 3f) break;
-        
+            float dist = Vector3.Distance(transform.position, myWaypoints[currentWaypointIndex]);
+            if (dist > 3f) break;
+
             currentWaypointIndex++;
         }
 
@@ -611,15 +626,23 @@ public class EnemyBase : MonoBehaviour, IDamageable
         // Calculate offset waypoint
         Vector3 targetWaypoint = myWaypoints[currentWaypointIndex];
 
-        // Get perpendicular direction to path for offset
         if (currentWaypointIndex < myWaypoints.Length - 1)
         {
-            Vector3 pathDirection = (myWaypoints[currentWaypointIndex + 1] - targetWaypoint).normalized;
+            Vector3 nextWaypoint = myWaypoints[currentWaypointIndex + 1];
+            Vector3 pathDirection = (nextWaypoint - targetWaypoint).normalized;
             Vector3 offsetDirection = Vector3.Cross(pathDirection, Vector3.up);
-            targetWaypoint += offsetDirection * myPathOffset;
+
+            float waypointOffset = myPathOffset + (myPathDrift * currentWaypointIndex);
+            waypointOffset = Mathf.Clamp(waypointOffset, -pathOffsetRange, pathOffsetRange);
+
+            targetWaypoint += offsetDirection * waypointOffset;
         }
 
         NavAgent.SetDestination(targetWaypoint);
+
+        // DEBUG
+        Debug.DrawLine(transform.position, targetWaypoint, Color.green, 0.1f);
+        Debug.DrawLine(transform.position, myWaypoints[currentWaypointIndex], Color.red, 0.1f);
 
         // Smooth rotation towards steering target
         Vector3 direction = NavAgent.steeringTarget - transform.position;
@@ -633,25 +656,13 @@ public class EnemyBase : MonoBehaviour, IDamageable
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * adjustedRotationSpeed);
         }
 
-        // Dynamic waypoint reach threshold - larger when moving fast or when path is clear ahead
-        float dynamicThreshold = waypointReachThreshold;
-        if (currentWaypointIndex < myWaypoints.Length - 1)
-        {
-            // Increase threshold if next waypoint is roughly in same direction (not a sharp turn)
-            Vector3 toCurrentWaypoint = (targetWaypoint - transform.position).normalized;
-            Vector3 toNextWaypoint = (myWaypoints[currentWaypointIndex + 1] - targetWaypoint).normalized;
-            float turnAngle = Vector3.Angle(toCurrentWaypoint, toNextWaypoint);
-            
-            if (turnAngle < 45f)
-            {
-                dynamicThreshold = waypointReachThreshold * 2f; // Can cut corner on gentle turns
-            }
-        }
-
+        // Dynamic reach threshold based on corner cut multiplier
+        float dynamicThreshold = waypointReachThreshold * myCornerCutMultiplier;
+        
         if (!NavAgent.pathPending && NavAgent.remainingDistance <= dynamicThreshold)
         {
             currentWaypointIndex++;
-            stuckDuration = 0f; // Reset stuck timer on waypoint reached
+            stuckDuration = 0f;
         }
     }
     
