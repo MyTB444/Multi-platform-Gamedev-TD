@@ -42,6 +42,47 @@ public class MegaWaveDetails
 }
 
 [Serializable]
+public class EnemyWeight
+{
+    [Tooltip("The enemy type to spawn")]
+    public EnemyType enemyType;
+    
+    [Tooltip("Spawn chance weight - higher = more common relative to other types")]
+    [Range(1, 100)] public int weight = 10;
+    
+    [Tooltip("Guaranteed minimum of this type per wave (0 = no guarantee)")]
+    public int minCount = 0;
+    
+    [Tooltip("Maximum allowed per wave (0 = unlimited)")]
+    public int maxCount = 0;
+}
+
+[Serializable]
+public class DifficultyTier
+{
+    [Tooltip("Label for this tier (e.g. Early, Mid, Late)")]
+    public string tierName = "New Tier";
+    
+    [Tooltip("First wave number this tier applies to (e.g. 1 = starts at wave 1)")]
+    public int startWave = 1;
+    
+    [Tooltip("Last wave number for this tier. Set to -1 for infinite (final tier)")]
+    public int endWave = 10;
+    
+    [Tooltip("Base number of enemies on the first wave of this tier")]
+    public int baseEnemyCount = 5;
+    
+    [Tooltip("Extra enemies added per wave within this tier (e.g. 2 = +2 enemies each wave)")]
+    public int enemiesPerWaveIncrease = 1;
+    
+    [Tooltip("How fast enemies spawn (1 = normal, 2 = twice as fast, 0.5 = half speed)")]
+    public float spawnRateMultiplier = 1f;
+    
+    [Tooltip("Enemy types that can spawn in this tier with their weights and min/max caps")]
+    public List<EnemyWeight> enemyWeights = new List<EnemyWeight>();
+}
+
+[Serializable]
 public class EnemyPoolConfig
 {
     public EnemyType enemyType;
@@ -53,10 +94,16 @@ public class WaveManager : MonoBehaviour
 {
     public static WaveManager instance;
 
-    [Header("Wave Details")]
-    [SerializeField] private float timeBetweenWaves;
+    [Header("Wave Settings")]
+    [SerializeField] private float timeBetweenWaves = 10f;
     [SerializeField] private float waveTimer;
+    [SerializeField] private bool useEndlessWaves = true;
+
+    [Header("Manual Waves (if not endless)")]
     [SerializeField] private WaveDetails[] levelWaves;
+
+    [Header("Endless Wave Settings")]
+    [SerializeField] private List<DifficultyTier> difficultyTiers = new List<DifficultyTier>();
 
     [Header("Mega Wave")]
     [SerializeField] private MegaWaveDetails megaWave;
@@ -75,13 +122,18 @@ public class WaveManager : MonoBehaviour
     private bool makingNextWave;
     public bool gameBegan;
 
+    private float currentSpawnRateMultiplier = 1f;
+
     private void Awake()
     {
         instance = this;
         enemySpawners = new List<EnemySpawner>(FindObjectsByType<EnemySpawner>(FindObjectsSortMode.None));
-
-        // Build lookup and register pools
         enemyPrefabLookup = new Dictionary<EnemyType, GameObject>();
+    }
+
+    private void Start()
+    {
+        // Register enemy prefabs with pool
         foreach (var config in enemyPrefabs)
         {
             if (config.prefab != null)
@@ -115,28 +167,26 @@ public class WaveManager : MonoBehaviour
     public void CheckIfWaveCompleted()
     {
         if (gameBegan == false || GameManager.instance.IsGameLost()) return;
-    
+
         if (AllEnemiesDefeated() == false || AllSpawnersFinishedSpawning() == false || makingNextWave) return;
-    
+
         makingNextWave = true;
         waveIndex++;
-    
-        if (HasNoMoreWaves())
+
+        // If mega wave is active, check if completed
+        if (megaWaveActive)
         {
-            // Don't win yet - wait for mega wave to be triggered and completed
-            // If mega wave is already active, let CheckIfMegaWaveCompleted handle it
-            if (megaWaveActive)
-            {
-                CheckIfMegaWaveCompleted();
-            }
-            else
-            {
-                Debug.Log("All normal waves complete! Summon the Guardian to trigger the final Mega Wave!");
-                // Optionally notify UI that guardian can be summoned
-            }
+            CheckIfMegaWaveCompleted();
             return;
         }
-    
+
+        // Endless mode never runs out of waves - wait for guardian
+        if (!useEndlessWaves && HasNoMoreWaves())
+        {
+            Debug.Log("All normal waves complete! Summon the Guardian to trigger the final Mega Wave!");
+            return;
+        }
+
         EnableWaveTimer(true);
     }
 
@@ -161,7 +211,6 @@ public class WaveManager : MonoBehaviour
         }
 
         waveTimer -= Time.deltaTime;
-        //UIBase.instance.UpdateWaveTimerUI(waveTimer);
 
         if (waveTimer <= 0) StartNewWave();
     }
@@ -177,10 +226,13 @@ public class WaveManager : MonoBehaviour
 
     private void GiveEnemiesToSpawners()
     {
-        List<GameObject> newEnemies = GetNewEnemies();
+        List<GameObject> newEnemies = useEndlessWaves ? GenerateEndlessWave() : GetNewEnemies();
         int spawnerIndex = 0;
 
-        if (newEnemies == null) return;
+        if (newEnemies == null || newEnemies.Count == 0) return;
+
+        // Shuffle for variety
+        ShuffleList(newEnemies);
 
         for (int i = 0; i < newEnemies.Count; i++)
         {
@@ -193,7 +245,169 @@ public class WaveManager : MonoBehaviour
 
             if (spawnerIndex >= enemySpawners.Count) spawnerIndex = 0;
         }
+
+        Debug.Log($"Wave {waveIndex + 1} started: {newEnemies.Count} enemies");
     }
+
+    #region Endless Wave Generation
+
+    private List<GameObject> GenerateEndlessWave()
+    {
+        DifficultyTier currentTier = GetCurrentTier();
+        if (currentTier == null)
+        {
+            Debug.LogWarning("No difficulty tier found for wave " + (waveIndex + 1));
+            return null;
+        }
+
+        // Calculate enemy count for this wave
+        int waveInTier = (waveIndex + 1) - currentTier.startWave;
+        int enemyCount = currentTier.baseEnemyCount + (waveInTier * currentTier.enemiesPerWaveIncrease);
+
+        // Store spawn rate for spawners
+        currentSpawnRateMultiplier = currentTier.spawnRateMultiplier;
+
+        // Generate enemy list with weights and min/max
+        List<GameObject> enemies = GenerateWeightedEnemies(currentTier, enemyCount);
+
+        Debug.Log($"[Endless Wave {waveIndex + 1}] Tier: {currentTier.tierName} | Enemies: {enemyCount} | Spawn Rate: {currentSpawnRateMultiplier}x");
+
+        return enemies;
+    }
+
+    private DifficultyTier GetCurrentTier()
+    {
+        int currentWave = waveIndex + 1;
+
+        foreach (var tier in difficultyTiers)
+        {
+            bool afterStart = currentWave >= tier.startWave;
+            bool beforeEnd = tier.endWave == -1 || currentWave <= tier.endWave;
+
+            if (afterStart && beforeEnd)
+            {
+                return tier;
+            }
+        }
+
+        // Fallback to last tier if beyond all defined tiers
+        if (difficultyTiers.Count > 0)
+        {
+            return difficultyTiers[difficultyTiers.Count - 1];
+        }
+
+        return null;
+    }
+
+    private List<GameObject> GenerateWeightedEnemies(DifficultyTier tier, int totalCount)
+    {
+        List<GameObject> enemies = new List<GameObject>();
+        Dictionary<EnemyType, int> spawnCounts = new Dictionary<EnemyType, int>();
+
+        // Initialize counts
+        foreach (var weight in tier.enemyWeights)
+        {
+            spawnCounts[weight.enemyType] = 0;
+        }
+
+        // First pass: Add guaranteed minimums
+        foreach (var weight in tier.enemyWeights)
+        {
+            if (weight.minCount > 0 && enemyPrefabLookup.ContainsKey(weight.enemyType))
+            {
+                int toAdd = Mathf.Min(weight.minCount, totalCount - enemies.Count);
+                for (int i = 0; i < toAdd; i++)
+                {
+                    enemies.Add(enemyPrefabLookup[weight.enemyType]);
+                    spawnCounts[weight.enemyType]++;
+                }
+            }
+        }
+
+        // Second pass: Fill remaining with weighted random
+        int remainingSlots = totalCount - enemies.Count;
+        int totalWeight = CalculateTotalWeight(tier.enemyWeights, spawnCounts);
+
+        for (int i = 0; i < remainingSlots; i++)
+        {
+            EnemyType? selectedType = SelectWeightedEnemy(tier.enemyWeights, spawnCounts, totalWeight);
+
+            if (selectedType.HasValue && enemyPrefabLookup.ContainsKey(selectedType.Value))
+            {
+                enemies.Add(enemyPrefabLookup[selectedType.Value]);
+                spawnCounts[selectedType.Value]++;
+
+                // Recalculate weight if we hit a max
+                var weight = tier.enemyWeights.Find(w => w.enemyType == selectedType.Value);
+                if (weight != null && weight.maxCount > 0 && spawnCounts[selectedType.Value] >= weight.maxCount)
+                {
+                    totalWeight = CalculateTotalWeight(tier.enemyWeights, spawnCounts);
+                }
+            }
+        }
+
+        return enemies;
+    }
+
+    private int CalculateTotalWeight(List<EnemyWeight> weights, Dictionary<EnemyType, int> currentCounts)
+    {
+        int total = 0;
+        foreach (var weight in weights)
+        {
+            if (!enemyPrefabLookup.ContainsKey(weight.enemyType)) continue;
+
+            // Skip if at max
+            if (weight.maxCount > 0 && currentCounts.ContainsKey(weight.enemyType) && currentCounts[weight.enemyType] >= weight.maxCount)
+            {
+                continue;
+            }
+
+            total += weight.weight;
+        }
+        return total;
+    }
+
+    private EnemyType? SelectWeightedEnemy(List<EnemyWeight> weights, Dictionary<EnemyType, int> currentCounts, int totalWeight)
+    {
+        if (totalWeight <= 0) return null;
+
+        int roll = UnityEngine.Random.Range(0, totalWeight);
+        int cumulative = 0;
+
+        foreach (var weight in weights)
+        {
+            if (!enemyPrefabLookup.ContainsKey(weight.enemyType)) continue;
+
+            // Skip if at max
+            if (weight.maxCount > 0 && currentCounts.ContainsKey(weight.enemyType) && currentCounts[weight.enemyType] >= weight.maxCount)
+            {
+                continue;
+            }
+
+            cumulative += weight.weight;
+            if (roll < cumulative)
+            {
+                return weight.enemyType;
+            }
+        }
+
+        return null;
+    }
+
+    private void ShuffleList<T>(List<T> list)
+    {
+        for (int i = list.Count - 1; i > 0; i--)
+        {
+            int j = UnityEngine.Random.Range(0, i + 1);
+            T temp = list[i];
+            list[i] = list[j];
+            list[j] = temp;
+        }
+    }
+
+    #endregion
+
+    #region Manual Wave System
 
     private List<GameObject> GetNewEnemies()
     {
@@ -233,6 +447,12 @@ public class WaveManager : MonoBehaviour
         }
     }
 
+    private bool HasNoMoreWaves() => !useEndlessWaves && waveIndex >= levelWaves.Length;
+
+    #endregion
+
+    #region Wave State Checks
+
     private bool AllEnemiesDefeated()
     {
         foreach (EnemySpawner spawner in enemySpawners)
@@ -258,9 +478,10 @@ public class WaveManager : MonoBehaviour
         return true;
     }
 
-    private bool HasNoMoreWaves() => waveIndex >= levelWaves.Length;
+    #endregion
 
-    // Mega Wave System
+    #region Mega Wave System
+
     public void TriggerMegaWave()
     {
         if (megaWaveTriggered) return;
@@ -268,7 +489,6 @@ public class WaveManager : MonoBehaviour
         megaWaveTriggered = true;
         megaWaveStartTime = Time.time;
 
-        // Stop normal wave progression
         EnableWaveTimer(false);
 
         Debug.Log("Mega Wave triggered! Starting in " + megaWaveDelay + " seconds...");
@@ -299,6 +519,8 @@ public class WaveManager : MonoBehaviour
         int spawnerIndex = 0;
 
         if (megaEnemies == null || megaEnemies.Count == 0) return;
+
+        ShuffleList(megaEnemies);
 
         for (int i = 0; i < megaEnemies.Count; i++)
         {
@@ -349,8 +571,17 @@ public class WaveManager : MonoBehaviour
         GameManager.instance.LevelCompleted();
     }
 
+    #endregion
+
+    #region Public Getters
+
     public bool IsMegaWaveActive() => megaWaveActive;
     public bool IsMegaWaveTriggered() => megaWaveTriggered;
     public float GetMegaWaveHealthMultiplier() => megaWave != null ? Mathf.Clamp(megaWave.enemyHealthMultiplier, 0.1f, 10f) : 1f;
     public float GetMegaWaveSpawnRateMultiplier() => megaWave != null ? Mathf.Clamp(megaWave.spawnRateMultiplier, 0.1f, 10f) : 1f;
+    public float GetCurrentSpawnRateMultiplier() => megaWaveActive ? GetMegaWaveSpawnRateMultiplier() : currentSpawnRateMultiplier;
+    public int GetCurrentWave() => waveIndex + 1;
+    public DifficultyTier GetCurrentDifficultyTier() => GetCurrentTier();
+
+    #endregion
 }

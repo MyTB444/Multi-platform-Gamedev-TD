@@ -105,16 +105,25 @@ public class DamageNumber : MonoBehaviour
         {
             float fadeElapsed = elapsed - fadeDelay;
             float alpha = 1f - (fadeElapsed / fadeDuration);
-            
+
             if (alpha <= 0f)
             {
-                Destroy(gameObject);
+                ObjectPooling.instance.Return(gameObject);
                 return;
             }
-            
+
             Color fadedColor = startColor;
             fadedColor.a = alpha;
             textMesh.color = fadedColor;
         }
+    }
+
+    private void OnEnable()
+    {
+        if (textMesh != null)
+        {
+            textMesh.color = normalColor;
+        }
+        transform.localScale = baseScale;
     }
 }

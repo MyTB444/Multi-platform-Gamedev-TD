@@ -1,6 +1,8 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public enum EnemyType
 {
@@ -45,7 +47,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     [SerializeField] private ElementType elementType;
 
     [Header("Ability")]
-    [SerializeField] private bool isInvisible;
+    public bool isInvisible;
     [SerializeField] private bool isReinforced;
 
     [Header("Visuals")]
@@ -55,10 +57,28 @@ public class EnemyBase : MonoBehaviour, IDamageable
     [SerializeField] private Transform centerPoint;
     [SerializeField] private Transform bottomPoint;
     
+    [Header("Spawn Settings")]
+    [SerializeField] private bool useSpawnGrace = true;
+    [SerializeField] private float spawnGracePeriod = 0.5f;
+    private float spawnTime;
+    
+    [Header("Path Variation")]
+    [Tooltip("Random lateral offset from path center (0 = always center, 0.5 = spread across road)")]
+    [SerializeField] private float pathOffsetRange = 0.3f;
+
+    [Tooltip("Random speed variation (0.1 = ±10% speed variation)")]
+    [SerializeField] private float speedVariationPercent = 0.1f;
+    [SerializeField] private bool isHighPriority = false;
+    [Tooltip("How close enemy must get to waypoint before moving to next (lower = tighter corners)")]
+    [SerializeField] private float waypointReachThreshold = 0.3f;
+
+    private float myPathOffset;
+    private float mySpeedMultiplier;
+    
     [Header("Stun Effect")]
     [SerializeField] private Color frozenColor = new Color(0.5f, 0.8f, 1f, 1f);
     private Renderer[] enemyRenderers;
-    private Color[] originalColors;
+    
     private bool hasSavedColors = false;
 
     private NavMeshAgent NavAgent;
@@ -77,6 +97,8 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     private Vector3 Destination;
     protected bool canMove = true;
+    [HideInInspector]public Rigidbody myBody;
+    
 
     // Slow system
     private float baseSpeed;
@@ -133,7 +155,16 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private float shieldHealth = 0f;
     private GameObject activeShieldEffect;
     
-    private void OnEnable()
+    private VFXDamage vfxDamageScriptRef;
+
+    [SerializeField] private  Canvas enemyHealthDisplayCanvas;
+    [SerializeField] private  Slider healthBar;
+
+    [SerializeField] private EnemyVFXPool enemyVFXPoolScriptRef;
+    private bool enemyHealthBarStatus = false;
+    private bool spellsActivated = false;
+    
+    protected virtual void OnEnable()
     {
         UpdateVisuals();
         NavAgent = GetComponent<NavMeshAgent>();
@@ -143,6 +174,37 @@ public class EnemyBase : MonoBehaviour, IDamageable
         if (NavAgent != null)
         {
             NavAgent.enabled = false;
+        }
+        
+        if (enemyBaseRef == null)
+        {
+            enemyBaseRef = this;
+        }
+        if(vfxDamageScriptRef != null)
+        {
+           
+            vfxDamageScriptRef.enemies.Remove(this);
+            
+        }
+        enemyHealthDisplayCanvas.enabled = false;
+        
+        vfxContainer = enemyVFXPoolScriptRef;
+        vfxContainer.PoolVFXGameObjects();
+
+        enemyHealthDisplayCanvas.worldCamera = Camera.main;
+        healthBar.value = 1;
+        myBody = GetComponent<Rigidbody>();
+        EnemyAnimator.enabled = true;
+        spellsActivated = false;
+        myBody.useGravity = true;
+        myBody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+    }
+
+    private void OnDisable()
+    {
+        if (healthBar != null)
+        {
+            healthBar.onValueChanged.RemoveAllListeners();
         }
     }
 
@@ -165,11 +227,25 @@ public class EnemyBase : MonoBehaviour, IDamageable
             gameObject.AddComponent<EnemyDebuffDisplay>();
         }
     }
+    
+    public void GetRefOfVfxDamageScript(VFXDamage vfxDamageScriptRef)
+    {
+        this.vfxDamageScriptRef = vfxDamageScriptRef;
+        this.vfxDamageScriptRef.stopFlames = false;
+       
+    }
 
     protected virtual void Update()
     {
         UpdateStatusEffects();
-        FollowPath();
+        if (enemyBaseRef != null)
+        {
+            if (!enemyBaseRef.spellsActivated)
+            {
+                FollowPath();
+
+            }
+        }
         PlayAnimations();
     }
 
@@ -434,10 +510,37 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public void SetupEnemy(EnemySpawner myNewSpawner, Vector3[] pathWaypoints)
     {
         mySpawner = myNewSpawner;
+        spawnTime = Time.time;
+    
+        // Randomize path offset and speed variation
+        myPathOffset = Random.Range(-pathOffsetRange, pathOffsetRange);
+        mySpeedMultiplier = Random.Range(1f - speedVariationPercent, 1f + speedVariationPercent);
+    
         UpdateWaypoints(pathWaypoints);
         CollectTotalDistance();
         ResetEnemy();
         BeginMovement();
+    }
+    
+    // For minions/summons that spawn without a spawner
+    public void SetupEnemyNoGrace(Vector3[] pathWaypoints)
+    {
+        spawnTime = -spawnGracePeriod;
+    
+        // Randomize path offset and speed variation
+        myPathOffset = Random.Range(-pathOffsetRange, pathOffsetRange);
+        mySpeedMultiplier = Random.Range(1f - speedVariationPercent, 1f + speedVariationPercent);
+    
+        UpdateWaypoints(pathWaypoints);
+        CollectTotalDistance();
+        ResetEnemy();
+        BeginMovement();
+    }
+    
+    public bool IsTargetable()
+    {
+        if (!useSpawnGrace) return true;
+        return Time.time > spawnTime + spawnGracePeriod;
     }
 
     private void UpdateWaypoints(Vector3[] newWaypoints)
@@ -456,7 +559,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         if (NavAgent != null)
         {
             NavAgent.enabled = true;
-        
+    
             // Find a valid NavMesh position near spawn point
             NavMeshHit hit;
             if (NavMesh.SamplePosition(transform.position, out hit, 5f, NavMesh.AllAreas))
@@ -468,12 +571,22 @@ public class EnemyBase : MonoBehaviour, IDamageable
                 Debug.LogWarning($"[{gameObject.name}] Could not find NavMesh near {transform.position}");
                 NavAgent.Warp(transform.position);
             }
-        
-            NavAgent.speed = enemySpeed;
+    
+            NavAgent.speed = enemySpeed * mySpeedMultiplier;
             NavAgent.isStopped = false;
             NavAgent.updateRotation = false;
         
-            // Set first destination immediately so it starts moving right away
+            if (isHighPriority)
+            {
+                NavAgent.avoidancePriority = 1; // Others avoid me
+                NavAgent.obstacleAvoidanceType = ObstacleAvoidanceType.LowQualityObstacleAvoidance;
+            }
+            else
+            {
+                NavAgent.avoidancePriority = Random.Range(30, 70);
+            }
+    
+            // Set first destination immediately
             if (myWaypoints != null && myWaypoints.Length > 0)
             {
                 NavAgent.SetDestination(myWaypoints[0]);
@@ -497,8 +610,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         if (myWaypoints == null || currentWaypointIndex >= myWaypoints.Length) return;
 
         if (NavAgent == null || !NavAgent.isActiveAndEnabled) return;
-    
-        // Must be on NavMesh to do anything
+
         if (!NavAgent.isOnNavMesh) return;
 
         if (isStunned || !canMove)
@@ -506,32 +618,45 @@ public class EnemyBase : MonoBehaviour, IDamageable
             NavAgent.isStopped = true;
             return;
         }
-    
-        NavAgent.isStopped = false;
-        NavAgent.speed = enemySpeed;
 
-        // Skip waypoints we've already passed
+        NavAgent.isStopped = false;
+        NavAgent.speed = enemySpeed * mySpeedMultiplier;
+
+        // Skip waypoints we've already passed - but only if we're close to them
         while (currentWaypointIndex < myWaypoints.Length && HasPassedWaypoint(currentWaypointIndex))
         {
+            float distToWaypoint = Vector3.Distance(transform.position, myWaypoints[currentWaypointIndex]);
+            if (distToWaypoint > 3f) break; // Don't skip if we're far away
+        
             currentWaypointIndex++;
         }
 
         if (currentWaypointIndex >= myWaypoints.Length) return;
 
+        // Calculate offset waypoint
         Vector3 targetWaypoint = myWaypoints[currentWaypointIndex];
+
+        // Get perpendicular direction to path for offset
+        if (currentWaypointIndex < myWaypoints.Length - 1)
+        {
+            Vector3 pathDirection = (myWaypoints[currentWaypointIndex + 1] - targetWaypoint).normalized;
+            Vector3 offsetDirection = Vector3.Cross(pathDirection, Vector3.up);
+            targetWaypoint += offsetDirection * myPathOffset;
+        }
+
         NavAgent.SetDestination(targetWaypoint);
 
         // Smooth rotation towards steering target
         Vector3 direction = NavAgent.steeringTarget - transform.position;
         direction.y = 0;
-    
+
         if (direction.sqrMagnitude > 0.01f)
         {
             Quaternion targetRotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 10f);
         }
 
-        if (!NavAgent.pathPending && NavAgent.remainingDistance <= waypointReachDistance)
+        if (!NavAgent.pathPending && NavAgent.remainingDistance <= waypointReachThreshold)
         {
             currentWaypointIndex++;
         }
@@ -584,8 +709,18 @@ public class EnemyBase : MonoBehaviour, IDamageable
             return;
         }
 
-        Debug.Log($"{gameObject.name}: Setting Walk to true");
-        EnemyAnimator.SetBool("Walk", true);
+        if (!spellsActivated)
+        {
+            EnemyAnimator.SetBool("Walk", true);
+            myBody.constraints = RigidbodyConstraints.FreezeRotationX|RigidbodyConstraints.FreezeRotationZ;
+        }
+        else
+        {
+            
+            EnemyAnimator.SetBool("Walk", false);
+            EnemyAnimator.SetTrigger("FloatMidAir");
+           
+        }
     }
 
     public float GetRemainingDistance()
@@ -607,7 +742,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         Destroy(gameObject);
     }
 
-    public virtual void TakeDamage(DamageInfo damageInfo)
+    public virtual void TakeDamage(DamageInfo damageInfo,float vfxDamage = 0,bool spellDamageEnabled = false )
     {
         DamageCalculator.DamageResult result = DamageCalculator.Calculate(damageInfo, elementType);
 
@@ -639,46 +774,94 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
 
         Debug.Log($"DamageInfo: {damageInfo.elementType} vs {elementType} = {result.finalDamage}");
-
-        float damageToApply = result.finalDamage;
-        if (hasShield && shieldHealth > 0)
+        if (spellDamageEnabled)
         {
-            if (shieldHealth >= damageToApply)
+            if (gameObject.activeInHierarchy)
             {
-                shieldHealth -= damageToApply;
-                damageToApply = 0;
-                Debug.Log($"Shield absorbed all damage. Shield remaining: {shieldHealth}");
-            }
-            else
-            {
-                damageToApply -= shieldHealth;
-                Debug.Log($"Shield broken");
-                shieldHealth = 0;
-                RemoveShield();
+                enemyCurrentHp -= vfxDamage * 100;
+                healthBar.value -= enemyCurrentHp * Time.fixedDeltaTime / 100;
             }
         }
+        // Normal damage path
+        else
+        {
+            float damageToApply = result.finalDamage;
+        
+            // Shield absorbs damage first
+            if (hasShield && shieldHealth > 0)
+            {
+                if (shieldHealth >= damageToApply)
+                {
+                    shieldHealth -= damageToApply;
+                    damageToApply = 0;
+                    Debug.Log($"Shield absorbed all damage. Shield remaining: {shieldHealth}");
+                }
+                else
+                {
+                    damageToApply -= shieldHealth;
+                    Debug.Log($"Shield broken");
+                    shieldHealth = 0;
+                    RemoveShield();
+                }
+            }
 
-        enemyCurrentHp -= damageToApply;
+            enemyCurrentHp -= damageToApply;
+            healthBar.value -= damageToApply;
+        }
+        
+        healthBar.onValueChanged.AddListener((value) =>
+        {
+            //Debug.Log("123");
+            if (gameObject.activeInHierarchy && gameObject != null)
+            {
+                enemyHealthBarStatus = true;
+                  
+                enemyHealthDisplayCanvas.enabled = enemyHealthBarStatus;
+                    
+                    
+            }
+        });
 
-        if (enemyCurrentHp <= 0 && !isDead)
+        if ((enemyCurrentHp <= 0 || healthBar.value <= 0) && !isDead)
         {
             isDead = true;
+            enemyHealthBarStatus = false;
+            StartCoroutine(DisableHealthBar(false));
             Die();
+        }
+        if (gameObject.activeInHierarchy && gameObject != null)
+        {
+            enemyHealthBarStatus = false;
+            StartCoroutine(DisableHealthBar(true));
+
         }
     }
 
-    public virtual void TakeDamage(float incomingDamage)
+    public virtual void TakeDamage(float incomingDamage, float vfxDamage = 0, bool spellDamageEnabled = false)
     {
-        TakeDamage(new DamageInfo(incomingDamage, ElementType.Physical));
+        TakeDamage(new DamageInfo(incomingDamage, ElementType.Physical),vfxDamage ,spellDamageEnabled);
+    }
+    
+    private IEnumerator DisableHealthBar(bool status)
+    {
+        if (gameObject.activeInHierarchy && gameObject != null)
+        {
+            if (status)
+            {
+                yield return new WaitForSeconds(5f);
+            }
+            enemyHealthDisplayCanvas.enabled = enemyHealthBarStatus;
+        }
     }
 
-    private void Die()
+    public void Die()
     {
         if (GameManager.instance != null)
         {
             GameManager.instance.UpdateSkillPoints(reward);
         }
         RemoveEnemy();
+        enemyBaseRef = null;
         ObjectPooling.instance.Return(gameObject);
     }
     
@@ -748,11 +931,72 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
         UpdateVisuals();
     }
-
-    private void UpdateVisuals()
+    
+    public void LiftEffectFunction(bool status,bool isMechanicSpellDamage)
     {
-        Renderer r = GetComponent<Renderer>();
-        if (r == null) return;
+        if (gameObject.activeInHierarchy && gameObject != null)
+        {
+            enemyBaseRef.myBody.useGravity = !status;
+            if (!status)
+            {
+                myBody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
+                StartCoroutine(EnableNavMesh());
+            }
+            else
+            {
+                enemyBaseRef.spellsActivated = status;
+                enemyBaseRef.NavAgent.enabled = !status;
+                StartCoroutine(DisableYPos(isMechanicSpellDamage));
+            }
+        }
+    }
+
+   
+
+    private IEnumerator DisableYPos(bool isMechanicalSpellDamage)
+    {
+        if (gameObject.activeInHierarchy && gameObject != null && !isMechanicalSpellDamage)
+        {
+            yield return new WaitForSeconds(0.5f);
+            myBody.constraints = RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezeRotation;
+        }
+    }
+    
+    private IEnumerator EnableNavMesh()
+    {
+        if (gameObject.activeInHierarchy && gameObject != null)
+        {
+            yield return new WaitForSecondsRealtime(0.4f);
+            spellsActivated = false;
+            enemyBaseRef.NavAgent.enabled = true;
+        }
+    }
+  
+    public IEnumerator ExplodeEnemy(Vector3 currentMousePosition ,EnemyBase affectedEnemy)
+    {
+        NavAgent.enabled = false;
+        EnemyAnimator.enabled = false;
+        spellsActivated = true;
+        myBody.constraints = RigidbodyConstraints.None;
+       
+        myBody.useGravity = true;
+
+        myBody.AddExplosionForce(0.5f, currentMousePosition, 10, 2, ForceMode.Force);
+
+        yield return new WaitForSeconds(2f);
+        
+        Die();
+      
+    }
+
+    public void UpdateVisuals()
+    {
+        Renderer r = GetComponentInChildren<Renderer>();
+        if (r == null)
+        {
+            Debug.LogWarning($"[{gameObject.name}] No Renderer found on root object!");
+            return;
+        }
 
         Color finalColor = enemyColor;
 
@@ -774,7 +1018,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
         if (shieldEffectPrefab != null && activeShieldEffect == null)
         {
-            activeShieldEffect = Instantiate(shieldEffectPrefab, transform.position, Quaternion.identity, transform);
+            activeShieldEffect = ObjectPooling.instance.GetVFXWithParent(shieldEffectPrefab, transform, -1f);
         }
 
         Debug.Log($"Shield applied: {shieldAmount} HP");
@@ -787,7 +1031,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
         if (activeShieldEffect != null)
         {
-            Destroy(activeShieldEffect);
+            ObjectPooling.instance.Return(activeShieldEffect);
             activeShieldEffect = null;
         }
 
@@ -822,4 +1066,54 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public float GetPoisonDurationNormalized(float maxDuration = 4f) => hasPoison ? Mathf.Clamp01((poisonEndTime - Time.time) / maxDuration) : 0f;
     public float GetBleedDurationNormalized(float maxDuration = 4f) => hasBleed ? Mathf.Clamp01((bleedEndTime - Time.time) / maxDuration) : 0f;
     public float GetFrostbiteDurationNormalized(float maxDuration = 3f) => hasFrostbite ? Mathf.Clamp01((frostbiteEndTime - Time.time) / maxDuration) : 0f;
+    public EnemyVFXPool vfxContainer { get; set; }
+    public EnemyBase enemyBaseRef { get; set; }
+    public bool isDeadProperty => isDead;
+    public float GetDistanceToNextWaypoint()
+    {
+        if (myWaypoints == null || currentWaypointIndex >= myWaypoints.Length) return 0f;
+        return Vector3.Distance(transform.position, myWaypoints[currentWaypointIndex]);
+    }
+
+    public Vector3 GetNextWaypointPosition()
+    {
+        if (myWaypoints == null || currentWaypointIndex >= myWaypoints.Length) return transform.position;
+        return myWaypoints[currentWaypointIndex];
+    }
+
+    public Vector3 GetDirectionAfterNextWaypoint()
+    {
+        if (myWaypoints == null) return transform.forward;
+    
+        // Need at least 2 more waypoints to know direction after turn
+        if (currentWaypointIndex + 1 >= myWaypoints.Length) return transform.forward;
+    
+        Vector3 currentWaypoint = myWaypoints[currentWaypointIndex];
+        Vector3 nextWaypoint = myWaypoints[currentWaypointIndex + 1];
+    
+        return (nextWaypoint - currentWaypoint).normalized;
+    }
+
+    private void OnMouseEnter()
+    {
+        if (SpellAbility.instance.MechanicSpellActivated)
+        {
+            SkinnedMeshRenderer skinnedMeshRenderer = gameObject.GetComponentInChildren<SkinnedMeshRenderer>();
+            skinnedMeshRenderer.material.color = new Color(1, 0, 0, 0.7f);
+        }
+    }
+
+    private void OnMouseExit()
+    {
+        if (SpellAbility.instance.MechanicSpellActivated)
+        {
+            SkinnedMeshRenderer skinnedMeshRenderer = gameObject.GetComponentInChildren<SkinnedMeshRenderer>();
+            foreach (Color o in originalColors)
+            {
+                skinnedMeshRenderer.material.color = o;
+            }
+        }
+    }
+
+    public Color[] originalColors { get; private set; }
 }

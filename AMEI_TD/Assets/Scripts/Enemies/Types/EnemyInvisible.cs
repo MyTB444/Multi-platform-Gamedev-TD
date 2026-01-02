@@ -14,6 +14,13 @@ public class EnemyInvisible : EnemyBase
     private Material enemyMaterial;
     private float flickerTime;
 
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+     
+        isInvisible = true;
+    }
+
     protected override void Start()
     {
         base.Start();
@@ -58,14 +65,16 @@ public class EnemyInvisible : EnemyBase
     private void ApplyFlickerEffect()
     {
         if (enemyMaterial == null) return;
+        if (isInvisible)
+        {
+            flickerTime += Time.deltaTime * flickerSpeed;
 
-        flickerTime += Time.deltaTime * flickerSpeed;
+            float alpha = Mathf.Lerp(minAlpha, maxAlpha, (Mathf.Sin(flickerTime) + 1f) / 2f);
 
-        float alpha = Mathf.Lerp(minAlpha, maxAlpha, (Mathf.Sin(flickerTime) + 1f) / 2f);
-
-        Color currentColor = enemyMaterial.color;
-        currentColor.a = alpha;
-        enemyMaterial.color = currentColor;
+            Color currentColor = enemyMaterial.color;
+            currentColor.a = alpha;
+            enemyMaterial.color = currentColor;
+        }
     }
 
     private void OnValidate()

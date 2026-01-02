@@ -101,8 +101,7 @@ public class PhantomSwordDamage : MonoBehaviour
         {
             yield return new WaitForSeconds(vfxStartDelay);
         }
-        
-        GameObject vfx = Instantiate(slashVFXPrefab, position, rotation);
-        Destroy(vfx, vfxDuration);
+
+        ObjectPooling.instance.GetVFX(slashVFXPrefab, position, rotation, vfxDuration);
     }
 }

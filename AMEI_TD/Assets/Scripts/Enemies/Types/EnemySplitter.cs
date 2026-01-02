@@ -32,7 +32,7 @@ public class EnemySplitter : EnemyBase
         }
     }
 
-    public override void TakeDamage(DamageInfo damageInfo)
+    public override void TakeDamage(DamageInfo damageInfo,float vfxDamage = 0,bool spellDamageEnabled = false)
     {
         float hpBeforeDamage = enemyCurrentHp;
         bool wasAlive = !isDead;
@@ -52,7 +52,7 @@ public class EnemySplitter : EnemyBase
     {
         if (splitVFXPrefab != null)
         {
-            Instantiate(splitVFXPrefab, transform.position, Quaternion.identity);
+            ObjectPooling.instance.GetVFX(splitVFXPrefab, transform.position, Quaternion.identity, 2f);
         }
 
         for (int i = 0; i < splitCount; i++)

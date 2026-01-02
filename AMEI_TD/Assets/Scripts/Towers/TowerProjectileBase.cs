@@ -63,8 +63,7 @@ public class TowerProjectileBase : MonoBehaviour
         if (impactEffectPrefab != null)
         {
             Vector3 impactPoint = other.ClosestPoint(transform.position);
-            GameObject impact = Instantiate(impactEffectPrefab, impactPoint, Quaternion.identity);
-            Destroy(impact, 2f);
+            ObjectPooling.instance.GetVFX(impactEffectPrefab, impactPoint, Quaternion.identity, 2f);
         }
 
         if (other.GetComponent<EnemyBase>())
@@ -77,8 +76,7 @@ public class TowerProjectileBase : MonoBehaviour
     {
         if (!hasHit && impactEffectPrefab != null)
         {
-            GameObject impact = Instantiate(impactEffectPrefab, transform.position, Quaternion.identity);
-            Destroy(impact, 2f);
+            ObjectPooling.instance.GetVFX(impactEffectPrefab, transform.position, Quaternion.identity, 2f);
         }
 
         isActive = false;

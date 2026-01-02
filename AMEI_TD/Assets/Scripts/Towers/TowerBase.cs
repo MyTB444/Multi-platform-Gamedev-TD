@@ -362,6 +362,9 @@ public class TowerBase : MonoBehaviour
                 EnemyBase decoy = allocatedColliders[i].GetComponent<EnemyBase>();
 
                 if (decoy == null) continue;
+                
+                // Skip enemies in spawn grace period
+                if (!decoy.IsTargetable()) continue;
 
                 float distanceToDecoy = Vector3.Distance(transform.position, decoy.transform.position);
 
@@ -386,6 +389,9 @@ public class TowerBase : MonoBehaviour
             EnemyBase newEnemy = allocatedColliders[i].GetComponent<EnemyBase>();
 
             if (newEnemy == null) continue;
+            
+            // Skip enemies in spawn grace period
+            if (!newEnemy.IsTargetable()) continue;
 
             float distanceToEnemy = Vector3.Distance(transform.position, newEnemy.transform.position);
 
@@ -526,8 +532,7 @@ public class TowerBase : MonoBehaviour
     {
         if (attackSpawnEffectPrefab != null && gunPoint != null)
         {
-            GameObject spawnVFX = Instantiate(attackSpawnEffectPrefab, gunPoint.position, Quaternion.identity);
-            Destroy(spawnVFX, 2f);
+            ObjectPooling.instance.GetVFX(attackSpawnEffectPrefab, gunPoint.position, Quaternion.identity, 2f);
         }
 
         Vector3 directionToEnemy = DirectionToEnemyFrom(gunPoint);

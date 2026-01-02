@@ -140,8 +140,7 @@ public class TowerSpikeTrap : TowerBase
     {
         if (attackSpawnEffectPrefab != null && hammerImpactPoint != null)
         {
-            GameObject vfx = Instantiate(attackSpawnEffectPrefab, hammerImpactPoint.position, Quaternion.identity);
-            Destroy(vfx, 2f);
+            ObjectPooling.instance.GetVFX(attackSpawnEffectPrefab, hammerImpactPoint.position, Quaternion.identity, 2f);
         }
     }
     

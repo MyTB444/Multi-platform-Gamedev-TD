@@ -121,19 +121,55 @@ public class TowerArcher : TowerBase
     private void UpdatePredictedPosition()
     {
         EnemyBase targetToPredict = isAttacking && lockedTarget != null ? lockedTarget : currentEnemy;
-        
+    
         if (targetToPredict == null || !targetToPredict.gameObject.activeSelf)
         {
             predictedPosition = Vector3.zero;
             return;
         }
-        
-        Vector3 currentTargetPos = targetToPredict.transform.position;
+    
         float enemySpeed = enemyVelocity.magnitude;
-        
         float predictionTime = baseFlightTime + (enemySpeed * speedMultiplier);
-        
-        predictedPosition = currentTargetPos + (enemyVelocity * predictionTime);
+    
+        // Scale prediction based on distance (less prediction at close range)
+        float distance = Vector3.Distance(transform.position, targetToPredict.transform.position);
+        float predictionScale = Mathf.Clamp01(distance / attackRange); // 0 at close, 1 at max range
+        predictionTime *= predictionScale;
+    
+        predictedPosition = GetPathAwarePrediction(targetToPredict, predictionTime);
+    }
+    
+    private Vector3 GetPathAwarePrediction(EnemyBase target, float predictionTime)
+    {
+        if (target == null) return Vector3.zero;
+    
+        Vector3 currentPos = target.transform.position;
+        float speed = enemyVelocity.magnitude;
+    
+        if (speed < 0.1f) return currentPos;
+    
+        // How far enemy travels in prediction time
+        float travelDistance = speed * predictionTime;
+    
+        // Get remaining distance to next waypoint
+        float distanceToWaypoint = target.GetDistanceToNextWaypoint();
+    
+        // If enemy won't reach waypoint, use simple prediction
+        if (distanceToWaypoint <= 0 || travelDistance < distanceToWaypoint)
+        {
+            return currentPos + (enemyVelocity * predictionTime);
+        }
+    
+        // Enemy WILL turn - predict in two parts
+        // Part 1: Travel to waypoint
+        float timeToWaypoint = distanceToWaypoint / speed;
+        Vector3 waypointPos = target.GetNextWaypointPosition();
+    
+        // Part 2: Travel along new direction after turn
+        float remainingTime = predictionTime - timeToWaypoint;
+        Vector3 directionAfterTurn = target.GetDirectionAfterNextWaypoint();
+    
+        return waypointPos + (directionAfterTurn * speed * remainingTime);
     }
     
     protected override void HandleRotation()
@@ -164,7 +200,24 @@ public class TowerArcher : TowerBase
     
     protected override bool CanAttack()
     {
+        if (currentEnemy == null) return false;
+    
+        // Check if facing enemy (within 15 degrees)
+        if (!IsFacingEnemy(15f)) return false;
+    
         return base.CanAttack() && !isAttacking;
+    }
+
+    private bool IsFacingEnemy(float maxAngle)
+    {
+        if (currentEnemy == null || towerBody == null) return false;
+    
+        Vector3 directionToEnemy = currentEnemy.transform.position - towerBody.position;
+        directionToEnemy.y = 0;
+    
+        float angle = Vector3.Angle(towerBody.forward, directionToEnemy);
+    
+        return angle <= maxAngle;
     }
     
     protected override void Attack()
@@ -232,7 +285,7 @@ public class TowerArcher : TowerBase
         // Clear old VFX
         if (activeArrowVisualVFX != null)
         {
-            Destroy(activeArrowVisualVFX);
+            ObjectPooling.instance.Return(activeArrowVisualVFX);
             activeArrowVisualVFX = null;
         }
     
@@ -241,12 +294,12 @@ public class TowerArcher : TowerBase
     
         if (fireArrows && fireArrowVFX != null)
         {
-            activeArrowVisualVFX = Instantiate(fireArrowVFX, spawnPoint);
+            activeArrowVisualVFX = ObjectPooling.instance.GetVFXWithParent(fireArrowVFX, spawnPoint, -1f);
             activeArrowVisualVFX.transform.localPosition = Vector3.zero;
         }
         else if (poisonArrows && poisonArrowVFX != null)
         {
-            activeArrowVisualVFX = Instantiate(poisonArrowVFX, spawnPoint);
+            activeArrowVisualVFX = ObjectPooling.instance.GetVFXWithParent(poisonArrowVFX, spawnPoint, -1f);
             activeArrowVisualVFX.transform.localPosition = Vector3.zero;
         }
     }

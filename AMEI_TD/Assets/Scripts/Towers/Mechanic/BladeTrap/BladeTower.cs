@@ -108,7 +108,7 @@ public class BladeTower : TowerBase
         {
             if (vfx != null)
             {
-                Destroy(vfx);
+                ObjectPooling.instance.Return(vfx);
             }
         }
         activeBleedVFXList.Clear();
@@ -138,8 +138,8 @@ public class BladeTower : TowerBase
                 {
                     continue;
                 }
-            
-                GameObject vfx = Instantiate(bleedVFX, point);
+
+                GameObject vfx = ObjectPooling.instance.GetVFXWithParent(bleedVFX, point, -1f);
                 vfx.transform.localPosition = Vector3.zero;
                 activeBleedVFXList.Add(vfx);
             }
@@ -237,8 +237,7 @@ public class BladeTower : TowerBase
     {
         if (attackSpawnEffectPrefab != null && hammerImpactPoint != null)
         {
-            GameObject vfx = Instantiate(attackSpawnEffectPrefab, hammerImpactPoint.position, Quaternion.identity);
-            Destroy(vfx, 2f);
+            ObjectPooling.instance.GetVFX(attackSpawnEffectPrefab, hammerImpactPoint.position, Quaternion.identity, 2f);
         }
     }
     

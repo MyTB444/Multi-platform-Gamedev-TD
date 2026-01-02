@@ -82,7 +82,8 @@ public class EnemyHerald : EnemyBase
         if (magicCirclePrefab != null)
         {
             Vector3 circlePos = transform.position + Vector3.up * magicCircleYOffset;
-            activeMagicCircle = Instantiate(magicCirclePrefab, circlePos, Quaternion.Euler(360, 180, 0), transform);
+            activeMagicCircle = ObjectPooling.instance.GetVFX(magicCirclePrefab, circlePos, Quaternion.Euler(360, 180, 0), -1f);
+            activeMagicCircle.transform.SetParent(transform);
         }
 
         if (heraldAnimator != null)
@@ -107,14 +108,20 @@ public class EnemyHerald : EnemyBase
             if (ps != null)
             {
                 ps.Stop();
-                Destroy(activeMagicCircle, ps.main.startLifetime.constantMax);
+                StartCoroutine(ReturnToPoolAfterDelay(activeMagicCircle, ps.main.startLifetime.constantMax));
             }
             else
             {
-                Destroy(activeMagicCircle);
+                ObjectPooling.instance.Return(activeMagicCircle);
             }
             activeMagicCircle = null;
         }
+    }
+
+    private System.Collections.IEnumerator ReturnToPoolAfterDelay(GameObject obj, float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        ObjectPooling.instance.Return(obj);
     }
 
     // Called by animation event
@@ -145,13 +152,10 @@ public class EnemyHerald : EnemyBase
             if (enemyHealVFXPrefab != null)
             {
                 Vector3 vfxPos = enemy.transform.position + Vector3.up * enemyVFXYOffset;
-                GameObject healVFX = Instantiate(enemyHealVFXPrefab, vfxPos, Quaternion.identity, enemy.transform);
-
-                // Scale VFX based on enemy size
                 float enemyScale = enemy.transform.localScale.x;
-                healVFX.transform.localScale = Vector3.one * enemyScale;
-
-                Destroy(healVFX, healDuration + vfxFadeOutBuffer);
+                Vector3 scale = Vector3.one * enemyScale;
+                GameObject healVFX = ObjectPooling.instance.GetVFX(enemyHealVFXPrefab, vfxPos, Quaternion.identity, scale, healDuration + vfxFadeOutBuffer);
+                healVFX.transform.SetParent(enemy.transform);
             }
         }
     }
@@ -164,7 +168,7 @@ public class EnemyHerald : EnemyBase
 
         if (activeMagicCircle != null)
         {
-            Destroy(activeMagicCircle);
+            ObjectPooling.instance.Return(activeMagicCircle);
             activeMagicCircle = null;
         }
     }
@@ -180,7 +184,7 @@ public class EnemyHerald : EnemyBase
         // Cleanup any active magic circle VFX
         if (activeMagicCircle != null)
         {
-            Destroy(activeMagicCircle);
+            ObjectPooling.instance.Return(activeMagicCircle);
             activeMagicCircle = null;
         }
     }

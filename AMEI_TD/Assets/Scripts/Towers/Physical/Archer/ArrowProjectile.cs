@@ -8,6 +8,8 @@ public class ArrowProjectile : TowerProjectileBase
     [SerializeField] private float curveStrength = 8f;
     [SerializeField] private float gravityMultiplier = 3f;
     [SerializeField] private float maxCurveDuration = 0.5f;
+    [SerializeField] private float closeRangeGravityBoost = 3f;
+    [SerializeField] private float closeRangeThreshold = 6f;
     
     [Header("VFX")]
     [SerializeField] private Transform vfxPoint;
@@ -45,12 +47,12 @@ public class ArrowProjectile : TowerProjectileBase
         applyPoison = false;
         applyFire = false;
     
-        // Destroy any child VFX from previous use
+        // Return any child VFX from previous use to pool
         if (vfxPoint != null)
         {
             foreach (Transform child in vfxPoint)
             {
-                Destroy(child.gameObject);
+                ObjectPooling.instance.Return(child.gameObject);
             }
         }
     
@@ -74,10 +76,19 @@ public class ArrowProjectile : TowerProjectileBase
         launchTime = Time.time;
         targetPosition = targetPos;
         initialForward = transform.forward;
-        
+    
         arrowSpeed = newSpeed + (distance * 0.5f);
         maxCurveDuration = 0.3f + (distance * 0.05f);
-        
+    
+        if (distance < closeRangeThreshold)
+        {
+            gravityMultiplier = 3f + closeRangeGravityBoost;
+        }
+        else
+        {
+            gravityMultiplier = 3f;
+        }
+    
         rb.useGravity = false;
         rb.velocity = initialForward * arrowSpeed;
         launched = true;
@@ -131,7 +142,7 @@ public class ArrowProjectile : TowerProjectileBase
         if (arrowVFX != null)
         {
             Transform spawnPoint = vfxPoint != null ? vfxPoint : transform;
-            GameObject vfx = Instantiate(arrowVFX, spawnPoint);
+            GameObject vfx = ObjectPooling.instance.GetVFXWithParent(arrowVFX, spawnPoint, -1f);
             vfx.transform.localPosition = Vector3.zero;
         }
     }
@@ -142,11 +153,11 @@ public class ArrowProjectile : TowerProjectileBase
         fireDamage = damage;
         fireDuration = duration;
         fireDamageInfo = new DamageInfo(damage, elementType, true);
-    
+
         if (arrowVFX != null)
         {
             Transform spawnPoint = vfxPoint != null ? vfxPoint : transform;
-            GameObject vfx = Instantiate(arrowVFX, spawnPoint);
+            GameObject vfx = ObjectPooling.instance.GetVFXWithParent(arrowVFX, spawnPoint, -1f);
             vfx.transform.localPosition = Vector3.zero;
         }
     }
@@ -159,8 +170,7 @@ public class ArrowProjectile : TowerProjectileBase
         if (impactEffectPrefab != null)
         {
             Vector3 impactPoint = other.ClosestPoint(transform.position);
-            GameObject impact = Instantiate(impactEffectPrefab, impactPoint, Quaternion.identity);
-            Destroy(impact, 2f);
+            ObjectPooling.instance.GetVFX(impactEffectPrefab, impactPoint, Quaternion.identity, 2f);
         }
 
         EnemyBase enemy = other.GetComponent<EnemyBase>();
