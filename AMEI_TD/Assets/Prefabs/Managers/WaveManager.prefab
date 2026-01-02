@@ -46,19 +46,60 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   timeBetweenWaves: 2
   waveTimer: 0
+  useEndlessWaves: 1
   levelWaves:
+  - enemyBasic: 5
+    enemyFast: 0
+    enemyTank: 0
+    enemyInvisible: 0
+    enemyReinforced: 0
+    enemySummoner: 0
+    enemyHexer: 0
+    enemyHerald: 0
+    enemyAdaptive: 0
+    enemySplitter: 0
+    enemyGhostwalk: 0
+    enemyDecoy: 0
   - enemyBasic: 1
     enemyFast: 1
     enemyTank: 1
-    enemyInvisible: 1
-    enemyReinforced: 1
-    enemySummoner: 1
-    enemyHexer: 1
-    enemyHerald: 1
-    enemyAdaptive: 1
-    enemySplitter: 1
-    enemyGhostwalk: 1
-    enemyDecoy: 1
+    enemyInvisible: 0
+    enemyReinforced: 0
+    enemySummoner: 0
+    enemyHexer: 0
+    enemyHerald: 0
+    enemyAdaptive: 0
+    enemySplitter: 0
+    enemyGhostwalk: 0
+    enemyDecoy: 0
+  difficultyTiers:
+  - tierName: en
+    startWave: 10
+    endWave: 10
+    baseEnemyCount: 10
+    enemiesPerWaveIncrease: 10
+    spawnRateMultiplier: 3
+    enemyWeights:
+    - enemyType: 0
+      weight: 100
+      minCount: 1
+      maxCount: 10
+  megaWave:
+    enemyBasic: 5
+    enemyFast: 5
+    enemyTank: 5
+    enemyInvisible: 5
+    enemyReinforced: 0
+    enemySummoner: 0
+    enemyHexer: 0
+    enemyHerald: 0
+    enemyAdaptive: 0
+    enemySplitter: 0
+    enemyGhostwalk: 0
+    enemyDecoy: 0
+    spawnRateMultiplier: 0.5
+    enemyHealthMultiplier: 1.5
+  megaWaveDelay: 3
   enemyPrefabs:
   - enemyType: 0
     prefab: {fileID: 8663543207204576051, guid: e3c65aa6917ec5744b5fbb6f58025d78, type: 3}
