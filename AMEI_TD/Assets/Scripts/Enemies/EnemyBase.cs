@@ -60,6 +60,9 @@ public class EnemyBase : MonoBehaviour, IDamageable
     [SerializeField] private float acceleration = 8f;
     [SerializeField] private float angularSpeed = 360f;
     [SerializeField] private float animationSpeedMultiplier = 1f;
+    [SerializeField] private float cornerDetectionDistance = 3f;
+    [SerializeField] private float cornerSlowdownAmount = 0.6f;
+    [SerializeField] private float cornerRotationSmoothing = 0.3f;
     
     [Header("Spawn Settings")]
     [SerializeField] private bool useSpawnGrace = true;
@@ -607,7 +610,32 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
 
         NavAgent.isStopped = false;
-        NavAgent.speed = enemySpeed * mySpeedMultiplier;
+
+        // Calculate speed with corner slowdown
+        float currentSpeed = enemySpeed * mySpeedMultiplier;
+
+        if (currentWaypointIndex < myWaypoints.Length)
+        {
+            float distToWaypoint = Vector3.Distance(transform.position, myWaypoints[currentWaypointIndex]);
+    
+            if (distToWaypoint < cornerDetectionDistance && currentWaypointIndex < myWaypoints.Length - 1)
+            {
+                // Check if it's actually a corner (not straight path)
+                Vector3 currentDir = (myWaypoints[currentWaypointIndex] - transform.position).normalized;
+                Vector3 nextDir = (myWaypoints[currentWaypointIndex + 1] - myWaypoints[currentWaypointIndex]).normalized;
+                float turnAngle = Vector3.Angle(currentDir, nextDir);
+        
+                if (turnAngle > 30f)
+                {
+                    // Slow down based on distance to corner and turn sharpness
+                    float slowFactor = distToWaypoint / cornerDetectionDistance;
+                    float turnFactor = turnAngle / 90f;
+                    currentSpeed *= Mathf.Lerp(cornerSlowdownAmount, 1f, slowFactor);
+                }
+            }
+        }
+
+        NavAgent.speed = currentSpeed;
 
         // Stuck detection
         HandleStuckDetection();
@@ -640,17 +668,25 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
         NavAgent.SetDestination(targetWaypoint);
 
-        // DEBUG
-        Debug.DrawLine(transform.position, targetWaypoint, Color.green, 0.1f);
-        Debug.DrawLine(transform.position, myWaypoints[currentWaypointIndex], Color.red, 0.1f);
+        // Smooth rotation with corner anticipation
+        Vector3 currentDirection = NavAgent.steeringTarget - transform.position;
+        currentDirection.y = 0;
 
-        // Smooth rotation towards steering target
-        Vector3 direction = NavAgent.steeringTarget - transform.position;
-        direction.y = 0;
-
-        if (direction.sqrMagnitude > 0.01f)
+        if (currentDirection.sqrMagnitude > 0.01f)
         {
-            Quaternion targetRotation = Quaternion.LookRotation(direction);
+            Vector3 targetDirection = currentDirection.normalized;
+            float distToWaypoint = Vector3.Distance(transform.position, targetWaypoint);
+    
+            // Blend toward next waypoint direction when approaching corner
+            if (distToWaypoint < cornerDetectionDistance && currentWaypointIndex < myWaypoints.Length - 1)
+            {
+                Vector3 nextDirection = (myWaypoints[currentWaypointIndex + 1] - targetWaypoint).normalized;
+                float blendFactor = 1f - (distToWaypoint / cornerDetectionDistance);
+                blendFactor *= cornerRotationSmoothing;
+                targetDirection = Vector3.Slerp(targetDirection, nextDirection, blendFactor);
+            }
+    
+            Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
             float speedFactor = enemySpeed / 3f;
             float adjustedRotationSpeed = rotationSpeed * Mathf.Max(1f, speedFactor);
             transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * adjustedRotationSpeed);
