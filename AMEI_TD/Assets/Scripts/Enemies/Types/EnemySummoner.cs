@@ -26,11 +26,13 @@ public class EnemySummoner : EnemyBase
     private bool isSummoning = false;
     private List<GameObject> activeMinions = new List<GameObject>();
     private Animator summonerAnimator;
+    private Rigidbody rb;
 
     protected override void Start()
     {
         base.Start();
         summonerAnimator = GetComponent<Animator>();
+        rb = GetComponent<Rigidbody>();
         summonTimer = summonCooldown;
     }
 
@@ -57,14 +59,19 @@ public class EnemySummoner : EnemyBase
     {
         isSummoning = true;
         canMove = false;
-    
+
+        if (rb != null)
+        {
+            rb.isKinematic = true;
+        }
+
         if (magicCirclePrefab != null)
         {
             Vector3 circlePos = transform.position + Vector3.up * magicCircleYOffset;
             activeMagicCircle = ObjectPooling.instance.GetVFX(magicCirclePrefab, circlePos, Quaternion.Euler(360, 180, 0), -1f);
             activeMagicCircle.transform.SetParent(transform);
         }
-    
+
         if (summonerAnimator != null)
         {
             summonerAnimator.SetTrigger("Summon");
