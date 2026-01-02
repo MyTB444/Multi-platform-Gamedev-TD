@@ -63,7 +63,7 @@ public class EnemyAdaptive : EnemyBase
         UpdateColorTransition();
     }
 
-    public override void TakeDamage(DamageInfo damageInfo)
+    public override void TakeDamage(DamageInfo damageInfo,float vfxDamage = 0,bool spellDamageEnabled = false)
     {
         AdaptToElement(damageInfo.elementType);
         base.TakeDamage(damageInfo);

@@ -32,7 +32,7 @@ public class EnemySplitter : EnemyBase
         }
     }
 
-    public override void TakeDamage(DamageInfo damageInfo)
+    public override void TakeDamage(DamageInfo damageInfo,float vfxDamage = 0,bool spellDamageEnabled = false)
     {
         float hpBeforeDamage = enemyCurrentHp;
         bool wasAlive = !isDead;
