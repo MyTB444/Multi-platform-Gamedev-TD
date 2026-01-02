@@ -59,6 +59,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     [SerializeField] private float rotationSpeed = 12f;
     [SerializeField] private float acceleration = 8f;
     [SerializeField] private float angularSpeed = 360f;
+    [SerializeField] private float animationSpeedMultiplier = 1f;
     
     [Header("Spawn Settings")]
     [SerializeField] private bool useSpawnGrace = true;
@@ -656,20 +657,22 @@ public class EnemyBase : MonoBehaviour, IDamageable
     
     private void PlayAnimations()
     {
-        if (EnemyAnimator == null)
-        {
-            Debug.Log($"{gameObject.name}: Animator is NULL");
-            return;
-        }
+        if (EnemyAnimator == null) return;
 
-        if (isStunned)
+        if (isStunned || !canMove)
         {
             EnemyAnimator.SetBool("Walk", false);
             return;
         }
 
-        Debug.Log($"{gameObject.name}: Setting Walk to true");
         EnemyAnimator.SetBool("Walk", true);
+    
+        // Match animation speed to movement speed
+        if (NavAgent != null && NavAgent.isOnNavMesh && NavAgent.enabled)
+        {
+            float speedRatio = NavAgent.velocity.magnitude / (enemySpeed * mySpeedMultiplier);
+            EnemyAnimator.SetFloat("WalkSpeed", animationSpeedMultiplier * Mathf.Clamp(speedRatio, 0.8f, 1.2f));
+        }
     }
 
     public float GetRemainingDistance()

@@ -605,6 +605,7 @@ MonoBehaviour:
   rotationSpeed: 10
   acceleration: 40
   angularSpeed: 360
+  animationSpeedMultiplier: 1.5
   useSpawnGrace: 1
   spawnGracePeriod: 0.5
   pathOffsetRange: 0.3
