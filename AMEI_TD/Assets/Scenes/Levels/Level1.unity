@@ -10336,6 +10336,7 @@ GameObject:
   - component: {fileID: 209882324}
   - component: {fileID: 209882326}
   - component: {fileID: 209882323}
+  - component: {fileID: 209882327}
   m_Layer: 5
   m_Name: PhysicalSpell
   m_TagString: Untagged
@@ -10458,9 +10459,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1801747584}
-        m_TargetAssemblyTypeName: UIBase, Assembly-CSharp
-        m_MethodName: ViewSkillTree
+      - m_Target: {fileID: 465320773}
+        m_TargetAssemblyTypeName: SpellAbility, Assembly-CSharp
+        m_MethodName: ActivateFireSpell
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -10470,6 +10471,23 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+--- !u!114 &209882327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 209882321}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51f656498e6eb4abfabdb0167efcded4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cooldown: 10
+  button: {fileID: 0}
+  icon: {fileID: 1584548153}
+  activeColor: {r: 1, g: 1, b: 1, a: 1}
+  disabledColor: {r: 0.21568628, g: 0.21568628, b: 0.21568628, a: 1}
 --- !u!1 &209941279
 GameObject:
   m_ObjectHideFlags: 0
@@ -12655,6 +12673,7 @@ GameObject:
   - component: {fileID: 245650290}
   - component: {fileID: 245650292}
   - component: {fileID: 245650289}
+  - component: {fileID: 245650293}
   m_Layer: 5
   m_Name: MagicalSpell
   m_TagString: Untagged
@@ -12777,18 +12796,35 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1801747584}
-        m_TargetAssemblyTypeName: UIBase, Assembly-CSharp
-        m_MethodName: ViewSkillTree
-        m_Mode: 1
+      - m_Target: {fileID: 465320773}
+        m_TargetAssemblyTypeName: SpellAbility, Assembly-CSharp
+        m_MethodName: set_MagicSpellActivated
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 0
+          m_BoolArgument: 1
         m_CallState: 2
+--- !u!114 &245650293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 245650287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51f656498e6eb4abfabdb0167efcded4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cooldown: 10
+  button: {fileID: 0}
+  icon: {fileID: 893312608}
+  activeColor: {r: 1, g: 1, b: 1, a: 1}
+  disabledColor: {r: 0.21568628, g: 0.21568628, b: 0.21568628, a: 1}
 --- !u!1 &249175968
 GameObject:
   m_ObjectHideFlags: 0
@@ -16571,6 +16607,7 @@ GameObject:
   - component: {fileID: 318291561}
   - component: {fileID: 318291560}
   - component: {fileID: 318291562}
+  - component: {fileID: 318291565}
   m_Layer: 5
   m_Name: ImaginarySpell
   m_TagString: Untagged
@@ -16622,17 +16659,17 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1801747584}
-        m_TargetAssemblyTypeName: UIBase, Assembly-CSharp
-        m_MethodName: ViewSkillTree
-        m_Mode: 1
+      - m_Target: {fileID: 465320773}
+        m_TargetAssemblyTypeName: SpellAbility, Assembly-CSharp
+        m_MethodName: set_ImaginarySpellActivated
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 0
+          m_BoolArgument: 1
         m_CallState: 2
 --- !u!114 &318291561
 MonoBehaviour:
@@ -16705,6 +16742,23 @@ RectTransform:
   m_AnchoredPosition: {x: 150, y: 0}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &318291565
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 318291559}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51f656498e6eb4abfabdb0167efcded4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cooldown: 10
+  button: {fileID: 0}
+  icon: {fileID: 1547445725}
+  activeColor: {r: 1, g: 1, b: 1, a: 1}
+  disabledColor: {r: 0.21568628, g: 0.21568628, b: 0.21568628, a: 1}
 --- !u!1 &318524810
 GameObject:
   m_ObjectHideFlags: 0
@@ -23814,6 +23868,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 1330105388019602277, guid: dfe057432e51c4eab8df7ce0539f9fe0, type: 3}
   m_PrefabInstance: {fileID: 869885827}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &465320773 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 210423928404077867, guid: 3eabe48b849c49f46a21d2db84bd71af, type: 3}
+  m_PrefabInstance: {fileID: 738793194}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6db54654d435bb844b22dae64f6bd0fe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &466998754
 GameObject:
   m_ObjectHideFlags: 0
@@ -37121,7 +37186,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 3242496166541548391, guid: 3eabe48b849c49f46a21d2db84bd71af, type: 3}
       propertyPath: m_Name
-      value: SpellAbility
+      value: SpellManager
       objectReference: {fileID: 0}
     - target: {fileID: 9085296557737979655, guid: 3eabe48b849c49f46a21d2db84bd71af, type: 3}
       propertyPath: m_LocalPosition.x
@@ -76741,63 +76806,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &1630726187
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 5537941893074787483, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
-      propertyPath: m_Name
-      value: TowerArcher (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 8294430211428561170, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 43.45504
-      objectReference: {fileID: 0}
-    - target: {fileID: 8294430211428561170, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 5.291
-      objectReference: {fileID: 0}
-    - target: {fileID: 8294430211428561170, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 12.750517
-      objectReference: {fileID: 0}
-    - target: {fileID: 8294430211428561170, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8294430211428561170, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8294430211428561170, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8294430211428561170, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8294430211428561170, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8294430211428561170, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8294430211428561170, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
 --- !u!1 &1632208309
 GameObject:
   m_ObjectHideFlags: 0
@@ -85181,67 +85189,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1784328117}
   m_Mesh: {fileID: 4300000, guid: 8f059788f09129548819124918076d2e, type: 3}
---- !u!1001 &1784974891
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 5537941893074787483, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
-      propertyPath: m_Name
-      value: TowerArcher
-      objectReference: {fileID: 0}
-    - target: {fileID: 5537941893074787483, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8294430211428561170, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 43.146732
-      objectReference: {fileID: 0}
-    - target: {fileID: 8294430211428561170, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 5.391
-      objectReference: {fileID: 0}
-    - target: {fileID: 8294430211428561170, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 23.303045
-      objectReference: {fileID: 0}
-    - target: {fileID: 8294430211428561170, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8294430211428561170, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8294430211428561170, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8294430211428561170, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8294430211428561170, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8294430211428561170, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8294430211428561170, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
 --- !u!1 &1786797144
 GameObject:
   m_ObjectHideFlags: 0
@@ -94186,6 +94133,7 @@ GameObject:
   - component: {fileID: 1925506624}
   - component: {fileID: 1925506626}
   - component: {fileID: 1925506623}
+  - component: {fileID: 1925506627}
   m_Layer: 5
   m_Name: MechanicalSpell
   m_TagString: Untagged
@@ -94308,18 +94256,35 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1801747584}
-        m_TargetAssemblyTypeName: UIBase, Assembly-CSharp
-        m_MethodName: ViewSkillTree
-        m_Mode: 1
+      - m_Target: {fileID: 465320773}
+        m_TargetAssemblyTypeName: SpellAbility, Assembly-CSharp
+        m_MethodName: set_MechanicSpellActivated
+        m_Mode: 6
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
-          m_BoolArgument: 0
+          m_BoolArgument: 1
         m_CallState: 2
+--- !u!114 &1925506627
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1925506621}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51f656498e6eb4abfabdb0167efcded4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cooldown: 10
+  button: {fileID: 0}
+  icon: {fileID: 1204882859}
+  activeColor: {r: 1, g: 1, b: 1, a: 1}
+  disabledColor: {r: 0.21568628, g: 0.21568628, b: 0.21568628, a: 1}
 --- !u!1 &1927317022
 GameObject:
   m_ObjectHideFlags: 0
@@ -110907,8 +110872,6 @@ SceneRoots:
   - {fileID: 1045599259}
   - {fileID: 35987033}
   - {fileID: 71376897}
-  - {fileID: 1784974891}
-  - {fileID: 1630726187}
   - {fileID: 503327743}
   - {fileID: 738793194}
   - {fileID: 8668728419986163523}
