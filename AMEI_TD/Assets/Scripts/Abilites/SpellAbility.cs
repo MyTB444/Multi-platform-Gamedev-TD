@@ -230,7 +230,7 @@ public class SpellAbility : MonoBehaviour
                             Debug.Log("Here");
                             stopMagic = true;
                             CanSelectPaths = false;
-                            StartCoroutine(DisableVFX(5));
+                            StartCoroutine(DisableVFX(0f));
                             CanSelectPaths = true;
                             mousePositionDictionary.Clear();
                             break;
