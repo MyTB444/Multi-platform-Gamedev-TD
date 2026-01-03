@@ -1329,7 +1329,7 @@ GameObject:
   - component: {fileID: 2794576192632957625}
   m_Layer: 6
   m_Name: EnemyDecoy
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1415,6 +1415,10 @@ MonoBehaviour:
   stuckDistanceThreshold: 0.2
   stuckSkipDistance: 2
   enemyCurrentHp: 0
+  myBody: {fileID: 0}
+  enemyHealthDisplayCanvas: {fileID: 0}
+  healthBar: {fileID: 0}
+  enemyVFXPoolScriptRef: {fileID: 0}
   decoyMaterial: {fileID: 2100000, guid: e6fe7821163816c45a485408bc952121, type: 2}
   decoyLifetime: 8
   decoySpawnInterval: 5

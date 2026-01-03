@@ -79,7 +79,7 @@ GameObject:
   - component: {fileID: -8499618686236042899}
   m_Layer: 6
   m_Name: EnemySplitter
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -156,6 +156,10 @@ MonoBehaviour:
   waypointReachThreshold: 0.1
   frozenColor: {r: 0.5, g: 0.8, b: 1, a: 1}
   enemyCurrentHp: 0
+  myBody: {fileID: 0}
+  enemyHealthDisplayCanvas: {fileID: 0}
+  healthBar: {fileID: 0}
+  enemyVFXPoolScriptRef: {fileID: 0}
   splitVFXPrefab: {fileID: 1758473627833946668, guid: 9b21333b068a5084ba09535839bee3c8, type: 3}
   splitterPrefab: {fileID: 1067925524328404}
   maxSplitLevel: 2

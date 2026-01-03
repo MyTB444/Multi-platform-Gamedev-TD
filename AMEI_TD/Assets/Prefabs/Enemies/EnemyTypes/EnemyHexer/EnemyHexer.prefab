@@ -145,7 +145,7 @@ GameObject:
   - component: {fileID: 3201943284611982963}
   m_Layer: 6
   m_Name: EnemyHexer
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -229,6 +229,10 @@ MonoBehaviour:
   stuckDistanceThreshold: 0.2
   stuckSkipDistance: 2
   enemyCurrentHp: 0
+  myBody: {fileID: 0}
+  enemyHealthDisplayCanvas: {fileID: 0}
+  healthBar: {fileID: 0}
+  enemyVFXPoolScriptRef: {fileID: 0}
   detectionRadius: 10
   attackCooldown: 3
   towerLayer:

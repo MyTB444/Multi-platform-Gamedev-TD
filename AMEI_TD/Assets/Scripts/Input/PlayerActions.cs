@@ -53,6 +53,51 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""SkillTree"",
+                    ""type"": ""Button"",
+                    ""id"": ""88b8e691-9471-4bd8-94d0-c5b72bb8af6a"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""PhysicalSpell"",
+                    ""type"": ""Button"",
+                    ""id"": ""a762bf98-32a6-4698-97db-a6912275dd80"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MagicalSpell"",
+                    ""type"": ""Button"",
+                    ""id"": ""e581c5b5-fb1c-46e6-b6fa-6b3bd10003e7"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""MechanicalSpell"",
+                    ""type"": ""Button"",
+                    ""id"": ""d5fd253c-2830-4253-a3c2-509cd6ff16eb"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""ImaginarySpell"",
+                    ""type"": ""Button"",
+                    ""id"": ""bf0149dc-208e-4668-a952-a0ffeafacc8f"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -88,6 +133,61 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""Restart"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""a4ccd0ff-27f9-4e3f-92e6-db403c352c74"",
+                    ""path"": ""<Keyboard>/s"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""SkillTree"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2391be5a-ddd9-4bce-84eb-3a06749681ec"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""PhysicalSpell"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bb8e3080-0d07-4f09-a1b1-0b110c5d4420"",
+                    ""path"": ""<Keyboard>/w"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""MagicalSpell"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""0035db15-f016-4f60-86af-4b175464779d"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""MechanicalSpell"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5808c3b3-3013-46f8-9137-e90dfc277ed0"",
+                    ""path"": ""<Keyboard>/r"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""ImaginarySpell"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -111,6 +211,11 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_SellTower = m_Player.FindAction("SellTower", throwIfNotFound: true);
         m_Player_Pause = m_Player.FindAction("Pause", throwIfNotFound: true);
         m_Player_Restart = m_Player.FindAction("Restart", throwIfNotFound: true);
+        m_Player_SkillTree = m_Player.FindAction("SkillTree", throwIfNotFound: true);
+        m_Player_PhysicalSpell = m_Player.FindAction("PhysicalSpell", throwIfNotFound: true);
+        m_Player_MagicalSpell = m_Player.FindAction("MagicalSpell", throwIfNotFound: true);
+        m_Player_MechanicalSpell = m_Player.FindAction("MechanicalSpell", throwIfNotFound: true);
+        m_Player_ImaginarySpell = m_Player.FindAction("ImaginarySpell", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -175,6 +280,11 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_SellTower;
     private readonly InputAction m_Player_Pause;
     private readonly InputAction m_Player_Restart;
+    private readonly InputAction m_Player_SkillTree;
+    private readonly InputAction m_Player_PhysicalSpell;
+    private readonly InputAction m_Player_MagicalSpell;
+    private readonly InputAction m_Player_MechanicalSpell;
+    private readonly InputAction m_Player_ImaginarySpell;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -182,6 +292,11 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @SellTower => m_Wrapper.m_Player_SellTower;
         public InputAction @Pause => m_Wrapper.m_Player_Pause;
         public InputAction @Restart => m_Wrapper.m_Player_Restart;
+        public InputAction @SkillTree => m_Wrapper.m_Player_SkillTree;
+        public InputAction @PhysicalSpell => m_Wrapper.m_Player_PhysicalSpell;
+        public InputAction @MagicalSpell => m_Wrapper.m_Player_MagicalSpell;
+        public InputAction @MechanicalSpell => m_Wrapper.m_Player_MechanicalSpell;
+        public InputAction @ImaginarySpell => m_Wrapper.m_Player_ImaginarySpell;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -200,6 +315,21 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Restart.started += instance.OnRestart;
             @Restart.performed += instance.OnRestart;
             @Restart.canceled += instance.OnRestart;
+            @SkillTree.started += instance.OnSkillTree;
+            @SkillTree.performed += instance.OnSkillTree;
+            @SkillTree.canceled += instance.OnSkillTree;
+            @PhysicalSpell.started += instance.OnPhysicalSpell;
+            @PhysicalSpell.performed += instance.OnPhysicalSpell;
+            @PhysicalSpell.canceled += instance.OnPhysicalSpell;
+            @MagicalSpell.started += instance.OnMagicalSpell;
+            @MagicalSpell.performed += instance.OnMagicalSpell;
+            @MagicalSpell.canceled += instance.OnMagicalSpell;
+            @MechanicalSpell.started += instance.OnMechanicalSpell;
+            @MechanicalSpell.performed += instance.OnMechanicalSpell;
+            @MechanicalSpell.canceled += instance.OnMechanicalSpell;
+            @ImaginarySpell.started += instance.OnImaginarySpell;
+            @ImaginarySpell.performed += instance.OnImaginarySpell;
+            @ImaginarySpell.canceled += instance.OnImaginarySpell;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -213,6 +343,21 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @Restart.started -= instance.OnRestart;
             @Restart.performed -= instance.OnRestart;
             @Restart.canceled -= instance.OnRestart;
+            @SkillTree.started -= instance.OnSkillTree;
+            @SkillTree.performed -= instance.OnSkillTree;
+            @SkillTree.canceled -= instance.OnSkillTree;
+            @PhysicalSpell.started -= instance.OnPhysicalSpell;
+            @PhysicalSpell.performed -= instance.OnPhysicalSpell;
+            @PhysicalSpell.canceled -= instance.OnPhysicalSpell;
+            @MagicalSpell.started -= instance.OnMagicalSpell;
+            @MagicalSpell.performed -= instance.OnMagicalSpell;
+            @MagicalSpell.canceled -= instance.OnMagicalSpell;
+            @MechanicalSpell.started -= instance.OnMechanicalSpell;
+            @MechanicalSpell.performed -= instance.OnMechanicalSpell;
+            @MechanicalSpell.canceled -= instance.OnMechanicalSpell;
+            @ImaginarySpell.started -= instance.OnImaginarySpell;
+            @ImaginarySpell.performed -= instance.OnImaginarySpell;
+            @ImaginarySpell.canceled -= instance.OnImaginarySpell;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -244,5 +389,10 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnSellTower(InputAction.CallbackContext context);
         void OnPause(InputAction.CallbackContext context);
         void OnRestart(InputAction.CallbackContext context);
+        void OnSkillTree(InputAction.CallbackContext context);
+        void OnPhysicalSpell(InputAction.CallbackContext context);
+        void OnMagicalSpell(InputAction.CallbackContext context);
+        void OnMechanicalSpell(InputAction.CallbackContext context);
+        void OnImaginarySpell(InputAction.CallbackContext context);
     }
 }

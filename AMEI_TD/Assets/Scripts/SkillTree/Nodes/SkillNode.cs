@@ -1,6 +1,26 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Microsoft.Unity.VisualStudio.Editor;
 using UnityEngine;
+
+public enum SwapType
+{
+    Null,
+    Spear,
+    Knight,
+    IceMage,
+    BladeTower
+}
+
+public enum SpellEnableType
+{
+    Null,
+    Physical,
+    Magical,
+    Mechanical,
+    Imaginary
+}
 
 [CreateAssetMenu(fileName = "NewSkill", menuName = "Skill Tree/Skill Node")]
 public class SkillNode : ScriptableObject
@@ -11,26 +31,52 @@ public class SkillNode : ScriptableObject
     [TextArea(2, 4)]
     public string description;
     public Sprite icon;
+    public bool irreversible;
 
     [Header("Requirements")]
     public int skillPointCost;
     public List<SkillNode> prerequisites = new List<SkillNode>();
 
-    [Header("Effect")]
-    public SkillEffectType effectType;
-    public float effectValue;
-    public string skillTypeName;
-    public enum SkillEffectType
-    {
-        AddFlat,
-        AddPercent,
-        UnlockSkill,
-        UnlockTower
-    }
+    [Header("Functionalities")]
+    public TowerUpgradeType function;
+    public TowerUpgradeType function2;
+    public SwapType swapType;
+    public SpellEnableType spellEnableType;
+    public bool noah;
+    public event Action<SwapType> EventRaised;
     public void ApplyEffect()
     {
+        TowerUpgradeManager.instance.UnlockUpgrade(function);
+        if(function2 != TowerUpgradeType.Null)
+        {
+            TowerUpgradeManager.instance.UnlockUpgrade(function);
+        }
+        if(swapType != SwapType.Null)
+        Raise(swapType);
+        if(spellEnableType != SpellEnableType.Null)
+        EnableSpell(spellEnableType);
+        if(noah)
+        EnableNoah();
+        
     }
     public void RemoveEffect()
     {
+       TowerUpgradeManager.instance.LockUpgrade(function);
+        if (function2 != TowerUpgradeType.Null)
+        {
+            TowerUpgradeManager.instance.LockUpgrade(function);
+        }
+    }
+    public void Raise(SwapType type)
+    {
+        EventRaised.Invoke(type);
+    }
+    public void EnableSpell(SpellEnableType type)
+    {
+        SpellFunctionality.instance.EnableButton(type);
+    }
+    public void EnableNoah()
+    {
+        PlayerCastle.instance.SpawnGuardianTower();
     }
 }

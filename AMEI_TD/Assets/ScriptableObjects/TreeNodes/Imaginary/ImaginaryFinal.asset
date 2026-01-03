@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72d0a0b181c38404684b4e6fab58ceee, type: 3}
+  m_Name: ImaginaryFinal
+  m_EditorClassIdentifier: 
+  skillName: Grand Seer
+  skillCost: 5
+  description: 'Rock Shower throws a massive rock at the end.
+
+
+    Phantoms attack
+    twice before fading.'
+  icon: {fileID: 21300000, guid: f9fdbb78149b97549afa65f0b3557e9e, type: 3}
+  irreversible: 0
+  skillPointCost: 5
+  prerequisites: []
+  function: 27
+  function2: 31
+  swapType: 0
+  spellEnableType: 0
