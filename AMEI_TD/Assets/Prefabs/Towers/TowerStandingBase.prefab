@@ -2267,7 +2267,7 @@ MonoBehaviour:
   spawnPointDefault: {fileID: 6610860206502459288}
   spawnPointMechanic: {fileID: 3303847220282222111}
   spawnPointImaginary: {fileID: 6610860206502459288}
-  roadFacing: 0
+  roadFacing: 1
 --- !u!33 &4379249189958798178
 MeshFilter:
   m_ObjectHideFlags: 0
