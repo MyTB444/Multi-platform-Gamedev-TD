@@ -30816,6 +30816,7 @@ GameObject:
   - component: {fileID: 6298646655010823366}
   - component: {fileID: 6110613413649458891}
   - component: {fileID: 4848511707019329408}
+  - component: {fileID: -387213564112599542}
   m_Layer: 0
   m_Name: TowerStandingBase
   m_TagString: Untagged
@@ -31077,6 +31078,22 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &-387213564112599542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6142938654885707507}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1697c6ac37751354fae506d4966022a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnPointDefault: {fileID: 0}
+  spawnPointMechanic: {fileID: 0}
+  spawnPointImaginary: {fileID: 0}
+  roadFacing: 0
 --- !u!1 &6158674375773363705
 GameObject:
   m_ObjectHideFlags: 0

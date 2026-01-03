@@ -95,7 +95,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     [Header("Stun Effect")]
     [SerializeField] private Color frozenColor = new Color(0.5f, 0.8f, 1f, 1f);
     private Renderer[] enemyRenderers;
-    private Color[] originalColors;
+    public Color[] originalColors;
     private bool hasSavedColors = false;
     
     [Header("Stuck Detection")]
@@ -1258,6 +1258,4 @@ public class EnemyBase : MonoBehaviour, IDamageable
             }
         }
     }
-
-    public Color[] originalColors { get; private set; }
 }
