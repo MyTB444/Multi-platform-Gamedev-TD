@@ -27857,7 +27857,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 210423928404077867, guid: 3eabe48b849c49f46a21d2db84bd71af, type: 3}
       propertyPath: imaginaryVFXCoolDown
-      value: 5
+      value: 3.5
       objectReference: {fileID: 0}
     - target: {fileID: 210423928404077867, guid: 3eabe48b849c49f46a21d2db84bd71af, type: 3}
       propertyPath: mechanicSpellCoolDown
@@ -70512,8 +70512,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1911896613}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.24638942, y: -0.6373329, z: 0.22292171, w: 0.6952733}
-  m_LocalPosition: {x: 53.183167, y: 11.018871, z: 16.72229}
+  m_LocalRotation: {x: 0.2528356, y: -0.668639, z: 0.25645182, w: 0.65056014}
+  m_LocalPosition: {x: 50.39357, y: 16.047966, z: 20.00901}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
