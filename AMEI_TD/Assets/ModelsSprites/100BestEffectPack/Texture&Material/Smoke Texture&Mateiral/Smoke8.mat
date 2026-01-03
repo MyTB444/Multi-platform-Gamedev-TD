@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Flash2
+  m_Name: Smoke8
   m_Shader: {fileID: 4800000, guid: eee4f23a9611584428cd8df8a4792f02, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -24,17 +24,22 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 32c27fc59e3204385b8eeb676e285b29, type: 3}
+        m_Texture: {fileID: 2800000, guid: 208a7a4f996c44860b85a8c627341eea, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AllColorFactor: 6
+    - _AllColorFactor: 1
     - _ColorBlueFactor: 1
-    - _ColorGreenFactor: 1
-    - _ColorRedFactor: 1
-    - _InvFade: 1
+    - _ColorGreenFactor: 2
+    - _ColorRedFactor: 0
+    - _InvFade: 3
+    - _TintColorFactor: 1
+    - _TintColorFactor2: 1
+    - _TintColorFactor3: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _TintColor: {r: 1, g: 1, b: 1, a: 1}
+    - _TintColor: {r: 1, g: 1, b: 1, a: 0.741}
+    - _TintColor2: {r: 1, g: 1, b: 1, a: 1}
+    - _TintColor3: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

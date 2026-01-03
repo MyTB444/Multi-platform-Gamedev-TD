@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -11,6 +12,8 @@ public class SpellAbility : MonoBehaviour
     public static SpellAbility instance;
     private bool stopFire = false;
     private bool stopMagic = false;
+    private bool stopMechanic = false;
+    private bool stopImaginary = false;
     private Vector3 currentMousePosition;
     private Dictionary<Vector3, Vector3> mousePositionDictionary = new();
 
@@ -22,14 +25,18 @@ public class SpellAbility : MonoBehaviour
     [SerializeField] private GameObject flamesPrefab;
     [SerializeField] private GameObject magicAreaPrefab;
     [SerializeField] private GameObject bombPrefab;
+    [SerializeField] private GameObject imaginaryVFX;
 
     [Header("Pool Settings")]
     [SerializeField] private int flamesPoolSize = 20;
     [SerializeField] private int magicAreaPoolSize = 5;
     [SerializeField] private int bombPoolSize = 3;
-
-   
-
+    [SerializeField] private float fireSpellCoolDown;
+    [SerializeField] private float magicSpellCoolDown;
+    [SerializeField] private float mechanicSpellCoolDown;
+    [SerializeField] private float imaginarySpellCoolDown;
+    [SerializeField] private float imaginaryVFXCoolDown;
+    private List<float> originalColorfloat = new();
     private void Awake()
     {
         instance = this;
@@ -73,20 +80,26 @@ public class SpellAbility : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.S))
         {
             FireSpellActivated = true;
+            CanSelectPaths = true;
             currenSpellType = SpellType.Physical;
             stopFire = false;
         }
         if (Input.GetKeyDown(KeyCode.B))
         {
             currenSpellType = SpellType.Magic;
+            CanSelectPaths = true;
             MagicSpellActivated = true;
             stopMagic = false;
         }
 
         if (Input.GetKeyDown(KeyCode.D))
         {
-            currenSpellType = SpellType.Mechanic;
-            MechanicSpellActivated = true;
+            if (!MechanicSpellActivated && !stopMechanic)
+            {
+                currenSpellType = SpellType.Mechanic;
+                MechanicSpellActivated = true;
+                
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.E))
@@ -99,7 +112,7 @@ public class SpellAbility : MonoBehaviour
 
         if (FireSpellActivated && currenSpellType == SpellType.Physical)
         {
-            CanSelectPaths = true;
+            
             FireSpell();
         }
         #endregion
@@ -108,14 +121,14 @@ public class SpellAbility : MonoBehaviour
 
         if (MagicSpellActivated)
         {
-            CanSelectPaths = true;
+            
             MagicSpell();
         }
         #endregion
 
         #region MechanicSpell
 
-        if (MechanicSpellActivated)
+        if (MechanicSpellActivated && !stopMechanic)
         {
             if (Input.GetMouseButton(0))
             {
@@ -126,7 +139,7 @@ public class SpellAbility : MonoBehaviour
 
         #region ImaginarySpell
 
-        if (ImaginarySpellActivated)
+        if (ImaginarySpellActivated && !stopImaginary)
         {
             EnemyBase[] enemies = FindObjectsByType<EnemyBase>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
             Debug.Log($"[Imaginary Spell] Found {enemies.Length} enemies");
@@ -143,9 +156,34 @@ public class SpellAbility : MonoBehaviour
                     
                             if (enemy.isInvisible)
                             {
-                                enemy.isInvisible = false;
-                                enemy.UpdateVisuals();
+                                
+                                   
+                                GameObject vfx = ObjectPooling.instance.Get(imaginaryVFX);
+                                if (vfx != null)
+                                {
+                                    SkinnedMeshRenderer[] skinnedMesh = enemy.gameObject.GetComponentsInChildren<SkinnedMeshRenderer>();
+                                    if (skinnedMesh != null)
+                                    {
+                                        foreach (SkinnedMeshRenderer o in skinnedMesh)
+                                        {
+                                            if (o != null)
+                                            {
+                                                vfx.transform.parent = enemy.vfxContainer.gameObject.transform;
+                                                vfx.transform.localPosition = GiveRandomPointOnEnemyMesh(o.localBounds) - enemy.vfxContainer.gameObject.transform.localPosition;
+                                                vfx.transform.rotation = Quaternion.identity;
+                                                vfx.SetActive(true);
+                                            }
+                                        }
+                                    }
+                                           
+                                }        
+                              
+                                           
                                 Debug.Log($"[Imaginary Spell] Revealed {enemy.name}");
+                                
+                              
+                                StartCoroutine(CoolDownSpells(imaginaryVFXCoolDown,enemy,vfx,imaginarySpellCoolDown));//inversed becuase pool particles vfx first then cool down spell 
+
                             }
                         }
                     }
@@ -156,6 +194,8 @@ public class SpellAbility : MonoBehaviour
 
         #endregion
     }
+
+  
 
     #region FireSpell
 
@@ -180,12 +220,18 @@ public class SpellAbility : MonoBehaviour
                     {
                         Debug.Log("Here");
                         stopFire = true;
-                        StartCoroutine(DisableVFX(5f));
+                        CanSelectPaths = false;
+                        StartCoroutine(CoolDownSpells(fireSpellCoolDown));
                         break;
                     }
                 }
             }
         }
+    }
+
+    private Vector3 GiveRandomPointOnEnemyMesh(Bounds bounds)
+    {
+        return new Vector3(bounds.center.x, Random.Range(bounds.extents.y, bounds.extents.y / 3f), Random.Range(-bounds.extents.z / 10f, bounds.extents.z / 8f));
     }
 
     private Vector3 GiveRandomPointOnMesh(Bounds bounds)
@@ -220,6 +266,8 @@ public class SpellAbility : MonoBehaviour
                             magicAreas.transform.rotation = Quaternion.Euler(-90, 0, 0);
                             magicAreas.SetActive(true);
                             selectedPath = null;
+                            CanSelectPaths = true;
+                           
                         }
                     }
 
@@ -230,8 +278,8 @@ public class SpellAbility : MonoBehaviour
                             Debug.Log("Here");
                             stopMagic = true;
                             CanSelectPaths = false;
-                            StartCoroutine(DisableVFX(5));
-                            CanSelectPaths = true;
+                            StartCoroutine(CoolDownSpells(magicSpellCoolDown));
+                           
                             mousePositionDictionary.Clear();
                             break;
                         }
@@ -265,10 +313,12 @@ public class SpellAbility : MonoBehaviour
                         {
                             enemyBaseGameObjectRef.gameObject.GetComponentInChildren<SkinnedMeshRenderer>().material.color = new(0, 1, 0, 0.5f);
                         }
-
+                        stopMechanic = true;
+                        StartCoroutine(CoolDownSpells(mechanicSpellCoolDown));
                         StartCoroutine(LiftSelectedEnemy(enemyBaseGameObjectRef, false));
                         print($"<color=red> mouseWorldpos </color>" + hit.point);
                         MechanicSpellActivated = false;
+                       
                     }
                 }
             }
@@ -382,6 +432,7 @@ public class SpellAbility : MonoBehaviour
                             
                             StartCoroutine(affectedEnemyBaseRef.ExplodeEnemy(currentMousePosition, affectedEnemyBaseRef));
                             selectedPath = null;
+                           
                         }
                     }
                 }
@@ -405,6 +456,7 @@ public class SpellAbility : MonoBehaviour
     public void ActivateFireSpell()
     {
         FireSpellActivated = true;
+        CanSelectPaths = true;
         currenSpellType = SpellType.Physical;
         stopFire = false;
     }
@@ -412,6 +464,7 @@ public class SpellAbility : MonoBehaviour
     public void ActivateMagicSpell()
     {
         currenSpellType = SpellType.Magic;
+        CanSelectPaths = true;
         MagicSpellActivated = true;
         stopMagic = false;
     }
@@ -443,7 +496,7 @@ public class SpellAbility : MonoBehaviour
 
     #region DisableVFX
 
-    private IEnumerator DisableVFX(float WaitTime)
+    private IEnumerator CoolDownSpells(float WaitTime,EnemyBase enemy = null,GameObject vfx = null,float optionalTime = 0)
     {
         yield return new WaitForSeconds(WaitTime);
         selectedPath = null;
@@ -467,6 +520,56 @@ public class SpellAbility : MonoBehaviour
                 CanSelectPaths = false;
                 MagicSpellActivated = false;
                 break;
+
+            case SpellType.Mechanic:
+                CanSelectPaths = false;
+                stopMechanic = false;
+                MechanicSpellActivated = false;
+                break;
+
+            case SpellType.Imaginary:
+                enemy.isInvisible = false;
+                enemy.UpdateVisuals();
+
+                float elapsed = 0;
+                float duration = 3;
+                List<ParticleSystem> ps = vfx.GetComponentsInChildren<ParticleSystem>().ToList();
+                List<ParticleSystemRenderer> psRenderer = vfx.GetComponentsInChildren<ParticleSystemRenderer>().ToList();
+            
+                while (elapsed < duration)
+                {
+                    elapsed += Time.deltaTime;
+                    float t = elapsed / duration;
+                   
+                    for (int i = 0; i < ps.Count; i++) 
+                    {
+                        var emission = ps[i].emission;
+                        emission.enabled = false;
+                        originalColorfloat.Add(psRenderer[i].material.GetFloat("_AllColorFactor")); 
+                        for (int j = 0; j < originalColorfloat.Count; j++)
+                        {
+                            originalColorfloat[j] = Mathf.Lerp(1, 0, t);
+                            psRenderer[i].material.SetFloat("_AllColorFactor", originalColorfloat[j]);
+                        }
+                        
+                        yield return null;
+                    }
+                   
+                }
+                if (elapsed >= duration)
+                {
+                    originalColorfloat.Clear();
+                    ps.Clear();
+                    psRenderer.Clear();
+
+                    ObjectPooling.instance.Return(vfx);
+                    yield return new WaitForSeconds(optionalTime);
+                    CanSelectPaths = false;
+                    stopImaginary = false;
+                    ImaginarySpellActivated = false;
+                   
+                }
+                break;
         }
     }
 
@@ -481,5 +584,14 @@ public class SpellAbility : MonoBehaviour
     public bool CanSelectPaths { get; internal set; }
     public SpellType currenSpellType { get; internal set; }
 
+    public float GetFireSpellCoolDown() => fireSpellCoolDown;
+
+    public float GetMagicSpellCoolDown() => magicSpellCoolDown;
+
+    public float GetMechanicSpellCoolDown() => mechanicSpellCoolDown;
+
+    public float GetImaginarySpellCoolDown() => imaginarySpellCoolDown;
+
+    public float GetImaginaryVFXCoolDown() => imaginaryVFXCoolDown;
     #endregion
 }

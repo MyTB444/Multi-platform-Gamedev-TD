@@ -1,9 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
-public class SelectedPath : MonoBehaviour
+public class SelectedPath : MonoBehaviour,IPointerEnterHandler,IPointerDownHandler,IPointerExitHandler
 {
     private Material PathMat;
     private Color InitialColor;
@@ -19,7 +21,7 @@ public class SelectedPath : MonoBehaviour
         FlameArea = gameObject.transform.GetChild(0).GetComponent<MeshRenderer>();
 
     }
-    private void OnMouseEnter()
+    void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
     {
         if (SpellAbility.instance != null)
         {
@@ -29,11 +31,11 @@ public class SelectedPath : MonoBehaviour
             }
         }
     }
-    private void OnMouseExit()
+    void IPointerExitHandler.OnPointerExit(PointerEventData eventData)
     {
         PathMat.color = InitialColor;
     }
-    private void OnMouseDown()
+    void IPointerDownHandler.OnPointerDown(PointerEventData eventData)
     {
         if (SpellAbility.instance.CanSelectPaths)
         {
