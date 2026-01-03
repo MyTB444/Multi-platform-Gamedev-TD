@@ -27295,18 +27295,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1927317023}
     m_Modifications:
-    - target: {fileID: 4027973325404645379, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
-      propertyPath: roadFacing
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4027973325404645379, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
-      propertyPath: showDebugRays
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4027973325404645379, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
-      propertyPath: detectionRadius
-      value: 20
-      objectReference: {fileID: 0}
     - target: {fileID: 6142938654885707507, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
       propertyPath: m_Name
       value: TowerStandingBase (12)
