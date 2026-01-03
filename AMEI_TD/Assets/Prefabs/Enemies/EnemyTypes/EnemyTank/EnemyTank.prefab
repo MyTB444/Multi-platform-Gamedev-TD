@@ -487,16 +487,29 @@ MonoBehaviour:
   elementType: 0
   isInvisible: 0
   isReinforced: 0
-  enemyColor: {r: 1, g: 0, b: 0, a: 1}
+  enemyColor: {r: 1, g: 1, b: 1, a: 1}
   centerPoint: {fileID: 1905194148752420682}
   bottomPoint: {fileID: 5173420360161879469}
+  rotationSpeed: 12
+  acceleration: 8
+  angularSpeed: 360
+  animationSpeedMultiplier: 1
+  cornerDetectionDistance: 3
+  cornerSlowdownAmount: 0.6
+  cornerRotationSmoothing: 0.3
   useSpawnGrace: 1
   spawnGracePeriod: 0.5
   pathOffsetRange: 0
   speedVariationPercent: 0.1
   isHighPriority: 1
   waypointReachThreshold: 0.1
+  cornerCutVariation: 0.8
+  pathDriftAmount: 0.3
   frozenColor: {r: 0.5, g: 0.8, b: 1, a: 1}
+  originalColors: []
+  stuckCheckInterval: 0.5
+  stuckDistanceThreshold: 0.2
+  stuckSkipDistance: 2
   enemyCurrentHp: 0
   myBody: {fileID: 0}
   enemyHealthDisplayCanvas: {fileID: 8878344807254345788}
