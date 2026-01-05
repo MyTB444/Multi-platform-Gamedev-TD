@@ -27844,29 +27844,25 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 210423928404077867, guid: 3eabe48b849c49f46a21d2db84bd71af, type: 3}
-      propertyPath: imaginaryVFX
+      propertyPath: magicVisualPrefab
       value: 
-      objectReference: {fileID: 7368993886450700974, guid: f9013c7cebf50fc44ae0f9de8421d64d, type: 3}
-    - target: {fileID: 210423928404077867, guid: 3eabe48b849c49f46a21d2db84bd71af, type: 3}
-      propertyPath: fireSpellCoolDown
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 210423928404077867, guid: 3eabe48b849c49f46a21d2db84bd71af, type: 3}
-      propertyPath: magicSpellCoolDown
-      value: 10
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 1624051024428852866, guid: 89f29b10d2bc3d840964c06b0a5b0579, type: 3}
     - target: {fileID: 210423928404077867, guid: 3eabe48b849c49f46a21d2db84bd71af, type: 3}
       propertyPath: imaginaryVFXCoolDown
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 210423928404077867, guid: 3eabe48b849c49f46a21d2db84bd71af, type: 3}
+      propertyPath: mechanicVisualPrefab
+      value: 
+      objectReference: {fileID: 8825648436799785635, guid: 67372ede1b2c25841b32e3aa244dc489, type: 3}
+    - target: {fileID: 210423928404077867, guid: 3eabe48b849c49f46a21d2db84bd71af, type: 3}
+      propertyPath: imaginarySpellCoolDown
       value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 210423928404077867, guid: 3eabe48b849c49f46a21d2db84bd71af, type: 3}
-      propertyPath: mechanicSpellCoolDown
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 210423928404077867, guid: 3eabe48b849c49f46a21d2db84bd71af, type: 3}
-      propertyPath: imaginarySpellCoolDown
-      value: 10
-      objectReference: {fileID: 0}
+      propertyPath: tinyFlamesVisualPrefab
+      value: 
+      objectReference: {fileID: 1972207730512856, guid: 2a9343f07c3238f4b8c66f8cadd2fe7d, type: 3}
     - target: {fileID: 3242496166541548391, guid: 3eabe48b849c49f46a21d2db84bd71af, type: 3}
       propertyPath: m_Name
       value: SpellAbility
@@ -34326,7 +34322,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: difficultyTiers.Array.data[0].enemyWeights.Array.data[0].enemyType
-      value: 3
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

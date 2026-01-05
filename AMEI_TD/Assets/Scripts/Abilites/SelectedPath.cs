@@ -9,10 +9,12 @@ public class SelectedPath : MonoBehaviour,IPointerEnterHandler,IPointerDownHandl
 {
     private Material PathMat;
     private Color InitialColor;
-
+    private Color selectedColor = new Color(1, 0, 0, 0.5f);
+    public bool isHoveringOnPotentialPaths {  get; private set; }
     [SerializeField] private bool isOnXAxis;
 
     public bool isOnAxisProperty => isOnXAxis;
+    
 
     private void OnEnable()
     {
@@ -27,20 +29,48 @@ public class SelectedPath : MonoBehaviour,IPointerEnterHandler,IPointerDownHandl
         {
             if (SpellAbility.instance.CanSelectPaths)
             {
-                PathMat.color = new Color(1, 0, 0, 0.5f);
+                PathMat.color = selectedColor;
+                SpellAbility.instance.IsHoveringOnPotentialPaths(true);
             }
+       
         }
+
     }
     void IPointerExitHandler.OnPointerExit(PointerEventData eventData)
     {
         PathMat.color = InitialColor;
+        if (SpellAbility.instance != null)
+        {
+            SpellAbility.instance.IsHoveringOnPotentialPaths(false);
+        }
     }
+
+    public IEnumerator ChangePathMatToOriginalColor()
+    {
+        float elapsed = 0;
+        float duration = 1f;
+
+        while(elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t =elapsed/ duration;
+            Color newColor = Vector4.Lerp(new Vector4(selectedColor.r,selectedColor.g,selectedColor.b,selectedColor.a),
+                                          new Vector4(InitialColor.r, InitialColor.g, InitialColor.b, InitialColor.a), t);
+            PathMat.color = newColor;
+            yield return null;
+
+        }
+        
+      
+       
+    }
+
     void IPointerDownHandler.OnPointerDown(PointerEventData eventData)
     {
         if (SpellAbility.instance.CanSelectPaths)
         {
             
-            Vector3 mousepos = (Input.mousePosition);
+            Vector2 mousepos = Mouse.current.position.ReadValue();
 
             Ray ray = Camera.main.ScreenPointToRay(mousepos);
 

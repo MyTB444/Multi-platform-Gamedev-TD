@@ -982,7 +982,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
        
         myBody.useGravity = true;
 
-        myBody.AddExplosionForce(0.5f, currentMousePosition, 10, 2, ForceMode.Force);
+        myBody.AddExplosionForce(0.5f, currentMousePosition, 5, 2, ForceMode.Force);
 
         yield return new WaitForSeconds(2f);
         

@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 198104970619360998}
   - component: {fileID: 199570947319072982}
   - component: {fileID: 8681579370218767243}
-  m_Layer: 11
+  m_Layer: 22
   m_Name: MediumFlames
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4873,9 +4873,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 532a156e510334b4591b75e29ac6f87f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stopFlames: 0
-  stopMagic: 0
-  enemies: []
   tinyFlamesPrefab: {fileID: 1972207730512856, guid: 3cbf6e6c4aae0e6418e9f176d49eb910, type: 3}
   magicDisableTime: 5
   tinyFlamesDisableTime: 5

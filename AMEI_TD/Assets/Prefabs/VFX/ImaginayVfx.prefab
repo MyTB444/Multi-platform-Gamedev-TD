@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4227405652271216859}
   - component: {fileID: 7787946817190355042}
   - component: {fileID: 6673718897773213906}
-  m_Layer: 0
+  m_Layer: 22
   m_Name: Fire-Smoke2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4772,7 +4772,7 @@ GameObject:
   - component: {fileID: 3922097170907302366}
   - component: {fileID: 4549604500833188440}
   - component: {fileID: 770748321205610354}
-  m_Layer: 0
+  m_Layer: 22
   m_Name: ImaginayVfx
   m_TagString: Untagged
   m_Icon: {fileID: 0}

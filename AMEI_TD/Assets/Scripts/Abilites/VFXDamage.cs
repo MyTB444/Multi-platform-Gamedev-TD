@@ -11,14 +11,14 @@ public class VFXDamage : MonoBehaviour
     private SpellType spellType;
     private EnemyBase enemyBaseGameObjectRef;
 
-    public bool stopFlames = false;
+    public bool stopFlames { get; set; } = false;
     private Dictionary<EnemyBase, GameObject> EnemyDictionary = new();
-   
-    public bool stopMagic = false;
+
+    public bool stopMagic { get; set; } = false;
     private List<SkinnedMeshRenderer> skinnedMeshRenderer = new();
     private ParticleSystem ps;
 
-    public List<EnemyBase> enemies = new();
+    public List<EnemyBase> enemies { get; set; } = new();
 
     [Header("VFX Prefabs")]
     [SerializeField] private GameObject tinyFlamesPrefab;
