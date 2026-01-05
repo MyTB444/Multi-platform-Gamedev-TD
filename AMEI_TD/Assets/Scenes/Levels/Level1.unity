@@ -24725,7 +24725,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: levelWaves.Array.data[0].enemyBasic
-      value: 3
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: levelWaves.Array.data[0].enemyDecoy
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: levelWaves.Array.data[1].enemyBasic
@@ -24757,7 +24761,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: difficultyTiers.Array.data[0].baseEnemyCount
-      value: 5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: difficultyTiers.Array.data[0].spawnRateMultiplier
@@ -24785,7 +24789,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: difficultyTiers.Array.data[0].enemyWeights.Array.data[0].enemyType
-      value: 4
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -27458,7 +27462,7 @@ Transform:
   m_GameObject: {fileID: 540704844}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 32, y: 0, z: 24}
+  m_LocalPosition: {x: 31.99, y: 0, z: 24}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -80485,6 +80489,10 @@ PrefabInstance:
       propertyPath: m_VersionIndex
       value: 4307
       objectReference: {fileID: 0}
+    - target: {fileID: 4027973325404645379, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
+      propertyPath: roadFacing
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 6142938654885707507, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
       propertyPath: m_Name
       value: TowerStandingBase (16)
@@ -83904,6 +83912,10 @@ PrefabInstance:
     - target: {fileID: 3006103288002480201, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
       propertyPath: m_VersionIndex
       value: 4307
+      objectReference: {fileID: 0}
+    - target: {fileID: 4027973325404645379, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
+      propertyPath: roadFacing
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6142938654885707507, guid: 717033d49cfe2b640a51d6a070db72c9, type: 3}
       propertyPath: m_Name
