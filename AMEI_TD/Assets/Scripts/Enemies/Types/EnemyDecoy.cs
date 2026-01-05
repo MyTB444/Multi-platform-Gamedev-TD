@@ -24,6 +24,8 @@ public class EnemyDecoy : EnemyBase
         {
             decoySpawnTime = Time.time;
             StopAllCoroutines();
+            // Prevent decoys from ever spawning more decoys
+            lastDecoySpawnTime = float.MaxValue;
         }
         else
         {
@@ -42,7 +44,7 @@ public class EnemyDecoy : EnemyBase
                 DestroyDecoy();
             }
         }
-        else
+        else if (!isDecoy)  // Extra safety: only real enemies can spawn decoys
         {
             if (Time.time >= lastDecoySpawnTime + decoySpawnInterval)
             {
@@ -94,8 +96,6 @@ public class EnemyDecoy : EnemyBase
         SetLayerRecursively(decoyObject, decoyLayerIndex);
         Debug.Log($"Decoy created on layer: {LayerMask.LayerToName(decoyObject.layer)} (index: {decoyObject.layer})");
 
-        decoyObject.SetActive(false);
-
         EnemyDecoy decoyScript = decoyObject.GetComponent<EnemyDecoy>();
         if (decoyScript != null)
         {
@@ -113,8 +113,6 @@ public class EnemyDecoy : EnemyBase
             }
 
             CopyStateToDecoy(decoyScript);
-
-            decoyObject.SetActive(true);
         }
     }
 
@@ -150,24 +148,34 @@ public class EnemyDecoy : EnemyBase
 
     private void CopyStateToDecoy(EnemyDecoy decoy)
     {
-        var waypointsField = typeof(EnemyBase).GetField("myWaypoints", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-        if (waypointsField != null)
+        // Use SetupEnemyNoGrace to properly initialize the decoy with NavMesh
+        Vector3[] waypoints = GetMyWaypoints();
+        if (waypoints != null)
         {
-            waypointsField.SetValue(decoy, GetMyWaypoints());
+            decoy.SetupEnemyNoGrace(waypoints);
         }
 
+        // CRITICAL: Set isDecoy flag AFTER SetupEnemyNoGrace (which calls ResetEnemy and sets it to false)
+        decoy.isDecoy = true;
+
+        // CRITICAL: Prevent decoys from spawning more decoys (AFTER SetupEnemyNoGrace which resets this)
+        decoy.lastDecoySpawnTime = float.MaxValue;
+
+        // Copy current waypoint index so decoy continues from same point in path
         var waypointIndexField = typeof(EnemyBase).GetField("currentWaypointIndex", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
         if (waypointIndexField != null)
         {
             waypointIndexField.SetValue(decoy, GetCurrentWaypointIndex());
         }
 
+        // Copy spawner reference
         var spawnerField = typeof(EnemyBase).GetField("mySpawner", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
         if (spawnerField != null)
         {
             spawnerField.SetValue(decoy, GetMySpawner());
         }
 
+        // Ensure decoy is alive
         var isDeadField = typeof(EnemyBase).GetField("isDead", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
         if (isDeadField != null)
         {
