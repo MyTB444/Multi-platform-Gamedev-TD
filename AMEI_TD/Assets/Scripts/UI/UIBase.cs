@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -15,6 +16,7 @@ public class UIBase : MonoBehaviour
     [SerializeField] private GameObject treeUI;
     [SerializeField] private GameObject infoUI;
     [SerializeField] private TextMeshProUGUI pointsUI;
+    [SerializeField] private GameObject spellNotActive;
 
     void Awake()
     {
@@ -94,5 +96,16 @@ public class UIBase : MonoBehaviour
     public void DisableInfo()
     {
         infoUI.SetActive(false);
+    }
+    public void ActivateNotActiveText()
+    {
+        StopAllCoroutines();
+        spellNotActive.SetActive(true);
+        StartCoroutine(TextDelay());
+    }
+    private IEnumerator TextDelay()
+    {
+        yield return new WaitForSeconds(3.0f);
+        spellNotActive.SetActive(false);
     }
 }

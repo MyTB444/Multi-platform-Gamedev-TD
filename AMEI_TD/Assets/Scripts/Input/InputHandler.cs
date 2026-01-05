@@ -8,6 +8,7 @@ public class InputHandler : MonoBehaviour
     public static InputHandler instance;
     [SerializeField] private UIBase uiBase;
     private bool gameEnd;
+    public SpellButton[] spellButtons;
 
     void Awake()
     {
@@ -78,28 +79,64 @@ public class InputHandler : MonoBehaviour
     {
         if (context.ReadValueAsButton())
         {
-            //Adnan
+            if (spellButtons[0].IsButtonActive())
+            {
+                spellButtons[0].CooldownStart();
+                SpellAbility.instance.ActivateFireSpell();
+            }
+            else
+            {
+                SpellIsNotActive();
+            }
         }
     }
     private void Magical(InputAction.CallbackContext context)
     {
         if (context.ReadValueAsButton())
         {
-            //Adnan
+            if (spellButtons[1].IsButtonActive())
+            {
+                spellButtons[1].CooldownStart();
+                SpellAbility.instance.ActivateMagicSpell();
+            }
+            else
+            {
+                SpellIsNotActive();
+            }
         }
     }
     private void Mechanical(InputAction.CallbackContext context)
     {
         if (context.ReadValueAsButton())
         {
-            //Adnan
+            if (spellButtons[2].IsButtonActive())
+            {
+                spellButtons[2].CooldownStart();
+                SpellAbility.instance.ActivateMechanicSpell();
+            }
+            else
+            {
+                SpellIsNotActive();
+            }
         }
     }
     private void Imaginary(InputAction.CallbackContext context)
     {
         if (context.ReadValueAsButton())
         {
-            //Adnan
+            if (spellButtons[3].IsButtonActive())
+            {
+                spellButtons[3].CooldownStart();
+                SpellAbility.instance.ActivateFireSpell();
+            }
+            else
+            {
+                SpellIsNotActive();
+            }
         }
+    }
+    private void SpellIsNotActive()
+    {
+        UIBase.instance.ActivateNotActiveText();
     }
 }

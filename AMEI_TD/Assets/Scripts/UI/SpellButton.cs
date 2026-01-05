@@ -24,7 +24,7 @@ public class SpellButton : MonoBehaviour
         }
 
     }
-    private void CooldownStart()
+    public void CooldownStart()
     {
         button.interactable = false;
         icon.color = disabledColor;
@@ -35,5 +35,9 @@ public class SpellButton : MonoBehaviour
         yield return new WaitForSeconds(cooldown);
         icon.color = activeColor;
         button.interactable = true;
+    }
+    public bool IsButtonActive()
+    {
+        return button.interactable;
     }
 }
