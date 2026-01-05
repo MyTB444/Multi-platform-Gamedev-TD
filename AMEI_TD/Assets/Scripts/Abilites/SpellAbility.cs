@@ -37,6 +37,7 @@ public class SpellAbility : MonoBehaviour
     [SerializeField] private float imaginarySpellCoolDown;
     [SerializeField] private float imaginaryVFXCoolDown;
     private List<float> originalColorfloat = new();
+    private bool IsSpellActivated = false;
     private void Awake()
     {
         instance = this;
@@ -79,22 +80,28 @@ public class SpellAbility : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.S))
         {
-            FireSpellActivated = true;
-            CanSelectPaths = true;
-            currenSpellType = SpellType.Physical;
-            stopFire = false;
+            if (!FireSpellActivated && !IsSpellActivated)
+            {
+                FireSpellActivated = true;
+                CanSelectPaths = true;
+                currenSpellType = SpellType.Physical;
+                stopFire = false;
+            }
         }
         if (Input.GetKeyDown(KeyCode.B))
         {
-            currenSpellType = SpellType.Magic;
-            CanSelectPaths = true;
-            MagicSpellActivated = true;
-            stopMagic = false;
+            if (!MagicSpellActivated && !IsSpellActivated)
+            {
+                currenSpellType = SpellType.Magic;
+                CanSelectPaths = true;
+                MagicSpellActivated = true;
+                stopMagic = false;
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.D))
         {
-            if (!MechanicSpellActivated && !stopMechanic)
+            if (!MechanicSpellActivated && !stopMechanic && !IsSpellActivated)
             {
                 currenSpellType = SpellType.Mechanic;
                 MechanicSpellActivated = true;
@@ -104,15 +111,18 @@ public class SpellAbility : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.E))
         {
-            currenSpellType = SpellType.Imaginary;
-            ImaginarySpellActivated = true;
+            if (!ImaginarySpellActivated && !IsSpellActivated)
+            {
+                currenSpellType = SpellType.Imaginary;
+                ImaginarySpellActivated = true;
+            }
         }
 
         #region FireSpell
 
         if (FireSpellActivated && currenSpellType == SpellType.Physical)
         {
-            
+            IsSpellActivated = true;
             FireSpell();
         }
         #endregion
@@ -121,7 +131,7 @@ public class SpellAbility : MonoBehaviour
 
         if (MagicSpellActivated)
         {
-            
+            IsSpellActivated = true;
             MagicSpell();
         }
         #endregion
@@ -130,6 +140,7 @@ public class SpellAbility : MonoBehaviour
 
         if (MechanicSpellActivated && !stopMechanic)
         {
+            IsSpellActivated = true;
             if (Input.GetMouseButton(0))
             {
                 EnableMechanicDamage();
@@ -141,6 +152,7 @@ public class SpellAbility : MonoBehaviour
 
         if (ImaginarySpellActivated && !stopImaginary)
         {
+            IsSpellActivated = true;
             EnemyBase[] enemies = FindObjectsByType<EnemyBase>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
             Debug.Log($"[Imaginary Spell] Found {enemies.Length} enemies");
     
@@ -455,30 +467,42 @@ public class SpellAbility : MonoBehaviour
 
     public void ActivateFireSpell()
     {
-        FireSpellActivated = true;
-        CanSelectPaths = true;
-        currenSpellType = SpellType.Physical;
-        stopFire = false;
+        if (!FireSpellActivated && !IsSpellActivated)
+        {
+            FireSpellActivated = true;
+            CanSelectPaths = true;
+            currenSpellType = SpellType.Physical;
+            stopFire = false;
+        }
     }
 
     public void ActivateMagicSpell()
     {
-        currenSpellType = SpellType.Magic;
-        CanSelectPaths = true;
-        MagicSpellActivated = true;
-        stopMagic = false;
+        if (!MagicSpellActivated && !IsSpellActivated)
+        {
+            currenSpellType = SpellType.Magic;
+            CanSelectPaths = true;
+            MagicSpellActivated = true;
+            stopMagic = false;
+        }
     }
 
     public void ActivateMechanicSpell()
     {
-        currenSpellType = SpellType.Mechanic;
-        MechanicSpellActivated = true;
+        if (!MechanicSpellActivated && !IsSpellActivated)
+        {
+            currenSpellType = SpellType.Mechanic;
+            MechanicSpellActivated = true;
+        }
     }
 
     public void ActivateImaginarySpell()
     {
-        currenSpellType = SpellType.Imaginary;
-        ImaginarySpellActivated = true;
+        if (!ImaginarySpellActivated && !IsSpellActivated)
+        {
+            currenSpellType = SpellType.Imaginary;
+            ImaginarySpellActivated = true;
+        }
     }
 
     #endregion
@@ -512,6 +536,7 @@ public class SpellAbility : MonoBehaviour
                 flames.Clear();
                 CanSelectPaths = false;
                 FireSpellActivated = false;
+                IsSpellActivated = false;
                 break;
                 
             case SpellType.Magic:
@@ -519,12 +544,14 @@ public class SpellAbility : MonoBehaviour
                 stopMagic = false;
                 CanSelectPaths = false;
                 MagicSpellActivated = false;
+                IsSpellActivated = false;
                 break;
 
             case SpellType.Mechanic:
                 CanSelectPaths = false;
                 stopMechanic = false;
                 MechanicSpellActivated = false;
+                IsSpellActivated = false;
                 break;
 
             case SpellType.Imaginary:
@@ -532,14 +559,14 @@ public class SpellAbility : MonoBehaviour
                 enemy.UpdateVisuals();
 
                 float elapsed = 0;
-                float duration = 3;
+                float duration = 8;
                 List<ParticleSystem> ps = vfx.GetComponentsInChildren<ParticleSystem>().ToList();
                 List<ParticleSystemRenderer> psRenderer = vfx.GetComponentsInChildren<ParticleSystemRenderer>().ToList();
             
                 while (elapsed < duration)
                 {
                     elapsed += Time.deltaTime;
-                    float t = elapsed / duration;
+                    float t = elapsed *2/ duration;
                    
                     for (int i = 0; i < ps.Count; i++) 
                     {
@@ -569,6 +596,7 @@ public class SpellAbility : MonoBehaviour
                     ImaginarySpellActivated = false;
                    
                 }
+                IsSpellActivated = false;
                 break;
         }
     }

@@ -27857,7 +27857,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 210423928404077867, guid: 3eabe48b849c49f46a21d2db84bd71af, type: 3}
       propertyPath: imaginaryVFXCoolDown
-      value: 3.5
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 210423928404077867, guid: 3eabe48b849c49f46a21d2db84bd71af, type: 3}
       propertyPath: mechanicSpellCoolDown

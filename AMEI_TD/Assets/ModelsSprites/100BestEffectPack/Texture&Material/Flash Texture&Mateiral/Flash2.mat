@@ -29,10 +29,10 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AllColorFactor: 6
+    - _AllColorFactor: 3
     - _ColorBlueFactor: 1
-    - _ColorGreenFactor: 2
-    - _ColorRedFactor: 0
+    - _ColorGreenFactor: 0.4
+    - _ColorRedFactor: 0.5
     - _InvFade: 1
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
