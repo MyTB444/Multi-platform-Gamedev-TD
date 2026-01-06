@@ -109,7 +109,7 @@ public class TowerBase : MonoBehaviour
 
     [Header("Audio")]
     [SerializeField] protected AudioClip attackSound;
-    [SerializeField] [Range(0f, 1f)] protected float attackSoundVolume = 1f;
+    [SerializeField][Range(0f, 1f)] protected float attackSoundVolume = 1f;
 
     [Header("Targeting Setup")]
     [SerializeField] protected bool targetMostAdvancedEnemy = true;
@@ -156,6 +156,9 @@ public class TowerBase : MonoBehaviour
     [SerializeField] private Color guardianBuffColor = new Color(1f, 0.85f, 0.3f, 1f);
     [SerializeField] private float guardianGlowIntensity = 0.3f;
     [SerializeField] private float guardianPulseSpeed = 2f;
+
+    public int BuyPrice => buyPrice;
+    public int SellPrice => sellPrice;
 
     protected virtual void Awake()
     {
