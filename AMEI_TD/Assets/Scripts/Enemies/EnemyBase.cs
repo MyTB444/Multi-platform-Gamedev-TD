@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public enum EnemyType
@@ -32,7 +33,7 @@ public enum DebuffType
     Frostbite 
 }
 
-public class EnemyBase : MonoBehaviour, IDamageable
+public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPointerExitHandler
 {
     protected EnemySpawner mySpawner;
 
@@ -1125,7 +1126,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
        
         myBody.useGravity = true;
 
-        myBody.AddExplosionForce(0.5f, currentMousePosition, 10, 2, ForceMode.Force);
+        myBody.AddExplosionForce(0.5f, currentMousePosition, 5, 2, ForceMode.Force);
 
         yield return new WaitForSeconds(2f);
         
@@ -1238,7 +1239,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         return (nextWaypoint - currentWaypoint).normalized;
     }
 
-    private void OnMouseEnter()
+    void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
     {
         if (SpellAbility.instance.MechanicSpellActivated)
         {
@@ -1247,7 +1248,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
     }
 
-    private void OnMouseExit()
+   void IPointerExitHandler.OnPointerExit(PointerEventData eventData)
     {
         if (SpellAbility.instance.MechanicSpellActivated)
         {

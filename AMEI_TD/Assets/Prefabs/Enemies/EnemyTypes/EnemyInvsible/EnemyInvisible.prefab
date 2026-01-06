@@ -427,6 +427,7 @@ GameObject:
   - component: {fileID: -2278032858224100774}
   - component: {fileID: 1987557770203138956}
   - component: {fileID: -3382405180151512375}
+  - component: {fileID: 3114641620578624333}
   m_Layer: 6
   m_Name: EnemyInvisible
   m_TagString: Enemy
@@ -490,7 +491,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyType: 3
-  enemySpeed: 1
+  enemySpeed: 2
   damage: 15
   reward: 10
   enemyMaxHp: 15
@@ -500,22 +501,13 @@ MonoBehaviour:
   enemyColor: {r: 1, g: 1, b: 1, a: 1}
   centerPoint: {fileID: 8365026619384376731}
   bottomPoint: {fileID: 3127176693983339875}
-  rotationSpeed: 12
-  acceleration: 8
-  angularSpeed: 360
-  animationSpeedMultiplier: 1
   useSpawnGrace: 1
   spawnGracePeriod: 0.5
-  pathOffsetRange: 0.2
+  pathOffsetRange: 0.5
   speedVariationPercent: 0.1
-  isHighPriority: 1
+  isHighPriority: 0
   waypointReachThreshold: 0.3
-  cornerCutVariation: 0.2
-  pathDriftAmount: 0.15
   frozenColor: {r: 0.5, g: 0.8, b: 1, a: 1}
-  stuckCheckInterval: 0.5
-  stuckDistanceThreshold: 0.2
-  stuckSkipDistance: 2
   enemyCurrentHp: 0
   myBody: {fileID: 0}
   enemyHealthDisplayCanvas: {fileID: 57293284616673567}
@@ -555,7 +547,7 @@ NavMeshAgent:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1931298151966786}
-  m_Enabled: 1
+  m_Enabled: 0
   m_AgentTypeID: 0
   m_Radius: 0.6
   m_Speed: 3.5
