@@ -49,14 +49,14 @@ public class SkillNode : ScriptableObject
         TowerUpgradeManager.instance.UnlockUpgrade(function);
         if(function2 != TowerUpgradeType.Null)
         {
-            TowerUpgradeManager.instance.UnlockUpgrade(function);
+            TowerUpgradeManager.instance.UnlockUpgrade(function2);
         }
         if(swapType != SwapType.Null)
-        Raise(swapType);
+            Raise(swapType);
         if(spellEnableType != SpellEnableType.Null)
-        EnableSpell(spellEnableType);
+            EnableSpell(spellEnableType);
         if(noah)
-        EnableNoah();
+            EnableNoah();
         
     }
     public void RemoveEffect()
@@ -64,7 +64,7 @@ public class SkillNode : ScriptableObject
        TowerUpgradeManager.instance.LockUpgrade(function);
         if (function2 != TowerUpgradeType.Null)
         {
-            TowerUpgradeManager.instance.LockUpgrade(function);
+            TowerUpgradeManager.instance.LockUpgrade(function2);
         }
     }
     public void Raise(SwapType type)

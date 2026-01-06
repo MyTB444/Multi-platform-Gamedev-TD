@@ -55,14 +55,6 @@ public class UIBase : MonoBehaviour
     {
         points = Mathf.Clamp(points, 0, int.MaxValue);
         pointsUI.text = points.ToString();
-        if (points < 50)
-        {
-            pointsUI.color = Color.red;
-            if (points <= 0)
-            {
-                Debug.Log("YouDied");
-            }
-        }
     }
 
     public void UpdateWaveTimerUI(float value)

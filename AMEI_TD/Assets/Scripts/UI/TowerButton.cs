@@ -55,20 +55,17 @@ public class TowerButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (GameManager.instance.GetPoints() > defaultBuyPrice) 
+        GameObject towerToBuild = towerSwapped ? towerPrefab2 : towerPrefab;
+        TowerBase towerBaseUnit = towerToBuild.GetComponent<TowerBase>();
+        int buyPrice = towerBaseUnit.GetBuyPrice();
+    
+        if (GameManager.instance.GetPoints() >= buyPrice) 
         {
-            if (!towerSwapped)
-            {
-                BuildTower(towerPrefab);
-            }
-            else
-            {
-                BuildTower(towerPrefab2);
-            }
+            BuildTower(towerToBuild);
         }
         else
         {
-            Debug.Log("U dont have money");
+            Debug.Log("Not enough gold");
         }
     }
 
@@ -110,13 +107,12 @@ public class TowerButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         {
             element = towerScript.GetElementType();
         }
-        
+    
         Transform spawnPoint = towerBase.GetSpawnPoint(element);
         Quaternion spawnRotation = towerBase.GetSpawnRotation(element);
-        
+    
         tb.SetUnit(Instantiate(tower, spawnPoint.position, spawnRotation));
-        TowerBase towerBaseUnit = tower.GetComponent<TowerBase>();
-        int buyPrice = towerBaseUnit.GetBuyPrice();
+        int buyPrice = towerScript.GetBuyPrice();
         GameManager.instance.UpdateSkillPoints(-buyPrice);
         tb.SetTowerBuiltMode(true);
         tb.DeactivateButtons();
