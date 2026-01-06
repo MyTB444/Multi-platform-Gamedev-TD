@@ -6,13 +6,13 @@ public class TowerButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 {
     [SerializeField] private GameObject towerPrefab;
     [SerializeField] private GameObject towerPrefab2;
-    [SerializeField] private Transform buildPosition;
     [SerializeField] private int buyPrice;
     [SerializeField] private GameObject icon;
     [SerializeField] private GameObject icon2;
 
     private bool towerSwapped;
     private TileButton tb;
+    private TowerStandingBase towerBase;
     private MeshRenderer mr;
     [SerializeField] private Material defaultMat;
     [SerializeField] private Material howeredMat;
@@ -30,6 +30,7 @@ public class TowerButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         tb = GetComponentInParent<TileButton>();
         mr = GetComponent<MeshRenderer>();
         matList = mr.materials;
+        towerBase = GetComponentInParent<TowerStandingBase>();
     }
 
     public void Activate()
@@ -51,7 +52,6 @@ public class TowerButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         this.gameObject.transform.localScale = defaultSize;
         matList[0] = defaultMat;
         mr.materials = matList;
-
     }
 
     public void OnPointerDown(PointerEventData eventData)
@@ -60,12 +60,11 @@ public class TowerButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         {
             if (!towerSwapped)
             {
-                BuildTower(towerPrefab, buildPosition);
+                BuildTower(towerPrefab);
             }
             else
             {
-                BuildTower(towerPrefab2, buildPosition);
-
+                BuildTower(towerPrefab2);
             }
         }
         else
@@ -87,12 +86,10 @@ public class TowerButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         this.gameObject.transform.localScale = new Vector3(6, 5.4f, 6);
         matList[0] = howeredMat;
         mr.materials = matList;
-
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-
         if (!towerSwapped)
         {
             icon.SetActive(false);
@@ -105,21 +102,32 @@ public class TowerButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         matList[0] = defaultMat;
         mr.materials = matList;
     }
-    private void BuildTower(GameObject tower, Transform pos)
+
+    private void BuildTower(GameObject tower)
     {
-        tb.SetUnit(Instantiate(tower.gameObject, new Vector3(pos.position.x, pos.position.y, pos.position.z), Quaternion.identity));
+        ElementType element = ElementType.Physical;
+        TowerBase towerScript = tower.GetComponent<TowerBase>();
+        if (towerScript != null)
+        {
+            element = towerScript.GetElementType();
+        }
+        
+        Transform spawnPoint = towerBase.GetSpawnPoint(element);
+        Quaternion spawnRotation = towerBase.GetSpawnRotation(element);
+        
+        tb.SetUnit(Instantiate(tower, spawnPoint.position, spawnRotation));
         GameManager.instance.UpdateSkillPoints(-buyPrice);
         tb.SetTowerBuiltMode(true);
         tb.DeactivateButtons();
         tb.ActivateTileButtons(false);
     }
+
     private void SwapTower(SwapType givenType)
     {
         if (givenType == buttonType)
         {
             towerSwapped = true;
         }
-
     }
 
     public bool GetActive()
