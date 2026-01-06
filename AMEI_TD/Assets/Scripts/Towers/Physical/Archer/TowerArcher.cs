@@ -8,7 +8,6 @@ public class TowerArcher : TowerBase
     
     [Header("Animation Timing")]
     [SerializeField] private float baseAnimationLength = 1f;
-    [SerializeField] private float arrowRespawnDelay = 0.9f;
     
     [Header("Prediction")]
     [SerializeField] private float baseFlightTime = 0.3f;
@@ -37,6 +36,7 @@ public class TowerArcher : TowerBase
     private EnemyBase lockedTarget;
     private Vector3 lockedVelocity;
     private Vector3 lockedPosition;
+    private float baseAttackCooldownForArrow;
     
     protected override void Awake()
     {
@@ -66,6 +66,7 @@ public class TowerArcher : TowerBase
     protected override void Start()
     {
         base.Start();
+        baseAttackCooldownForArrow = attackCooldown;
         UpdateArrowVisualVFX();
     }
     
@@ -244,24 +245,26 @@ public class TowerArcher : TowerBase
 
     public void OnReleaseBow()
     {
+        float cooldownRatio = attackCooldown / baseAttackCooldown;  // Use inherited variable
+    
         if (bowController != null)
         {
-            bowController.ReleaseBow();
+            bowController.ReleaseBow(cooldownRatio);
         }
-        
+    
         PlayAttackSound();
-        
         FireArrow();
-        
+    
         if (arrowVisual != null)
         {
             arrowVisual.SetActive(false);
         }
-        
+    
         isAttacking = false;
         ClearLockedTarget();
-        
-        Invoke("OnArrowReady", arrowRespawnDelay);
+    
+        float dynamicRespawnDelay = 0.9f * cooldownRatio;
+        Invoke("OnArrowReady", dynamicRespawnDelay);
     }
     
     public void OnArrowReady()

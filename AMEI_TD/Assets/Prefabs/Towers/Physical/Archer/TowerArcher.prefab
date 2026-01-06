@@ -18902,7 +18902,6 @@ MonoBehaviour:
   bowController: {fileID: 4796576192046828227}
   arrowVisual: {fileID: 5029408247247093985}
   baseAnimationLength: 1
-  arrowRespawnDelay: 0.9
   baseFlightTime: 0.3
   speedMultiplier: 0.05
   arrowVisualVFXPoint: {fileID: 8919103593872427823}
