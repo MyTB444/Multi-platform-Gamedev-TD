@@ -31,7 +31,7 @@ public class SkillTreeManager : MonoBehaviour
             return false;
 
         // Not enough points
-        if (GameManager.instance.GetPoints() <= skill.skillPointCost)
+        if (GameManager.instance.GetPoints() < skill.skillPointCost)
             return false;
 
         // Check prerequisites

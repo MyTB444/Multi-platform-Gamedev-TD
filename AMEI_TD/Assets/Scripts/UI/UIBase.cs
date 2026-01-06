@@ -2,6 +2,7 @@ using System.Collections;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Video;
 
 public class UIBase : MonoBehaviour
 {
@@ -43,7 +44,7 @@ public class UIBase : MonoBehaviour
     }
     public void ViewSkillTree()
     {
-        if(treeUI.activeSelf == false)
+        if (treeUI.activeSelf == false)
             treeUI.SetActive(true);
         else
         {

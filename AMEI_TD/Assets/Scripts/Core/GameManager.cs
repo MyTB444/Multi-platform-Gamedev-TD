@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
         points += newPoints;
         UIBase.instance.UpdatePointsUI(points);
         SkillTreeManager.instance.PointsGained();
-        if (points <= 0 && gameLost == false) LevelFailed();
+        //LevelFailed();
     }
 
     private void LevelFailed()
@@ -48,8 +48,7 @@ public class GameManager : MonoBehaviour
     
     private void GameOverOutcomeUI(bool playerWon)
     {
-        // InputHandler.instance.EnableRestart();
-        // UIBase.instance.GameWon(playerWon);
+        UIBase.instance.GameWon(playerWon);
     }
 
     private void StopWaveProgression()
