@@ -8,7 +8,6 @@ public class TowerButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     [SerializeField] private GameObject towerPrefab2;
     [SerializeField] private GameObject icon;
     [SerializeField] private GameObject icon2;
-
     private bool towerSwapped;
     private TileButton tb;
     private TowerStandingBase towerBase;
@@ -18,8 +17,8 @@ public class TowerButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     private Material[] matList;
     private Vector3 defaultSize;
     public SwapType buttonType;
-    public int minBuyPrice;
-
+    public int defaultBuyPrice;
+    public int swappedBuyPrice;
     public SkillNode difficultyEvent;
 
     private void Awake()
@@ -56,7 +55,7 @@ public class TowerButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (GameManager.instance.GetPoints() > minBuyPrice) // Cheapest tower
+        if (GameManager.instance.GetPoints() > defaultBuyPrice) 
         {
             if (!towerSwapped)
             {
@@ -129,6 +128,7 @@ public class TowerButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         if (givenType == buttonType)
         {
             towerSwapped = true;
+            defaultBuyPrice = swappedBuyPrice;
         }
     }
 
