@@ -79,9 +79,17 @@ public class TowerArcher : TowerBase
     public override void SetUpgrade(TowerUpgradeType upgradeType, bool enabled)
     {
         base.SetUpgrade(upgradeType, enabled);
-    
+
         switch (upgradeType)
         {
+            case TowerUpgradeType.PhysicalAttackSpeed:
+                attackSpeedBoost = enabled;
+                ApplyStatUpgrades();
+                break;
+            case TowerUpgradeType.PhysicalRange:
+                rangeBoost = enabled;
+                ApplyStatUpgrades();
+                break;
             case TowerUpgradeType.PoisonArrows:
                 poisonArrows = enabled;
                 UpdateArrowVisualVFX();

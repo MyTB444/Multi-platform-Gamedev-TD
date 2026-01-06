@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: PhysicalAttackSpeed
   m_EditorClassIdentifier: 
   skillName: Arm Day
-  skillCost: 20
+  skillCost: 50
   description: Physical towers gain 25% attack speed.
   icon: {fileID: 21300000, guid: 313eb4d0157f6ec418d857892d7b44ad, type: 3}
   irreversible: 0
-  skillPointCost: 20
+  skillPointCost: 50
   prerequisites:
   - {fileID: 11400000, guid: 38f340fe322a64fa0aceb85c873f9eae, type: 2}
   function: 2
