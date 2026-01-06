@@ -25,18 +25,12 @@ public class ArrowProjectile : TowerProjectileBase
     private float fireDuration;
     private DamageInfo fireDamageInfo;
     
-    private Rigidbody rb;
     private bool launched = false;
     private bool curving = true;
     private float launchTime;
     private Vector3 targetPosition;
     private Vector3 initialForward;
     private float arrowSpeed;
-    
-    private void Awake()
-    {
-        rb = GetComponent<Rigidbody>();
-    }
     
     protected override void OnEnable()
     {

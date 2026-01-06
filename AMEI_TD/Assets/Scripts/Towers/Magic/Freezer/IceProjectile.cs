@@ -33,6 +33,12 @@ public class IceProjectile : TowerProjectileBase
         isHoming = true;
         targetLost = false;
         canFreeze = false;
+        
+        if (rb != null)
+        {
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
     }
     
     public void SetupIceProjectile(

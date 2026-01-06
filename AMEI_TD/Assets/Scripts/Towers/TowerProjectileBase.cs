@@ -8,6 +8,7 @@ public class TowerProjectileBase : MonoBehaviour
     protected bool isActive = true;
     protected bool hasHit = false;
     protected IDamageable damageable;
+    protected Rigidbody rb;
 
     [SerializeField] protected float maxLifeTime = 10f;
     protected float spawnTime;
@@ -18,6 +19,11 @@ public class TowerProjectileBase : MonoBehaviour
     [Header("Audio")]
     [SerializeField] protected AudioClip impactSound;
     [SerializeField] [Range(0f, 1f)] protected float impactSoundVolume = 1f;
+    
+    private void Awake()
+    {
+        rb = GetComponent<Rigidbody>();
+    }
     
     public void SetupProjectile(Vector3 targetPosition, IDamageable newDamageable, DamageInfo newDamageInfo, float newSpeed)
     {
@@ -104,5 +110,12 @@ public class TowerProjectileBase : MonoBehaviour
         isActive = true;
         hasHit = false;
         spawnTime = Time.time;
+        
+        Rigidbody rb = GetComponent<Rigidbody>();
+        if (rb != null)
+        {
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
     }
 }

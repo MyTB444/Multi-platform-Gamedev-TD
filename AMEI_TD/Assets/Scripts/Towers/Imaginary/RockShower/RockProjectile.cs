@@ -123,6 +123,41 @@ public class RockProjectile : TowerProjectileBase
         }
     }
     
+    protected override void MoveProjectile()
+    {
+        float moveDistance = speed * Time.deltaTime;
+    
+        Debug.DrawRay(transform.position, Vector3.down * (moveDistance + 0.5f), Color.red, 0.1f);
+    
+        if (Physics.Raycast(transform.position, Vector3.down, out RaycastHit hit, moveDistance + 0.5f, groundLayer))
+        {
+            Debug.Log($"[ROCK] Hit ground: {hit.collider.name}");
+            transform.position = hit.point;
+        
+            if (!hasHit)
+            {
+                hasHit = true;
+                DealAOEDamage();
+
+                if (impactEffectPrefab != null)
+                {
+                    Vector3 scaledSize = impactEffectPrefab.transform.localScale * rockSize;
+                    ObjectPooling.instance.GetVFX(impactEffectPrefab, transform.position, Quaternion.identity, scaledSize, 2f);
+                }
+
+                if (isMeteor || Random.value <= impactSoundChance)
+                {
+                    PlayImpactSound(transform.position);
+                }
+
+                ObjectPooling.instance.Return(gameObject);
+            }
+            return;
+        }
+    
+        transform.position += direction * moveDistance;
+    }
+    
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;

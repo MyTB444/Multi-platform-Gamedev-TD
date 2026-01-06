@@ -21,14 +21,8 @@ public class SpearProjectile : TowerProjectileBase
     [Header("VFX")]
     [SerializeField] private Transform vfxPoint;
     
-    private Rigidbody rb;
     private bool launched = false;
     private float spearSpeed;
-    
-    private void Awake()
-    {
-        rb = GetComponent<Rigidbody>();
-    }
     
     protected override void OnEnable()
     {

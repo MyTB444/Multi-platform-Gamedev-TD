@@ -45,6 +45,12 @@ public class HomingProjectile : TowerProjectileBase
         canBurn = false;
         hasAoE = false;
         canSpreadBurn = false;
+        
+        if (rb != null)
+        {
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
     }
 
     public void SetupHomingProjectile(Transform enemyTarget, IDamageable newDamageable, DamageInfo newDamageInfo, float newSpeed, LayerMask whatIsEnemy)
