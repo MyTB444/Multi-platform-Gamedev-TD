@@ -7,6 +7,7 @@ public class SelectedPath : MonoBehaviour
 {
     private Material PathMat;
     private Color InitialColor;
+    private MeshRenderer pathMeshRenderer;
 
     [SerializeField] private bool isOnXAxis;
 
@@ -14,10 +15,14 @@ public class SelectedPath : MonoBehaviour
 
     private void OnEnable()
     {
-        PathMat = gameObject.GetComponent<MeshRenderer>().material;
+        pathMeshRenderer = gameObject.GetComponent<MeshRenderer>();
+        PathMat = pathMeshRenderer.material;
         InitialColor = PathMat.color;
         FlameArea = gameObject.transform.GetChild(0).GetComponent<MeshRenderer>();
 
+        // Disable both mesh renderers by default
+        pathMeshRenderer.enabled = false;
+        FlameArea.enabled = false;
     }
     private void OnMouseEnter()
     {
@@ -25,13 +30,19 @@ public class SelectedPath : MonoBehaviour
         {
             if (SpellAbility.instance.CanSelectPaths)
             {
+                // Enable both mesh renderers and show red highlight
+                pathMeshRenderer.enabled = true;
+                FlameArea.enabled = true;
                 PathMat.color = new Color(1, 0, 0, 0.5f);
             }
         }
     }
     private void OnMouseExit()
     {
+        // Reset color and disable both mesh renderers
         PathMat.color = InitialColor;
+        pathMeshRenderer.enabled = false;
+        FlameArea.enabled = false;
     }
     private void OnMouseDown()
     {
@@ -56,10 +67,6 @@ public class SelectedPath : MonoBehaviour
                 Debug.DrawRay(ray.origin,ray.direction*300f, Color.red,10f);
 
             }
-            //Vector3 mousepos = Input.mousePosition - Camera.main.transform.position;
-
-
-         
         }
     }
 
