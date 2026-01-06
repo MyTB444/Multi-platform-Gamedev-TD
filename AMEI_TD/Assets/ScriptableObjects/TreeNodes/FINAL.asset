@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: FINAL
   m_EditorClassIdentifier: 
   skillName: The Alpha and the Omega
-  skillCost: 5
+  skillCost: 300
   description: Noah ascends to your base, overwhelming your enemies with the full
     might of the arcane!
   icon: {fileID: 21300000, guid: feb8709f10385a94095b55fe8d0f625c, type: 3}
   irreversible: 1
-  skillPointCost: 5
+  skillPointCost: 300
   prerequisites:
   - {fileID: 11400000, guid: 2fcfe1ac11fbc4ad6b19a098763dd815, type: 2}
   - {fileID: 11400000, guid: 032542ef7b705427297ed08b7ccfddeb, type: 2}

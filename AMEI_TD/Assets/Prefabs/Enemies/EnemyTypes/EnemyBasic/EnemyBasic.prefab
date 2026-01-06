@@ -769,7 +769,7 @@ MonoBehaviour:
   enemyType: 0
   enemySpeed: 2
   damage: 1
-  reward: 8
+  reward: 10
   enemyMaxHp: 60
   elementType: 0
   isInvisible: 0
@@ -781,9 +781,6 @@ MonoBehaviour:
   acceleration: 8
   angularSpeed: 360
   animationSpeedMultiplier: 1
-  cornerDetectionDistance: 3
-  cornerSlowdownAmount: 0.6
-  cornerRotationSmoothing: 0.3
   useSpawnGrace: 1
   spawnGracePeriod: 0.5
   pathOffsetRange: 1.5
@@ -801,6 +798,7 @@ MonoBehaviour:
   myBody: {fileID: 0}
   enemyHealthDisplayCanvas: {fileID: 2253822894286516178}
   healthBar: {fileID: 6398779029012184402}
+  healthBarDisplayDuration: 3
   enemyVFXPoolScriptRef: {fileID: 4679229004361025924}
 --- !u!136 &5952700638257805842
 CapsuleCollider:

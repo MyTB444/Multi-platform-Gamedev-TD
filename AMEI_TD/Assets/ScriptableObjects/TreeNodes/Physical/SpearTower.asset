@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: SpearTower
   m_EditorClassIdentifier: 
   skillName: Spear Thrower
-  skillCost: 5
+  skillCost: 50
   description: 'Physical towers are replaced with Spear Throwers; their attacks apply
     Bleed.
 
@@ -21,7 +21,7 @@ MonoBehaviour:
     UNLEASH!'
   icon: {fileID: 21300000, guid: 530bcabb1501d8148a19a77465ecac03, type: 3}
   irreversible: 1
-  skillPointCost: 5
+  skillPointCost: 50
   prerequisites:
   - {fileID: 11400000, guid: 7b0473e4d06cb4545bab387b159d6d2b, type: 2}
   function: 6
