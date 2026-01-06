@@ -116,6 +116,8 @@ public class TowerButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
         Quaternion spawnRotation = towerBase.GetSpawnRotation(element);
         
         tb.SetUnit(Instantiate(tower, spawnPoint.position, spawnRotation));
+        TowerBase towerBaseUnit = tower.GetComponent<TowerBase>();
+        // towerBase get price
         GameManager.instance.UpdateSkillPoints(-buyPrice);
         tb.SetTowerBuiltMode(true);
         tb.DeactivateButtons();

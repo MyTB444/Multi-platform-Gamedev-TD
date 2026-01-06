@@ -112,6 +112,8 @@ public class TileButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     }
     public void DestoryTower()
     {
+        TowerBase towerBase = spawnedUnit.GetComponent<TowerBase>();
+        //Get price
         gameManager.UpdateSkillPoints(sellPrice);
         Destroy(spawnedUnit);
         towerBuilt = false;
