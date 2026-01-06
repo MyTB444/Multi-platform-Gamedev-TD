@@ -49,6 +49,7 @@ public class NodeButton : MonoBehaviour, IPointerEnterHandler
             manager.OnSkillUnlocked.AddListener(OnAnySkillChanged);
             manager.OnSkillLocked.AddListener(OnAnySkillChanged);
             manager.OnTreeReset.AddListener(OnTreeReset);
+            manager.GainedPoints.AddListener(UpdateVisuals);
 
         }
     }

@@ -9,6 +9,8 @@ public class SkillTreeManager : MonoBehaviour
     [Header("Events")]
     public UnityEvent<SkillNode> OnSkillUnlocked;
     public UnityEvent<SkillNode> OnSkillLocked;
+    public UnityEvent GainedPoints;
+
     public UnityEvent OnTreeReset;
     public static SkillTreeManager instance;
     // Track unlocked skills
@@ -144,6 +146,11 @@ public class SkillTreeManager : MonoBehaviour
             
             Debug.Log($"Loaded skill: {skillName}");
         }
+    }
+    public void PointsGained()
+    {
+        GainedPoints?.Invoke();
+
     }
 
     [System.Serializable]

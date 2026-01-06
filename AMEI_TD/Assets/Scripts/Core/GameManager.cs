@@ -30,6 +30,7 @@ public class GameManager : MonoBehaviour
     {
         points += newPoints;
         UIBase.instance.UpdatePointsUI(points);
+        SkillTreeManager.instance.PointsGained();
         if (points <= 0 && gameLost == false) LevelFailed();
     }
 
