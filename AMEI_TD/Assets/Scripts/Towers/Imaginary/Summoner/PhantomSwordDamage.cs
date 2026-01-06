@@ -13,12 +13,15 @@ public class PhantomSwordDamage : MonoBehaviour
     private Vector3 vfxRotationOffset;
     private float vfxStartDelay;
     private float vfxDuration;
-    
+
     private bool applySlow = false;
     private float slowPercent;
     private float slowDuration;
+
+    private AudioClip slashSound;
+    private float slashSoundVolume;
     
-    public void Setup(DamageInfo newDamageInfo, LayerMask newEnemyLayer, GameObject vfxPrefab, Vector3 rotationOffset, float startDelay = 0f, float duration = 0.5f, bool applySlow = false, float slowPercent = 0f, float slowDuration = 0f)
+    public void Setup(DamageInfo newDamageInfo, LayerMask newEnemyLayer, GameObject vfxPrefab, Vector3 rotationOffset, float startDelay = 0f, float duration = 0.5f, bool applySlow = false, float slowPercent = 0f, float slowDuration = 0f, AudioClip slashSound = null, float slashSoundVolume = 1f)
     {
         damageInfo = newDamageInfo;
         enemyLayer = newEnemyLayer;
@@ -29,6 +32,8 @@ public class PhantomSwordDamage : MonoBehaviour
         this.applySlow = applySlow;
         this.slowPercent = slowPercent;
         this.slowDuration = slowDuration;
+        this.slashSound = slashSound;
+        this.slashSoundVolume = slashSoundVolume;
         hitEnemies.Clear();
         isAttacking = false;
     }
@@ -68,20 +73,23 @@ public class PhantomSwordDamage : MonoBehaviour
         if (hitEnemies.Contains(enemy)) return;
     
         hitEnemies.Add(enemy);
-    
+
+        Vector3 hitPoint = other.ClosestPoint(transform.position);
+
         // Spawn VFX at impact point
         if (slashVFXPrefab != null)
         {
-            Vector3 hitPoint = other.ClosestPoint(transform.position);
-        
             Vector3 directionToEnemy = (other.transform.position - transform.position).normalized;
             directionToEnemy.y = 0;
-        
+
             Quaternion rotation = Quaternion.LookRotation(directionToEnemy) * Quaternion.Euler(vfxRotationOffset);
-        
+
             StartCoroutine(SpawnVFX(hitPoint, rotation));
         }
-    
+
+        // Play slash sound
+        PlaySlashSound(hitPoint);
+
         IDamageable damageable = other.GetComponent<IDamageable>();
         if (damageable != null)
         {
@@ -103,5 +111,13 @@ public class PhantomSwordDamage : MonoBehaviour
         }
 
         ObjectPooling.instance.GetVFX(slashVFXPrefab, position, rotation, vfxDuration);
+    }
+
+    private void PlaySlashSound(Vector3 position)
+    {
+        if (slashSound != null)
+        {
+            AudioSource.PlayClipAtPoint(slashSound, position, slashSoundVolume);
+        }
     }
 }

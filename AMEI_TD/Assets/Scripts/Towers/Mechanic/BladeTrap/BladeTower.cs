@@ -23,6 +23,11 @@ public class BladeTower : TowerBase
     [Header("VFX")]
     [SerializeField] private Transform hammerImpactPoint;
     [SerializeField] private float vfxDelay = 0.3f;
+
+    [Header("Audio")]
+    [SerializeField] private AudioSource bladeAudioSource;
+    [SerializeField] private AudioClip bladeHitSound;
+    [SerializeField] [Range(0f, 1f)] private float bladeHitSoundVolume = 1f;
     
     [Header("Blade Upgrades")]
     [SerializeField] [Range(0f, 0.5f)] private float spinSpeedBoostPercent = 0.25f;
@@ -289,7 +294,10 @@ public class BladeTower : TowerBase
         {
             damageable.TakeDamage(CreateDamageInfo());
         }
-    
+
+        // Play blade hit sound
+        PlayBladeHitSound();
+
         // Bleed chance
         if (bleedChance && Random.value <= bleedChancePercent)
         {
@@ -298,6 +306,14 @@ public class BladeTower : TowerBase
         }
 
         recentlyHitEnemies[enemy] = Time.time + damageCooldown;
+    }
+
+    private void PlayBladeHitSound()
+    {
+        if (bladeHitSound != null && bladeAudioSource != null)
+        {
+            bladeAudioSource.PlayOneShot(bladeHitSound, bladeHitSoundVolume);
+        }
     }
     
     protected override void HandleRotation() { }

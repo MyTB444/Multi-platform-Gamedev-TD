@@ -38,7 +38,10 @@ public class PhantomKnight : MonoBehaviour
     private bool applySlow = false;
     private float slowPercent;
     private float slowDuration;
-    
+
+    private AudioClip slashSound;
+    private float slashSoundVolume;
+
     private DamageInfo damageInfo;
     private float attackRadius;
     private float fadeOutTime;
@@ -86,7 +89,7 @@ public class PhantomKnight : MonoBehaviour
         StopAllCoroutines();
     }
     
-    public void Setup(float newSpeed, DamageInfo newDamageInfo, float newAttackRadius, float newStoppingDistance, float newFadeOutTime, LayerMask newEnemyLayer, Transform enemy, bool doubleSlash = false, bool applySlow = false, float slowPercent = 0f, float slowDuration = 0f)
+    public void Setup(float newSpeed, DamageInfo newDamageInfo, float newAttackRadius, float newStoppingDistance, float newFadeOutTime, LayerMask newEnemyLayer, Transform enemy, bool doubleSlash = false, bool applySlow = false, float slowPercent = 0f, float slowDuration = 0f, AudioClip slashSound = null, float slashSoundVolume = 1f)
     {
         damageInfo = newDamageInfo;
         attackRadius = newAttackRadius;
@@ -99,11 +102,13 @@ public class PhantomKnight : MonoBehaviour
         this.applySlow = applySlow;
         this.slowPercent = slowPercent;
         this.slowDuration = slowDuration;
-    
+        this.slashSound = slashSound;
+        this.slashSoundVolume = slashSoundVolume;
+
         swordDamage = GetComponentInChildren<PhantomSwordDamage>();
         if (swordDamage != null)
         {
-            swordDamage.Setup(damageInfo, enemyLayer, slashVFX, slashVFXRotationOffset, slashVFXStartDelay, slashVFXDuration, applySlow, slowPercent, slowDuration);
+            swordDamage.Setup(damageInfo, enemyLayer, slashVFX, slashVFXRotationOffset, slashVFXStartDelay, slashVFXDuration, applySlow, slowPercent, slowDuration, slashSound, slashSoundVolume);
         }
         
         ghostEffect = GetComponent<GhostEffect>();

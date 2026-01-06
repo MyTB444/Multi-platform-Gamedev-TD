@@ -14,6 +14,10 @@ public class TowerProjectileBase : MonoBehaviour
 
     [Header("VFX")]
     [SerializeField] protected GameObject impactEffectPrefab;
+
+    [Header("Audio")]
+    [SerializeField] protected AudioClip impactSound;
+    [SerializeField] [Range(0f, 1f)] protected float impactSoundVolume = 1f;
     
     public void SetupProjectile(Vector3 targetPosition, IDamageable newDamageable, DamageInfo newDamageInfo, float newSpeed)
     {
@@ -60,15 +64,26 @@ public class TowerProjectileBase : MonoBehaviour
         if (hasHit) return;
         hasHit = true;
 
+        Vector3 impactPoint = other.ClosestPoint(transform.position);
+
         if (impactEffectPrefab != null)
         {
-            Vector3 impactPoint = other.ClosestPoint(transform.position);
             ObjectPooling.instance.GetVFX(impactEffectPrefab, impactPoint, Quaternion.identity, 2f);
         }
+
+        PlayImpactSound(impactPoint);
 
         if (other.GetComponent<EnemyBase>())
         {
             damageable?.TakeDamage(damageInfo);
+        }
+    }
+
+    protected virtual void PlayImpactSound(Vector3 position)
+    {
+        if (impactSound != null)
+        {
+            AudioSource.PlayClipAtPoint(impactSound, position, impactSoundVolume);
         }
     }
 

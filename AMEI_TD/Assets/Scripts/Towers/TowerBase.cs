@@ -107,6 +107,11 @@ public class TowerBase : MonoBehaviour
     [SerializeField] protected string attackAnimationTrigger = "Attack";
     [SerializeField] protected float projectileSpawnDelay = 0f;
 
+    [Header("Audio")]
+    [SerializeField] protected AudioSource audioSource;
+    [SerializeField] protected AudioClip attackSound;
+    [SerializeField] [Range(0f, 1f)] protected float attackSoundVolume = 1f;
+
     [Header("Targeting Setup")]
     [SerializeField] protected bool targetMostAdvancedEnemy = true;
     [SerializeField] protected bool targetPriorityEnemy = true;
@@ -517,6 +522,9 @@ public class TowerBase : MonoBehaviour
             characterAnimator.SetTrigger(attackAnimationTrigger);
         }
 
+        // Play attack sound
+        PlayAttackSound();
+
         // Fire projectile with delay (0 = immediate)
         if (projectileSpawnDelay > 0)
         {
@@ -525,6 +533,14 @@ public class TowerBase : MonoBehaviour
         else
         {
             FireProjectile();
+        }
+    }
+
+    protected virtual void PlayAttackSound()
+    {
+        if (attackSound != null && audioSource != null)
+        {
+            audioSource.PlayOneShot(attackSound, attackSoundVolume);
         }
     }
 
