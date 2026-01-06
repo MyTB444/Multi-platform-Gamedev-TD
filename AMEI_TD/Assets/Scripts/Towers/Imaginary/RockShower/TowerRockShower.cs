@@ -33,9 +33,11 @@ public class TowerRockShower : TowerBase
     [SerializeField] private float bonusShowerDuration = 1f;
     [Space]
     [SerializeField] private bool meteorStrike = false;
+    [SerializeField] private GameObject meteorPrefab;
     [SerializeField] private float meteorSize = 3f;
     [SerializeField] private float meteorHeight = 3f;
     [SerializeField] private float meteorDamageMultiplier = 3f;
+    [SerializeField] private float meteorSpeed = 4f;
     
     private bool isShowering = false;
     private bool isAttacking = false;
@@ -50,20 +52,23 @@ public class TowerRockShower : TowerBase
     protected override void Start()
     {
         base.Start();
-    
+
         if (rockPrefab != null)
         {
             ObjectPooling.instance.Register(rockPrefab, rockPoolAmount);
+        }
+    
+        if (meteorPrefab != null)
+        {
+            ObjectPooling.instance.Register(meteorPrefab, 3);
         }
     }
     
     protected override void FixedUpdate()
     {
-        // Always process debuffs
         UpdateDebuffs();
         UpdateDisabledVisual();
     
-        // Don't do anything if disabled
         if (isDisabled) return;
     
         UpdateEnemyVelocity();
@@ -142,14 +147,12 @@ public class TowerRockShower : TowerBase
         lastTimeAttacked = Time.time;
         isAttacking = true;
         
-        // Lock position here before animation plays
         if (currentEnemy != null)
         {
             float avgSpeed = (rockSpeedMin + rockSpeedMax) / 2f;
             float fallTime = spawnHeight / avgSpeed;
             lockedTargetPosition = GetPredictedPosition(fallTime);
             
-            // Fallback to current position if prediction fails
             if (lockedTargetPosition == Vector3.zero)
             {
                 lockedTargetPosition = currentEnemy.transform.position;
@@ -162,9 +165,9 @@ public class TowerRockShower : TowerBase
         }
     }
     
-    // Called by animation event
     public void OnStartRockShower()
     {
+        PlayAttackSound();
         StartCoroutine(RockShowerRoutine());
     }
     
@@ -181,7 +184,6 @@ public class TowerRockShower : TowerBase
 
         while (elapsed < finalDuration)
         {
-            // Skip spawning rocks while disabled, but keep waiting
             if (!isDisabled)
             {
                 SpawnRock(lockedTargetPosition);
@@ -191,7 +193,6 @@ public class TowerRockShower : TowerBase
             elapsed += finalTimeBetweenRocks;
         }
 
-        // Meteor strike at the end (only if not disabled)
         if (meteorStrike && !isDisabled)
         {
             SpawnMeteor(lockedTargetPosition);
@@ -231,8 +232,6 @@ public class TowerRockShower : TowerBase
     
     private void SpawnMeteor(Vector3 fallbackPosition)
     {
-        float meteorSpeed = rockSpeedMin;
-
         Vector3 targetPosition = fallbackPosition;
 
         Collider[] enemies = Physics.OverlapSphere(transform.position, attackRange, whatIsEnemy);
@@ -241,11 +240,11 @@ public class TowerRockShower : TowerBase
         {
             float closestDist = float.MaxValue;
             Transform closestEnemy = null;
-    
+
             foreach (Collider col in enemies)
             {
                 if (!col.gameObject.activeSelf) continue;
-        
+
                 float dist = Vector3.Distance(transform.position, col.transform.position);
                 if (dist < closestDist)
                 {
@@ -253,7 +252,7 @@ public class TowerRockShower : TowerBase
                     closestEnemy = col.transform;
                 }
             }
-    
+
             if (closestEnemy != null)
             {
                 targetPosition = closestEnemy.position;
@@ -267,18 +266,21 @@ public class TowerRockShower : TowerBase
             Vector3 scaledSize = attackSpawnEffectPrefab.transform.localScale * 2f;
             ObjectPooling.instance.GetVFX(attackSpawnEffectPrefab, spawnPos, Quaternion.identity, scaledSize, 2f);
         }
-
-        GameObject meteor = ObjectPooling.instance.Get(rockPrefab);
+        
+        GameObject prefabToUse = meteorPrefab != null ? meteorPrefab : rockPrefab;
+    
+        GameObject meteor = ObjectPooling.instance.Get(prefabToUse);
         meteor.transform.position = spawnPos;
         meteor.transform.rotation = Random.rotation;
         meteor.SetActive(true);
-        meteor.transform.localScale = rockPrefab.transform.localScale * meteorSize;
+        meteor.transform.localScale = prefabToUse.transform.localScale * meteorSize;
 
         float scaledDamage = damage * meteorSize * meteorDamageMultiplier;
         DamageInfo meteorDamageInfo = new DamageInfo(scaledDamage, elementType);
 
         RockProjectile projectile = meteor.GetComponent<RockProjectile>();
         projectile.Setup(meteorDamageInfo, whatIsEnemy, meteorSpeed, meteorSize);
+        projectile.SetAsMeteor();
     }
     
     protected override bool CanAttack()

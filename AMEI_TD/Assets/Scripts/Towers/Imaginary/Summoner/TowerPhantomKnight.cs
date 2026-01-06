@@ -26,6 +26,10 @@ public class TowerPhantomKnight : TowerBase
     [Header("Spawn VFX")]
     [SerializeField] private GameObject spawnVFXPrefab;
     [SerializeField] private float vfxDuration = 2f;
+
+    [Header("Audio")]
+    [SerializeField] private AudioClip phantomSlashSound;
+    [SerializeField] [Range(0f, 1f)] private float phantomSlashSoundVolume = 1f;
     
     [Header("Phantom Upgrades")]
     [SerializeField] private bool morePhantoms = false;
@@ -127,6 +131,7 @@ public class TowerPhantomKnight : TowerBase
     
     public void OnSpawnPhantoms()
     {
+        PlayAttackSound();
         if (savedEnemy == null || !savedEnemy.gameObject.activeSelf)
         {
             FindNewTarget();
@@ -214,7 +219,7 @@ public class TowerPhantomKnight : TowerBase
             if (phantom != null)
             {
                 DamageInfo phantomDamageInfo = new DamageInfo(phantomDamage, elementType);
-                phantom.Setup(phantomSpeed, phantomDamageInfo, attackRadius, stoppingDistance, fadeOutTime, whatIsEnemy, savedEnemy, doubleSlash, spectralChains, slowPercent, slowDuration);
+                phantom.Setup(phantomSpeed, phantomDamageInfo, attackRadius, stoppingDistance, fadeOutTime, whatIsEnemy, savedEnemy, doubleSlash, spectralChains, slowPercent, slowDuration, phantomSlashSound, phantomSlashSoundVolume);
                 activePhantoms.Add(phantom);
             }
         }

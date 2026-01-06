@@ -37,6 +37,10 @@ public class TowerGuardian : MonoBehaviour
     [SerializeField] private float towerAppearDelay = 1f;
     [SerializeField] private float towerScaleInDuration = 0.5f;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip lightningStrikeSound;
+    [SerializeField] [Range(0f, 1f)] private float lightningStrikeSoundVolume = 1f;
+
     private float lastLightningTime;
     private float lastBuffUpdateTime;
     private bool isActive = false;
@@ -303,12 +307,23 @@ public class TowerGuardian : MonoBehaviour
             StartCoroutine(ReturnToPoolAfterDelay(impact, lightningEffectDuration));
         }
 
+        // Play lightning strike sound
+        PlayLightningStrikeSound(bottomPos);
+
         // Insta-kill the target
         float overkillDamage = target.enemyMaxHp * 999f;
         DamageInfo lightningDamage = new DamageInfo(overkillDamage, lightningElementType);
         target.TakeDamage(lightningDamage);
 
         Debug.Log($"Lightning Strike! Insta-killed {target.name}");
+    }
+
+    private void PlayLightningStrikeSound(Vector3 position)
+    {
+        if (lightningStrikeSound != null)
+        {
+            AudioSource.PlayClipAtPoint(lightningStrikeSound, position, lightningStrikeSoundVolume);
+        }
     }
 
     private IEnumerator ReturnToPoolAfterDelay(GameObject obj, float delay)

@@ -45,6 +45,12 @@ public class HomingProjectile : TowerProjectileBase
         canBurn = false;
         hasAoE = false;
         canSpreadBurn = false;
+        
+        if (rb != null)
+        {
+            rb.velocity = Vector3.zero;
+            rb.angularVelocity = Vector3.zero;
+        }
     }
 
     public void SetupHomingProjectile(Transform enemyTarget, IDamageable newDamageable, DamageInfo newDamageInfo, float newSpeed, LayerMask whatIsEnemy)
@@ -177,12 +183,15 @@ public class HomingProjectile : TowerProjectileBase
         if (hasHit) return;
     
         hasHit = true;
+        
+        Vector3 impactPoint = other.ClosestPoint(transform.position);
     
         if (impactEffectPrefab != null)
         {
-            Vector3 impactPoint = other.ClosestPoint(transform.position);
             ObjectPooling.instance.GetVFX(impactEffectPrefab, impactPoint, Quaternion.identity, 2f);
         }
+        
+        PlayImpactSound(impactPoint);
     
         EnemyBase enemy = other.GetComponent<EnemyBase>();
         if (enemy != null)

@@ -34,7 +34,6 @@ public class TowerArcher : TowerBase
     private Vector3 predictedPosition;
     private Vector3 lastEnemyPosition;
     
-    // Locked target data
     private EnemyBase lockedTarget;
     private Vector3 lockedVelocity;
     private Vector3 lockedPosition;
@@ -46,10 +45,8 @@ public class TowerArcher : TowerBase
     
     private void Update()
     {
-        // Safety reset if stuck attacking
         if (isAttacking && Time.time > lastTimeAttacked + attackCooldown + 1f)
         {
-            Debug.Log("Force reset isAttacking");
             isAttacking = false;
         
             if (characterAnimator != null)
@@ -98,7 +95,6 @@ public class TowerArcher : TowerBase
     
     private void UpdateEnemyVelocity()
     {
-        // Use locked target if attacking, otherwise current enemy
         EnemyBase targetToTrack = isAttacking && lockedTarget != null ? lockedTarget : currentEnemy;
         
         if (targetToTrack == null || !targetToTrack.gameObject.activeSelf)
@@ -131,9 +127,8 @@ public class TowerArcher : TowerBase
         float enemySpeed = enemyVelocity.magnitude;
         float predictionTime = baseFlightTime + (enemySpeed * speedMultiplier);
     
-        // Scale prediction based on distance (less prediction at close range)
         float distance = Vector3.Distance(transform.position, targetToPredict.transform.position);
-        float predictionScale = Mathf.Clamp01(distance / attackRange); // 0 at close, 1 at max range
+        float predictionScale = Mathf.Clamp01(distance / attackRange);
         predictionTime *= predictionScale;
     
         predictedPosition = GetPathAwarePrediction(targetToPredict, predictionTime);
@@ -148,24 +143,16 @@ public class TowerArcher : TowerBase
     
         if (speed < 0.1f) return currentPos;
     
-        // How far enemy travels in prediction time
         float travelDistance = speed * predictionTime;
-    
-        // Get remaining distance to next waypoint
         float distanceToWaypoint = target.GetDistanceToNextWaypoint();
     
-        // If enemy won't reach waypoint, use simple prediction
         if (distanceToWaypoint <= 0 || travelDistance < distanceToWaypoint)
         {
             return currentPos + (enemyVelocity * predictionTime);
         }
     
-        // Enemy WILL turn - predict in two parts
-        // Part 1: Travel to waypoint
         float timeToWaypoint = distanceToWaypoint / speed;
         Vector3 waypointPos = target.GetNextWaypointPosition();
-    
-        // Part 2: Travel along new direction after turn
         float remainingTime = predictionTime - timeToWaypoint;
         Vector3 directionAfterTurn = target.GetDirectionAfterNextWaypoint();
     
@@ -201,10 +188,7 @@ public class TowerArcher : TowerBase
     protected override bool CanAttack()
     {
         if (currentEnemy == null) return false;
-    
-        // Check if facing enemy (within 15 degrees)
         if (!IsFacingEnemy(15f)) return false;
-    
         return base.CanAttack() && !isAttacking;
     }
 
@@ -216,7 +200,6 @@ public class TowerArcher : TowerBase
         directionToEnemy.y = 0;
     
         float angle = Vector3.Angle(towerBody.forward, directionToEnemy);
-    
         return angle <= maxAngle;
     }
     
@@ -225,7 +208,6 @@ public class TowerArcher : TowerBase
         lastTimeAttacked = Time.time;
         isAttacking = true;
         
-        // Lock target data at attack start
         if (currentEnemy != null)
         {
             lockedTarget = currentEnemy;
@@ -259,6 +241,8 @@ public class TowerArcher : TowerBase
             bowController.ReleaseBow();
         }
         
+        PlayAttackSound();
+        
         FireArrow();
         
         if (arrowVisual != null)
@@ -282,14 +266,12 @@ public class TowerArcher : TowerBase
     
     private void UpdateArrowVisualVFX()
     {
-        // Clear old VFX
         if (activeArrowVisualVFX != null)
         {
             ObjectPooling.instance.Return(activeArrowVisualVFX);
             activeArrowVisualVFX = null;
         }
     
-        // Spawn new VFX based on current upgrade
         Transform spawnPoint = arrowVisualVFXPoint != null ? arrowVisualVFXPoint : arrowVisual.transform;
     
         if (fireArrows && fireArrowVFX != null)
@@ -306,14 +288,12 @@ public class TowerArcher : TowerBase
     
     private void FireArrow()
     {
-        // Use locked target
         if (lockedTarget == null || !lockedTarget.gameObject.activeSelf)
         {
             ClearLockedTarget();
             return;
         }
 
-        // Calculate prediction using locked/updated data
         Vector3 targetPos = lockedTarget.transform.position;
         float enemySpeed = enemyVelocity.magnitude;
         float predictionTime = baseFlightTime + (enemySpeed * speedMultiplier);

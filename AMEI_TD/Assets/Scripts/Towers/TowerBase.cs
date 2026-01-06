@@ -107,6 +107,10 @@ public class TowerBase : MonoBehaviour
     [SerializeField] protected string attackAnimationTrigger = "Attack";
     [SerializeField] protected float projectileSpawnDelay = 0f;
 
+    [Header("Audio")]
+    [SerializeField] protected AudioClip attackSound;
+    [SerializeField] [Range(0f, 1f)] protected float attackSoundVolume = 1f;
+
     [Header("Targeting Setup")]
     [SerializeField] protected bool targetMostAdvancedEnemy = true;
     [SerializeField] protected bool targetPriorityEnemy = true;
@@ -171,7 +175,6 @@ public class TowerBase : MonoBehaviour
         ApplyStatUpgrades();
         SaveOriginalColors();
 
-        // Apply any unlocked upgrades from manager
         if (TowerUpgradeManager.instance != null)
         {
             TowerUpgradeManager.instance.ApplyUnlockedUpgrades(this);
@@ -225,33 +228,23 @@ public class TowerBase : MonoBehaviour
     protected void UpdateDisabledVisual()
     {
         if (!hasSavedColors) return;
-
-        if (!isDisabled)
-        {
-            return;
-        }
+        if (!isDisabled) return;
 
         float elapsed = Time.time - disableStartTime;
         float remaining = disableEndTime - Time.time;
 
-        // Calculate intensity based on fade in/out
         float intensity = 1f;
 
-        // Fade in
         if (elapsed < fadeInDuration)
         {
             intensity = elapsed / fadeInDuration;
         }
-        // Fade out
         else if (remaining < fadeOutDuration)
         {
             intensity = Mathf.Max(0f, remaining / fadeOutDuration);
         }
 
-        // Pulse effect
         float pulse = (Mathf.Sin(Time.time * pulseSpeed) + 1f) / 2f;
-
-        // Combine pulse with fade intensity
         float finalLerp = pulse * intensity;
 
         for (int i = 0; i < towerRenderers.Length; i++)
@@ -281,7 +274,6 @@ public class TowerBase : MonoBehaviour
         if (!hasSavedColors || isDisabled) return;
         if (!hasGuardianBuff) return;
 
-        // Gentle golden pulse effect for guardian buff
         float pulse = (Mathf.Sin(Time.time * guardianPulseSpeed) + 1f) / 2f;
         float lerpAmount = guardianGlowIntensity * pulse;
 
@@ -299,7 +291,6 @@ public class TowerBase : MonoBehaviour
         isSlowed = true;
         slowEndTime = Time.time + duration;
         slowMultiplier = 1f - Mathf.Clamp(slowPercent, 0f, 0.9f);
-        Debug.Log($"{gameObject.name} slowed! slowPercent={slowPercent}, slowMultiplier={slowMultiplier}");
     }
 
     private void RemoveSlow()
@@ -333,11 +324,9 @@ public class TowerBase : MonoBehaviour
     protected virtual void ClearTargetOutOfRange()
     {
         if (currentEnemy == null) return;
-
         if (Vector3.Distance(currentEnemy.transform.position, transform.position) > attackRange) currentEnemy = null;
     }
 
-    // Periodically searches for new targets instead of every frame for performance
     protected void UpdateTarget()
     {
         if (Time.time > lastTimeCheckedTarget + targetCheckInterval || currentEnemy == null)
@@ -360,14 +349,10 @@ public class TowerBase : MonoBehaviour
             for (int i = 0; i < decoysAround; i++)
             {
                 EnemyBase decoy = allocatedColliders[i].GetComponent<EnemyBase>();
-
                 if (decoy == null) continue;
-                
-                // Skip enemies in spawn grace period
                 if (!decoy.IsTargetable()) continue;
 
                 float distanceToDecoy = Vector3.Distance(transform.position, decoy.transform.position);
-
                 if (distanceToDecoy > attackRange) continue;
 
                 decoyTargets.Add(decoy);
@@ -380,41 +365,31 @@ public class TowerBase : MonoBehaviour
         }
 
         int enemiesAround = Physics.OverlapSphereNonAlloc(transform.position, attackRange, allocatedColliders, enemyLayerMask);
-
         if (enemiesAround == 0) return null;
 
-        // Collect valid enemies within range
         for (int i = 0; i < enemiesAround; i++)
         {
             EnemyBase newEnemy = allocatedColliders[i].GetComponent<EnemyBase>();
-
             if (newEnemy == null) continue;
-            
-            // Skip enemies in spawn grace period
             if (!newEnemy.IsTargetable()) continue;
 
             float distanceToEnemy = Vector3.Distance(transform.position, newEnemy.transform.position);
-
             if (distanceToEnemy > attackRange) continue;
 
             EnemyType newEnemyType = newEnemy.GetEnemyType();
-
             allTargets.Add(newEnemy);
 
-            // Track priority enemies separately
             if (newEnemyType == enemyPriorityType)
             {
                 priorityTargets.Add(newEnemy);
             }
         }
 
-        // Priority targeting: only shoot priority enemies if they exist
         if (targetPriorityEnemy && priorityTargets.Count > 0)
         {
             return ChooseEnemyToTarget(priorityTargets);
         }
 
-        // No priority targeting or no priority enemies: target anyone
         if (allTargets.Count > 0)
         {
             return ChooseEnemyToTarget(allTargets);
@@ -423,7 +398,6 @@ public class TowerBase : MonoBehaviour
         return null;
     }
 
-    // Selects best enemy from candidates based on HP and/or distance criteria
     private EnemyBase ChooseEnemyToTarget(List<EnemyBase> targets)
     {
         EnemyBase enemyToTarget = null;
@@ -433,7 +407,6 @@ public class TowerBase : MonoBehaviour
             return targets[Random.Range(0, targets.Count)];
         }
 
-        // HP-based targeting takes priority over distance
         if (useHpTargeting)
         {
             float bestHp = targetHighestHpEnemy ? float.MinValue : float.MaxValue;
@@ -444,24 +417,18 @@ public class TowerBase : MonoBehaviour
                 float enemyHp = enemy.GetEnemyHp();
                 float remainingDistance = enemy.GetRemainingDistance();
 
-                bool isBetterHp = targetHighestHpEnemy
-                    ? enemyHp > bestHp
-                    : enemyHp < bestHp;
-
+                bool isBetterHp = targetHighestHpEnemy ? enemyHp > bestHp : enemyHp < bestHp;
                 bool shouldTarget = false;
 
-                // Primary criteria: HP
                 if (isBetterHp)
                 {
                     shouldTarget = true;
                 }
                 else if (Mathf.Approximately(enemyHp, bestHp))
                 {
-                    // HP tied: use distance as tiebreaker
                     bool isBetterDistance = targetMostAdvancedEnemy
                         ? remainingDistance < bestDistance
                         : remainingDistance > bestDistance;
-
                     shouldTarget = isBetterDistance;
                 }
 
@@ -475,13 +442,11 @@ public class TowerBase : MonoBehaviour
         }
         else
         {
-            // Distance-only targeting (HP ignored)
             float bestDistance = targetMostAdvancedEnemy ? float.MaxValue : float.MinValue;
 
             foreach (EnemyBase enemy in targets)
             {
                 float remainingDistance = enemy.GetRemainingDistance();
-
                 bool isBetterDistance = targetMostAdvancedEnemy
                     ? remainingDistance < bestDistance
                     : remainingDistance > bestDistance;
@@ -503,7 +468,6 @@ public class TowerBase : MonoBehaviour
             currentEnemy = null;
             return;
         }
-
         Attack();
     }
 
@@ -511,13 +475,13 @@ public class TowerBase : MonoBehaviour
     {
         lastTimeAttacked = Time.time;
 
-        // Trigger attack animation
         if (characterAnimator != null)
         {
             characterAnimator.SetTrigger(attackAnimationTrigger);
         }
 
-        // Fire projectile with delay (0 = immediate)
+        PlayAttackSound();
+
         if (projectileSpawnDelay > 0)
         {
             Invoke("FireProjectile", projectileSpawnDelay);
@@ -525,6 +489,14 @@ public class TowerBase : MonoBehaviour
         else
         {
             FireProjectile();
+        }
+    }
+
+    protected virtual void PlayAttackSound()
+    {
+        if (attackSound != null)
+        {
+            AudioSource.PlayClipAtPoint(attackSound, transform.position, attackSoundVolume);
         }
     }
 
@@ -540,7 +512,6 @@ public class TowerBase : MonoBehaviour
         if (Physics.Raycast(gunPoint.position, directionToEnemy, out RaycastHit hitInfo, Mathf.Infinity, whatIsTargetable))
         {
             IDamageable damageable = hitInfo.transform.GetComponent<IDamageable>();
-
             if (damageable == null) return;
 
             Vector3 spawnPosition = gunPoint.position + directionToEnemy * 0.1f;
@@ -556,8 +527,6 @@ public class TowerBase : MonoBehaviour
 
     protected virtual bool CanAttack()
     {
-        // slowMultiplier < 1 means slowed, so divide to increase cooldown
-        // e.g., slowMultiplier = 0.5 means 50% speed, so cooldown takes 2x longer
         float effectiveCooldown = attackCooldown / slowMultiplier;
         return Time.time > lastTimeAttacked + effectiveCooldown && currentEnemy != null;
     }
@@ -573,11 +542,8 @@ public class TowerBase : MonoBehaviour
         if (currentEnemy == null || towerHead == null) return;
 
         Vector3 directionToEnemy = DirectionToEnemyFrom(towerHead);
-
         Quaternion lookRotation = Quaternion.LookRotation(directionToEnemy);
-
         Vector3 rotation = Quaternion.Lerp(towerHead.rotation, lookRotation, rotationSpeed * Time.deltaTime).eulerAngles;
-
         towerHead.rotation = Quaternion.Euler(rotation);
     }
 
@@ -599,27 +565,14 @@ public class TowerBase : MonoBehaviour
 
     protected virtual void ApplyStatUpgrades()
     {
-        // Calculate total buff percentages (tower upgrades + guardian buff)
         float totalDamageBoost = 0f;
         float totalAttackSpeedBoost = 0f;
         float totalRangeBoost = 0f;
 
-        if (damageBoost)
-        {
-            totalDamageBoost += damageBoostPercent;
-        }
+        if (damageBoost) totalDamageBoost += damageBoostPercent;
+        if (attackSpeedBoost) totalAttackSpeedBoost += attackSpeedBoostPercent;
+        if (rangeBoost) totalRangeBoost += rangeBoostPercent;
 
-        if (attackSpeedBoost)
-        {
-            totalAttackSpeedBoost += attackSpeedBoostPercent;
-        }
-
-        if (rangeBoost)
-        {
-            totalRangeBoost += rangeBoostPercent;
-        }
-
-        // Add Guardian buffs
         if (hasGuardianBuff)
         {
             totalDamageBoost += guardianDamageBuffPercent;
@@ -627,7 +580,6 @@ public class TowerBase : MonoBehaviour
             totalRangeBoost += guardianRangeBuffPercent;
         }
 
-        // Apply calculated stats
         damage = Mathf.RoundToInt(baseDamage * (1f + totalDamageBoost));
         attackCooldown = baseAttackCooldown * (1f - totalAttackSpeedBoost);
         attackRange = baseAttackRange * (1f + totalRangeBoost);
@@ -649,7 +601,6 @@ public class TowerBase : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
 
-    // Guardian Buff System
     public void ApplyGuardianBuff(float damagePercent, float attackSpeedPercent, float rangePercent)
     {
         hasGuardianBuff = true;
@@ -669,7 +620,6 @@ public class TowerBase : MonoBehaviour
     }
 
     public bool HasGuardianBuff() => hasGuardianBuff;
-
     public int GetBuyPrice() { return buyPrice; }
     public int GetSellPrice() { return sellPrice; }
     public float GetSlowMultiplier() => slowMultiplier;

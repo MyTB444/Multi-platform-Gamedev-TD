@@ -17048,6 +17048,8 @@ MonoBehaviour:
   characterAnimator: {fileID: 8691810099541559588}
   attackAnimationTrigger: Attack
   projectileSpawnDelay: 0.1
+  attackSound: {fileID: 8300000, guid: 6616ca48c4ad47f45abb2392d75468f0, type: 3}
+  attackSoundVolume: 0.22
   targetMostAdvancedEnemy: 1
   targetPriorityEnemy: 0
   enemyPriorityType: 0
@@ -17062,6 +17064,11 @@ MonoBehaviour:
     m_Bits: 64
   disabledColor: {r: 1, g: 0.2, b: 0.2, a: 1}
   pulseSpeed: 4
+  fadeInDuration: 0.3
+  fadeOutDuration: 0.5
+  guardianBuffColor: {r: 1, g: 0.85, b: 0.3, a: 1}
+  guardianGlowIntensity: 0.3
+  guardianPulseSpeed: 2
   spearVisual: {fileID: 8909929371272408851}
   spearRespawnDelay: 1.5
   throwAnimationDelay: 1.1

@@ -25,19 +25,12 @@ public class ArrowProjectile : TowerProjectileBase
     private float fireDuration;
     private DamageInfo fireDamageInfo;
     
-    
-    private Rigidbody rb;
     private bool launched = false;
     private bool curving = true;
     private float launchTime;
     private Vector3 targetPosition;
     private Vector3 initialForward;
     private float arrowSpeed;
-    
-    private void Awake()
-    {
-        rb = GetComponent<Rigidbody>();
-    }
     
     protected override void OnEnable()
     {
@@ -47,7 +40,6 @@ public class ArrowProjectile : TowerProjectileBase
         applyPoison = false;
         applyFire = false;
     
-        // Return any child VFX from previous use to pool
         if (vfxPoint != null)
         {
             foreach (Transform child in vfxPoint)
@@ -167,18 +159,20 @@ public class ArrowProjectile : TowerProjectileBase
         if (hasHit) return;
         hasHit = true;
 
+        Vector3 impactPoint = other.ClosestPoint(transform.position);
+
         if (impactEffectPrefab != null)
         {
-            Vector3 impactPoint = other.ClosestPoint(transform.position);
             ObjectPooling.instance.GetVFX(impactEffectPrefab, impactPoint, Quaternion.identity, 2f);
         }
+
+        PlayImpactSound(impactPoint);
 
         EnemyBase enemy = other.GetComponent<EnemyBase>();
         if (enemy != null)
         {
             damageable?.TakeDamage(damageInfo);
         
-            // Apply DoT (fire replaces poison)
             if (applyFire)
             {
                 enemy.ApplyDoT(fireDamageInfo, fireDuration, 0.5f, false, 0f, default, DebuffType.Burn);

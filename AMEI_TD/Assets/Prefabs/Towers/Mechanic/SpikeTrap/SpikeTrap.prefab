@@ -125,6 +125,8 @@ MonoBehaviour:
   trapActiveDuration: 1
   spikeDelay: 0.33
   damageDelay: 0.1
+  spikeImpactSound: {fileID: 8300000, guid: f7617a7275da92048b101e960c24aff3, type: 3}
+  spikeImpactVolume: 0.225
   spikeVFXPoints:
   - {fileID: 5828701641826275822}
   - {fileID: 3124674997631579389}

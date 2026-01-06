@@ -21,14 +21,8 @@ public class SpearProjectile : TowerProjectileBase
     [Header("VFX")]
     [SerializeField] private Transform vfxPoint;
     
-    private Rigidbody rb;
     private bool launched = false;
     private float spearSpeed;
-    
-    private void Awake()
-    {
-        rb = GetComponent<Rigidbody>();
-    }
     
     protected override void OnEnable()
     {
@@ -38,7 +32,6 @@ public class SpearProjectile : TowerProjectileBase
         isExplosive = false;
         explosionVFX = null;
     
-        // Return any child VFX from previous use to pool
         if (vfxPoint != null)
         {
             foreach (Transform child in vfxPoint)
@@ -124,7 +117,6 @@ public class SpearProjectile : TowerProjectileBase
         if (hasHit) return;
 
         EnemyBase enemy = other.GetComponent<EnemyBase>();
-
         if (enemy == null) return;
 
         hasHit = true;
@@ -136,19 +128,18 @@ public class SpearProjectile : TowerProjectileBase
             ObjectPooling.instance.GetVFX(impactEffectPrefab, impactPoint, Quaternion.identity, 2f);
         }
 
-        // Deal impact damage
+        PlayImpactSound(impactPoint);
+
         if (damageable != null)
         {
             damageable.TakeDamage(damageInfo);
         }
 
-        // Apply bleed
         if (applyBleed)
         {
             enemy.ApplyDoT(bleedDamageInfo, bleedDuration, 0.5f, false, 0f, default, DebuffType.Bleed);
         }
 
-        // Explosion
         if (isExplosive)
         {
             Vector3 explosionCenter = enemy.GetCenterPoint();

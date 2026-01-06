@@ -6439,6 +6439,8 @@ MonoBehaviour:
   spawnEffectDuration: 2.5
   towerAppearDelay: 0
   towerScaleInDuration: 0.5
+  lightningStrikeSound: {fileID: 8300000, guid: b072b10499c52b242835d48aa2bda1b2, type: 3}
+  lightningStrikeSoundVolume: 0.212
 --- !u!1 &1659699760057166846
 GameObject:
   m_ObjectHideFlags: 0

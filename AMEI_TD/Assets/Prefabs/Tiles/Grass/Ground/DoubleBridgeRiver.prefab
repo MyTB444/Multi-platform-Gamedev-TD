@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 9112701380215527067}
   - component: {fileID: 8871002337808369791}
   - component: {fileID: 8129351716473201921}
+  - component: {fileID: 3511415102422266388}
   m_Layer: 0
   m_Name: DoubleBridgeRiver
   m_TagString: Untagged
@@ -97,6 +98,27 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52aa7f865a27a0e438cbe5baffabcfc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!65 &3511415102422266388
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5086750260775969512}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 4.0000014, y: 0.27, z: 2.0000007}
+  m_Center: {x: 0.99998355, y: -0.1, z: 0}
 --- !u!1 &7064070417226685898
 GameObject:
   m_ObjectHideFlags: 0

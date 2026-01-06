@@ -221,6 +221,7 @@ public class SpearTower : TowerBase
     
     public void OnThrowSpear()
     {
+        PlayAttackSound();
         FireSpear();
         
         if (spearVisual != null)

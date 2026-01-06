@@ -138,6 +138,7 @@ public class TowerSpikeTrap : TowerBase
     
     public void SpawnHammerImpactVFX()
     {
+        PlayAttackSound();
         if (attackSpawnEffectPrefab != null && hammerImpactPoint != null)
         {
             ObjectPooling.instance.GetVFX(attackSpawnEffectPrefab, hammerImpactPoint.position, Quaternion.identity, 2f);

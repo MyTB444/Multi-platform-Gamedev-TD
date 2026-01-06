@@ -28124,6 +28124,8 @@ MonoBehaviour:
   characterAnimator: {fileID: 4797858890347702010}
   attackAnimationTrigger: Attack
   projectileSpawnDelay: 0
+  attackSound: {fileID: 0}
+  attackSoundVolume: 1
   targetMostAdvancedEnemy: 0
   targetPriorityEnemy: 1
   enemyPriorityType: 0
@@ -28138,6 +28140,11 @@ MonoBehaviour:
     m_Bits: 64
   disabledColor: {r: 1, g: 0.2, b: 0.2, a: 1}
   pulseSpeed: 4
+  fadeInDuration: 0.3
+  fadeOutDuration: 0.5
+  guardianBuffColor: {r: 1, g: 0.85, b: 0.3, a: 1}
+  guardianGlowIntensity: 0.3
+  guardianPulseSpeed: 2
   rockPrefab: {fileID: 3974658804896811211, guid: 1b7e441d5d3f3844b838546e815c30c1, type: 3}
   spawnHeight: 3
   spawnRadius: 0.9
@@ -28156,9 +28163,11 @@ MonoBehaviour:
   longerShower: 0
   bonusShowerDuration: 1
   meteorStrike: 0
+  meteorPrefab: {fileID: 3974658804896811211, guid: 5fed0da13bd85e24f94960e05052370c, type: 3}
   meteorSize: 5
   meteorHeight: 5
   meteorDamageMultiplier: 3
+  meteorSpeed: 4
 --- !u!65 &6243660486579001358
 BoxCollider:
   m_ObjectHideFlags: 0

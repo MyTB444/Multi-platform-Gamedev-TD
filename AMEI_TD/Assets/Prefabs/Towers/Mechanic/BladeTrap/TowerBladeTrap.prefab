@@ -2410,6 +2410,8 @@ MonoBehaviour:
   characterAnimator: {fileID: 8676718295220344351}
   attackAnimationTrigger: Attack
   projectileSpawnDelay: 0
+  attackSound: {fileID: 8300000, guid: af0e74ed1d6850549a6dc5817ecb66be, type: 3}
+  attackSoundVolume: 0.233
   targetMostAdvancedEnemy: 1
   targetPriorityEnemy: 1
   enemyPriorityType: 0
@@ -2426,6 +2428,9 @@ MonoBehaviour:
   pulseSpeed: 4
   fadeInDuration: 0.3
   fadeOutDuration: 0.5
+  guardianBuffColor: {r: 1, g: 0.85, b: 0.3, a: 1}
+  guardianGlowIntensity: 0.3
+  guardianPulseSpeed: 2
   bladeHolder: {fileID: 3946167265140034309}
   spinSpeed: 200
   returnSpeed: 90
@@ -2436,6 +2441,8 @@ MonoBehaviour:
   animationAnticipation: 0.5
   hammerImpactPoint: {fileID: 3133988239432917995}
   vfxDelay: 0.3
+  bladeHitSound: {fileID: 8300000, guid: f7617a7275da92048b101e960c24aff3, type: 3}
+  bladeHitSoundVolume: 0.246
   spinSpeedBoostPercent: 0.2
   bleedChance: 0
   bleedChancePercent: 0.3

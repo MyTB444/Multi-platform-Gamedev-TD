@@ -121,6 +121,8 @@ MonoBehaviour:
   characterAnimator: {fileID: 95805638432926132}
   attackAnimationTrigger: Attack
   projectileSpawnDelay: 0.5
+  attackSound: {fileID: 8300000, guid: 29a5fc94a4d25114fb75ccc40538a3f9, type: 3}
+  attackSoundVolume: 0.246
   targetMostAdvancedEnemy: 1
   targetPriorityEnemy: 1
   enemyPriorityType: 0
@@ -137,6 +139,9 @@ MonoBehaviour:
   pulseSpeed: 4
   fadeInDuration: 0.3
   fadeOutDuration: 0.5
+  guardianBuffColor: {r: 1, g: 0.85, b: 0.3, a: 1}
+  guardianGlowIntensity: 0.3
+  guardianPulseSpeed: 2
   burnChance: 0
   burnChancePercent: 0.4
   burnDamage: 3
