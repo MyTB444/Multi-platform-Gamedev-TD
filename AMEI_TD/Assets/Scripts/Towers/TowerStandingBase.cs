@@ -35,16 +35,7 @@ public class TowerStandingBase : MonoBehaviour
     
     public Quaternion GetSpawnRotation(ElementType elementType)
     {
-        switch (elementType)
-        {
-            case ElementType.Imaginary:
-            case ElementType.Mechanic:
-                return GetFacingRotation();
-            
-            default: // Physical, Magic
-                Transform spawnPoint = GetSpawnPoint(elementType);
-                return spawnPoint != null ? spawnPoint.rotation : transform.rotation;
-        }
+        return GetFacingRotation();
     }
     
     private Quaternion GetFacingRotation()
