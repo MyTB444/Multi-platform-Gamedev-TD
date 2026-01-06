@@ -139,4 +139,8 @@ public class InputHandler : MonoBehaviour
     {
         UIBase.instance.ActivateNotActiveText();
     }
+    public void DisableInput()
+    {
+        inputActions.Player.Disable();
+    }
 }
