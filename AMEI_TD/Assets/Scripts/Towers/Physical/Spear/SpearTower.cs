@@ -5,6 +5,10 @@ public class SpearTower : TowerBase
     [Header("Spear Setup")]
     [SerializeField] private GameObject spearVisual;
     
+    [Header("Prediction")]
+    [SerializeField] private float baseFlightTime = 0.2f;
+    [SerializeField] private float speedMultiplier = 0.1f;
+    
     [Header("Animation Timing")]
     [SerializeField] private float spearRespawnDelay = 1.5f;
     [SerializeField] private float throwAnimationDelay = 0.5f;
@@ -54,9 +58,17 @@ public class SpearTower : TowerBase
     public override void SetUpgrade(TowerUpgradeType upgradeType, bool enabled)
     {
         base.SetUpgrade(upgradeType, enabled);
-    
+
         switch (upgradeType)
         {
+            case TowerUpgradeType.PhysicalAttackSpeed:
+                attackSpeedBoost = enabled;
+                ApplyStatUpgrades();
+                break;
+            case TowerUpgradeType.PhysicalRange:
+                rangeBoost = enabled;
+                ApplyStatUpgrades();
+                break;
             case TowerUpgradeType.BarbedSpear:
                 bleedSpear = enabled;
                 UpdateSpearVisualVFX();
@@ -89,7 +101,6 @@ public class SpearTower : TowerBase
             if (velocityFrameCount > 1)
             {
                 enemyVelocity = (currentPos - lastEnemyPosition) / Time.fixedDeltaTime;
-                enemyVelocity.x = 0f;
             }
         }
         
@@ -115,23 +126,18 @@ public class SpearTower : TowerBase
     private Vector3 PredictTargetPosition()
     {
         EnemyBase targetToPredict = isAttacking && lockedTarget != null ? lockedTarget : currentEnemy;
-    
+
         if (targetToPredict == null || !targetToPredict.gameObject.activeSelf) return Vector3.zero;
-    
-        Vector3 spawnPos = spearVisual.transform.position;
+
         Vector3 enemyCenter = targetToPredict.GetCenterPoint();
+        float enemySpeed = enemyVelocity.magnitude;
     
-        float distance = Vector3.Distance(spawnPos, enemyCenter);
-        float flightTime = distance / projectileSpeed;
-        float totalTime = throwAnimationDelay + flightTime;
+        // Simple prediction like Archer
+        float predictionTime = baseFlightTime + (enemySpeed * speedMultiplier);
     
-        // Scale prediction based on distance (less prediction at close range)
-        float predictionScale = Mathf.Clamp01(distance / attackRange);
-        totalTime *= predictionScale;
-    
-        Vector3 predictedPos = GetPathAwarePrediction(targetToPredict, totalTime);
+        Vector3 predictedPos = enemyCenter + (enemyVelocity * predictionTime);
         predictedPos.y = enemyCenter.y;
-    
+
         return predictedPos;
     }
 

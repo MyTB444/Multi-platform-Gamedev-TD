@@ -62,9 +62,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
     [SerializeField] private float acceleration = 8f;
     [SerializeField] private float angularSpeed = 360f;
     [SerializeField] private float animationSpeedMultiplier = 1f;
-    [SerializeField] private float cornerDetectionDistance = 3f;
-    [SerializeField] private float cornerSlowdownAmount = 0.6f;
-    [SerializeField] private float cornerRotationSmoothing = 0.3f;
     
     [Header("Spawn Settings")]
     [SerializeField] private bool useSpawnGrace = true;
@@ -101,7 +98,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     [Header("Stuck Detection")]
     [SerializeField] private float stuckCheckInterval = 0.5f;
     [SerializeField] private float stuckDistanceThreshold = 0.2f;
-    [SerializeField] private float stuckSkipDistance = 2f; // Skip waypoint if stuck but close enough
+    [SerializeField] private float stuckSkipDistance = 2f;
 
     private Vector3 lastStuckCheckPosition;
     private float lastStuckCheckTime;
@@ -124,7 +121,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
     private Vector3 Destination;
     protected bool canMove = true;
     [HideInInspector]public Rigidbody myBody;
-    
 
     // Slow system
     private float baseSpeed;
@@ -183,11 +179,13 @@ public class EnemyBase : MonoBehaviour, IDamageable
     
     private VFXDamage vfxDamageScriptRef;
 
-    [SerializeField] private  Canvas enemyHealthDisplayCanvas;
-    [SerializeField] private  Slider healthBar;
+    [Header("Health Bar Display")]
+    [SerializeField] private Canvas enemyHealthDisplayCanvas;
+    [SerializeField] private Slider healthBar;
+    [SerializeField] private float healthBarDisplayDuration = 3f;
+    private Coroutine hideHealthBarCoroutine;
 
     [SerializeField] private EnemyVFXPool enemyVFXPoolScriptRef;
-    private bool enemyHealthBarStatus = false;
     private bool spellsActivated = false;
     
     protected virtual void OnEnable()
@@ -196,7 +194,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
         NavAgent = GetComponent<NavMeshAgent>();
         EnemyAnimator = GetComponentInChildren<Animator>();
     
-        // Disable NavAgent until SetupEnemy is called
         if (NavAgent != null)
         {
             NavAgent.enabled = false;
@@ -208,10 +205,9 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
         if(vfxDamageScriptRef != null)
         {
-           
             vfxDamageScriptRef.enemies.Remove(this);
-            
         }
+        
         enemyHealthDisplayCanvas.enabled = false;
         
         vfxContainer = enemyVFXPoolScriptRef;
@@ -228,9 +224,10 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     private void OnDisable()
     {
-        if (healthBar != null)
+        if (hideHealthBarCoroutine != null)
         {
-            healthBar.onValueChanged.RemoveAllListeners();
+            StopCoroutine(hideHealthBarCoroutine);
+            hideHealthBarCoroutine = null;
         }
     }
 
@@ -258,7 +255,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
         this.vfxDamageScriptRef = vfxDamageScriptRef;
         this.vfxDamageScriptRef.stopFlames = false;
-       
     }
 
     protected virtual void Update()
@@ -269,7 +265,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
             if (!enemyBaseRef.spellsActivated)
             {
                 FollowPath();
-
             }
         }
         PlayAnimations();
@@ -277,25 +272,21 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     private void UpdateStatusEffects()
     {
-        // Handle stun expiry
         if (isStunned && Time.time >= stunEndTime)
         {
             RemoveStun();
         }
     
-        // Handle slow expiry
         if (isSlowed && Time.time >= slowEndTime)
         {
             RemoveSlow();
         }
 
-        // Handle speed buff expiry
         if (isSpeedBuffed && Time.time >= speedBuffEndTime)
         {
             RemoveSpeedBuff();
         }
 
-        // Handle HoT
         if (hasHoT)
         {
             if (Time.time >= hotEndTime)
@@ -309,7 +300,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
             }
         }
 
-        // Handle Burn DoT
         if (hasBurn)
         {
             if (Time.time >= burnEndTime)
@@ -329,7 +319,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
             }
         }
 
-        // Handle Poison DoT
         if (hasPoison)
         {
             if (Time.time >= poisonEndTime)
@@ -343,7 +332,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
             }
         }
 
-        // Handle Bleed DoT
         if (hasBleed)
         {
             if (Time.time >= bleedEndTime)
@@ -357,7 +345,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
             }
         }
         
-        // Handle Frostbite DoT
         if (hasFrostbite)
         {
             if (Time.time >= frostbiteEndTime)
@@ -441,6 +428,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
             enemyCurrentHp = enemyMaxHp;
         }
         enemyCurrentHp = Mathf.Floor(enemyCurrentHp);
+        healthBar.value = enemyCurrentHp / enemyMaxHp;
     }
 
     public void ApplyStun(float duration)
@@ -538,7 +526,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
         mySpawner = myNewSpawner;
         spawnTime = Time.time;
 
-        // Randomize path offset and speed variation
         myPathOffset = Random.Range(-pathOffsetRange, pathOffsetRange);
         mySpeedMultiplier = Random.Range(1f - speedVariationPercent, 1f + speedVariationPercent);
         myCornerCutMultiplier = Random.Range(1f - cornerCutVariation, 1f + cornerCutVariation);
@@ -550,12 +537,10 @@ public class EnemyBase : MonoBehaviour, IDamageable
         BeginMovement();
     }
     
-    // For minions/summons that spawn without a spawner
     public void SetupEnemyNoGrace(Vector3[] pathWaypoints)
     {
         spawnTime = -spawnGracePeriod;
     
-        // Randomize path offset and speed variation
         myPathOffset = Random.Range(-pathOffsetRange, pathOffsetRange);
         mySpeedMultiplier = Random.Range(1f - speedVariationPercent, 1f + speedVariationPercent);
         myCornerCutMultiplier = Random.Range(1f - cornerCutVariation, 1f + cornerCutVariation);
@@ -586,7 +571,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
         currentWaypointIndex = 0;
         
-        // Reset stuck detection
         lastStuckCheckPosition = transform.position;
         lastStuckCheckTime = Time.time;
         stuckDuration = 0f;
@@ -595,7 +579,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
         {
             NavAgent.enabled = true;
             
-            // Find a valid NavMesh position near spawn point
             NavMeshHit hit;
             if (NavMesh.SamplePosition(transform.position, out hit, 5f, NavMesh.AllAreas))
             {
@@ -631,7 +614,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
                 NavAgent.avoidancePriority = Random.Range(30, 70);
             }
 
-            // Set first destination immediately
             if (myWaypoints != null && myWaypoints.Length > 0)
             {
                 NavAgent.SetDestination(myWaypoints[0]);
@@ -655,8 +637,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         if (myWaypoints == null || currentWaypointIndex >= myWaypoints.Length) return;
 
         if (NavAgent == null || !NavAgent.isActiveAndEnabled) return;
-    
-        // Must be on NavMesh to do anything
+
         if (!NavAgent.isOnNavMesh) return;
 
         if (isStunned || !canMove)
@@ -664,39 +645,13 @@ public class EnemyBase : MonoBehaviour, IDamageable
             NavAgent.isStopped = true;
             return;
         }
-    
+
         NavAgent.isStopped = false;
+        NavAgent.speed = enemySpeed * mySpeedMultiplier;
 
-        // Calculate speed with corner slowdown
-        float currentSpeed = enemySpeed * mySpeedMultiplier;
-
-        if (currentWaypointIndex < myWaypoints.Length)
-        {
-            float distToWaypoint = Vector3.Distance(transform.position, myWaypoints[currentWaypointIndex]);
-    
-            if (distToWaypoint < cornerDetectionDistance && currentWaypointIndex < myWaypoints.Length - 1)
-            {
-                // Check if it's actually a corner (not straight path)
-                Vector3 currentDir = (myWaypoints[currentWaypointIndex] - transform.position).normalized;
-                Vector3 nextDir = (myWaypoints[currentWaypointIndex + 1] - myWaypoints[currentWaypointIndex]).normalized;
-                float turnAngle = Vector3.Angle(currentDir, nextDir);
-        
-                if (turnAngle > 30f)
-                {
-                    // Slow down based on distance to corner and turn sharpness
-                    float slowFactor = distToWaypoint / cornerDetectionDistance;
-                    float turnFactor = turnAngle / 90f;
-                    currentSpeed *= Mathf.Lerp(cornerSlowdownAmount, 1f, slowFactor);
-                }
-            }
-        }
-
-        NavAgent.speed = currentSpeed;
-
-        // Stuck detection
         HandleStuckDetection();
 
-        // Skip waypoints we've already passed - but only if we're close to them
+        // Skip waypoints we've already passed
         while (currentWaypointIndex < myWaypoints.Length && HasPassedWaypoint(currentWaypointIndex))
         {
             float dist = Vector3.Distance(transform.position, myWaypoints[currentWaypointIndex]);
@@ -709,6 +664,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
         Vector3 targetWaypoint = myWaypoints[currentWaypointIndex];
 
+        // Apply path offset for variation
         if (currentWaypointIndex < myWaypoints.Length - 1)
         {
             Vector3 nextWaypoint = myWaypoints[currentWaypointIndex + 1];
@@ -723,33 +679,19 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
         NavAgent.SetDestination(targetWaypoint);
 
-        // Smooth rotation with corner anticipation
+        // Simple rotation towards movement direction
         Vector3 currentDirection = NavAgent.steeringTarget - transform.position;
         currentDirection.y = 0;
 
         if (currentDirection.sqrMagnitude > 0.01f)
         {
-            Vector3 targetDirection = currentDirection.normalized;
-            float distToWaypoint = Vector3.Distance(transform.position, targetWaypoint);
-    
-            // Blend toward next waypoint direction when approaching corner
-            if (distToWaypoint < cornerDetectionDistance && currentWaypointIndex < myWaypoints.Length - 1)
-            {
-                Vector3 nextDirection = (myWaypoints[currentWaypointIndex + 1] - targetWaypoint).normalized;
-                float blendFactor = 1f - (distToWaypoint / cornerDetectionDistance);
-                blendFactor *= cornerRotationSmoothing;
-                targetDirection = Vector3.Slerp(targetDirection, nextDirection, blendFactor);
-            }
-    
-            Quaternion targetRotation = Quaternion.LookRotation(targetDirection);
-            float speedFactor = enemySpeed / 3f;
-            float adjustedRotationSpeed = rotationSpeed * Mathf.Max(1f, speedFactor);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * adjustedRotationSpeed);
+            Quaternion targetRotation = Quaternion.LookRotation(currentDirection.normalized);
+            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
         }
 
-        // Dynamic reach threshold based on corner cut multiplier
+        // Check if reached waypoint
         float dynamicThreshold = waypointReachThreshold * myCornerCutMultiplier;
-        
+
         if (!NavAgent.pathPending && NavAgent.remainingDistance <= dynamicThreshold)
         {
             currentWaypointIndex++;
@@ -767,18 +709,15 @@ public class EnemyBase : MonoBehaviour, IDamageable
         {
             stuckDuration += stuckCheckInterval;
         
-            // If stuck for over 1 second, try to recover
             if (stuckDuration >= 1f)
             {
                 float distToWaypoint = Vector3.Distance(transform.position, myWaypoints[currentWaypointIndex]);
             
-                // If close enough to waypoint, skip it
                 if (distToWaypoint <= stuckSkipDistance)
                 {
                     currentWaypointIndex++;
                     stuckDuration = 0f;
                 }
-                // If stuck but not close, try to reposition slightly
                 else if (stuckDuration >= 2f)
                 {
                     NavMeshHit hit;
@@ -795,7 +734,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
         else
         {
-            stuckDuration = 0f; // Moving fine, reset
+            stuckDuration = 0f;
         }
 
         lastStuckCheckPosition = transform.position;
@@ -808,7 +747,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
         
         Vector3 waypoint = myWaypoints[waypointIndex];
         
-        // Get direction the path is going at this waypoint
         Vector3 pathDirection;
         if (waypointIndex < myWaypoints.Length - 1)
         {
@@ -816,18 +754,16 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
         else
         {
-            // Last waypoint - use direction from previous
             if (waypointIndex > 0)
             {
                 pathDirection = (waypoint - myWaypoints[waypointIndex - 1]).normalized;
             }
             else
             {
-                return false; // Only one waypoint, can't determine
+                return false;
             }
         }
         
-        // Check if enemy is past the waypoint (dot product positive means we've passed it)
         Vector3 toEnemy = transform.position - waypoint;
         toEnemy.y = 0;
         pathDirection.y = 0;
@@ -855,7 +791,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
         EnemyAnimator.SetBool("Walk", true);
         myBody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
 
-        // Match animation speed to movement speed
         if (NavAgent != null && NavAgent.isOnNavMesh && NavAgent.enabled)
         {
             float speedRatio = NavAgent.velocity.magnitude / (enemySpeed * mySpeedMultiplier);
@@ -882,7 +817,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         Destroy(gameObject);
     }
 
-    public virtual void TakeDamage(DamageInfo damageInfo,float vfxDamage = 0,bool spellDamageEnabled = false )
+    public virtual void TakeDamage(DamageInfo damageInfo, float vfxDamage = 0, bool spellDamageEnabled = false)
     {
         DamageCalculator.DamageResult result = DamageCalculator.Calculate(damageInfo, elementType);
 
@@ -914,20 +849,18 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
 
         Debug.Log($"DamageInfo: {damageInfo.elementType} vs {elementType} = {result.finalDamage}");
+        
         if (spellDamageEnabled)
         {
             if (gameObject.activeInHierarchy)
             {
                 enemyCurrentHp -= vfxDamage * 100;
-                healthBar.value -= enemyCurrentHp * Time.fixedDeltaTime / 100;
             }
         }
-        // Normal damage path
         else
         {
             float damageToApply = result.finalDamage;
         
-            // Shield absorbs damage first
             if (hasShield && shieldHealth > 0)
             {
                 if (shieldHealth >= damageToApply)
@@ -946,52 +879,63 @@ public class EnemyBase : MonoBehaviour, IDamageable
             }
 
             enemyCurrentHp -= damageToApply;
-            healthBar.value -= damageToApply;
         }
         
-        healthBar.onValueChanged.AddListener((value) =>
-        {
-            //Debug.Log("123");
-            if (gameObject.activeInHierarchy && gameObject != null)
-            {
-                enemyHealthBarStatus = true;
-                  
-                enemyHealthDisplayCanvas.enabled = enemyHealthBarStatus;
-                    
-                    
-            }
-        });
+        // Update health bar visual
+        healthBar.value = enemyCurrentHp / enemyMaxHp;
+        
+        // Show health bar and start fade timer
+        ShowHealthBar();
 
-        if ((enemyCurrentHp <= 0 || healthBar.value <= 0) && !isDead)
+        // Check for death
+        if (enemyCurrentHp <= 0 && !isDead)
         {
             isDead = true;
-            enemyHealthBarStatus = false;
-            StartCoroutine(DisableHealthBar(false));
+            HideHealthBarImmediate();
             Die();
-        }
-        if (gameObject.activeInHierarchy && gameObject != null)
-        {
-            enemyHealthBarStatus = false;
-            StartCoroutine(DisableHealthBar(true));
-
         }
     }
 
     public virtual void TakeDamage(float incomingDamage, float vfxDamage = 0, bool spellDamageEnabled = false)
     {
-        TakeDamage(new DamageInfo(incomingDamage, ElementType.Physical),vfxDamage ,spellDamageEnabled);
+        TakeDamage(new DamageInfo(incomingDamage, ElementType.Physical), vfxDamage, spellDamageEnabled);
     }
     
-    private IEnumerator DisableHealthBar(bool status)
+    private void ShowHealthBar()
     {
-        if (gameObject.activeInHierarchy && gameObject != null)
+        if (!gameObject.activeInHierarchy) return;
+        
+        enemyHealthDisplayCanvas.enabled = true;
+        
+        if (hideHealthBarCoroutine != null)
         {
-            if (status)
-            {
-                yield return new WaitForSeconds(5f);
-            }
-            enemyHealthDisplayCanvas.enabled = enemyHealthBarStatus;
+            StopCoroutine(hideHealthBarCoroutine);
         }
+        
+        hideHealthBarCoroutine = StartCoroutine(HideHealthBarAfterDelay());
+    }
+
+    private IEnumerator HideHealthBarAfterDelay()
+    {
+        yield return new WaitForSeconds(healthBarDisplayDuration);
+        
+        if (gameObject.activeInHierarchy && !isDead)
+        {
+            enemyHealthDisplayCanvas.enabled = false;
+        }
+        
+        hideHealthBarCoroutine = null;
+    }
+
+    private void HideHealthBarImmediate()
+    {
+        if (hideHealthBarCoroutine != null)
+        {
+            StopCoroutine(hideHealthBarCoroutine);
+            hideHealthBarCoroutine = null;
+        }
+        
+        enemyHealthDisplayCanvas.enabled = false;
     }
 
     public void Die()
@@ -1012,7 +956,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
 
     protected virtual void ResetEnemy()
     {
-        // Restore layer first
         gameObject.layer = originalLayerIndex;
     
         float healthMultiplier = 1f;
@@ -1037,6 +980,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         hasBleed = false;
         hasFrostbite = false;
         burnCanSpread = false;
+        
         // Reset Speed Buff
         isSpeedBuffed = false;
 
@@ -1073,10 +1017,19 @@ public class EnemyBase : MonoBehaviour, IDamageable
         lastStuckCheckTime = Time.time;
         lastStuckCheckPosition = transform.position;
         
+        // Reset health bar
+        healthBar.value = 1f;
+        enemyHealthDisplayCanvas.enabled = false;
+        if (hideHealthBarCoroutine != null)
+        {
+            StopCoroutine(hideHealthBarCoroutine);
+            hideHealthBarCoroutine = null;
+        }
+        
         UpdateVisuals();
     }
     
-    public void LiftEffectFunction(bool status,bool isMechanicSpellDamage)
+    public void LiftEffectFunction(bool status, bool isMechanicSpellDamage)
     {
         if (gameObject.activeInHierarchy && gameObject != null)
         {
@@ -1094,8 +1047,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
             }
         }
     }
-
-   
 
     private IEnumerator DisableYPos(bool isMechanicalSpellDamage)
     {
@@ -1116,7 +1067,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
         }
     }
   
-    public IEnumerator ExplodeEnemy(Vector3 currentMousePosition ,EnemyBase affectedEnemy)
+    public IEnumerator ExplodeEnemy(Vector3 currentMousePosition, EnemyBase affectedEnemy)
     {
         NavAgent.enabled = false;
         EnemyAnimator.enabled = false;
@@ -1130,7 +1081,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
         yield return new WaitForSeconds(2f);
         
         Die();
-      
     }
 
     public void UpdateVisuals()
@@ -1195,7 +1145,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public bool IsSpeedBuffed() => isSpeedBuffed;
     public bool HasHoT() => hasHoT;
     public ElementType GetElementType() => elementType;
-    public bool IsFrozen() => isStunned;  // Freeze uses stun system
+    public bool IsFrozen() => isStunned;
     public bool HasIceSlow() => isSlowed && isIceSlow;
     public bool HasBurn() => hasBurn;
     public bool HasPoison() => hasPoison;
@@ -1213,6 +1163,7 @@ public class EnemyBase : MonoBehaviour, IDamageable
     public EnemyVFXPool vfxContainer { get; set; }
     public EnemyBase enemyBaseRef { get; set; }
     public bool isDeadProperty => isDead;
+    
     public float GetDistanceToNextWaypoint()
     {
         if (myWaypoints == null || currentWaypointIndex >= myWaypoints.Length) return 0f;
@@ -1229,7 +1180,6 @@ public class EnemyBase : MonoBehaviour, IDamageable
     {
         if (myWaypoints == null) return transform.forward;
     
-        // Need at least 2 more waypoints to know direction after turn
         if (currentWaypointIndex + 1 >= myWaypoints.Length) return transform.forward;
     
         Vector3 currentWaypoint = myWaypoints[currentWaypointIndex];

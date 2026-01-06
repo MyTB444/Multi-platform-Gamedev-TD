@@ -23,6 +23,7 @@ public class BowController : MonoBehaviour
     [SerializeField] private float returnToHandDuration = 0.2f;
     
     private Vector3 nockRestLocalPosition;
+    private float currentReturnDelay;
     private Vector3 limbTopRestRotation;
     private Vector3 limbBottomRestRotation;
     private bool isDrawing = false;
@@ -60,9 +61,10 @@ public class BowController : MonoBehaviour
         isReleasing = false;
     }
     
-    public void ReleaseBow()
+    public void ReleaseBow(float cooldownRatio = 1f)
     {
         isDrawing = false;
+        currentReturnDelay = returnDelay * cooldownRatio;
         StartCoroutine(ReleaseCoroutine());
     }
     
@@ -92,7 +94,7 @@ public class BowController : MonoBehaviour
         limbBottom.localEulerAngles = limbBottomRestRotation;
         
         // Phase 2: Wait before returning to hand
-        yield return new WaitForSeconds(returnDelay);
+        yield return new WaitForSeconds(currentReturnDelay);
         
         // Phase 3: Return to hand position
         t = 0f;

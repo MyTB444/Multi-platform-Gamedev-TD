@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: Damage
   m_EditorClassIdentifier: 
   skillName: Fortify
-  skillCost: 5
+  skillCost: 40
   description: All towers deal 25% more damage.
   icon: {fileID: 21300000, guid: 03e6f50b7a998ed46a4c3f9f8cb0855e, type: 3}
   irreversible: 0
-  skillPointCost: 5
+  skillPointCost: 40
   prerequisites: []
   function: 1
   function2: 0

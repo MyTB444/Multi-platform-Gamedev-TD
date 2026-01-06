@@ -768,9 +768,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 0
   enemySpeed: 2
-  damage: 10
+  damage: 1
   reward: 10
-  enemyMaxHp: 20
+  enemyMaxHp: 60
   elementType: 0
   isInvisible: 0
   isReinforced: 0
@@ -790,6 +790,7 @@ MonoBehaviour:
   cornerCutVariation: 0.8
   pathDriftAmount: 0.15
   frozenColor: {r: 0.5, g: 0.8, b: 1, a: 1}
+  originalColors: []
   stuckCheckInterval: 0.5
   stuckDistanceThreshold: 0.2
   stuckSkipDistance: 2
@@ -797,6 +798,7 @@ MonoBehaviour:
   myBody: {fileID: 0}
   enemyHealthDisplayCanvas: {fileID: 2253822894286516178}
   healthBar: {fileID: 6398779029012184402}
+  healthBarDisplayDuration: 3
   enemyVFXPoolScriptRef: {fileID: 4679229004361025924}
 --- !u!136 &5952700638257805842
 CapsuleCollider:
