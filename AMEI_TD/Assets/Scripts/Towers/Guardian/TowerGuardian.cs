@@ -38,7 +38,6 @@ public class TowerGuardian : MonoBehaviour
     [SerializeField] private float towerScaleInDuration = 0.5f;
 
     [Header("Audio")]
-    [SerializeField] private AudioSource guardianAudioSource;
     [SerializeField] private AudioClip lightningStrikeSound;
     [SerializeField] [Range(0f, 1f)] private float lightningStrikeSoundVolume = 1f;
 
@@ -323,14 +322,7 @@ public class TowerGuardian : MonoBehaviour
     {
         if (lightningStrikeSound != null)
         {
-            if (guardianAudioSource != null)
-            {
-                guardianAudioSource.PlayOneShot(lightningStrikeSound, lightningStrikeSoundVolume);
-            }
-            else
-            {
-                AudioSource.PlayClipAtPoint(lightningStrikeSound, position, lightningStrikeSoundVolume);
-            }
+            AudioSource.PlayClipAtPoint(lightningStrikeSound, position, lightningStrikeSoundVolume);
         }
     }
 

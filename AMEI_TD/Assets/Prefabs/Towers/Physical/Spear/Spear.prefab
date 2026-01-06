@@ -638,6 +638,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxLifeTime: 10
   impactEffectPrefab: {fileID: 1296919836167789391, guid: 8e1918be94ee3be49ab9961549eab334, type: 3}
+  impactSound: {fileID: 8300000, guid: 5f26bc7526a58824cbd4bf0922f9981a, type: 3}
+  impactSoundVolume: 0.137
   trail: {fileID: 0}
   vfxPoint: {fileID: 2640574473869826520}
 --- !u!54 &2324157478279201440

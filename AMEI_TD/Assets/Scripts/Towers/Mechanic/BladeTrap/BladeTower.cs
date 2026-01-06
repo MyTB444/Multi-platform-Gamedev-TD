@@ -25,7 +25,6 @@ public class BladeTower : TowerBase
     [SerializeField] private float vfxDelay = 0.3f;
 
     [Header("Audio")]
-    [SerializeField] private AudioSource bladeAudioSource;
     [SerializeField] private AudioClip bladeHitSound;
     [SerializeField] [Range(0f, 1f)] private float bladeHitSoundVolume = 1f;
     
@@ -240,6 +239,7 @@ public class BladeTower : TowerBase
     
     public void SpawnHammerImpactVFX()
     {
+        PlayAttackSound();
         if (attackSpawnEffectPrefab != null && hammerImpactPoint != null)
         {
             ObjectPooling.instance.GetVFX(attackSpawnEffectPrefab, hammerImpactPoint.position, Quaternion.identity, 2f);
@@ -310,9 +310,9 @@ public class BladeTower : TowerBase
 
     private void PlayBladeHitSound()
     {
-        if (bladeHitSound != null && bladeAudioSource != null)
+        if (bladeHitSound != null)
         {
-            bladeAudioSource.PlayOneShot(bladeHitSound, bladeHitSoundVolume);
+            AudioSource.PlayClipAtPoint(bladeHitSound, transform.position, bladeHitSoundVolume);
         }
     }
     

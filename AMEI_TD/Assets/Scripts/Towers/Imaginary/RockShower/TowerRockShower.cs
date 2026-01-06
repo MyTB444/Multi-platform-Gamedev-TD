@@ -165,6 +165,7 @@ public class TowerRockShower : TowerBase
     // Called by animation event
     public void OnStartRockShower()
     {
+        PlayAttackSound();
         StartCoroutine(RockShowerRoutine());
     }
     

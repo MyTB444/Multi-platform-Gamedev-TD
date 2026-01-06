@@ -131,6 +131,7 @@ public class TowerPhantomKnight : TowerBase
     
     public void OnSpawnPhantoms()
     {
+        PlayAttackSound();
         if (savedEnemy == null || !savedEnemy.gameObject.activeSelf)
         {
             FindNewTarget();

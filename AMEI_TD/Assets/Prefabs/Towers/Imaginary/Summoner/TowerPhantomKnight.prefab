@@ -21468,6 +21468,8 @@ MonoBehaviour:
   characterAnimator: {fileID: 4582930928750596067}
   attackAnimationTrigger: Attack
   projectileSpawnDelay: 0
+  attackSound: {fileID: 0}
+  attackSoundVolume: 1
   targetMostAdvancedEnemy: 1
   targetPriorityEnemy: 0
   enemyPriorityType: 0
@@ -21482,6 +21484,11 @@ MonoBehaviour:
     m_Bits: 64
   disabledColor: {r: 1, g: 0.2, b: 0.2, a: 1}
   pulseSpeed: 4
+  fadeInDuration: 0.3
+  fadeOutDuration: 0.5
+  guardianBuffColor: {r: 1, g: 0.85, b: 0.3, a: 1}
+  guardianGlowIntensity: 0.3
+  guardianPulseSpeed: 2
   phantomPrefab: {fileID: 2537545956604527301, guid: 8b55fb7f86e2bb54a922b5e11b12cae4, type: 3}
   spawnDistanceAhead: 5
   phantomCount: 1
@@ -21495,6 +21502,8 @@ MonoBehaviour:
   phantomPoolAmount: 10
   spawnVFXPrefab: {fileID: 9007503105022112843, guid: 8d3efcfbf73f29f409a1e8cb1a020c10, type: 3}
   vfxDuration: 1
+  phantomSlashSound: {fileID: 8300000, guid: f7617a7275da92048b101e960c24aff3, type: 3}
+  phantomSlashSoundVolume: 0.301
   morePhantoms: 0
   bonusPhantomCount: 1
   closerSpawn: 0

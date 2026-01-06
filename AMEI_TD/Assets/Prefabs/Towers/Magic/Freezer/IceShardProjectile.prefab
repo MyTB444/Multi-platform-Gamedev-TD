@@ -9800,6 +9800,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxLifeTime: 10
   impactEffectPrefab: {fileID: 9125597833443693706, guid: 49a9bc166b0f23145b95fa10538dbdc8, type: 3}
+  impactSound: {fileID: 8300000, guid: 408f5514eacef264e98fff9f2bccdd9d, type: 3}
+  impactSoundVolume: 0.345
   rotationSpeed: 200
   retargetRange: 5
 --- !u!198 &572399922836779470

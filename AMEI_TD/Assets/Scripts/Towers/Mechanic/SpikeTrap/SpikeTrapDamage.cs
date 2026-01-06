@@ -15,6 +15,10 @@ public class SpikeTrapDamage : MonoBehaviour
     [SerializeField] private float spikeDelay = 0.3f;
     [SerializeField] private float damageDelay = 0.1f;
     
+    [Header("Audio")]
+    [SerializeField] private AudioClip spikeImpactSound;
+    [SerializeField] [Range(0f, 1f)] private float spikeImpactVolume = 1f;
+    
     [Header("VFX Points")]
     [SerializeField] private Transform[] spikeVFXPoints;
 
@@ -211,11 +215,15 @@ public class SpikeTrapDamage : MonoBehaviour
             transform.rotation,
             whatIsEnemy
         );
+        
+        bool hitAnyEnemy = false;
     
         for (int i = 0; i < enemyCount; i++)
         {
             if (detectedEnemies[i] != null && detectedEnemies[i].gameObject.activeSelf)
             {
+                hitAnyEnemy = true;
+                
                 IDamageable damageable = detectedEnemies[i].GetComponent<IDamageable>();
                 if (damageable != null)
                 {
@@ -248,6 +256,11 @@ public class SpikeTrapDamage : MonoBehaviour
                     }
                 }
             }
+        }
+        
+        if (hitAnyEnemy && spikeImpactSound != null)
+        {
+            AudioSource.PlayClipAtPoint(spikeImpactSound, transform.position, spikeImpactVolume);
         }
     }
     

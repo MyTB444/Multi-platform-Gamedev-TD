@@ -51,6 +51,8 @@ public class RockProjectile : TowerProjectileBase
                 ObjectPooling.instance.GetVFX(impactEffectPrefab, transform.position, Quaternion.identity, scaledSize, 2f);
             }
 
+            PlayImpactSound(transform.position);
+
             ObjectPooling.instance.Return(gameObject);
         }
     }
@@ -86,6 +88,8 @@ public class RockProjectile : TowerProjectileBase
                 Vector3 scaledSize = impactEffectPrefab.transform.localScale * rockSize;
                 ObjectPooling.instance.GetVFX(impactEffectPrefab, transform.position, Quaternion.identity, scaledSize, 2f);
             }
+
+            PlayImpactSound(transform.position);
 
             ObjectPooling.instance.Return(gameObject);
         }
