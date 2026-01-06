@@ -553,6 +553,7 @@ GameObject:
   - component: {fileID: 95640295303221614}
   - component: {fileID: 3444061643608665351}
   - component: {fileID: 4321115479502099356}
+  - component: {fileID: 6762449299822866759}
   m_Layer: 6
   m_Name: EnemyFast
   m_TagString: Enemy
@@ -595,9 +596,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 1
   enemySpeed: 3.5
-  damage: 10
+  damage: 1
   reward: 10
-  enemyMaxHp: 10
+  enemyMaxHp: 25
   elementType: 0
   isInvisible: 0
   isReinforced: 0
@@ -617,6 +618,7 @@ MonoBehaviour:
   cornerCutVariation: 0.8
   pathDriftAmount: 0.15
   frozenColor: {r: 0.5, g: 0.8, b: 1, a: 1}
+  originalColors: []
   stuckCheckInterval: 0.5
   stuckDistanceThreshold: 0.2
   stuckSkipDistance: 2
@@ -624,6 +626,7 @@ MonoBehaviour:
   myBody: {fileID: 0}
   enemyHealthDisplayCanvas: {fileID: 8274155651369890593}
   healthBar: {fileID: 1984997032052524187}
+  healthBarDisplayDuration: 3
   enemyVFXPoolScriptRef: {fileID: 1869571132183754838}
 --- !u!95 &95640295303221614
 Animator:

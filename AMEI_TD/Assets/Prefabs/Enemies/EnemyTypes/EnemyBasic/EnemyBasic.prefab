@@ -768,9 +768,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 0
   enemySpeed: 2
-  damage: 10
-  reward: 10
-  enemyMaxHp: 20
+  damage: 1
+  reward: 8
+  enemyMaxHp: 60
   elementType: 0
   isInvisible: 0
   isReinforced: 0
@@ -781,6 +781,9 @@ MonoBehaviour:
   acceleration: 8
   angularSpeed: 360
   animationSpeedMultiplier: 1
+  cornerDetectionDistance: 3
+  cornerSlowdownAmount: 0.6
+  cornerRotationSmoothing: 0.3
   useSpawnGrace: 1
   spawnGracePeriod: 0.5
   pathOffsetRange: 1.5
@@ -790,6 +793,7 @@ MonoBehaviour:
   cornerCutVariation: 0.8
   pathDriftAmount: 0.15
   frozenColor: {r: 0.5, g: 0.8, b: 1, a: 1}
+  originalColors: []
   stuckCheckInterval: 0.5
   stuckDistanceThreshold: 0.2
   stuckSkipDistance: 2
