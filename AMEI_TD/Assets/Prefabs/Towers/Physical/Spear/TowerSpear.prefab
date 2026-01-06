@@ -17070,6 +17070,8 @@ MonoBehaviour:
   guardianGlowIntensity: 0.3
   guardianPulseSpeed: 2
   spearVisual: {fileID: 8909929371272408851}
+  baseFlightTime: 0.15
+  speedMultiplier: 0.07
   spearRespawnDelay: 1.5
   throwAnimationDelay: 1.1
   forwardSpawnOffset: 0.5
