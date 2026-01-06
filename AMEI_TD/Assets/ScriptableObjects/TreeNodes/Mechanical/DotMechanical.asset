@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DotMechanical
   m_EditorClassIdentifier: 
   skillName: Things Over TIme
-  skillCost: 5
+  skillCost: 0
   description: 'Spike Traps poison enemies.
 
 
@@ -21,10 +21,11 @@ MonoBehaviour:
     Bleed.'
   icon: {fileID: 21300000, guid: 4d7635c366a76274c85747592d98d2f5, type: 3}
   irreversible: 0
-  skillPointCost: 5
+  skillPointCost: 0
   prerequisites:
   - {fileID: 11400000, guid: 1ca0c83bc7c014a83b93f7ee9aa49e5f, type: 2}
   function: 17
   function2: 21
   swapType: 0
   spellEnableType: 0
+  noah: 0
