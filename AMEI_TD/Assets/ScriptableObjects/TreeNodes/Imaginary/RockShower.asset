@@ -13,18 +13,18 @@ MonoBehaviour:
   m_Name: RockShower
   m_EditorClassIdentifier: 
   skillName: Rock Shower
-  skillCost: 5
+  skillCost: 0
   description: 'Rock Shower duration is increased by 1 second.
 
 
     UNLEASH!'
   icon: {fileID: 21300000, guid: 406984ac0d0fc2c4bbaf906048f7c43e, type: 3}
   irreversible: 1
-  skillPointCost: 5
+  skillPointCost: 0
   prerequisites:
   - {fileID: 11400000, guid: f5fc283c1d1df4ccba20e6e1bdb60bdb, type: 2}
-  function: 26
+  function: 0
   function2: 0
   swapType: 0
-  spellEnableType: 4
+  spellEnableType: 0
   noah: 0

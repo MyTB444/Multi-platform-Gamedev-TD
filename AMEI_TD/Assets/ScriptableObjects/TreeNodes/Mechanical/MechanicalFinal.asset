@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MechanicalFinal
   m_EditorClassIdentifier: 
   skillName: Pointy
-  skillCost: 5
+  skillCost: 0
   description: 'Spike Traps cripple enemies, slowing them.
 
 
@@ -21,9 +21,10 @@ MonoBehaviour:
     25% reach.'
   icon: {fileID: 21300000, guid: 030d61925e2f98f4d86e171153ec39e1, type: 3}
   irreversible: 0
-  skillPointCost: 5
+  skillPointCost: 0
   prerequisites: []
   function: 19
   function2: 23
   swapType: 0
   spellEnableType: 0
+  noah: 0

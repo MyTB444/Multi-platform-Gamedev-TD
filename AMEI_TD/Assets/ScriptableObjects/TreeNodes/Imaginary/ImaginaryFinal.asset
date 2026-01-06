@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ImaginaryFinal
   m_EditorClassIdentifier: 
   skillName: Grand Seer
-  skillCost: 5
+  skillCost: 0
   description: 'Rock Shower throws a massive rock at the end.
 
 
@@ -21,9 +21,10 @@ MonoBehaviour:
     twice before fading.'
   icon: {fileID: 21300000, guid: f9fdbb78149b97549afa65f0b3557e9e, type: 3}
   irreversible: 0
-  skillPointCost: 5
+  skillPointCost: 0
   prerequisites: []
-  function: 27
+  function: 0
   function2: 31
   swapType: 0
   spellEnableType: 0
+  noah: 0
