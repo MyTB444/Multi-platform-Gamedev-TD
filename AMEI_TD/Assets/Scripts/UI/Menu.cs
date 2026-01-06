@@ -36,16 +36,16 @@ public class Menu : MonoBehaviour
         switch (i)
         {
             case 0:
-                SceneManager.LoadScene("Eren");
+                SceneManager.LoadScene("Level1");
                 break;
             case 1:
-                SceneManager.LoadScene("Eren");
+                SceneManager.LoadScene("Level4");
                 break;
             case 2:
-                SceneManager.LoadScene("Eren");
+                SceneManager.LoadScene("Level7");
                 break;
             case 3:
-                SceneManager.LoadScene("Eren");
+                SceneManager.LoadScene("Level10");
                 break;
                 //Add level 1 list 
         }
@@ -56,16 +56,16 @@ public class Menu : MonoBehaviour
         switch (i)
         {
             case 0:
-                SceneManager.LoadScene("Ilja");
+                SceneManager.LoadScene("Level2");
                 break;
             case 1:
-                SceneManager.LoadScene("Eren");
+                SceneManager.LoadScene("Level5");
                 break;
             case 2:
-                SceneManager.LoadScene("Eren");
+                SceneManager.LoadScene("Level8");
                 break;
             case 3:
-                SceneManager.LoadScene("Eren");
+                SceneManager.LoadScene("Level11");
                 break;
                 //Add level 2 list 
         }
@@ -76,16 +76,16 @@ public class Menu : MonoBehaviour
         switch (i)
         {
             case 0:
-                SceneManager.LoadScene("Ilja");
+                SceneManager.LoadScene("Level3");
                 break;
             case 1:
-                SceneManager.LoadScene("Ilja");
+                SceneManager.LoadScene("Level6");
                 break;
             case 2:
-                SceneManager.LoadScene("Eren");
+                SceneManager.LoadScene("Level9");
                 break;
             case 3:
-                SceneManager.LoadScene("Ilja");
+                SceneManager.LoadScene("Level12");
                 break;
                 //Add level 3 list 
         }
