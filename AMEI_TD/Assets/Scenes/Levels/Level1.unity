@@ -1990,6 +1990,7 @@ GameObject:
   - component: {fileID: 29561719}
   - component: {fileID: 29561718}
   - component: {fileID: 29561717}
+  - component: {fileID: 29561721}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -2076,6 +2077,27 @@ Transform:
   - {fileID: 309175569}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &29561721
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 29561716}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &35987031
 GameObject:
   m_ObjectHideFlags: 0
@@ -2453,6 +2475,7 @@ GameObject:
   - component: {fileID: 49521207}
   - component: {fileID: 49521206}
   - component: {fileID: 49521205}
+  - component: {fileID: 49521209}
   m_Layer: 8
   m_Name: DirtSideway
   m_TagString: Untagged
@@ -2539,6 +2562,27 @@ Transform:
   - {fileID: 367054141}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &49521209
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 49521204}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.0000002, y: 2, z: 2.000001}
+  m_Center: {x: -0.0000009238722, y: 0, z: 0}
 --- !u!1 &50098812
 GameObject:
   m_ObjectHideFlags: 0
@@ -4016,6 +4060,7 @@ GameObject:
   - component: {fileID: 87822677}
   - component: {fileID: 87822676}
   - component: {fileID: 87822675}
+  - component: {fileID: 87822679}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -4102,6 +4147,27 @@ Transform:
   - {fileID: 1853322046}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &87822679
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 87822674}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &90722948
 GameObject:
   m_ObjectHideFlags: 0
@@ -4454,6 +4520,7 @@ GameObject:
   - component: {fileID: 99376375}
   - component: {fileID: 99376374}
   - component: {fileID: 99376373}
+  - component: {fileID: 99376377}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -4540,6 +4607,27 @@ Transform:
   - {fileID: 770610539}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &99376377
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 99376372}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &99926152
 GameObject:
   m_ObjectHideFlags: 0
@@ -5518,6 +5606,7 @@ GameObject:
   - component: {fileID: 124003390}
   - component: {fileID: 124003389}
   - component: {fileID: 124003388}
+  - component: {fileID: 124003392}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -5604,6 +5693,27 @@ Transform:
   - {fileID: 398652426}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &124003392
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 124003387}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &127608012
 GameObject:
   m_ObjectHideFlags: 0
@@ -11024,6 +11134,7 @@ GameObject:
   - component: {fileID: 241719136}
   - component: {fileID: 241719135}
   - component: {fileID: 241719134}
+  - component: {fileID: 241719138}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -11110,6 +11221,27 @@ Transform:
   - {fileID: 276516368}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &241719138
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 241719133}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &244318361
 GameObject:
   m_ObjectHideFlags: 0
@@ -12623,6 +12755,7 @@ GameObject:
   - component: {fileID: 268897049}
   - component: {fileID: 268897048}
   - component: {fileID: 268897047}
+  - component: {fileID: 268897051}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -12709,6 +12842,27 @@ Transform:
   - {fileID: 2079759282}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &268897051
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 268897046}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &272493370
 GameObject:
   m_ObjectHideFlags: 0
@@ -13518,6 +13672,7 @@ GameObject:
   - component: {fileID: 290078573}
   - component: {fileID: 290078572}
   - component: {fileID: 290078571}
+  - component: {fileID: 290078575}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -13604,6 +13759,27 @@ Transform:
   - {fileID: 273306906}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &290078575
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 290078570}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &295179238
 GameObject:
   m_ObjectHideFlags: 0
@@ -13616,6 +13792,7 @@ GameObject:
   - component: {fileID: 295179241}
   - component: {fileID: 295179240}
   - component: {fileID: 295179239}
+  - component: {fileID: 295179243}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -13702,6 +13879,27 @@ Transform:
   - {fileID: 1005363088}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &295179243
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 295179238}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &300239188
 GameObject:
   m_ObjectHideFlags: 0
@@ -15686,6 +15884,7 @@ GameObject:
   - component: {fileID: 351509067}
   - component: {fileID: 351509066}
   - component: {fileID: 351509065}
+  - component: {fileID: 351509069}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -15772,6 +15971,27 @@ Transform:
   - {fileID: 1065256887}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &351509069
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 351509064}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &353688530
 GameObject:
   m_ObjectHideFlags: 0
@@ -16501,6 +16721,7 @@ GameObject:
   - component: {fileID: 376277875}
   - component: {fileID: 376277874}
   - component: {fileID: 376277873}
+  - component: {fileID: 376277877}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -16587,6 +16808,27 @@ Transform:
   - {fileID: 2018871857}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &376277877
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 376277872}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!4 &382997122 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2379833100791306736, guid: 376eed7625db6cb4b8fef6cd5ede8f07, type: 3}
@@ -16797,6 +17039,7 @@ GameObject:
   - component: {fileID: 392887194}
   - component: {fileID: 392887193}
   - component: {fileID: 392887192}
+  - component: {fileID: 392887196}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -16883,6 +17126,27 @@ Transform:
   - {fileID: 1856833100}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &392887196
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 392887191}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &392928577
 GameObject:
   m_ObjectHideFlags: 0
@@ -17879,6 +18143,7 @@ GameObject:
   - component: {fileID: 412416879}
   - component: {fileID: 412416878}
   - component: {fileID: 412416877}
+  - component: {fileID: 412416881}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -17965,6 +18230,27 @@ Transform:
   - {fileID: 956229497}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &412416881
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 412416876}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &415252441
 GameObject:
   m_ObjectHideFlags: 0
@@ -17977,6 +18263,7 @@ GameObject:
   - component: {fileID: 415252444}
   - component: {fileID: 415252443}
   - component: {fileID: 415252442}
+  - component: {fileID: 415252446}
   m_Layer: 8
   m_Name: DirtSideway
   m_TagString: Untagged
@@ -18063,6 +18350,27 @@ Transform:
   - {fileID: 2029039675}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &415252446
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 415252441}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.0000002, y: 2, z: 2.000001}
+  m_Center: {x: -0.0000009238722, y: 0, z: 0}
 --- !u!1 &416324848
 GameObject:
   m_ObjectHideFlags: 0
@@ -21323,6 +21631,7 @@ GameObject:
   - component: {fileID: 486361291}
   - component: {fileID: 486361290}
   - component: {fileID: 486361289}
+  - component: {fileID: 486361293}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -21409,6 +21718,27 @@ Transform:
   - {fileID: 534310849}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &486361293
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 486361288}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &487031091
 GameObject:
   m_ObjectHideFlags: 0
@@ -23666,6 +23996,7 @@ GameObject:
   - component: {fileID: 549097130}
   - component: {fileID: 549097129}
   - component: {fileID: 549097128}
+  - component: {fileID: 549097132}
   m_Layer: 8
   m_Name: DirtSideway
   m_TagString: Untagged
@@ -23752,6 +24083,27 @@ Transform:
   - {fileID: 2030018909}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &549097132
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 549097127}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.0000002, y: 2, z: 2.000001}
+  m_Center: {x: -0.0000009238722, y: 0, z: 0}
 --- !u!1 &551696824
 GameObject:
   m_ObjectHideFlags: 0
@@ -25151,6 +25503,7 @@ GameObject:
   - component: {fileID: 580905106}
   - component: {fileID: 580905105}
   - component: {fileID: 580905104}
+  - component: {fileID: 580905108}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -25237,6 +25590,27 @@ Transform:
   - {fileID: 1236209880}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &580905108
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 580905103}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &582062368
 GameObject:
   m_ObjectHideFlags: 0
@@ -25645,6 +26019,7 @@ GameObject:
   - component: {fileID: 597388955}
   - component: {fileID: 597388954}
   - component: {fileID: 597388953}
+  - component: {fileID: 597388957}
   m_Layer: 8
   m_Name: DirtSideway
   m_TagString: Untagged
@@ -25731,6 +26106,27 @@ Transform:
   - {fileID: 1070334594}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &597388957
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 597388952}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.0000002, y: 2, z: 2.000001}
+  m_Center: {x: -0.0000009238722, y: 0, z: 0}
 --- !u!1 &598923071
 GameObject:
   m_ObjectHideFlags: 0
@@ -25922,6 +26318,7 @@ GameObject:
   - component: {fileID: 608609397}
   - component: {fileID: 608609396}
   - component: {fileID: 608609395}
+  - component: {fileID: 608609399}
   m_Layer: 8
   m_Name: DirtSideway
   m_TagString: Untagged
@@ -26008,6 +26405,27 @@ Transform:
   - {fileID: 1980713793}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &608609399
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608609394}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.0000002, y: 2, z: 2.000001}
+  m_Center: {x: -0.0000009238722, y: 0, z: 0}
 --- !u!1 &608723126
 GameObject:
   m_ObjectHideFlags: 0
@@ -26982,6 +27400,7 @@ GameObject:
   - component: {fileID: 642284147}
   - component: {fileID: 642284146}
   - component: {fileID: 642284145}
+  - component: {fileID: 642284149}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -27068,6 +27487,27 @@ Transform:
   - {fileID: 691394016}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &642284149
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 642284144}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &642492949
 GameObject:
   m_ObjectHideFlags: 0
@@ -28062,6 +28502,7 @@ GameObject:
   - component: {fileID: 666932861}
   - component: {fileID: 666932860}
   - component: {fileID: 666932859}
+  - component: {fileID: 666932863}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -28148,6 +28589,27 @@ Transform:
   - {fileID: 935342663}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &666932863
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 666932858}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &674891671
 GameObject:
   m_ObjectHideFlags: 0
@@ -29333,6 +29795,7 @@ GameObject:
   - component: {fileID: 699154739}
   - component: {fileID: 699154738}
   - component: {fileID: 699154737}
+  - component: {fileID: 699154741}
   m_Layer: 8
   m_Name: DirtSideway
   m_TagString: Untagged
@@ -29419,6 +29882,27 @@ Transform:
   - {fileID: 1423505038}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &699154741
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 699154736}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.0000002, y: 2, z: 2.000001}
+  m_Center: {x: -0.0000009238722, y: 0, z: 0}
 --- !u!114 &699529193 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8707801099757550886, guid: 8457fa35112354befbc4d79744ae3848, type: 3}
@@ -29661,6 +30145,7 @@ GameObject:
   - component: {fileID: 707560636}
   - component: {fileID: 707560635}
   - component: {fileID: 707560634}
+  - component: {fileID: 707560638}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -29747,6 +30232,27 @@ Transform:
   - {fileID: 1319542093}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &707560638
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 707560633}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &708320144
 GameObject:
   m_ObjectHideFlags: 0
@@ -29855,6 +30361,7 @@ GameObject:
   - component: {fileID: 708587167}
   - component: {fileID: 708587166}
   - component: {fileID: 708587165}
+  - component: {fileID: 708587169}
   m_Layer: 8
   m_Name: DirtSideway
   m_TagString: Untagged
@@ -29941,6 +30448,27 @@ Transform:
   - {fileID: 1875236812}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &708587169
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 708587164}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.0000002, y: 2, z: 2.000001}
+  m_Center: {x: -0.0000009238722, y: 0, z: 0}
 --- !u!1 &718995444
 GameObject:
   m_ObjectHideFlags: 0
@@ -31549,6 +32077,7 @@ GameObject:
   - component: {fileID: 750934677}
   - component: {fileID: 750934676}
   - component: {fileID: 750934675}
+  - component: {fileID: 750934679}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -31635,6 +32164,27 @@ Transform:
   - {fileID: 1488336017}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &750934679
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 750934674}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &760174890
 GameObject:
   m_ObjectHideFlags: 0
@@ -32587,6 +33137,7 @@ GameObject:
   - component: {fileID: 788057859}
   - component: {fileID: 788057858}
   - component: {fileID: 788057857}
+  - component: {fileID: 788057861}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -32673,6 +33224,27 @@ Transform:
   - {fileID: 816777061}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &788057861
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 788057856}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &788200957
 GameObject:
   m_ObjectHideFlags: 0
@@ -33215,6 +33787,7 @@ GameObject:
   - component: {fileID: 799199502}
   - component: {fileID: 799199501}
   - component: {fileID: 799199500}
+  - component: {fileID: 799199504}
   m_Layer: 8
   m_Name: DirtSideway
   m_TagString: Untagged
@@ -33301,6 +33874,27 @@ Transform:
   - {fileID: 2087169069}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &799199504
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 799199499}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.0000002, y: 2, z: 2.000001}
+  m_Center: {x: -0.0000009238722, y: 0, z: 0}
 --- !u!1 &808352110
 GameObject:
   m_ObjectHideFlags: 0
@@ -33877,6 +34471,7 @@ GameObject:
   - component: {fileID: 821018483}
   - component: {fileID: 821018482}
   - component: {fileID: 821018481}
+  - component: {fileID: 821018485}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -33963,6 +34558,27 @@ Transform:
   - {fileID: 1358480438}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &821018485
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 821018480}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &824136181
 GameObject:
   m_ObjectHideFlags: 0
@@ -40342,6 +40958,7 @@ GameObject:
   - component: {fileID: 997561961}
   - component: {fileID: 997561960}
   - component: {fileID: 997561959}
+  - component: {fileID: 997561963}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -40428,6 +41045,27 @@ Transform:
   - {fileID: 1647289269}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &997561963
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 997561958}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &1005363087
 GameObject:
   m_ObjectHideFlags: 0
@@ -41161,6 +41799,7 @@ GameObject:
   - component: {fileID: 1016805289}
   - component: {fileID: 1016805288}
   - component: {fileID: 1016805287}
+  - component: {fileID: 1016805291}
   m_Layer: 8
   m_Name: DirtSideway
   m_TagString: Untagged
@@ -41247,6 +41886,27 @@ Transform:
   - {fileID: 1709621199}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1016805291
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1016805286}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.0000002, y: 2, z: 2.000001}
+  m_Center: {x: -0.0000018775465, y: 0, z: 0}
 --- !u!1 &1019416345
 GameObject:
   m_ObjectHideFlags: 0
@@ -43399,6 +44059,7 @@ GameObject:
   - component: {fileID: 1076372489}
   - component: {fileID: 1076372488}
   - component: {fileID: 1076372487}
+  - component: {fileID: 1076372491}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -43485,6 +44146,27 @@ Transform:
   - {fileID: 1486165719}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1076372491
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1076372486}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: 0.000000029802322, y: 0, z: 0}
 --- !u!1 &1078798212
 GameObject:
   m_ObjectHideFlags: 0
@@ -43712,6 +44394,7 @@ GameObject:
   - component: {fileID: 1083906521}
   - component: {fileID: 1083906520}
   - component: {fileID: 1083906519}
+  - component: {fileID: 1083906523}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -43798,6 +44481,27 @@ Transform:
   - {fileID: 856033183}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1083906523
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1083906518}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &1095167930
 GameObject:
   m_ObjectHideFlags: 0
@@ -44470,6 +45174,7 @@ GameObject:
   - component: {fileID: 1114266714}
   - component: {fileID: 1114266713}
   - component: {fileID: 1114266712}
+  - component: {fileID: 1114266716}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -44556,6 +45261,27 @@ Transform:
   - {fileID: 1418755309}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1114266716
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1114266711}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &1116640302
 GameObject:
   m_ObjectHideFlags: 0
@@ -45067,6 +45793,7 @@ GameObject:
   - component: {fileID: 1129373344}
   - component: {fileID: 1129373343}
   - component: {fileID: 1129373342}
+  - component: {fileID: 1129373346}
   m_Layer: 8
   m_Name: DirtSideway
   m_TagString: Untagged
@@ -45153,6 +45880,27 @@ Transform:
   - {fileID: 1732418898}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1129373346
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1129373341}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.0000002, y: 2, z: 2.000001}
+  m_Center: {x: -0.0000009238722, y: 0, z: 0}
 --- !u!1 &1131902217
 GameObject:
   m_ObjectHideFlags: 0
@@ -45456,6 +46204,7 @@ GameObject:
   - component: {fileID: 1153371621}
   - component: {fileID: 1153371620}
   - component: {fileID: 1153371619}
+  - component: {fileID: 1153371623}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -45542,6 +46291,27 @@ Transform:
   - {fileID: 1616031796}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1153371623
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1153371618}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &1154919951
 GameObject:
   m_ObjectHideFlags: 0
@@ -45651,6 +46421,7 @@ GameObject:
   - component: {fileID: 1165269737}
   - component: {fileID: 1165269736}
   - component: {fileID: 1165269735}
+  - component: {fileID: 1165269739}
   m_Layer: 8
   m_Name: DirtSideway
   m_TagString: Untagged
@@ -45737,6 +46508,27 @@ Transform:
   - {fileID: 2048302219}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1165269739
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1165269734}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.0000002, y: 2, z: 2.000001}
+  m_Center: {x: -0.0000009238722, y: 0, z: 0}
 --- !u!1 &1166264316
 GameObject:
   m_ObjectHideFlags: 0
@@ -47088,6 +47880,7 @@ GameObject:
   - component: {fileID: 1206336864}
   - component: {fileID: 1206336863}
   - component: {fileID: 1206336862}
+  - component: {fileID: 1206336866}
   m_Layer: 8
   m_Name: DirtSideway
   m_TagString: Untagged
@@ -47174,6 +47967,27 @@ Transform:
   - {fileID: 437169921}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1206336866
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1206336861}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.0000002, y: 2, z: 2.000001}
+  m_Center: {x: -0.0000009238722, y: 0, z: 0}
 --- !u!1 &1207161966
 GameObject:
   m_ObjectHideFlags: 0
@@ -47282,6 +48096,7 @@ GameObject:
   - component: {fileID: 1208082309}
   - component: {fileID: 1208082308}
   - component: {fileID: 1208082307}
+  - component: {fileID: 1208082311}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -47368,6 +48183,27 @@ Transform:
   - {fileID: 521369036}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1208082311
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1208082306}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &1211647805
 GameObject:
   m_ObjectHideFlags: 0
@@ -47598,6 +48434,7 @@ GameObject:
   - component: {fileID: 1215045536}
   - component: {fileID: 1215045535}
   - component: {fileID: 1215045534}
+  - component: {fileID: 1215045538}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -47684,6 +48521,27 @@ Transform:
   - {fileID: 1190289513}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1215045538
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1215045533}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &1218562803
 GameObject:
   m_ObjectHideFlags: 0
@@ -53106,6 +53964,7 @@ GameObject:
   - component: {fileID: 1370639874}
   - component: {fileID: 1370639873}
   - component: {fileID: 1370639872}
+  - component: {fileID: 1370639876}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -53192,6 +54051,27 @@ Transform:
   - {fileID: 1262946838}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1370639876
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1370639871}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &1372610606
 GameObject:
   m_ObjectHideFlags: 0
@@ -54975,6 +55855,7 @@ GameObject:
   - component: {fileID: 1414409529}
   - component: {fileID: 1414409528}
   - component: {fileID: 1414409527}
+  - component: {fileID: 1414409531}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -55061,6 +55942,27 @@ Transform:
   - {fileID: 1952152213}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1414409531
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1414409526}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &1418755308
 GameObject:
   m_ObjectHideFlags: 0
@@ -55195,6 +56097,7 @@ GameObject:
   - component: {fileID: 1419632618}
   - component: {fileID: 1419632617}
   - component: {fileID: 1419632616}
+  - component: {fileID: 1419632620}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -55281,6 +56184,27 @@ Transform:
   - {fileID: 854471771}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1419632620
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1419632615}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &1423505037
 GameObject:
   m_ObjectHideFlags: 0
@@ -55580,6 +56504,7 @@ GameObject:
   - component: {fileID: 1428299645}
   - component: {fileID: 1428299644}
   - component: {fileID: 1428299643}
+  - component: {fileID: 1428299647}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -55666,6 +56591,27 @@ Transform:
   - {fileID: 1019416346}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1428299647
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1428299642}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &1429674614
 GameObject:
   m_ObjectHideFlags: 0
@@ -56505,6 +57451,7 @@ GameObject:
   - component: {fileID: 1445396453}
   - component: {fileID: 1445396452}
   - component: {fileID: 1445396451}
+  - component: {fileID: 1445396455}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -56591,6 +57538,27 @@ Transform:
   - {fileID: 1878341007}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1445396455
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1445396450}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &1446881666
 GameObject:
   m_ObjectHideFlags: 0
@@ -58382,6 +59350,7 @@ GameObject:
   - component: {fileID: 1500458613}
   - component: {fileID: 1500458612}
   - component: {fileID: 1500458611}
+  - component: {fileID: 1500458615}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -58468,6 +59437,27 @@ Transform:
   - {fileID: 1981428100}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1500458615
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1500458610}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &1503568137
 GameObject:
   m_ObjectHideFlags: 0
@@ -60435,6 +61425,7 @@ GameObject:
   - component: {fileID: 1581007549}
   - component: {fileID: 1581007548}
   - component: {fileID: 1581007547}
+  - component: {fileID: 1581007551}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -60521,6 +61512,27 @@ Transform:
   - {fileID: 1891120058}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1581007551
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1581007546}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &1588244201
 GameObject:
   m_ObjectHideFlags: 0
@@ -61462,6 +62474,7 @@ GameObject:
   - component: {fileID: 1605403711}
   - component: {fileID: 1605403710}
   - component: {fileID: 1605403709}
+  - component: {fileID: 1605403713}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -61548,6 +62561,27 @@ Transform:
   - {fileID: 1329033345}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1605403713
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1605403708}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &1605734926
 GameObject:
   m_ObjectHideFlags: 0
@@ -62471,6 +63505,7 @@ GameObject:
   - component: {fileID: 1618909359}
   - component: {fileID: 1618909358}
   - component: {fileID: 1618909357}
+  - component: {fileID: 1618909361}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -62557,6 +63592,27 @@ Transform:
   - {fileID: 194821386}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1618909361
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1618909356}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &1623158569
 GameObject:
   m_ObjectHideFlags: 0
@@ -63603,6 +64659,7 @@ GameObject:
   - component: {fileID: 1647681857}
   - component: {fileID: 1647681856}
   - component: {fileID: 1647681855}
+  - component: {fileID: 1647681859}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -63689,6 +64746,27 @@ Transform:
   - {fileID: 460537362}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1647681859
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1647681854}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.0000028312206, y: 0, z: 0}
 --- !u!1 &1648782883
 GameObject:
   m_ObjectHideFlags: 0
@@ -66087,6 +67165,7 @@ GameObject:
   - component: {fileID: 1685267386}
   - component: {fileID: 1685267385}
   - component: {fileID: 1685267384}
+  - component: {fileID: 1685267388}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -66173,6 +67252,27 @@ Transform:
   - {fileID: 790118912}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1685267388
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1685267383}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &1686310172
 GameObject:
   m_ObjectHideFlags: 0
@@ -66304,6 +67404,7 @@ GameObject:
   - component: {fileID: 1688813789}
   - component: {fileID: 1688813788}
   - component: {fileID: 1688813787}
+  - component: {fileID: 1688813791}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -66390,6 +67491,27 @@ Transform:
   - {fileID: 510834554}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1688813791
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1688813786}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.0000028312206, y: 0, z: 0}
 --- !u!1001 &1692316419
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -68296,6 +69418,7 @@ GameObject:
   - component: {fileID: 1730151961}
   - component: {fileID: 1730151960}
   - component: {fileID: 1730151959}
+  - component: {fileID: 1730151963}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -68382,6 +69505,27 @@ Transform:
   - {fileID: 2059136449}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1730151963
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1730151958}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!114 &1730955821 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8483702266342382568, guid: 8457fa35112354befbc4d79744ae3848, type: 3}
@@ -68846,6 +69990,7 @@ GameObject:
   - component: {fileID: 1745139454}
   - component: {fileID: 1745139453}
   - component: {fileID: 1745139452}
+  - component: {fileID: 1745139456}
   m_Layer: 8
   m_Name: DirtSideway
   m_TagString: Untagged
@@ -68932,6 +70077,27 @@ Transform:
   - {fileID: 2093340566}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1745139456
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1745139451}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.0000002, y: 2, z: 2.000001}
+  m_Center: {x: -0.0000009238722, y: 0, z: 0}
 --- !u!1 &1749053197
 GameObject:
   m_ObjectHideFlags: 0
@@ -69160,6 +70326,7 @@ GameObject:
   - component: {fileID: 1761156938}
   - component: {fileID: 1761156937}
   - component: {fileID: 1761156936}
+  - component: {fileID: 1761156940}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -69246,6 +70413,27 @@ Transform:
   - {fileID: 1603431287}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1761156940
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1761156935}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1001 &1762453696
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -71690,6 +72878,7 @@ GameObject:
   - component: {fileID: 1806251274}
   - component: {fileID: 1806251273}
   - component: {fileID: 1806251272}
+  - component: {fileID: 1806251276}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -71776,6 +72965,27 @@ Transform:
   - {fileID: 392928578}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1806251276
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1806251271}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &1808043069
 GameObject:
   m_ObjectHideFlags: 0
@@ -71980,6 +73190,7 @@ GameObject:
   - component: {fileID: 1816211305}
   - component: {fileID: 1816211304}
   - component: {fileID: 1816211303}
+  - component: {fileID: 1816211307}
   m_Layer: 8
   m_Name: DirtSideway
   m_TagString: Untagged
@@ -72066,6 +73277,27 @@ Transform:
   - {fileID: 1104807042}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1816211307
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1816211302}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.0000002, y: 2, z: 2.000001}
+  m_Center: {x: -0.0000018775465, y: 0, z: 0}
 --- !u!1 &1817458699
 GameObject:
   m_ObjectHideFlags: 0
@@ -74727,6 +75959,7 @@ GameObject:
   - component: {fileID: 1875503399}
   - component: {fileID: 1875503398}
   - component: {fileID: 1875503397}
+  - component: {fileID: 1875503401}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -74813,6 +76046,27 @@ Transform:
   - {fileID: 53183954}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1875503401
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1875503396}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &1877122112
 GameObject:
   m_ObjectHideFlags: 0
@@ -74825,6 +76079,7 @@ GameObject:
   - component: {fileID: 1877122115}
   - component: {fileID: 1877122114}
   - component: {fileID: 1877122113}
+  - component: {fileID: 1877122117}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -74911,6 +76166,27 @@ Transform:
   - {fileID: 55907342}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1877122117
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1877122112}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &1878341006
 GameObject:
   m_ObjectHideFlags: 0
@@ -75862,6 +77138,7 @@ GameObject:
   - component: {fileID: 1896251406}
   - component: {fileID: 1896251405}
   - component: {fileID: 1896251404}
+  - component: {fileID: 1896251408}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -75948,6 +77225,27 @@ Transform:
   - {fileID: 1126084800}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1896251408
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1896251403}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &1896402710
 GameObject:
   m_ObjectHideFlags: 0
@@ -76759,6 +78057,7 @@ GameObject:
   - component: {fileID: 1913465004}
   - component: {fileID: 1913465003}
   - component: {fileID: 1913465002}
+  - component: {fileID: 1913465006}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -76845,6 +78144,27 @@ Transform:
   - {fileID: 1598326059}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1913465006
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1913465001}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &1914652758
 GameObject:
   m_ObjectHideFlags: 0
@@ -76857,6 +78177,7 @@ GameObject:
   - component: {fileID: 1914652761}
   - component: {fileID: 1914652760}
   - component: {fileID: 1914652759}
+  - component: {fileID: 1914652763}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -76943,6 +78264,27 @@ Transform:
   - {fileID: 1780765637}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1914652763
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1914652758}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &1917521785
 GameObject:
   m_ObjectHideFlags: 0
@@ -76955,6 +78297,7 @@ GameObject:
   - component: {fileID: 1917521788}
   - component: {fileID: 1917521787}
   - component: {fileID: 1917521786}
+  - component: {fileID: 1917521790}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -77041,6 +78384,27 @@ Transform:
   - {fileID: 254536140}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1917521790
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1917521785}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &1918885299
 GameObject:
   m_ObjectHideFlags: 0
@@ -77438,6 +78802,7 @@ GameObject:
   - component: {fileID: 1921307031}
   - component: {fileID: 1921307030}
   - component: {fileID: 1921307029}
+  - component: {fileID: 1921307033}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -77524,6 +78889,27 @@ Transform:
   - {fileID: 1233918909}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &1921307033
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1921307028}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &1923164411
 GameObject:
   m_ObjectHideFlags: 0
@@ -82120,6 +83506,7 @@ GameObject:
   - component: {fileID: 2037922395}
   - component: {fileID: 2037922394}
   - component: {fileID: 2037922393}
+  - component: {fileID: 2037922397}
   m_Layer: 8
   m_Name: DirtSideway
   m_TagString: Untagged
@@ -82206,6 +83593,27 @@ Transform:
   - {fileID: 1817458700}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2037922397
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2037922392}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 2.0000002, y: 2, z: 2.000001}
+  m_Center: {x: -0.0000009238722, y: 0, z: 0}
 --- !u!1 &2043665134
 GameObject:
   m_ObjectHideFlags: 0
@@ -82756,6 +84164,7 @@ GameObject:
   - component: {fileID: 2057480354}
   - component: {fileID: 2057480353}
   - component: {fileID: 2057480352}
+  - component: {fileID: 2057480356}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -82842,6 +84251,27 @@ Transform:
   - {fileID: 1970340350}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2057480356
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2057480351}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &2059136448
 GameObject:
   m_ObjectHideFlags: 0
@@ -83095,6 +84525,7 @@ GameObject:
   - component: {fileID: 2067904456}
   - component: {fileID: 2067904455}
   - component: {fileID: 2067904454}
+  - component: {fileID: 2067904458}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -83181,6 +84612,27 @@ Transform:
   - {fileID: 1795670577}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2067904458
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2067904453}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &2068960376
 GameObject:
   m_ObjectHideFlags: 0
@@ -84492,6 +85944,7 @@ GameObject:
   - component: {fileID: 2092713254}
   - component: {fileID: 2092713253}
   - component: {fileID: 2092713252}
+  - component: {fileID: 2092713256}
   m_Layer: 8
   m_Name: DirtSideway2
   m_TagString: Untagged
@@ -84578,6 +86031,27 @@ Transform:
   - {fileID: 97838470}
   m_Father: {fileID: 2080168826}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!65 &2092713256
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2092713251}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9999998, y: 2, z: 2.0000005}
+  m_Center: {x: -0.000000923872, y: 0, z: 0}
 --- !u!1 &2093340565
 GameObject:
   m_ObjectHideFlags: 0
