@@ -144,11 +144,6 @@ public class HomingProjectile : TowerProjectileBase
             float distToTarget = Vector3.Distance(transform.position, lastKnownTargetPos);
             if (distToTarget < 0.5f)
             {
-                if (impactEffectPrefab != null)
-                {
-                    ObjectPooling.instance.GetVFX(impactEffectPrefab, transform.position, Quaternion.identity, 2f);
-                }
-
                 DestroyProjectile();
             }
         }

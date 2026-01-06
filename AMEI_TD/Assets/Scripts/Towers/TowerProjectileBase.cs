@@ -98,6 +98,7 @@ public class TowerProjectileBase : MonoBehaviour
         if (!hasHit && impactEffectPrefab != null)
         {
             ObjectPooling.instance.GetVFX(impactEffectPrefab, transform.position, Quaternion.identity, 2f);
+            PlayImpactSound(transform.position);
         }
 
         isActive = false;
