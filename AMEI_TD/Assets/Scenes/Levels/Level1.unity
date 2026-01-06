@@ -21661,19 +21661,47 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: waveTimer
-      value: 0
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: megaWaveDelay
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: timeBetweenWaves
-      value: 2
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: megaWave.enemyFast
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: megaWave.enemyTank
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: megaWave.enemyBasic
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: levelWaves.Array.size
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: megaWave.enemyInvisible
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: difficultyTiers.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: megaWave.spawnRateMultiplier
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: megaWave.enemyHealthMultiplier
+      value: 1.2
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: levelWaves.Array.data[0].enemyFast
@@ -21741,30 +21769,86 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: difficultyTiers.Array.data[0].endWave
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: difficultyTiers.Array.data[1].endWave
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: difficultyTiers.Array.data[2].endWave
       value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: difficultyTiers.Array.data[0].tierName
+      value: Early
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: difficultyTiers.Array.data[1].tierName
       value: SingleTier
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: difficultyTiers.Array.data[2].tierName
+      value: Endless
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: difficultyTiers.Array.data[0].startWave
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
-      propertyPath: difficultyTiers.Array.data[0].baseEnemyCount
+      propertyPath: difficultyTiers.Array.data[1].startWave
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: difficultyTiers.Array.data[2].startWave
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: difficultyTiers.Array.data[0].baseEnemyCount
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: difficultyTiers.Array.data[1].baseEnemyCount
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: difficultyTiers.Array.data[2].baseEnemyCount
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: difficultyTiers.Array.data[0].spawnRateMultiplier
       value: 0.8
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: difficultyTiers.Array.data[1].spawnRateMultiplier
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: difficultyTiers.Array.data[2].spawnRateMultiplier
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: difficultyTiers.Array.data[0].enemiesPerWaveIncrease
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: difficultyTiers.Array.data[1].enemiesPerWaveIncrease
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: difficultyTiers.Array.data[2].enemiesPerWaveIncrease
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: difficultyTiers.Array.data[0].enemyWeights.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: difficultyTiers.Array.data[1].enemyWeights.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: difficultyTiers.Array.data[2].enemyWeights.Array.size
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
@@ -21774,6 +21858,22 @@ PrefabInstance:
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: difficultyTiers.Array.data[0].enemyWeights.Array.data[1].weight
       value: 30
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: difficultyTiers.Array.data[1].enemyWeights.Array.data[0].weight
+      value: 70
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: difficultyTiers.Array.data[1].enemyWeights.Array.data[1].weight
+      value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: difficultyTiers.Array.data[2].enemyWeights.Array.data[0].weight
+      value: 60
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: difficultyTiers.Array.data[2].enemyWeights.Array.data[1].weight
+      value: 40
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: difficultyTiers.Array.data[0].enemyWeights.Array.data[0].maxCount
@@ -21788,11 +21888,35 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: difficultyTiers.Array.data[1].enemyWeights.Array.data[0].minCount
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: difficultyTiers.Array.data[1].enemyWeights.Array.data[1].minCount
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: difficultyTiers.Array.data[2].enemyWeights.Array.data[0].minCount
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: difficultyTiers.Array.data[2].enemyWeights.Array.data[1].minCount
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: difficultyTiers.Array.data[0].enemyWeights.Array.data[0].enemyType
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
       propertyPath: difficultyTiers.Array.data[0].enemyWeights.Array.data[1].enemyType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: difficultyTiers.Array.data[1].enemyWeights.Array.data[1].enemyType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7273141461257609423, guid: 81d7f6f2c4d9f4b4a87a84db7ac2b939, type: 3}
+      propertyPath: difficultyTiers.Array.data[2].enemyWeights.Array.data[1].enemyType
       value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -89788,7 +89912,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6576796619599666300, guid: 376eed7625db6cb4b8fef6cd5ede8f07, type: 3}
       propertyPath: points
-      value: 250
+      value: 150
       objectReference: {fileID: 0}
     - target: {fileID: 6576796619599666300, guid: 376eed7625db6cb4b8fef6cd5ede8f07, type: 3}
       propertyPath: waveManager
