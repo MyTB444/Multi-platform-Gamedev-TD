@@ -6,7 +6,6 @@ public class GameManager : MonoBehaviour
     [SerializeField] private int points;
     public static GameManager instance;
     public WaveManager waveManager;
-   
     private bool gameLost;
     public bool IsGameLost() => gameLost;
     
@@ -34,8 +33,9 @@ public class GameManager : MonoBehaviour
         //LevelFailed();
     }
 
-    private void LevelFailed()
+    public void LevelFailed()
     {
+        InputHandler.instance.DisableInput();
         GameOverOutcomeUI(false);
         gameLost = true;
         StopWaveProgression();
@@ -43,6 +43,7 @@ public class GameManager : MonoBehaviour
 
     public void LevelCompleted()
     {
+        InputHandler.instance.DisableInput();
         GameOverOutcomeUI(true);
     }
     
