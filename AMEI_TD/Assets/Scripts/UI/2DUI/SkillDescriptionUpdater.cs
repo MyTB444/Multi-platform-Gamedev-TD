@@ -19,9 +19,9 @@ public class SkillDescriptionUpdater : MonoBehaviour
     private void Start()
     {
         texts = GetComponentsInChildren<TextMeshProUGUI>();
-        savedTexts[0] = texts[0].text;
-        savedTexts[1] = texts[1].text;
-        savedTexts[2] = texts[2].text;
+        //savedTexts[0] = texts[0].text;
+        //savedTexts[1] = texts[1].text;
+        //savedTexts[2] = texts[2].text;
 
     }
     public void UpdateTexts(SkillNode node)
