@@ -6423,7 +6423,7 @@ MonoBehaviour:
   attackSpeedBuffPercent: 0.15
   rangeBuffPercent: 0.1
   buffUpdateInterval: 1
-  lightningCooldown: 3
+  lightningCooldown: 10
   lightningElementType: 3
   enemyLayerMask:
     serializedVersion: 2
