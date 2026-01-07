@@ -238,7 +238,7 @@ MonoBehaviour:
   healthBar: {fileID: 477889634844545416}
   healthBarDisplayDuration: 3
   enemyVFXPoolScriptRef: {fileID: 4995609814991652780}
-  detectionRadius: 10
+  detectionRadius: 12
   attackCooldown: 3
   towerLayer:
     serializedVersion: 2

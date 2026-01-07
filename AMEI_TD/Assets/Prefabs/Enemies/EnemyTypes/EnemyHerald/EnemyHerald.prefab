@@ -811,11 +811,11 @@ MonoBehaviour:
   healthBarDisplayDuration: 3
   enemyVFXPoolScriptRef: {fileID: 5249939508239873309}
   castRadius: 6
-  castCooldown: 8
+  castCooldown: 5
   enemyLayer:
     serializedVersion: 2
     m_Bits: 64
-  healPercent: 0.4
+  healPercent: 0.25
   healDuration: 3
   magicCirclePrefab: {fileID: 4285366753046329265, guid: 18bf8a51a682d524c9b99788097b8b71, type: 3}
   magicCircleYOffset: 0.1
