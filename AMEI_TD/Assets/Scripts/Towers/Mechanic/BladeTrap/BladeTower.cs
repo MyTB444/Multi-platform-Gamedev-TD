@@ -314,12 +314,14 @@ public class BladeTower : TowerBase
 
     private void PlayBladeHitSound()
     {
-        if (bladeHitSound != null)
+        if (bladeHitSound != null && audioSource != null)
         {
-            AudioSource.PlayClipAtPoint(bladeHitSound, transform.position, bladeHitSoundVolume);
+            audioSource.clip = bladeHitSound;
+            audioSource.volume = bladeHitSoundVolume;
+            audioSource.Play();
         }
     }
-    
+
     protected override void HandleRotation() { }
     protected override void Attack() { }
     protected override bool CanAttack() { return false; }

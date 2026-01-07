@@ -166,7 +166,7 @@ public class ArrowProjectile : TowerProjectileBase
             ObjectPooling.instance.GetVFX(impactEffectPrefab, impactPoint, Quaternion.identity, 2f);
         }
 
-        PlayImpactSound(impactPoint);
+        PlayImpactSound();
 
         EnemyBase enemy = other.GetComponent<EnemyBase>();
         if (enemy != null)
