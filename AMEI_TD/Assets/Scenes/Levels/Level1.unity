@@ -87576,6 +87576,10 @@ PrefabInstance:
       propertyPath: manager
       value: 
       objectReference: {fileID: 2141222430}
+    - target: {fileID: 815887555737245877, guid: 8457fa35112354befbc4d79744ae3848, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 960718968515753207, guid: 8457fa35112354befbc4d79744ae3848, type: 3}
       propertyPath: manager
       value: 
@@ -87640,6 +87644,10 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 2134071269}
+    - target: {fileID: 3233228981220160470, guid: 8457fa35112354befbc4d79744ae3848, type: 3}
+      propertyPath: skill
+      value: 
+      objectReference: {fileID: 11400000, guid: ad259f5a03e5241fca00a8d7f2b6b1ae, type: 2}
     - target: {fileID: 3233228981220160470, guid: 8457fa35112354befbc4d79744ae3848, type: 3}
       propertyPath: manager
       value: 
@@ -87768,10 +87776,22 @@ PrefabInstance:
       propertyPath: manager
       value: 
       objectReference: {fileID: 2141222430}
+    - target: {fileID: 6502744639035747537, guid: 8457fa35112354befbc4d79744ae3848, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7079419591183286983, guid: 8457fa35112354befbc4d79744ae3848, type: 3}
       propertyPath: manager
       value: 
       objectReference: {fileID: 2141222430}
+    - target: {fileID: 7096086463131044276, guid: 8457fa35112354befbc4d79744ae3848, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -600
+      objectReference: {fileID: 0}
+    - target: {fileID: 7096086463131044276, guid: 8457fa35112354befbc4d79744ae3848, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7127400711847250019, guid: 8457fa35112354befbc4d79744ae3848, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -87788,10 +87808,18 @@ PrefabInstance:
       propertyPath: manager
       value: 
       objectReference: {fileID: 2141222430}
+    - target: {fileID: 7684069497056060278, guid: 8457fa35112354befbc4d79744ae3848, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8910917567869280305, guid: 8457fa35112354befbc4d79744ae3848, type: 3}
       propertyPath: manager
       value: 
       objectReference: {fileID: 2141222430}
+    - target: {fileID: 9009985078262765249, guid: 8457fa35112354befbc4d79744ae3848, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9144657884349491356, guid: 8457fa35112354befbc4d79744ae3848, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
