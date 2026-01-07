@@ -28,6 +28,10 @@ MonoBehaviour:
   swapType: 0
   spellEnableType: 1
   noah: 0
+  disablesUpgrade: 0
+  restoresUpgrade: 0
+  disablesUpgrade2: 0
+  restoresUpgrade2: 0
   skillElementType: 0
-  isGlobeNode: 0
+  isGlobeNode: 1
   isGuardianNode: 0
