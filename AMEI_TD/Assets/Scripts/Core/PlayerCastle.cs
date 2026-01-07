@@ -3,13 +3,16 @@ using UnityEngine;
 public class PlayerCastle : MonoBehaviour
 {
     public static PlayerCastle instance;
-    
+
     [Header("Guardian Tower")]
     [SerializeField] private GameObject guardianTowerPrefab;
     [SerializeField] private Transform guardianSpawnPoint;
 
+    [Header("Enemy Detection")]
+    [SerializeField] private LayerMask enemyLayer;
+
     private TowerGuardian spawnedGuardian;
-    
+
     private void Awake()
     {
         instance = this;
@@ -18,19 +21,18 @@ public class PlayerCastle : MonoBehaviour
     // When an enemy reaches the castle, remove it and deduct skill points
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject != null)
+        // Check if the colliding object is on the enemy layer
+        if (((1 << other.gameObject.layer) & enemyLayer) != 0)
         {
-            if (other.gameObject.GetComponent<EnemyBase>() != null)
-            {
-                EnemyBase enemy = other.GetComponent<EnemyBase>();
+            EnemyBase enemy = other.GetComponent<EnemyBase>();
 
-                if (enemy == null) return;
+            if (enemy == null) return;
 
-                enemy.RemoveEnemy();
-
-                // Penalty for enemy reaching the castle
-                GameManager.instance.UpdateSkillPoints(-enemy.GetDamage());
-            }
+            enemy.RemoveEnemy();
+            ObjectPooling.instance.Return(other.gameObject);
+            GameManager.instance.TakeDamageHealth(enemy.GetDamage());
+            Debug.Log("HP: " + GameManager.instance.GetHealthPoints());
+            GameManager.instance.UpdateSkillPoints(-enemy.GetDamage());
         }
     }
 

@@ -4,6 +4,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private int points;
+    [SerializeField] private float healthPoints = 10f;
     public static GameManager instance;
     public WaveManager waveManager;
     private bool gameLost;
@@ -22,6 +23,7 @@ public class GameManager : MonoBehaviour
     {
         UIBase.instance.UpdatePointsUI(points);
         waveManager.ActivateWaveManager();
+        UIBase.instance.UpdateHpUi(healthPoints);
     }
 
     // Use negative values to deduct points, positive values to add points
@@ -70,4 +72,16 @@ public class GameManager : MonoBehaviour
     }
 
     public int GetPoints() => points;
+    public float GetHealthPoints() => healthPoints;
+    public void TakeDamageHealth(float damage)
+    {
+        healthPoints -= damage;
+        UIBase.instance.UpdateHpUi(healthPoints);
+
+        if (healthPoints <= 0 && !gameLost)
+        {
+            healthPoints = 0;
+            LevelFailed();
+        }
+    }
 }
