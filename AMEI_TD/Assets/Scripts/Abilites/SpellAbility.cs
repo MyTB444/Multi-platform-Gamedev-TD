@@ -614,8 +614,7 @@ public class SpellAbility : MonoBehaviour
 
     public void ActivateFireSpell()
     {
-        Debug.Log(IsSpellActivated);
-        Debug.Log(FireSpellActivated);
+        IsSpellActivated = false;
         if (!FireSpellActivated && !IsSpellActivated)
         {
             Debug.Log("12345");
@@ -637,8 +636,11 @@ public class SpellAbility : MonoBehaviour
 
     public void ActivateMagicSpell()
     {
+        IsSpellActivated = false;
+        print("$<color=green> Magic Spell Activated</color>");
         if (!MagicSpellActivated && !IsSpellActivated)
         {
+            print("$<color=red> Magic Spell Activated</color>");
             currenSpellType = SpellType.Magic;
             CanSelectPaths = true;
 
@@ -656,7 +658,8 @@ public class SpellAbility : MonoBehaviour
     }
 
     public void ActivateMechanicSpell()
-    {     
+    {
+        IsSpellActivated = false;
         stopMechanic = false;
         if (!MechanicSpellActivated && !stopMechanic && !IsSpellActivated)
         {
@@ -680,6 +683,7 @@ public class SpellAbility : MonoBehaviour
 
     public void ActivateImaginarySpell()
     {
+        IsSpellActivated = false;
         if (!ImaginarySpellActivated && !IsSpellActivated)
         {
             currenSpellType = SpellType.Imaginary;
@@ -726,88 +730,107 @@ public class SpellAbility : MonoBehaviour
 
     private IEnumerator CoolDownSpells(float WaitTime,EnemyBase enemy = null,GameObject vfx = null,float optionalTime = 0)
     {
-        yield return new WaitForSeconds(WaitTime);
-        selectedPath = null;
         
-        switch (currenSpellType)
+
+
+        if (FireSpellActivated)
         {
-            case SpellType.Physical:
-                foreach (GameObject o in flames)
-                {
-                    yield return new WaitForSeconds(0.3f);
-                    ObjectPooling.instance.Return(o);
-                }
-                flames.Clear();
-                CanSelectPaths = false;
-                FireSpellActivated = false;
-                IsSpellActivated = false;
-                currenSpellType = SpellType.None;
-                break;
-                
-            case SpellType.Magic:
-                currentMousePosition = Vector3.zero;
-                stopMagic = false;
-                CanSelectPaths = false;
-                MagicSpellActivated = false;
-                IsSpellActivated = false;
-                currenSpellType = SpellType.None;
-                break;
-
-            case SpellType.Mechanic:
-                CanSelectPaths = false;
-            
-                MechanicSpellActivated = false;
-                IsSpellActivated = false;
-                currenSpellType = SpellType.None;
-                break;
-
-            case SpellType.Imaginary:
-                enemy.isInvisible = false;
-                enemy.UpdateVisuals();
-
-                float elapsed = 0;
-                float duration = 5;
-                List<ParticleSystem> ps = vfx.GetComponentsInChildren<ParticleSystem>().ToList();
-                List<ParticleSystemRenderer> psRenderer = vfx.GetComponentsInChildren<ParticleSystemRenderer>().ToList();
-            
-                while (elapsed < duration)
-                {
-                    elapsed += Time.deltaTime;
-                    float t = elapsed *2/ duration;
-                   
-                    for (int i = 0; i < ps.Count; i++) 
-                    {
-                        var emission = ps[i].emission;
-                        emission.enabled = false;
-                        originalColorfloat.Add(psRenderer[i].material.GetFloat("_AllColorFactor")); 
-                        for (int j = 0; j < originalColorfloat.Count; j++)
-                        {
-                            originalColorfloat[j] = Mathf.Lerp(1, 0, t);
-                            psRenderer[i].material.SetFloat("_AllColorFactor", originalColorfloat[j]);
-                        }
-                        
-                        yield return null;
-                    }
-                   
-                }
-                if (elapsed >= duration)
-                {
-                    originalColorfloat.Clear();
-                    ps.Clear();
-                    psRenderer.Clear();
-
-                    ObjectPooling.instance.Return(vfx);
-                    yield return new WaitForSeconds(optionalTime);
-                    CanSelectPaths = false;
-                    stopImaginary = false;
-                    ImaginarySpellActivated = false;
-
-                }
-                IsSpellActivated = false;
-                currenSpellType = SpellType.None;
-                break;
+             FireSpellActivated = false;
+             selectedPath = null;
+            if (currenSpellType == SpellType.Physical)
+            {
+                yield return new WaitForSeconds(WaitTime);
+            }
+            foreach (GameObject o in flames)
+            {
+                yield return new WaitForSeconds(0.3f);
+                ObjectPooling.instance.Return(o);
+            }
+            flames.Clear();
+            CanSelectPaths = false;
+           
+        
         }
+        if (MagicSpellActivated)
+        {
+            if (currenSpellType == SpellType.Magic)
+            {
+                yield return new WaitForSeconds(WaitTime);
+            }
+                selectedPath = null;
+            currentMousePosition = Vector3.zero;
+            stopMagic = false;
+          
+            MagicSpellActivated = false;
+
+
+        }
+        if (MechanicSpellActivated)
+        {
+            if (currenSpellType == SpellType.Mechanic)
+            {
+                yield return new WaitForSeconds(WaitTime);
+            }
+            selectedPath = null;
+          
+            MechanicSpellActivated = false;
+           
+              
+        }
+
+        if(ImaginarySpellActivated)
+        {
+            if (currenSpellType == SpellType.Imaginary)
+            {
+                yield return new WaitForSeconds(WaitTime);
+            }
+            selectedPath = null;
+            enemy.isInvisible = false;
+            enemy.UpdateVisuals();
+
+            float elapsed = 0;
+            float duration = 5;
+            List<ParticleSystem> ps = vfx.GetComponentsInChildren<ParticleSystem>().ToList();
+            List<ParticleSystemRenderer> psRenderer = vfx.GetComponentsInChildren<ParticleSystemRenderer>().ToList();
+
+            while (elapsed < duration)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed * 2 / duration;
+
+                for (int i = 0; i < ps.Count; i++)
+                {
+                    var emission = ps[i].emission;
+                    emission.enabled = false;
+                    originalColorfloat.Add(psRenderer[i].material.GetFloat("_AllColorFactor"));
+                    for (int j = 0; j < originalColorfloat.Count; j++)
+                    {
+                        originalColorfloat[j] = Mathf.Lerp(1, 0, t);
+                        psRenderer[i].material.SetFloat("_AllColorFactor", originalColorfloat[j]);
+                    }
+
+                    yield return null;
+                }
+
+            }
+            if (elapsed >= duration)
+            {
+                originalColorfloat.Clear();
+                ps.Clear();
+                psRenderer.Clear();
+
+                ObjectPooling.instance.Return(vfx);
+                yield return new WaitForSeconds(optionalTime);
+             
+                stopImaginary = false;
+                ImaginarySpellActivated = false;
+
+            }
+           
+        }
+               
     }
+    
 
     #endregion
 
