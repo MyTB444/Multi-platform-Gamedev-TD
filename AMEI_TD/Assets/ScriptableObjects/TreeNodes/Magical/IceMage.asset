@@ -23,8 +23,8 @@ MonoBehaviour:
   skillPointCost: 0
   prerequisites:
   - {fileID: 11400000, guid: 74ee795e952bb4e178b3ba72e974c096, type: 2}
-  function: 0
+  function: 14
   function2: 0
   swapType: 3
-  spellEnableType: 0
+  spellEnableType: 2
   noah: 0
