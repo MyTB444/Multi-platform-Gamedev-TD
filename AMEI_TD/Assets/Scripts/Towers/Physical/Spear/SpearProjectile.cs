@@ -117,48 +117,73 @@ public class SpearProjectile : TowerProjectileBase
         if (hasHit) return;
 
         EnemyBase enemy = other.GetComponent<EnemyBase>();
-        if (enemy == null) return;
-
-        hasHit = true;
-
         Vector3 impactPoint = other.ClosestPoint(transform.position);
-
-        if (impactEffectPrefab != null)
-        {
-            ObjectPooling.instance.GetVFX(impactEffectPrefab, impactPoint, Quaternion.identity, 2f);
-        }
-
-        PlayImpactSound(impactPoint);
-
-        if (damageable != null)
-        {
-            damageable.TakeDamage(damageInfo);
-        }
-
-        if (applyBleed)
-        {
-            enemy.ApplyDoT(bleedDamageInfo, bleedDuration, 0.5f, false, 0f, default, DebuffType.Bleed);
-        }
-
-        if (isExplosive)
-        {
-            Vector3 explosionCenter = enemy.GetCenterPoint();
         
-            if (explosionVFX != null)
+        // If we hit an enemy, deal direct damage and apply effects
+        if (enemy != null)
+        {
+            hasHit = true;
+
+            if (impactEffectPrefab != null)
             {
-                ObjectPooling.instance.GetVFX(explosionVFX, impactPoint, Quaternion.identity, 2f);
+                ObjectPooling.instance.GetVFX(impactEffectPrefab, impactPoint, Quaternion.identity, 2f);
             }
 
-            Collider[] enemies = Physics.OverlapSphere(explosionCenter, explosionRadius, enemyLayer);
-            foreach (Collider col in enemies)
+            PlayImpactSound(impactPoint);
+
+            if (damageable != null)
             {
-                IDamageable explosionTarget = col.GetComponent<IDamageable>();
-                if (explosionTarget != null)
-                {
-                    explosionTarget.TakeDamage(explosionDamageInfo);
-                }
+                damageable.TakeDamage(damageInfo);
+            }
+
+            if (applyBleed)
+            {
+                enemy.ApplyDoT(bleedDamageInfo, bleedDuration, 0.5f, false, 0f, default, DebuffType.Bleed);
+            }
+
+            if (isExplosive)
+            {
+                TriggerExplosion(enemy.GetCenterPoint(), impactPoint);
+            }
+            else
+            {
+                DestroyProjectile();
             }
         }
+        // If we hit ground/environment and have explosive tip, still explode
+        else if (isExplosive)
+        {
+            hasHit = true;
+            
+            PlayImpactSound(impactPoint);
+            TriggerExplosion(impactPoint, impactPoint);
+        }
+        // Non-explosive spear hits ground - just destroy it
+        else
+        {
+            hasHit = true;
+            DestroyProjectile();
+        }
+    }
+    
+    private void TriggerExplosion(Vector3 explosionCenter, Vector3 vfxPosition)
+    {
+        if (explosionVFX != null)
+        {
+            ObjectPooling.instance.GetVFX(explosionVFX, vfxPosition, Quaternion.identity, 2f);
+        }
+
+        Collider[] enemies = Physics.OverlapSphere(explosionCenter, explosionRadius, enemyLayer);
+        foreach (Collider col in enemies)
+        {
+            IDamageable explosionTarget = col.GetComponent<IDamageable>();
+            if (explosionTarget != null)
+            {
+                explosionTarget.TakeDamage(explosionDamageInfo);
+            }
+        }
+        
+        DestroyProjectile();
     }
     
     protected override void DestroyProjectile()
