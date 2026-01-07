@@ -17052,10 +17052,10 @@ MonoBehaviour:
   attackSound: {fileID: 8300000, guid: efc854c9f41959b40854b768fb8b2d10, type: 3}
   attackSoundVolume: 0.22
   targetMostAdvancedEnemy: 1
-  targetPriorityEnemy: 0
-  enemyPriorityType: 0
+  targetPriorityElement: 1
+  priorityElementType: 1
   useHpTargeting: 0
-  targetHighestHpEnemy: 1
+  targetHighestHpEnemy: 0
   useRandomTargeting: 0
   decoyLayer:
     serializedVersion: 2

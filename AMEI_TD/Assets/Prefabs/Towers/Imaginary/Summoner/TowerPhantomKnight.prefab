@@ -21472,8 +21472,8 @@ MonoBehaviour:
   attackSound: {fileID: 0}
   attackSoundVolume: 1
   targetMostAdvancedEnemy: 1
-  targetPriorityEnemy: 0
-  enemyPriorityType: 0
+  targetPriorityElement: 1
+  priorityElementType: 2
   useHpTargeting: 0
   targetHighestHpEnemy: 0
   useRandomTargeting: 0

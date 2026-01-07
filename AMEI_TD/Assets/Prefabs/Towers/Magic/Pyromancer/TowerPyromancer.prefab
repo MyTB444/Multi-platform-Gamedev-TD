@@ -125,10 +125,10 @@ MonoBehaviour:
   attackSound: {fileID: 8300000, guid: 29a5fc94a4d25114fb75ccc40538a3f9, type: 3}
   attackSoundVolume: 0.246
   targetMostAdvancedEnemy: 1
-  targetPriorityEnemy: 1
-  enemyPriorityType: 0
-  useHpTargeting: 1
-  targetHighestHpEnemy: 1
+  targetPriorityElement: 1
+  priorityElementType: 3
+  useHpTargeting: 0
+  targetHighestHpEnemy: 0
   useRandomTargeting: 0
   decoyLayer:
     serializedVersion: 2

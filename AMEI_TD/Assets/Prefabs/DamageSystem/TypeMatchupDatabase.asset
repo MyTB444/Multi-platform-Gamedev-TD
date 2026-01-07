@@ -19,21 +19,21 @@ MonoBehaviour:
   typeChart:
   - multipliers:
     - 1
-    - 1
-    - 1
-    - 1
-  - multipliers:
-    - 1
-    - 1
-    - 1
+    - 2
+    - 0.5
     - 1
   - multipliers:
     - 1
+    - 0.5
     - 1
-    - 1
-    - 1
+    - 2
   - multipliers:
+    - 2
     - 1
     - 1
+    - 0.5
+  - multipliers:
+    - 0.5
     - 1
+    - 2
     - 1
