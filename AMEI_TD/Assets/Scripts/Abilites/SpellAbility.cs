@@ -101,81 +101,9 @@ public class SpellAbility : MonoBehaviour
 
     private void Update()
     {
-        //for testing only
-
-        //disable this 
+        
        
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            //if (!FireSpellActivated && !IsSpellActivated)
-            //{
-
-            //    CanSelectPaths = true;
-            //    currenSpellType = SpellType.Physical;
-            //    stopFire = false;
-            //    if(vfxVisualVisualGameObject != null)
-            //    {
-            //        ObjectPooling.instance.Return(vfxVisualVisualGameObject);
-            //    }
-            //    for (int i = 0; i < 1; i++)
-            //    {
-            //        vfxVisualVisualGameObject = ObjectPooling.instance.Get(tinyFlamesVisualPrefab);
-            //    }
-
-            //}
-            ActivateFireSpell();
-        }
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            if (!MagicSpellActivated && !IsSpellActivated)
-            {
-                currenSpellType = SpellType.Magic;
-                CanSelectPaths = true;
-              
-                stopMagic = false;
-
-                if (vfxVisualVisualGameObject != null)
-                {
-                    ObjectPooling.instance.Return(vfxVisualVisualGameObject);
-                }
-                for (int i = 0; i < 1; i++)
-                {
-                    vfxVisualVisualGameObject = ObjectPooling.instance.Get(magicVisualPrefab);
-                }
-            }
-        }
-
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            stopMechanic = false;
-            if (!MechanicSpellActivated && !stopMechanic && !IsSpellActivated)
-            {
-                currenSpellType = SpellType.Mechanic;
-                
-                if (vfxVisualVisualGameObject != null)
-                {
-                    CanSelectPaths = false;
-                    if (selectedPath != null)
-                    {
-                        StartCoroutine(selectedPath.ChangePathMatToOriginalColor());//means path can be selected
-                    }
-                    ObjectPooling.instance.Return(vfxVisualVisualGameObject);
-                }
-                for (int i = 0; i < 1; i++)
-                {
-                    vfxVisualVisualGameObject = ObjectPooling.instance.Get(mechanicVisualPrefab);
-                }
-            }
-        }
-
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            if (!ImaginarySpellActivated && !IsSpellActivated)
-            {
-                currenSpellType = SpellType.Imaginary;
-                ImaginarySpellActivated = true;
-            }
-        }
+      
 
         #region FireSpell
 
@@ -615,6 +543,7 @@ public class SpellAbility : MonoBehaviour
     public void ActivateFireSpell()
     {
         IsSpellActivated = false;
+        FireSpellActivated = false;
         if (!FireSpellActivated && !IsSpellActivated)
         {
             Debug.Log("12345");
@@ -637,6 +566,7 @@ public class SpellAbility : MonoBehaviour
     public void ActivateMagicSpell()
     {
         IsSpellActivated = false;
+        MagicSpellActivated = false;
         print("$<color=green> Magic Spell Activated</color>");
         if (!MagicSpellActivated && !IsSpellActivated)
         {
@@ -660,6 +590,7 @@ public class SpellAbility : MonoBehaviour
     public void ActivateMechanicSpell()
     {
         IsSpellActivated = false;
+        MechanicSpellActivated = false;
         stopMechanic = false;
         if (!MechanicSpellActivated && !stopMechanic && !IsSpellActivated)
         {
@@ -684,6 +615,7 @@ public class SpellAbility : MonoBehaviour
     public void ActivateImaginarySpell()
     {
         IsSpellActivated = false;
+        ImaginarySpellActivated = false;
         if (!ImaginarySpellActivated && !IsSpellActivated)
         {
             currenSpellType = SpellType.Imaginary;
@@ -735,7 +667,7 @@ public class SpellAbility : MonoBehaviour
 
         if (FireSpellActivated)
         {
-             FireSpellActivated = false;
+             
              selectedPath = null;
             if (currenSpellType == SpellType.Physical)
             {
@@ -747,7 +679,7 @@ public class SpellAbility : MonoBehaviour
                 ObjectPooling.instance.Return(o);
             }
             flames.Clear();
-            CanSelectPaths = false;
+          
            
         
         }
@@ -757,11 +689,11 @@ public class SpellAbility : MonoBehaviour
             {
                 yield return new WaitForSeconds(WaitTime);
             }
-                selectedPath = null;
+            selectedPath = null;
             currentMousePosition = Vector3.zero;
             stopMagic = false;
           
-            MagicSpellActivated = false;
+          
 
 
         }
@@ -773,7 +705,7 @@ public class SpellAbility : MonoBehaviour
             }
             selectedPath = null;
           
-            MechanicSpellActivated = false;
+            
            
               
         }
@@ -823,7 +755,7 @@ public class SpellAbility : MonoBehaviour
                 yield return new WaitForSeconds(optionalTime);
              
                 stopImaginary = false;
-                ImaginarySpellActivated = false;
+               
 
             }
            
