@@ -584,9 +584,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 11
   enemySpeed: 2
-  damage: 10
-  reward: 10
-  enemyMaxHp: 10
+  damage: 2
+  reward: 12
+  enemyMaxHp: 40
   elementType: 3
   isInvisible: 0
   isReinforced: 0
@@ -597,9 +597,6 @@ MonoBehaviour:
   acceleration: 8
   angularSpeed: 360
   animationSpeedMultiplier: 1
-  cornerDetectionDistance: 3
-  cornerSlowdownAmount: 0.6
-  cornerRotationSmoothing: 0.3
   useSpawnGrace: 1
   spawnGracePeriod: 0.5
   pathOffsetRange: 1.8
@@ -617,6 +614,7 @@ MonoBehaviour:
   myBody: {fileID: 0}
   enemyHealthDisplayCanvas: {fileID: 5091256969886904886}
   healthBar: {fileID: 7954333140643457181}
+  healthBarDisplayDuration: 3
   enemyVFXPoolScriptRef: {fileID: 876773381979735398}
 --- !u!195 &2636003380119713654
 NavMeshAgent:

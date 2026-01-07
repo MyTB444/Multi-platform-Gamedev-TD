@@ -1227,9 +1227,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   enemyType: 4
   enemySpeed: 1
-  damage: 20
-  reward: 10
-  enemyMaxHp: 15
+  damage: 2
+  reward: 15
+  enemyMaxHp: 80
   elementType: 2
   isInvisible: 0
   isReinforced: 0
@@ -1249,10 +1249,16 @@ MonoBehaviour:
   cornerCutVariation: 0.8
   pathDriftAmount: 0.15
   frozenColor: {r: 0.5, g: 0.8, b: 1, a: 1}
+  originalColors: []
   stuckCheckInterval: 0.5
   stuckDistanceThreshold: 0.2
   stuckSkipDistance: 2
   enemyCurrentHp: 0
+  myBody: {fileID: 0}
+  enemyHealthDisplayCanvas: {fileID: 3419143671697691651}
+  healthBar: {fileID: 5502246442414514960}
+  healthBarDisplayDuration: 3
+  enemyVFXPoolScriptRef: {fileID: 8727391333008355060}
   shieldEffectPrefab: {fileID: 1289543790355709915, guid: b99922c2f59b1a542bdd06ae8bee47ae, type: 3}
   shieldAmount: 10
   shieldRadius: 5
@@ -1260,10 +1266,6 @@ MonoBehaviour:
   enemyLayer:
     serializedVersion: 2
     m_Bits: 64
-  myBody: {fileID: 0}
-  enemyHealthDisplayCanvas: {fileID: 3419143671697691651}
-  healthBar: {fileID: 5502246442414514960}
-  enemyVFXPoolScriptRef: {fileID: 8727391333008355060}
   armorTint: {r: 0.7, g: 0.8, b: 1, a: 1}
   pulseColor: {r: 0.3, g: 0.6, b: 1, a: 1}
   pulseSpeed: 1

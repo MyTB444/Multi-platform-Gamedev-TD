@@ -21439,13 +21439,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be1f2af24cabc6642b19e45a2d291de3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 0
-  attackCooldown: 3
+  damage: 70
+  attackCooldown: 3.5
   towerBody: {fileID: 0}
   towerHead: {fileID: 0}
   gunPoint: {fileID: 0}
   rotationSpeed: 10
-  attackRange: 15
+  attackRange: 5
   whatIsEnemy:
     serializedVersion: 2
     m_Bits: 64
@@ -21456,8 +21456,8 @@ MonoBehaviour:
   projectileSpeed: 0
   elementType: 3
   projectilePoolAmount: 20
-  buyPrice: 1
-  sellPrice: 1
+  buyPrice: 75
+  sellPrice: 37
   damageBoost: 0
   damageBoostPercent: 0.25
   attackSpeedBoost: 0

@@ -92,8 +92,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b280a9a08a6f6d043addd96e78393154, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 2
-  attackCooldown: 1
+  damage: 15
+  attackCooldown: 1.5
   towerBody: {fileID: 4063552230360950}
   towerHead: {fileID: 0}
   gunPoint: {fileID: 8763049949150767723}
@@ -109,8 +109,8 @@ MonoBehaviour:
   projectileSpeed: 5
   elementType: 1
   projectilePoolAmount: 20
-  buyPrice: 1
-  sellPrice: 1
+  buyPrice: 50
+  sellPrice: 25
   damageBoost: 0
   damageBoostPercent: 0.25
   attackSpeedBoost: 0
