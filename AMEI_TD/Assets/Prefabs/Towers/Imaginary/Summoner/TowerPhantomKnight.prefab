@@ -21441,11 +21441,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 70
   attackCooldown: 3.5
-  towerBody: {fileID: 0}
+  towerBody: {fileID: 4228951654224667403}
   towerHead: {fileID: 0}
   gunPoint: {fileID: 0}
   rotationSpeed: 10
-  attackRange: 5
+  attackRange: 15
   whatIsEnemy:
     serializedVersion: 2
     m_Bits: 64

@@ -5,7 +5,8 @@ public enum ElementType
     Physical,
     Magic,
     Mechanic,
-    Imaginary
+    Imaginary,
+    Global
 }
 
 [System.Serializable]
