@@ -18,21 +18,29 @@ public class PlayerCastle : MonoBehaviour
         instance = this;
     }
 
-    // When an enemy reaches the castle, remove it and deduct skill points
     private void OnTriggerEnter(Collider other)
     {
-        // Check if the colliding object is on the enemy layer
         if (((1 << other.gameObject.layer) & enemyLayer) != 0)
         {
             EnemyBase enemy = other.GetComponent<EnemyBase>();
 
             if (enemy == null) return;
 
+            // Get enemy element before removing
+            ElementType enemyElement = enemy.GetElementType();
+            int damage = enemy.GetDamage();
+
             enemy.RemoveEnemy();
             ObjectPooling.instance.Return(other.gameObject);
-            GameManager.instance.TakeDamageHealth(enemy.GetDamage());
-            Debug.Log("HP: " + GameManager.instance.GetHealthPoints());
-            GameManager.instance.UpdateSkillPoints(-enemy.GetDamage());
+            
+            // Deal HP damage
+            GameManager.instance.TakeDamageHealth(damage);
+            
+            // Trigger skill loss based on enemy element
+            if (SkillTreeManager.instance != null)
+            {
+                SkillTreeManager.instance.OnEnemyReachedCastle(enemyElement);
+            }
         }
     }
 

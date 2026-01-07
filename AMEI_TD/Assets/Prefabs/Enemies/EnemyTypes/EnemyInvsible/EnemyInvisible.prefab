@@ -491,10 +491,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyType: 3
-  enemySpeed: 1
-  damage: 15
-  reward: 10
-  enemyMaxHp: 15
+  enemySpeed: 1.5
+  damage: 2
+  reward: 15
+  enemyMaxHp: 50
   elementType: 3
   isInvisible: 1
   isReinforced: 0
@@ -514,6 +514,7 @@ MonoBehaviour:
   cornerCutVariation: 0.2
   pathDriftAmount: 0.15
   frozenColor: {r: 0.5, g: 0.8, b: 1, a: 1}
+  originalColors: []
   stuckCheckInterval: 0.5
   stuckDistanceThreshold: 0.2
   stuckSkipDistance: 2
@@ -521,6 +522,7 @@ MonoBehaviour:
   myBody: {fileID: 0}
   enemyHealthDisplayCanvas: {fileID: 57293284616673567}
   healthBar: {fileID: 4477278156164222279}
+  healthBarDisplayDuration: 3
   enemyVFXPoolScriptRef: {fileID: 5510763137486812663}
   flickerSpeed: 3
   minAlpha: 0.5

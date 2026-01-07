@@ -1951,13 +1951,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a2446dbd515ac34dacd0915c80e74da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 5
-  attackCooldown: 1
+  damage: 30
+  attackCooldown: 2.5
   towerBody: {fileID: 989189631621950190}
   towerHead: {fileID: 0}
   gunPoint: {fileID: 2962993310056431864}
   rotationSpeed: 10
-  attackRange: 15
+  attackRange: 10
   whatIsEnemy:
     serializedVersion: 2
     m_Bits: 64
@@ -1968,8 +1968,8 @@ MonoBehaviour:
   projectileSpeed: 8
   elementType: 1
   projectilePoolAmount: 20
-  buyPrice: 1
-  sellPrice: 1
+  buyPrice: 70
+  sellPrice: 35
   damageBoost: 0
   damageBoostPercent: 0.25
   attackSpeedBoost: 0

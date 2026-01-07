@@ -141,10 +141,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyType: 10
-  enemySpeed: 0.6
-  damage: 40
-  reward: 20
-  enemyMaxHp: 20
+  enemySpeed: 0.8
+  damage: 2
+  reward: 18
+  enemyMaxHp: 60
   elementType: 2
   isInvisible: 0
   isReinforced: 0
@@ -155,9 +155,6 @@ MonoBehaviour:
   acceleration: 8
   angularSpeed: 360
   animationSpeedMultiplier: 1
-  cornerDetectionDistance: 3
-  cornerSlowdownAmount: 0.6
-  cornerRotationSmoothing: 0.3
   useSpawnGrace: 1
   spawnGracePeriod: 0.5
   pathOffsetRange: 0
@@ -175,6 +172,7 @@ MonoBehaviour:
   myBody: {fileID: 0}
   enemyHealthDisplayCanvas: {fileID: 2305095053398547535}
   healthBar: {fileID: 4333880470227857035}
+  healthBarDisplayDuration: 3
   enemyVFXPoolScriptRef: {fileID: 2016512488378955966}
   splitVFXPrefab: {fileID: 1758473627833946668, guid: 9b21333b068a5084ba09535839bee3c8, type: 3}
   splitterPrefab: {fileID: 1067925524328404}

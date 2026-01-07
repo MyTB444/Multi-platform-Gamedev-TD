@@ -15,7 +15,7 @@ MonoBehaviour:
   skillName: Blade Tower
   skillCost: 0
   description: 'Spike Trap towers are replaced with Blade Towers that deal continuous
-    spinning damage.
+    spinning damage with extended reach.
 
 
     UNLEASH!'
@@ -25,7 +25,14 @@ MonoBehaviour:
   prerequisites:
   - {fileID: 11400000, guid: fa3b443a4bb9f438da90fabced2c9a5e, type: 2}
   function: 0
-  function2: 0
+  function2: 23
   swapType: 4
   spellEnableType: 3
   noah: 0
+  disablesUpgrade: 0
+  restoresUpgrade: 0
+  disablesUpgrade2: 0
+  restoresUpgrade2: 0
+  skillElementType: 2
+  isGlobeNode: 1
+  isGuardianNode: 0

@@ -1848,10 +1848,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemyType: 12
-  enemySpeed: 2
-  damage: 10
-  reward: 10
-  enemyMaxHp: 10
+  enemySpeed: 2.5
+  damage: 1
+  reward: 6
+  enemyMaxHp: 40
   elementType: 3
   isInvisible: 0
   isReinforced: 0
@@ -1862,9 +1862,6 @@ MonoBehaviour:
   acceleration: 8
   angularSpeed: 360
   animationSpeedMultiplier: 1
-  cornerDetectionDistance: 3
-  cornerSlowdownAmount: 0.6
-  cornerRotationSmoothing: 0.3
   useSpawnGrace: 1
   spawnGracePeriod: 0.5
   pathOffsetRange: 1.5
@@ -1882,6 +1879,7 @@ MonoBehaviour:
   myBody: {fileID: 0}
   enemyHealthDisplayCanvas: {fileID: 9029107379601323502}
   healthBar: {fileID: 1770440094514961967}
+  healthBarDisplayDuration: 3
   enemyVFXPoolScriptRef: {fileID: 4022519690591218048}
   decoyMaterial: {fileID: 2100000, guid: e6fe7821163816c45a485408bc952121, type: 2}
   decoyLifetime: 8

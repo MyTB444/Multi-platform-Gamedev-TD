@@ -18,13 +18,20 @@ MonoBehaviour:
 
 
     Blade Towers gain
-    25% reach.'
+    an additional 2 Blades.'
   icon: {fileID: 21300000, guid: 030d61925e2f98f4d86e171153ec39e1, type: 3}
   irreversible: 0
   skillPointCost: 0
   prerequisites: []
   function: 19
-  function2: 23
+  function2: 22
   swapType: 0
   spellEnableType: 0
   noah: 0
+  disablesUpgrade: 0
+  restoresUpgrade: 0
+  disablesUpgrade2: 0
+  restoresUpgrade2: 0
+  skillElementType: 2
+  isGlobeNode: 0
+  isGuardianNode: 0

@@ -225,8 +225,6 @@ public class TowerPhantomKnight : TowerBase
         }
     }
     
-    protected override void HandleRotation() { }
-    
     protected override void OnDrawGizmos()
     {
         Gizmos.color = Color.magenta;

@@ -58,11 +58,15 @@ public class BladeTower : TowerBase
     private float currentAngle = 0f;
     private bool hasTriggeredAnimation = false;
     
+    protected override void Awake()
+    {
+        base.Awake();
+        baseSpinSpeed = spinSpeed;
+    }
+
     protected override void Start()
     {
         base.Start();
-
-        baseSpinSpeed = spinSpeed;
 
         if (bladeHolder != null)
         {
