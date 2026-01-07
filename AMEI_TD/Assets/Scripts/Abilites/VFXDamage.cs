@@ -11,14 +11,14 @@ public class VFXDamage : MonoBehaviour
     private SpellType spellType;
     private EnemyBase enemyBaseGameObjectRef;
 
-    public bool stopFlames = false;
+    public bool stopFlames { get; set; } = false;
     private Dictionary<EnemyBase, GameObject> EnemyDictionary = new();
-   
-    public bool stopMagic = false;
+
+    public bool stopMagic { get; set; } = false;
     private List<SkinnedMeshRenderer> skinnedMeshRenderer = new();
     private ParticleSystem ps;
 
-    public List<EnemyBase> enemies = new();
+    public List<EnemyBase> enemies { get; set; } = new();
 
     [Header("VFX Prefabs")]
     [SerializeField] private GameObject tinyFlamesPrefab;
@@ -46,6 +46,65 @@ public class VFXDamage : MonoBehaviour
         if (spellType == SpellType.Magic)
         {
             StartCoroutine(DisableVFXGameObject(magicDisableTime));
+        }
+    }
+
+    #region FLames
+
+
+    public IEnumerator EnableFlameDamage(GameObject other, float timeToEnableDamage)
+    {
+        if (other.gameObject != null && other.gameObject.activeInHierarchy && gameObject != null)
+        {
+            if (!gameObject.CompareTag("TinyFlames"))
+            {
+                yield return new WaitForSeconds(timeToEnableDamage);
+
+                if (other.gameObject != null)
+                {
+                    skinnedMeshRenderer = other.gameObject.GetComponentsInChildren<SkinnedMeshRenderer>().ToList();
+
+                    GameObject tinyFlames;
+
+                    for (int i = 0; i < skinnedMeshRenderer.Count; i++)
+                    {
+                        if (!EnemyDictionary.ContainsKey(enemyBaseGameObjectRef))
+                        {
+                            if (!stopFlames)
+                            {
+                                if (skinnedMeshRenderer[i] != null && enemyBaseGameObjectRef.vfxContainer.gameObject != null)
+                                {
+                                    Debug.Log("found");
+                                    for (int j = 0; j <= 4; j++)
+                                    {
+                                        tinyFlames = ObjectPooling.instance.Get(tinyFlamesPrefab);
+                                        if (tinyFlames != null)
+                                        {
+                                            tinyFlames.transform.parent = enemyBaseGameObjectRef.vfxContainer.gameObject.transform;
+                                            tinyFlames.transform.localPosition = ReturnRandomPointOnMesh(skinnedMeshRenderer[i].localBounds) - enemyBaseGameObjectRef.vfxContainer.gameObject.transform.localPosition;
+                                            tinyFlames.transform.rotation = Quaternion.Euler(-90, 0, 0);
+                                            tinyFlames.SetActive(true);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (!EnemyDictionary.ContainsKey(enemyBaseGameObjectRef))
+                        {
+                            EnemyDictionary.Add(enemyBaseGameObjectRef, other);
+                        }
+                    }
+                }
+                if (other.gameObject != null && other.gameObject.activeInHierarchy)
+                {
+                    if (enemyBaseGameObjectRef.isDeadProperty)
+                    {
+                        EnemyDictionary.Remove(enemyBaseGameObjectRef);
+                    }
+
+                    enemyBaseGameObjectRef.TakeDamage(0f, 0.0000003f, true);
+                }
+            }
         }
     }
 
@@ -80,6 +139,14 @@ public class VFXDamage : MonoBehaviour
         }
     }
 
+
+
+
+    #endregion
+
+    #region ParticleCollision
+
+
     private void OnParticleCollision(GameObject other)
     {
         if (other.gameObject.CompareTag("Enemy"))
@@ -110,11 +177,16 @@ public class VFXDamage : MonoBehaviour
         }
     }
 
+    #endregion
+
+    #region RetrunPointOnMesh
     private Vector3 ReturnRandomPointOnMesh(Bounds bounds)
     {
         return new Vector3(bounds.center.x, Random.Range(bounds.extents.y, bounds.extents.y / 3f), Random.Range(-bounds.extents.z / 10f, bounds.extents.z / 8f));
     }
+    #endregion
 
+    #region Magic
     public IEnumerator EnableLiftDamage(EnemyBase enemyBase)
     {
         if (enemyBase.gameObject != null && enemyBase.gameObject.activeInHierarchy && enemyBase != null)
@@ -164,62 +236,9 @@ public class VFXDamage : MonoBehaviour
             }
         }
     }
+    #endregion
 
-    public IEnumerator EnableFlameDamage(GameObject other, float timeToEnableDamage)
-    {
-        if (other.gameObject != null && other.gameObject.activeInHierarchy && gameObject != null)
-        {
-            if (!gameObject.CompareTag("TinyFlames"))
-            {
-                yield return new WaitForSeconds(timeToEnableDamage);
-
-                if (other.gameObject != null)
-                {
-                    skinnedMeshRenderer = other.gameObject.GetComponentsInChildren<SkinnedMeshRenderer>().ToList();
-
-                    GameObject tinyFlames;
-
-                    for (int i = 0; i < skinnedMeshRenderer.Count; i++)
-                    {
-                        if (!EnemyDictionary.ContainsKey(enemyBaseGameObjectRef))
-                        {
-                            if (!stopFlames)
-                            {
-                                if (skinnedMeshRenderer[i] != null && enemyBaseGameObjectRef.vfxContainer.gameObject != null)
-                                {
-                                    Debug.Log("found");
-                                    for (int j = 0; j <= 4; j++)
-                                    {
-                                        tinyFlames = ObjectPooling.instance.Get(tinyFlamesPrefab);
-                                        if (tinyFlames != null)
-                                        {                                         
-                                            tinyFlames.transform.parent = enemyBaseGameObjectRef.vfxContainer.gameObject.transform;
-                                            tinyFlames.transform.localPosition = ReturnRandomPointOnMesh(skinnedMeshRenderer[i].localBounds) - enemyBaseGameObjectRef.vfxContainer.gameObject.transform.localPosition;
-                                            tinyFlames.transform.rotation = Quaternion.Euler(-90, 0, 0);
-                                            tinyFlames.SetActive(true);
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        if (!EnemyDictionary.ContainsKey(enemyBaseGameObjectRef))
-                        {
-                            EnemyDictionary.Add(enemyBaseGameObjectRef, other);
-                        }
-                    }
-                }
-                if (other.gameObject != null && other.gameObject.activeInHierarchy)
-                {
-                    if (enemyBaseGameObjectRef.isDeadProperty)
-                    {
-                        EnemyDictionary.Remove(enemyBaseGameObjectRef);
-                    }
-
-                    enemyBaseGameObjectRef.TakeDamage(0f, 0.0000003f, true);
-                }
-            }
-        }
-    }
+    #region DisableVFX
 
     private IEnumerator DisableVFXGameObject(float disableTime)
     {
@@ -236,4 +255,5 @@ public class VFXDamage : MonoBehaviour
             ObjectPooling.instance.Return(gameObject);
         }
     }
+    #endregion
 }

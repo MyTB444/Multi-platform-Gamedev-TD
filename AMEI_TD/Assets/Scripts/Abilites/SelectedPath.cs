@@ -1,17 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
-public class SelectedPath : MonoBehaviour
+public class SelectedPath : MonoBehaviour,IPointerEnterHandler,IPointerDownHandler,IPointerExitHandler
 {
     private Material PathMat;
     private Color InitialColor;
     private MeshRenderer pathMeshRenderer;
 
+    private Color selectedColor = new Color(1, 0, 0, 0.5f);
+    public bool isHoveringOnPotentialPaths {  get; private set; }
     [SerializeField] private bool isOnXAxis;
 
     public bool isOnAxisProperty => isOnXAxis;
+    
 
     private void OnEnable()
     {
@@ -24,7 +29,7 @@ public class SelectedPath : MonoBehaviour
         pathMeshRenderer.enabled = false;
         FlameArea.enabled = false;
     }
-    private void OnMouseEnter()
+    void IPointerEnterHandler.OnPointerEnter(PointerEventData eventData)
     {
         if (SpellAbility.instance != null)
         {
@@ -34,22 +39,50 @@ public class SelectedPath : MonoBehaviour
                 pathMeshRenderer.enabled = true;
                 FlameArea.enabled = true;
                 PathMat.color = new Color(1, 0, 0, 0.5f);
+                PathMat.color = selectedColor;
+                SpellAbility.instance.IsHoveringOnPotentialPaths(true);
             }
         }
     }
-    private void OnMouseExit()
+    void IPointerExitHandler.OnPointerExit(PointerEventData eventData)
     {
         // Reset color and disable both mesh renderers
         PathMat.color = InitialColor;
+        if (SpellAbility.instance != null)
+        {
+            SpellAbility.instance.IsHoveringOnPotentialPaths(false);
+        }
+        
         pathMeshRenderer.enabled = false;
         FlameArea.enabled = false;
     }
-    private void OnMouseDown()
+
+    public IEnumerator ChangePathMatToOriginalColor()
+    {
+        float elapsed = 0;
+        float duration = 1f;
+
+        while(elapsed < duration)
+        {
+            elapsed += Time.deltaTime;
+            float t =elapsed/ duration;
+            Color newColor = Vector4.Lerp(new Vector4(selectedColor.r,selectedColor.g,selectedColor.b,selectedColor.a),
+                                          new Vector4(InitialColor.r, InitialColor.g, InitialColor.b, InitialColor.a), t);
+            PathMat.color = newColor;
+            yield return null;
+
+        }
+        
+      
+       
+    }
+
+    void IPointerDownHandler.OnPointerDown(PointerEventData eventData)
     {
         if (SpellAbility.instance.CanSelectPaths)
         {
             
-            Vector3 mousepos = (Input.mousePosition);
+            Vector2 mousepos = Mouse.current.position.ReadValue();
 
             Ray ray = Camera.main.ScreenPointToRay(mousepos);
 
