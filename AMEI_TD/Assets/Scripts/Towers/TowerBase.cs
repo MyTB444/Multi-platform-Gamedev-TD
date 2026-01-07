@@ -380,6 +380,7 @@ public class TowerBase : MonoBehaviour
             EnemyBase newEnemy = allocatedColliders[i].GetComponent<EnemyBase>();
             if (newEnemy == null) continue;
             if (!newEnemy.IsTargetable()) continue;
+            if (newEnemy.IsInvisible()) continue;
 
             float distanceToEnemy = Vector3.Distance(transform.position, newEnemy.transform.position);
             if (distanceToEnemy > attackRange) continue;
