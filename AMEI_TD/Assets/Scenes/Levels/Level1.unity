@@ -31155,6 +31155,26 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1739840205}
     m_Modifications:
+    - target: {fileID: 210423928404077867, guid: 3eabe48b849c49f46a21d2db84bd71af, type: 3}
+      propertyPath: fireSpellCoolDown
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 210423928404077867, guid: 3eabe48b849c49f46a21d2db84bd71af, type: 3}
+      propertyPath: magicSpellCoolDown
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 210423928404077867, guid: 3eabe48b849c49f46a21d2db84bd71af, type: 3}
+      propertyPath: imaginaryVFXCoolDown
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 210423928404077867, guid: 3eabe48b849c49f46a21d2db84bd71af, type: 3}
+      propertyPath: mechanicSpellCoolDown
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 210423928404077867, guid: 3eabe48b849c49f46a21d2db84bd71af, type: 3}
+      propertyPath: imaginarySpellCoolDown
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3242496166541548391, guid: 3eabe48b849c49f46a21d2db84bd71af, type: 3}
       propertyPath: m_Name
       value: SpellManager
