@@ -18855,7 +18855,7 @@ MonoBehaviour:
   towerHead: {fileID: 0}
   gunPoint: {fileID: 1383047700879017827}
   rotationSpeed: 10
-  attackRange: 8
+  attackRange: 9
   whatIsEnemy:
     serializedVersion: 2
     m_Bits: 64
@@ -18866,8 +18866,8 @@ MonoBehaviour:
   projectileSpeed: 15
   elementType: 0
   projectilePoolAmount: 20
-  buyPrice: 30
-  sellPrice: 15
+  buyPrice: 45
+  sellPrice: 22
   damageBoost: 0
   damageBoostPercent: 0.25
   attackSpeedBoost: 0
@@ -18906,12 +18906,12 @@ MonoBehaviour:
   speedMultiplier: 0.05
   arrowVisualVFXPoint: {fileID: 8919103593872427823}
   poisonArrows: 0
-  poisonDamage: 5
+  poisonDamage: 8
   poisonDuration: 3
   poisonArrowVFX: {fileID: 764456538143545835, guid: 157342d22a0c84b40b3d0eb8ff79ed1d, type: 3}
   fireArrows: 0
-  fireDamage: 10
-  fireDuration: 3
+  fireDamage: 12
+  fireDuration: 2.5
   fireArrowVFX: {fileID: 4717735165549109670, guid: ac8d0804ebc9bc94594ea51bf660284c, type: 3}
 --- !u!95 &5148307974464681058
 Animator:

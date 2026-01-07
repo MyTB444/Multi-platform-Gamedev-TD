@@ -1951,7 +1951,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a2446dbd515ac34dacd0915c80e74da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 30
+  damage: 15
   attackCooldown: 2.5
   towerBody: {fileID: 989189631621950190}
   towerHead: {fileID: 0}
@@ -2002,14 +2002,14 @@ MonoBehaviour:
   guardianGlowIntensity: 0.3
   guardianPulseSpeed: 2
   visualRotationOffset: {x: 90, y: 0, z: 0}
-  slowPercent: 0.5
-  slowDuration: 3
+  slowPercent: 0.35
+  slowDuration: 2
   effectRadius: 2
-  dotDamagePerTick: 1
+  dotDamagePerTick: 5
   dotDuration: 3
   dotTickInterval: 0.5
   strongerSlow: 0
-  bonusSlowPercent: 0.15
+  bonusSlowPercent: 0.25
   longerSlow: 0
   bonusSlowDuration: 1
   frostbite: 0
