@@ -108,6 +108,7 @@ public class TowerBase : MonoBehaviour
     [SerializeField] protected float projectileSpawnDelay = 0f;
 
     [Header("Audio")]
+    protected AudioSource audioSource;
     [SerializeField] protected AudioClip attackSound;
     [SerializeField][Range(0f, 1f)] protected float attackSoundVolume = 1f;
 
@@ -165,6 +166,9 @@ public class TowerBase : MonoBehaviour
         baseDamage = damage;
         baseAttackCooldown = attackCooldown;
         baseAttackRange = attackRange;
+        audioSource = GetComponent<AudioSource>();
+        audioSource.playOnAwake = false;
+        audioSource.spatialBlend = 1f;
     }
 
     protected virtual void Start()
@@ -503,9 +507,11 @@ public class TowerBase : MonoBehaviour
 
     protected virtual void PlayAttackSound()
     {
-        if (attackSound != null)
+        if (attackSound != null && audioSource != null)
         {
-            AudioSource.PlayClipAtPoint(attackSound, transform.position, attackSoundVolume);
+            audioSource.clip = attackSound;
+            audioSource.volume = attackSoundVolume;
+            audioSource.Play();
         }
     }
 

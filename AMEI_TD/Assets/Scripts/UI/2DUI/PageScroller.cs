@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class PageScroller : MonoBehaviour
 {
@@ -9,6 +10,7 @@ public class PageScroller : MonoBehaviour
     public bool loopPages = true;
 
     private int currentIndex = 0;
+    public AudioMixer audioMixer;
 
     void Start()
     {
@@ -39,5 +41,10 @@ public class PageScroller : MonoBehaviour
         {
             pages[i].SetActive(i == index);
         }
+    }
+    public void SetMaster()
+    {
+        audioMixer.SetFloat("MasterVolume", -80);
+        AudioSLider.instance.SetAllToZero();
     }
 }

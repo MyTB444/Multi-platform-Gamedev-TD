@@ -26,6 +26,7 @@ public class InputHandler : MonoBehaviour
         inputActions.Player.MagicalSpell.performed += Magical;
         inputActions.Player.MechanicalSpell.performed += Mechanical;
         inputActions.Player.ImaginarySpell.performed += Imaginary;
+        inputActions.Player.CancelSpell.performed += CancelSpell;
 
         uiBase = FindAnyObjectByType<UIBase>();
     }
@@ -133,6 +134,13 @@ public class InputHandler : MonoBehaviour
             {
                 SpellIsNotActive();
             }
+        }
+    }
+    private void CancelSpell(InputAction.CallbackContext context)
+    {
+        if (context.ReadValueAsButton())
+        {
+            SpellAbility.instance.DeactivateSpells();
         }
     }
     private void SpellIsNotActive()

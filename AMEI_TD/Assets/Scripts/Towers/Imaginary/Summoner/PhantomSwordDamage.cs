@@ -19,8 +19,14 @@ public class PhantomSwordDamage : MonoBehaviour
     private float slowDuration;
 
     private AudioClip slashSound;
+    private AudioSource audioSource;
     private float slashSoundVolume;
-    
+    private void Awake()
+    {
+        audioSource = GetComponent<AudioSource>();
+        audioSource.playOnAwake = false;
+        audioSource.spatialBlend = 1f;
+    }
     public void Setup(DamageInfo newDamageInfo, LayerMask newEnemyLayer, GameObject vfxPrefab, Vector3 rotationOffset, float startDelay = 0f, float duration = 0.5f, bool applySlow = false, float slowPercent = 0f, float slowDuration = 0f, AudioClip slashSound = null, float slashSoundVolume = 1f)
     {
         damageInfo = newDamageInfo;
@@ -88,7 +94,7 @@ public class PhantomSwordDamage : MonoBehaviour
         }
 
         // Play slash sound
-        PlaySlashSound(hitPoint);
+        PlaySlashSound();
 
         IDamageable damageable = other.GetComponent<IDamageable>();
         if (damageable != null)
@@ -113,11 +119,13 @@ public class PhantomSwordDamage : MonoBehaviour
         ObjectPooling.instance.GetVFX(slashVFXPrefab, position, rotation, vfxDuration);
     }
 
-    private void PlaySlashSound(Vector3 position)
+    private void PlaySlashSound()
     {
-        if (slashSound != null)
+        if (slashSound != null && audioSource != null)
         {
-            AudioSource.PlayClipAtPoint(slashSound, position, slashSoundVolume);
+            audioSource.clip = slashSound;
+            audioSource.volume = slashSoundVolume;
+            audioSource.Play();
         }
     }
 }

@@ -98,6 +98,15 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""CancelSpell"",
+                    ""type"": ""Button"",
+                    ""id"": ""0eb54674-f5ae-44ed-b44a-52cbc85859c9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -188,6 +197,17 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
                     ""action"": ""ImaginarySpell"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5eeb5a8c-47be-476c-a3ac-c0f984716444"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": ""Keyboard & Mouse"",
+                    ""action"": ""CancelSpell"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -216,6 +236,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         m_Player_MagicalSpell = m_Player.FindAction("MagicalSpell", throwIfNotFound: true);
         m_Player_MechanicalSpell = m_Player.FindAction("MechanicalSpell", throwIfNotFound: true);
         m_Player_ImaginarySpell = m_Player.FindAction("ImaginarySpell", throwIfNotFound: true);
+        m_Player_CancelSpell = m_Player.FindAction("CancelSpell", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -285,6 +306,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_MagicalSpell;
     private readonly InputAction m_Player_MechanicalSpell;
     private readonly InputAction m_Player_ImaginarySpell;
+    private readonly InputAction m_Player_CancelSpell;
     public struct PlayerActions
     {
         private @PlayerInputActions m_Wrapper;
@@ -297,6 +319,7 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         public InputAction @MagicalSpell => m_Wrapper.m_Player_MagicalSpell;
         public InputAction @MechanicalSpell => m_Wrapper.m_Player_MechanicalSpell;
         public InputAction @ImaginarySpell => m_Wrapper.m_Player_ImaginarySpell;
+        public InputAction @CancelSpell => m_Wrapper.m_Player_CancelSpell;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -330,6 +353,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @ImaginarySpell.started += instance.OnImaginarySpell;
             @ImaginarySpell.performed += instance.OnImaginarySpell;
             @ImaginarySpell.canceled += instance.OnImaginarySpell;
+            @CancelSpell.started += instance.OnCancelSpell;
+            @CancelSpell.performed += instance.OnCancelSpell;
+            @CancelSpell.canceled += instance.OnCancelSpell;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -358,6 +384,9 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
             @ImaginarySpell.started -= instance.OnImaginarySpell;
             @ImaginarySpell.performed -= instance.OnImaginarySpell;
             @ImaginarySpell.canceled -= instance.OnImaginarySpell;
+            @CancelSpell.started -= instance.OnCancelSpell;
+            @CancelSpell.performed -= instance.OnCancelSpell;
+            @CancelSpell.canceled -= instance.OnCancelSpell;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -394,5 +423,6 @@ public partial class @PlayerInputActions: IInputActionCollection2, IDisposable
         void OnMagicalSpell(InputAction.CallbackContext context);
         void OnMechanicalSpell(InputAction.CallbackContext context);
         void OnImaginarySpell(InputAction.CallbackContext context);
+        void OnCancelSpell(InputAction.CallbackContext context);
     }
 }

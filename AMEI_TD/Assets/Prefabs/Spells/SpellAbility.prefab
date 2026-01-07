@@ -48,11 +48,16 @@ MonoBehaviour:
   magicAreaPrefab: {fileID: 1691079832961232890, guid: 1e1134ee9e549224c9dc871b0651dcf2, type: 3}
   bombPrefab: {fileID: 2433282508537954060, guid: 596ba3c68872fa04680c3545016bfaa6, type: 3}
   imaginaryVFXPrefab: {fileID: 7368993886450700974, guid: f9013c7cebf50fc44ae0f9de8421d64d, type: 3}
-  tinyFlamesVisualPrefab: {fileID: 1972207730512856, guid: 3cbf6e6c4aae0e6418e9f176d49eb910, type: 3}
+  tinyFlamesVisualPrefab: {fileID: 1972207730512856, guid: 2a9343f07c3238f4b8c66f8cadd2fe7d, type: 3}
+  magicVisualPrefab: {fileID: 1624051024428852866, guid: 89f29b10d2bc3d840964c06b0a5b0579, type: 3}
+  mechanicVisualPrefab: {fileID: 8825648436799785635, guid: 67372ede1b2c25841b32e3aa244dc489, type: 3}
   flamesPoolSize: 40
   magicAreaPoolSize: 5
   bombPoolSize: 3
   imaginaryVFXPoolSize: 3
+  tinyFlamesVFXPoolSize: 1
+  magicVFXPoolSize: 1
+  mechanicVFXPoolSize: 1
   fireSpellCoolDown: 10
   magicSpellCoolDown: 10
   mechanicSpellCoolDown: 10
