@@ -140,7 +140,7 @@ public class InputHandler : MonoBehaviour
     {
         if (context.ReadValueAsButton())
         {
-            //
+            SpellAbility.instance.DeactivateSpells();
         }
     }
     private void SpellIsNotActive()
