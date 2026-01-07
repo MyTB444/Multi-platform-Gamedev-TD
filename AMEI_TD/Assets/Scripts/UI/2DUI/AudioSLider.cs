@@ -15,20 +15,23 @@ public class AudioSLider : MonoBehaviour
 
     private float savedMusicVolume;
     private float savedEffectVolume;
+    private float savedMaster;
     private const float minVolume = -80f;
 
-    void Start()
+    void Awake()
     {
         instance = this;
 
         // Load saved volumes or default to full (0 dB)
-        float savedMaster = PlayerPrefs.GetFloat("MasterVolume", 0f);
+        savedMaster = PlayerPrefs.GetFloat("MasterVolume", 0f);
         savedMusicVolume = PlayerPrefs.GetFloat("MusicVolume", 0f);
         savedEffectVolume = PlayerPrefs.GetFloat("EffectVolume", 0f);
-
-        masterSlider.value = savedMaster;
-        musicSlider.value = savedMusicVolume;
-        effectSlider.value = savedEffectVolume;
+        if (masterSlider != null)
+            masterSlider.value = savedMaster;
+        if (musicSlider != null)
+            musicSlider.value = savedMusicVolume;
+        if (effectSlider != null)
+            effectSlider.value = savedEffectVolume;
 
         SetMasterVolume(savedMaster);
         SetMusicVolume(savedMusicVolume);
@@ -56,13 +59,15 @@ public class AudioSLider : MonoBehaviour
         }
         else
         {
-            // Restore sliders when master is raised
-            if (!musicSlider.interactable)
+            if (musicSlider != null)
             {
-                musicSlider.interactable = true;
-                effectSlider.interactable = true;
-                musicSlider.value = savedMusicVolume;
-                effectSlider.value = savedEffectVolume;
+                if (!musicSlider.interactable)
+                {
+                    musicSlider.interactable = true;
+                    effectSlider.interactable = true;
+                    musicSlider.value = savedMusicVolume;
+                    effectSlider.value = savedEffectVolume;
+                }
             }
         }
     }
