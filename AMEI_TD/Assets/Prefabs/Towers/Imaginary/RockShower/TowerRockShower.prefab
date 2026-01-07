@@ -28126,11 +28126,11 @@ MonoBehaviour:
   projectileSpawnDelay: 0
   attackSound: {fileID: 0}
   attackSoundVolume: 1
-  targetMostAdvancedEnemy: 0
-  targetPriorityEnemy: 1
-  enemyPriorityType: 0
-  useHpTargeting: 1
-  targetHighestHpEnemy: 1
+  targetMostAdvancedEnemy: 1
+  targetPriorityElement: 1
+  priorityElementType: 2
+  useHpTargeting: 0
+  targetHighestHpEnemy: 0
   useRandomTargeting: 0
   decoyLayer:
     serializedVersion: 2

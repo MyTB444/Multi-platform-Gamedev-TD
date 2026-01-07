@@ -2414,10 +2414,10 @@ MonoBehaviour:
   attackSound: {fileID: 8300000, guid: af0e74ed1d6850549a6dc5817ecb66be, type: 3}
   attackSoundVolume: 0.233
   targetMostAdvancedEnemy: 1
-  targetPriorityEnemy: 1
-  enemyPriorityType: 0
-  useHpTargeting: 1
-  targetHighestHpEnemy: 1
+  targetPriorityElement: 1
+  priorityElementType: 0
+  useHpTargeting: 0
+  targetHighestHpEnemy: 0
   useRandomTargeting: 0
   decoyLayer:
     serializedVersion: 2

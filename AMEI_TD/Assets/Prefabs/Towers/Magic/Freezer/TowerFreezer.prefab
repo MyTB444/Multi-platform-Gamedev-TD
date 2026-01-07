@@ -1984,8 +1984,8 @@ MonoBehaviour:
   attackSound: {fileID: 8300000, guid: 00c18b341250456449997f4e46beaf0c, type: 3}
   attackSoundVolume: 0.254
   targetMostAdvancedEnemy: 1
-  targetPriorityEnemy: 1
-  enemyPriorityType: 0
+  targetPriorityElement: 1
+  priorityElementType: 3
   useHpTargeting: 1
   targetHighestHpEnemy: 1
   useRandomTargeting: 0

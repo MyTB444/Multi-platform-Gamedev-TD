@@ -114,8 +114,8 @@ public class TowerBase : MonoBehaviour
 
     [Header("Targeting Setup")]
     [SerializeField] protected bool targetMostAdvancedEnemy = true;
-    [SerializeField] protected bool targetPriorityEnemy = true;
-    [SerializeField] protected EnemyType enemyPriorityType;
+    [SerializeField] protected bool targetPriorityElement = true;
+    [SerializeField] protected ElementType priorityElementType;
     [SerializeField] protected bool useHpTargeting = true;
     [SerializeField] protected bool targetHighestHpEnemy = true;
     [SerializeField] protected bool useRandomTargeting = false;
@@ -389,16 +389,16 @@ public class TowerBase : MonoBehaviour
             float distanceToEnemy = Vector3.Distance(transform.position, newEnemy.transform.position);
             if (distanceToEnemy > attackRange) continue;
 
-            EnemyType newEnemyType = newEnemy.GetEnemyType();
+            ElementType enemyElement = newEnemy.GetElementType();
             allTargets.Add(newEnemy);
 
-            if (newEnemyType == enemyPriorityType)
+            if (enemyElement == priorityElementType)
             {
                 priorityTargets.Add(newEnemy);
             }
         }
 
-        if (targetPriorityEnemy && priorityTargets.Count > 0)
+        if (targetPriorityElement && priorityTargets.Count > 0)
         {
             return ChooseEnemyToTarget(priorityTargets);
         }

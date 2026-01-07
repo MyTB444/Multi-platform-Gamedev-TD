@@ -21472,9 +21472,9 @@ MonoBehaviour:
   attackSound: {fileID: 0}
   attackSoundVolume: 1
   targetMostAdvancedEnemy: 1
-  targetPriorityEnemy: 0
-  enemyPriorityType: 0
-  useHpTargeting: 0
+  targetPriorityElement: 1
+  priorityElementType: 2
+  useHpTargeting: 1
   targetHighestHpEnemy: 0
   useRandomTargeting: 0
   decoyLayer:
