@@ -865,13 +865,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   towerPrefab: {fileID: 8836886349948865617, guid: 7231af0e3dc89c64385bea35b4ca1158, type: 3}
   towerPrefab2: {fileID: 6618268475936549678, guid: 62f454052e86acd4fb4fc5e222e0d352, type: 3}
-  buildPosition: {fileID: 6993471770916893617}
-  buyPrice: 0
   icon: {fileID: 9138353307165755389}
   icon2: {fileID: 4218778379542809740}
   defaultMat: {fileID: 2100000, guid: d9ec7b865d60f4ab0bc8b2541afd0181, type: 2}
   howeredMat: {fileID: 2100000, guid: ef4a7c13258424ea894a4283030b50e6, type: 2}
   buttonType: 2
+  defaultBuyPrice: 0
+  swappedBuyPrice: 0
   difficultyEvent: {fileID: 11400000, guid: 42803575146b04babbfd879ed7e9cb7b, type: 2}
 --- !u!65 &7795144709417302845
 BoxCollider:
@@ -13977,13 +13977,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   towerPrefab: {fileID: 1953271650171834, guid: c720e6aaa446a5a4cb48f4e9064a9029, type: 3}
   towerPrefab2: {fileID: 787283226116520210, guid: f5735c00fb878df418f3ede60a3586b8, type: 3}
-  buildPosition: {fileID: 6617764006459020096}
-  buyPrice: 0
   icon: {fileID: 1333891750370446012}
   icon2: {fileID: 1212458604258143088}
   defaultMat: {fileID: 2100000, guid: d9ec7b865d60f4ab0bc8b2541afd0181, type: 2}
   howeredMat: {fileID: 2100000, guid: ef4a7c13258424ea894a4283030b50e6, type: 2}
   buttonType: 3
+  defaultBuyPrice: 0
+  swappedBuyPrice: 0
   difficultyEvent: {fileID: 11400000, guid: 61902e556626143eb9e68d16a880481e, type: 2}
 --- !u!65 &2645054823476558843
 BoxCollider:
@@ -15050,13 +15050,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   towerPrefab: {fileID: 5537941893074787483, guid: 7f6a4aa4c50da7645a42b36235cbaa89, type: 3}
   towerPrefab2: {fileID: 4499273221298853635, guid: 2c697f064fe55754395fc558b149d596, type: 3}
-  buildPosition: {fileID: 6617764006459020096}
-  buyPrice: 0
   icon: {fileID: 1757577529586327980}
   icon2: {fileID: 452418184880072250}
   defaultMat: {fileID: 2100000, guid: d9ec7b865d60f4ab0bc8b2541afd0181, type: 2}
   howeredMat: {fileID: 2100000, guid: ef4a7c13258424ea894a4283030b50e6, type: 2}
   buttonType: 1
+  defaultBuyPrice: 0
+  swappedBuyPrice: 0
   difficultyEvent: {fileID: 11400000, guid: c4b83dd757c4c496eb5527494cd4ebf7, type: 2}
 --- !u!65 &1508757215515180108
 BoxCollider:
@@ -32041,13 +32041,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   towerPrefab: {fileID: 1666991278309154317, guid: f1ec96bd8a2e80d4cb539d7a09e8ca43, type: 3}
   towerPrefab2: {fileID: 1060176546675274297, guid: 624fa53d9337f684c9aebcef0a9bcf17, type: 3}
-  buildPosition: {fileID: 159008421319576070}
-  buyPrice: 0
   icon: {fileID: 2221333962655934256}
   icon2: {fileID: 1050856529647657648}
   defaultMat: {fileID: 2100000, guid: d9ec7b865d60f4ab0bc8b2541afd0181, type: 2}
   howeredMat: {fileID: 2100000, guid: ef4a7c13258424ea894a4283030b50e6, type: 2}
   buttonType: 4
+  defaultBuyPrice: 0
+  swappedBuyPrice: 0
   difficultyEvent: {fileID: 11400000, guid: e7a3d30e573c943c39dfb92c0a69911a, type: 2}
 --- !u!65 &2114125021785018099
 BoxCollider:
