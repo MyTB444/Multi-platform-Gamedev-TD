@@ -42,9 +42,9 @@ public class PageScroller : MonoBehaviour
             pages[i].SetActive(i == index);
         }
     }
-    public void SetVolume()
+    public void SetMaster()
     {
         audioMixer.SetFloat("MasterVolume", -80);
-        AudioSLider.instance.SetToZero();
+        AudioSLider.instance.SetAllToZero();
     }
 }
