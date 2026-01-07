@@ -1260,8 +1260,8 @@ MonoBehaviour:
   healthBarDisplayDuration: 3
   enemyVFXPoolScriptRef: {fileID: 8727391333008355060}
   shieldEffectPrefab: {fileID: 1289543790355709915, guid: b99922c2f59b1a542bdd06ae8bee47ae, type: 3}
-  shieldAmount: 10
-  shieldRadius: 5
+  shieldAmount: 50
+  shieldRadius: 7
   shieldCooldown: 10
   enemyLayer:
     serializedVersion: 2

@@ -1439,8 +1439,8 @@ MonoBehaviour:
   healthBar: {fileID: 5034258519788585738}
   healthBarDisplayDuration: 3
   enemyVFXPoolScriptRef: {fileID: 4740428758652628245}
-  maxActiveMinions: 3
-  summonCooldown: 5
+  maxActiveMinions: 6
+  summonCooldown: 7
   spawnRadius: 1.5
   minionsPerSummon: 2
   magicCirclePrefab: {fileID: 4285366753046329265, guid: c4a34c2e6d3f9da4fadacfff9ce95761, type: 3}
