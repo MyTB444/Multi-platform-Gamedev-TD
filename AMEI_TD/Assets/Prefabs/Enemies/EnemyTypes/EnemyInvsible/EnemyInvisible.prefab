@@ -494,7 +494,7 @@ MonoBehaviour:
   enemySpeed: 1.5
   damage: 2
   reward: 15
-  enemyMaxHp: 50
+  enemyMaxHp: 250
   elementType: 3
   isInvisible: 1
   isReinforced: 0

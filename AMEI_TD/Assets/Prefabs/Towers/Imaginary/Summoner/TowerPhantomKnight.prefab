@@ -21440,7 +21440,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be1f2af24cabc6642b19e45a2d291de3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 70
+  damage: 55
   attackCooldown: 3.5
   towerBody: {fileID: 4228951654224667403}
   towerHead: {fileID: 0}
@@ -21492,11 +21492,11 @@ MonoBehaviour:
   guardianPulseSpeed: 2
   phantomPrefab: {fileID: 2537545956604527301, guid: 8b55fb7f86e2bb54a922b5e11b12cae4, type: 3}
   spawnDistanceAhead: 5
-  phantomCount: 1
+  phantomCount: 2
   horizontalSpacing: 1.5
   depthStagger: 0.5
   phantomSpeed: 4
-  phantomDamage: 5
+  phantomDamage: 55
   attackRadius: 2
   stoppingDistance: 0.45
   fadeOutTime: 0.5
@@ -21506,7 +21506,7 @@ MonoBehaviour:
   phantomSlashSound: {fileID: 8300000, guid: f7617a7275da92048b101e960c24aff3, type: 3}
   phantomSlashSoundVolume: 0.301
   morePhantoms: 0
-  bonusPhantomCount: 1
+  bonusPhantomCount: 2
   closerSpawn: 0
   closerSpawnDistance: 2
   spectralChains: 0

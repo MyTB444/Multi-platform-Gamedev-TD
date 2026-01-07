@@ -93,13 +93,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b280a9a08a6f6d043addd96e78393154, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 15
+  damage: 12
   attackCooldown: 1.5
   towerBody: {fileID: 4063552230360950}
   towerHead: {fileID: 0}
   gunPoint: {fileID: 8763049949150767723}
   rotationSpeed: 10
-  attackRange: 10
+  attackRange: 9
   whatIsEnemy:
     serializedVersion: 2
     m_Bits: 64
@@ -107,7 +107,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 64
   projectilePrefab: {fileID: 5912905722827363994, guid: 17db417334a9d8f45a6dae4397e32918, type: 3}
-  projectileSpeed: 5
+  projectileSpeed: 6.5
   elementType: 1
   projectilePoolAmount: 20
   buyPrice: 50
@@ -144,15 +144,15 @@ MonoBehaviour:
   guardianGlowIntensity: 0.3
   guardianPulseSpeed: 2
   burnChance: 0
-  burnChancePercent: 0.4
-  burnDamage: 3
-  burnDuration: 3
+  burnChancePercent: 0.6
+  burnDamage: 9
+  burnDuration: 2
   biggerFireball: 0
   fireballScaleMultiplier: 1.5
   fireballAoERadius: 1.5
   fireballAoEDamagePercent: 0.5
   burnSpread: 0
-  burnSpreadRadius: 2
+  burnSpreadRadius: 4
 --- !u!82 &-3667490595277712349
 AudioSource:
   m_ObjectHideFlags: 0

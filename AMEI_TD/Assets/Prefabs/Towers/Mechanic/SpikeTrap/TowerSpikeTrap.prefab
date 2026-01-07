@@ -6350,7 +6350,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97c18fa6e6e749d44a8d463d52353ba0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 12
+  damage: 30
   attackCooldown: 0.6
   towerBody: {fileID: 0}
   towerHead: {fileID: 0}
@@ -6409,11 +6409,11 @@ MonoBehaviour:
   hammerImpactPoint: {fileID: 885937671795851817}
   spikeTrapAttackSpeedPercent: 0.2
   poisonSpikes: 0
-  poisonDamage: 2
+  poisonDamage: 8
   poisonDuration: 3
   poisonSpikeVFX: {fileID: 764456538143545835, guid: 157342d22a0c84b40b3d0eb8ff79ed1d, type: 3}
   bleedingSpikes: 0
-  bleedDamage: 3
+  bleedDamage: 12
   bleedDuration: 4
   bleedSpikeVFX: {fileID: 3538601806443498961, guid: ae8be53a4ea8c18479183ebb3a59bf7c, type: 3}
   critChance: 0.4

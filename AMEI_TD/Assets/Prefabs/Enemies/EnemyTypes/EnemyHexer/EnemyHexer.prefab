@@ -208,7 +208,7 @@ MonoBehaviour:
   enemySpeed: 1.5
   damage: 0
   reward: 8
-  enemyMaxHp: 40
+  enemyMaxHp: 150
   elementType: 1
   isInvisible: 0
   isReinforced: 0
@@ -238,7 +238,7 @@ MonoBehaviour:
   healthBar: {fileID: 477889634844545416}
   healthBarDisplayDuration: 3
   enemyVFXPoolScriptRef: {fileID: 4995609814991652780}
-  detectionRadius: 10
+  detectionRadius: 12
   attackCooldown: 3
   towerLayer:
     serializedVersion: 2
