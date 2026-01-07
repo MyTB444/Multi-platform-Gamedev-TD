@@ -44,3 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d54ad457b957d254b8ff88ab1f145d95, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  spearPrefab: {fileID: 4499273221298853635, guid: 2c697f064fe55754395fc558b149d596, type: 3}
+  iceMagePrefab: {fileID: 787283226116520210, guid: f5735c00fb878df418f3ede60a3586b8, type: 3}
+  bladeTowerPrefab: {fileID: 1060176546675274297, guid: 624fa53d9337f684c9aebcef0a9bcf17, type: 3}
+  phantomKnightPrefab: {fileID: 6618268475936549678, guid: 62f454052e86acd4fb4fc5e222e0d352, type: 3}

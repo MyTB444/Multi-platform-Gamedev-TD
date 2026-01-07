@@ -131,4 +131,9 @@ public class TileButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     {
         spawnedUnit = a;
     }
+    
+    public GameObject GetUnit()
+    {
+        return spawnedUnit;
+    }
 }
