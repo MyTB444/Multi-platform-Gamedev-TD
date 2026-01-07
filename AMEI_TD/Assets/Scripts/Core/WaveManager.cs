@@ -211,7 +211,7 @@ public class WaveManager : MonoBehaviour
         }
 
         waveTimer -= Time.deltaTime;
-
+        UIBase.instance.UpdateWaveTimerUI(waveTimer);
         if (waveTimer <= 0) StartNewWave();
     }
 
@@ -248,8 +248,6 @@ public class WaveManager : MonoBehaviour
 
         Debug.Log($"Wave {waveIndex + 1} started: {newEnemies.Count} enemies");
     }
-
-    #region Endless Wave Generation
 
     private List<GameObject> GenerateEndlessWave()
     {
@@ -405,10 +403,6 @@ public class WaveManager : MonoBehaviour
         }
     }
 
-    #endregion
-
-    #region Manual Wave System
-
     private List<GameObject> GetNewEnemies()
     {
         if (HasNoMoreWaves())
@@ -449,9 +443,7 @@ public class WaveManager : MonoBehaviour
 
     private bool HasNoMoreWaves() => !useEndlessWaves && waveIndex >= levelWaves.Length;
 
-    #endregion
 
-    #region Wave State Checks
 
     private bool AllEnemiesDefeated()
     {
@@ -477,10 +469,6 @@ public class WaveManager : MonoBehaviour
         }
         return true;
     }
-
-    #endregion
-
-    #region Mega Wave System
 
     public void TriggerMegaWave()
     {
@@ -570,11 +558,7 @@ public class WaveManager : MonoBehaviour
         Debug.Log("MEGA WAVE COMPLETED! Level Victory!");
         GameManager.instance.LevelCompleted();
     }
-
-    #endregion
-
-    #region Public Getters
-
+    
     public bool IsMegaWaveActive() => megaWaveActive;
     public bool IsMegaWaveTriggered() => megaWaveTriggered;
     public float GetMegaWaveHealthMultiplier() => megaWave != null ? Mathf.Clamp(megaWave.enemyHealthMultiplier, 0.1f, 10f) : 1f;
@@ -582,6 +566,4 @@ public class WaveManager : MonoBehaviour
     public float GetCurrentSpawnRateMultiplier() => megaWaveActive ? GetMegaWaveSpawnRateMultiplier() : currentSpawnRateMultiplier;
     public int GetCurrentWave() => waveIndex + 1;
     public DifficultyTier GetCurrentDifficultyTier() => GetCurrentTier();
-
-    #endregion
 }
