@@ -42,6 +42,14 @@ public class SkillNode : ScriptableObject
     public SpellEnableType spellEnableType;
     public bool noah;
     
+    [Header("Replacement System - Default Tower Path")]
+    public TowerUpgradeType disablesUpgrade;
+    public TowerUpgradeType restoresUpgrade;
+    
+    [Header("Replacement System - Swapped Tower Path")]
+    public TowerUpgradeType disablesUpgrade2;
+    public TowerUpgradeType restoresUpgrade2;
+    
     [Header("Skill Loss System")]
     public ElementType skillElementType;
     public bool isGlobeNode;
@@ -51,16 +59,35 @@ public class SkillNode : ScriptableObject
     
     public void ApplyEffect()
     {
+        bool tookSwapPath = swapType != SwapType.Null 
+            ? false
+            : TowerUpgradeManager.instance.IsSwapUnlocked(GetRelatedSwapType());
+        
+        if (tookSwapPath)
+        {
+            if (disablesUpgrade2 != TowerUpgradeType.Null)
+            {
+                TowerUpgradeManager.instance.LockUpgrade(disablesUpgrade2);
+            }
+        }
+        else
+        {
+            if (disablesUpgrade != TowerUpgradeType.Null)
+            {
+                TowerUpgradeManager.instance.LockUpgrade(disablesUpgrade);
+            }
+        }
+        
         TowerUpgradeManager.instance.UnlockUpgrade(function);
-        if(function2 != TowerUpgradeType.Null)
+        if (function2 != TowerUpgradeType.Null)
         {
             TowerUpgradeManager.instance.UnlockUpgrade(function2);
         }
-        if(swapType != SwapType.Null)
+        if (swapType != SwapType.Null)
             Raise(swapType);
-        if(spellEnableType != SpellEnableType.Null)
+        if (spellEnableType != SpellEnableType.Null)
             EnableSpell(spellEnableType);
-        if(noah)
+        if (noah)
             EnableNoah();
     }
     
@@ -70,6 +97,35 @@ public class SkillNode : ScriptableObject
         if (function2 != TowerUpgradeType.Null)
         {
             TowerUpgradeManager.instance.LockUpgrade(function2);
+        }
+        
+        bool tookSwapPath = TowerUpgradeManager.instance.IsSwapUnlocked(GetRelatedSwapType());
+        
+        if (tookSwapPath)
+        {
+            if (restoresUpgrade2 != TowerUpgradeType.Null)
+            {
+                TowerUpgradeManager.instance.UnlockUpgrade(restoresUpgrade2);
+            }
+        }
+        else
+        {
+            if (restoresUpgrade != TowerUpgradeType.Null)
+            {
+                TowerUpgradeManager.instance.UnlockUpgrade(restoresUpgrade);
+            }
+        }
+    }
+    
+    private SwapType GetRelatedSwapType()
+    {
+        switch (skillElementType)
+        {
+            case ElementType.Physical: return SwapType.Spear;
+            case ElementType.Magic: return SwapType.IceMage;
+            case ElementType.Mechanic: return SwapType.BladeTower;
+            case ElementType.Imaginary: return SwapType.Knight;
+            default: return SwapType.Null;
         }
     }
     

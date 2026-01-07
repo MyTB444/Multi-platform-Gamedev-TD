@@ -135,30 +135,36 @@ public class SkillTreeManager : MonoBehaviour
     private SkillNode GetSkillToLose(ElementType element)
     {
         List<SkillNode> elementSkills = new List<SkillNode>();
-        
+    
         for (int i = unlockOrder.Count - 1; i >= 0; i--)
         {
             SkillNode skill = unlockOrder[i];
-            
+        
             if (skill.skillElementType != element) continue;
             if (skill.isGuardianNode) continue;
             if (skill.isGlobeNode) continue;
-            
+        
             elementSkills.Add(skill);
         }
-        
+    
+        Debug.Log($"Found {elementSkills.Count} {element} skills that could be lost");
+    
         bool hasGlobe = HasGlobeForElement(element);
-        
+        Debug.Log($"Has globe for {element}: {hasGlobe}");
+    
         foreach (SkillNode skill in elementSkills)
         {
+            Debug.Log($"Checking skill: {skill.skillName}");
+        
             if (hasGlobe)
             {
-                if (IsAboveGlobe(skill, element))
+                bool isAbove = IsAboveGlobe(skill, element);
+                bool hasDependents = HasDependentSkills(skill);
+                Debug.Log($"  IsAboveGlobe: {isAbove}, HasDependents: {hasDependents}");
+            
+                if (isAbove && !hasDependents)
                 {
-                    if (!HasDependentSkills(skill))
-                    {
-                        return skill;
-                    }
+                    return skill;
                 }
             }
             else
@@ -169,7 +175,7 @@ public class SkillTreeManager : MonoBehaviour
                 }
             }
         }
-        
+    
         return null;
     }
     
@@ -187,19 +193,28 @@ public class SkillTreeManager : MonoBehaviour
     
     private bool IsAboveGlobe(SkillNode skill, ElementType element)
     {
-        foreach (SkillNode prereq in skill.prerequisites)
+        // Find the globe for this element
+        SkillNode globe = GetGlobeForElement(element);
+        if (globe == null) return false;
+    
+        // Check unlock order - if skill was unlocked AFTER globe, it's above it
+        int globeIndex = unlockOrder.IndexOf(globe);
+        int skillIndex = unlockOrder.IndexOf(skill);
+    
+        // Skill unlocked after globe = above the globe
+        return skillIndex > globeIndex;
+    }
+    
+    private SkillNode GetGlobeForElement(ElementType element)
+    {
+        foreach (SkillNode skill in unlockedSkills)
         {
-            if (prereq.isGlobeNode && prereq.skillElementType == element)
+            if (skill.skillElementType == element && skill.isGlobeNode)
             {
-                return true;
-            }
-            
-            if (IsAboveGlobe(prereq, element))
-            {
-                return true;
+                return skill;
             }
         }
-        return false;
+        return null;
     }
     
     private bool HasDependentSkills(SkillNode skill)
