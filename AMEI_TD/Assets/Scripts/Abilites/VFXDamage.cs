@@ -33,16 +33,16 @@ public class VFXDamage : MonoBehaviour
         {
             ObjectPooling.instance.Register(tinyFlamesPrefab, 20);
         }
-        spellType = instance.currenSpellType;
+       
     }
     
 
 
     private void OnEnable()
     {
-      
-          
-        
+
+        spellType = instance.currenSpellType;
+
         enemyBaseGameObjectRef = null;
         EnemyDictionary.Clear();    
         stopFlames = false;
