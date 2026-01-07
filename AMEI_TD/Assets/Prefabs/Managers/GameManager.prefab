@@ -45,7 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3c5efc04b3d1b44628e2332266381850, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  points: 5
+  points: 1000
+  healthPoints: 10
   waveManager: {fileID: 0}
   typeMatchupDatabase: {fileID: 11400000, guid: d344d67bd351206468b13acd5da88ebd, type: 2}
 --- !u!114 &240844272392965744
