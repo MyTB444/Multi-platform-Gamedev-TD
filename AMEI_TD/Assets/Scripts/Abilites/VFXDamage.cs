@@ -26,6 +26,7 @@ public class VFXDamage : MonoBehaviour
     [Header("Settings")]
     [SerializeField] private float magicDisableTime = 5f;
     [SerializeField] private float tinyFlamesDisableTime = 5f;
+    [SerializeField] private float DamageMultiplier = 2f;
 
     private void Start()
     {
@@ -107,7 +108,7 @@ public class VFXDamage : MonoBehaviour
                         EnemyDictionary.Remove(enemyBaseGameObjectRef);
                     }
 
-                    enemyBaseGameObjectRef.TakeDamage(0f, 0.0000003f, true);
+                    enemyBaseGameObjectRef.TakeDamage(0f, 0.00003f * DamageMultiplier, true);
                 }
             }
         }
@@ -125,7 +126,7 @@ public class VFXDamage : MonoBehaviour
                     EnemyDictionary.Remove(enemyBaseGameObjectRef);
                 }
 
-                enemyBaseGameObjectRef.TakeDamage(0f, 0.00005f, true);
+                enemyBaseGameObjectRef.TakeDamage(0f, 0.0005f *DamageMultiplier, true);
 
                 if (other.gameObject != null && other.gameObject.activeInHierarchy)
                 {
@@ -227,7 +228,7 @@ public class VFXDamage : MonoBehaviour
                         if (!enemyBase.isDeadProperty)
                         {
                             Debug.Log("123");
-                            enemyBase.TakeDamage(0f, 0.0000004f, true);
+                            enemyBase.TakeDamage(0f, 0.001f * DamageMultiplier, true);
                         }
                     }
                     if (enemyBase.isDeadProperty)
@@ -260,5 +261,9 @@ public class VFXDamage : MonoBehaviour
             ObjectPooling.instance.Return(gameObject);
         }
     }
+    #endregion
+
+    #region Getters
+    public float GetDamageMultilpier() => DamageMultiplier;
     #endregion
 }

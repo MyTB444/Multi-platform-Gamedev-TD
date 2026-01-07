@@ -824,14 +824,30 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
 
         if (DamageNumberSpawner.instance != null)
         {
-            Vector3 spawnPos = centerPoint != null ? centerPoint.position : transform.position;
-            DamageNumberSpawner.instance.Spawn(
-                spawnPos,
-                result.finalDamage,
-                result.wasSuperEffective,
-                result.wasNotVeryEffective,
-                result.wasImmune
-            );
+            if (!spellDamageEnabled)
+            {
+                Vector3 spawnPos = centerPoint != null ? centerPoint.position : transform.position;
+               DamageNumberSpawner.instance.Spawn(
+                    spawnPos,
+                    result.finalDamage,
+                    result.wasSuperEffective,
+                    result.wasNotVeryEffective,
+                    result.wasImmune
+                );
+            }
+            else
+            {
+                Debug.Log("12345");
+                Vector3 spawnPos = centerPoint != null ? centerPoint.position : transform.position;
+                DamageNumberSpawner.instance.Spawn(
+                    spawnPos,
+                    result.finalDamage,
+                    result.wasSuperEffective,
+                    result.wasNotVeryEffective,
+                    result.wasImmune,
+                    true
+                );
+            }
         }
 
         if (result.wasImmune)

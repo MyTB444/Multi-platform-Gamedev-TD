@@ -3670,7 +3670,7 @@ ParticleSystem:
         m_RotationOrder: 4
     minKillSpeed: 0
     maxKillSpeed: 10000
-    radiusScale: 0.1
+    radiusScale: 0.8
     collidesWith:
       serializedVersion: 2
       m_Bits: 64
@@ -4726,3 +4726,4 @@ MonoBehaviour:
   tinyFlamesPrefab: {fileID: 1972207730512856, guid: 3cbf6e6c4aae0e6418e9f176d49eb910, type: 3}
   magicDisableTime: 5
   tinyFlamesDisableTime: 5
+  DamageMultiplier: 2
