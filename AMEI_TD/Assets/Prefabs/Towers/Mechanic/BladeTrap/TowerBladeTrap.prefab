@@ -2382,7 +2382,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69ec94be3d52698419ef19642bd2f621, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 40
+  damage: 32
   attackCooldown: 2
   towerBody: {fileID: 0}
   towerHead: {fileID: 0}
@@ -2446,8 +2446,8 @@ MonoBehaviour:
   bladeHitSoundVolume: 0.246
   spinSpeedBoostPercent: 0.2
   bleedChance: 0
-  bleedChancePercent: 0.3
-  bleedDamage: 3
+  bleedChancePercent: 0.45
+  bleedDamage: 15
   bleedDuration: 4
   bleedVFX: {fileID: 3538601806443498961, guid: ae8be53a4ea8c18479183ebb3a59bf7c, type: 3}
   moreBlades: 0

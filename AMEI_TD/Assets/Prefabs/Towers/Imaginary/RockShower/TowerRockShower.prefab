@@ -28095,7 +28095,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38eb0a6271d9f5e45920c1c582a59347, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 25
+  damage: 7
   attackCooldown: 1.8
   towerBody: {fileID: 843637828774583270}
   towerHead: {fileID: 0}
@@ -28154,14 +28154,14 @@ MonoBehaviour:
   rockSizeMax: 1.5
   rockSpeedMin: 8
   rockSpeedMax: 15
-  predictionMultiplier: 4
+  predictionMultiplier: 7
   rockPoolAmount: 30
   moreRocks: 0
-  bonusRocks: 3
+  bonusRocks: 5
   biggerRocks: 0
-  rockSizeBonus: 0.3
+  rockSizeBonus: 0.5
   longerShower: 0
-  bonusShowerDuration: 1
+  bonusShowerDuration: 1.5
   meteorStrike: 0
   meteorPrefab: {fileID: 3974658804896811211, guid: 5fed0da13bd85e24f94960e05052370c, type: 3}
   meteorSize: 5
