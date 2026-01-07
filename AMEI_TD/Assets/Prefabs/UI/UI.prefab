@@ -989,7 +989,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &7544444603597757358
 RectTransform:
   m_ObjectHideFlags: 0
@@ -12594,7 +12594,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &142881299964813705
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15721,7 +15721,7 @@ PrefabInstance:
     - target: {fileID: 2968682627777421095, guid: 7fcb48453934f4058b79ba4f6ae3bbf1, type: 3}
       propertyPath: skill
       value: 
-      objectReference: {fileID: 11400000, guid: 586976236ac284e819068045eaadbd41, type: 2}
+      objectReference: {fileID: 11400000, guid: 7029412eb9a084b94ab49acebf62312b, type: 2}
     - target: {fileID: 6337084670624423787, guid: 7fcb48453934f4058b79ba4f6ae3bbf1, type: 3}
       propertyPath: m_Sprite
       value: 

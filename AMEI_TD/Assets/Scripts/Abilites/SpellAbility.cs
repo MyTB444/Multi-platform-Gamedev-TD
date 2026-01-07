@@ -675,7 +675,7 @@ public class SpellAbility : MonoBehaviour
             }
             foreach (GameObject o in flames)
             {
-                yield return new WaitForSeconds(0.3f);
+                yield return new WaitForSeconds(0.2f);
                 ObjectPooling.instance.Return(o);
             }
             flames.Clear();
