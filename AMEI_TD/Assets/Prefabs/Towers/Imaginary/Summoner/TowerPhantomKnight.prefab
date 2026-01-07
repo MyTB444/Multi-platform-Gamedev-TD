@@ -21474,7 +21474,7 @@ MonoBehaviour:
   targetMostAdvancedEnemy: 1
   targetPriorityElement: 1
   priorityElementType: 2
-  useHpTargeting: 0
+  useHpTargeting: 1
   targetHighestHpEnemy: 0
   useRandomTargeting: 0
   decoyLayer:

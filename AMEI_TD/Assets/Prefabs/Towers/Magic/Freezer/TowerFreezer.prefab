@@ -1986,8 +1986,8 @@ MonoBehaviour:
   targetMostAdvancedEnemy: 1
   targetPriorityElement: 1
   priorityElementType: 3
-  useHpTargeting: 0
-  targetHighestHpEnemy: 0
+  useHpTargeting: 1
+  targetHighestHpEnemy: 1
   useRandomTargeting: 0
   decoyLayer:
     serializedVersion: 2
