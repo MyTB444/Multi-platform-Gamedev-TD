@@ -704,6 +704,7 @@ public class SpellAbility : MonoBehaviour
         }
     }
     #endregion
+
     #region SelectedPath
 
     public void SelectedPathFromPlayer(SelectedPath path, Vector3 mousePosition)
@@ -740,6 +741,7 @@ public class SpellAbility : MonoBehaviour
                 CanSelectPaths = false;
                 FireSpellActivated = false;
                 IsSpellActivated = false;
+                currenSpellType = SpellType.None;
                 break;
                 
             case SpellType.Magic:
@@ -748,6 +750,7 @@ public class SpellAbility : MonoBehaviour
                 CanSelectPaths = false;
                 MagicSpellActivated = false;
                 IsSpellActivated = false;
+                currenSpellType = SpellType.None;
                 break;
 
             case SpellType.Mechanic:
@@ -755,6 +758,7 @@ public class SpellAbility : MonoBehaviour
             
                 MechanicSpellActivated = false;
                 IsSpellActivated = false;
+                currenSpellType = SpellType.None;
                 break;
 
             case SpellType.Imaginary:
@@ -797,9 +801,10 @@ public class SpellAbility : MonoBehaviour
                     CanSelectPaths = false;
                     stopImaginary = false;
                     ImaginarySpellActivated = false;
-                   
+
                 }
                 IsSpellActivated = false;
+                currenSpellType = SpellType.None;
                 break;
         }
     }
