@@ -123,12 +123,15 @@ public class WaveManager : MonoBehaviour
     public bool gameBegan;
 
     private float currentSpawnRateMultiplier = 1f;
+    private bool isFirstWave = true;
+    private float initialWaveTimer;
 
     private void Awake()
     {
         instance = this;
         enemySpawners = new List<EnemySpawner>(FindObjectsByType<EnemySpawner>(FindObjectsSortMode.None));
         enemyPrefabLookup = new Dictionary<EnemyType, GameObject>();
+        initialWaveTimer = waveTimer;
     }
 
     private void Start()
@@ -196,7 +199,7 @@ public class WaveManager : MonoBehaviour
 
         if (waveTimerEnabled == enable) return;
 
-        waveTimer = timeBetweenWaves;
+        waveTimer = isFirstWave ? initialWaveTimer : timeBetweenWaves;
         waveTimerEnabled = enable;
     }
 
@@ -219,6 +222,7 @@ public class WaveManager : MonoBehaviour
     {
         if (GameManager.instance.IsGameLost()) return;
 
+        isFirstWave = false;
         GiveEnemiesToSpawners();
         EnableWaveTimer(false);
         makingNextWave = false;
