@@ -45,10 +45,6 @@ public class TowerRockShower : TowerBase
     private Vector3 lastEnemyPosition;
     private Vector3 lockedTargetPosition;
     
-    protected override void Awake()
-    {
-    }
-    
     protected override void Start()
     {
         base.Start();
