@@ -83,7 +83,6 @@ public class UIBase : MonoBehaviour
         else
         {
             hpUI.text = "0";
-            GameManager.instance.LevelFailed();
         }
     }
 
