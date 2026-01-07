@@ -5,36 +5,37 @@ using UnityEngine.Events;
 
 public class SkillTreeManager : MonoBehaviour
 {
-    
     [Header("Events")]
     public UnityEvent<SkillNode> OnSkillUnlocked;
     public UnityEvent<SkillNode> OnSkillLocked;
     public UnityEvent GainedPoints;
-
     public UnityEvent OnTreeReset;
+    
     public static SkillTreeManager instance;
-    // Track unlocked skills
+    
     private HashSet<SkillNode> unlockedSkills = new HashSet<SkillNode>();
+    private List<SkillNode> unlockOrder = new List<SkillNode>();
+    private bool treeFullyProtected = false;
+    
     private void Start()
     {
         instance = this;
         LoadProgress();
     }
+    
     public bool IsSkillUnlocked(SkillNode skill)
     {
         return unlockedSkills.Contains(skill);
     }
+    
     public bool CanUnlockSkill(SkillNode skill)
     {
-        // Already unlocked
         if (IsSkillUnlocked(skill))
             return false;
 
-        // Not enough points
         if (GameManager.instance.GetPoints() < skill.skillPointCost)
             return false;
 
-        // Check prerequisites
         foreach (var prereq in skill.prerequisites)
         {
             if (!IsSkillUnlocked(prereq))
@@ -52,16 +53,23 @@ public class SkillTreeManager : MonoBehaviour
             return false;
         }
 
-        // Spend points
         GameManager.instance.UpdateSkillPoints(-skill.skillPointCost);
 
-        // Mark as unlocked
         unlockedSkills.Add(skill);
+        
+        if (!unlockOrder.Contains(skill))
+        {
+            unlockOrder.Add(skill);
+        }
 
-        // Apply effect
         skill.ApplyEffect();
+        
+        if (skill.isGuardianNode)
+        {
+            treeFullyProtected = true;
+            Debug.Log("Guardian unlocked! Entire skill tree is now protected!");
+        }
 
-        // Fire events
         OnSkillUnlocked?.Invoke(skill);
 
         Debug.Log($"✓ Unlocked: {skill.skillName}");
@@ -74,10 +82,9 @@ public class SkillTreeManager : MonoBehaviour
     {
         if (!IsSkillUnlocked(skill))
             return false;
-        if(skill.irreversible)
+        if (skill.irreversible)
             return false;
 
-        // Check if any unlocked skills depend on this
         foreach (var unlockedSkill in unlockedSkills)
         {
             if (unlockedSkill.prerequisites.Contains(skill))
@@ -87,36 +94,180 @@ public class SkillTreeManager : MonoBehaviour
             }
         }
 
-        // Refund points
         GameManager.instance.UpdateSkillPoints(skill.skillPointCost);
 
-        // Remove from unlocked
         unlockedSkills.Remove(skill);
+        unlockOrder.Remove(skill);
 
         skill.RemoveEffect();
 
-        // Fire events
         OnSkillLocked?.Invoke(skill);
         Debug.Log($"✗ Locked: {skill.skillName}");
 
         SaveProgress();
         return true;
     }
+    
+    public void OnEnemyReachedCastle(ElementType enemyElement)
+    {
+        if (treeFullyProtected)
+        {
+            Debug.Log("Tree protected by Guardian - no skill loss");
+            return;
+        }
+        
+        SkillNode skillToLose = GetSkillToLose(enemyElement);
+        
+        if (skillToLose == null && HasNoElementSkills())
+        {
+            skillToLose = GetSkillToLose(ElementType.Global);
+        }
+        
+        if (skillToLose == null)
+        {
+            Debug.Log($"No skills to lose");
+            return;
+        }
+        
+        ForceLockSkill(skillToLose);
+    }
+    
+    private SkillNode GetSkillToLose(ElementType element)
+    {
+        List<SkillNode> elementSkills = new List<SkillNode>();
+        
+        for (int i = unlockOrder.Count - 1; i >= 0; i--)
+        {
+            SkillNode skill = unlockOrder[i];
+            
+            if (skill.skillElementType != element) continue;
+            if (skill.isGuardianNode) continue;
+            if (skill.isGlobeNode) continue;
+            
+            elementSkills.Add(skill);
+        }
+        
+        bool hasGlobe = HasGlobeForElement(element);
+        
+        foreach (SkillNode skill in elementSkills)
+        {
+            if (hasGlobe)
+            {
+                if (IsAboveGlobe(skill, element))
+                {
+                    if (!HasDependentSkills(skill))
+                    {
+                        return skill;
+                    }
+                }
+            }
+            else
+            {
+                if (!HasDependentSkills(skill))
+                {
+                    return skill;
+                }
+            }
+        }
+        
+        return null;
+    }
+    
+    private bool HasGlobeForElement(ElementType element)
+    {
+        foreach (SkillNode skill in unlockedSkills)
+        {
+            if (skill.skillElementType == element && skill.isGlobeNode)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private bool IsAboveGlobe(SkillNode skill, ElementType element)
+    {
+        foreach (SkillNode prereq in skill.prerequisites)
+        {
+            if (prereq.isGlobeNode && prereq.skillElementType == element)
+            {
+                return true;
+            }
+            
+            if (IsAboveGlobe(prereq, element))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private bool HasDependentSkills(SkillNode skill)
+    {
+        foreach (SkillNode unlockedSkill in unlockedSkills)
+        {
+            if (unlockedSkill.prerequisites.Contains(skill))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    private bool HasNoElementSkills()
+    {
+        foreach (SkillNode skill in unlockedSkills)
+        {
+            if (skill.skillElementType != ElementType.Global && 
+                !skill.isGuardianNode && 
+                !skill.isGlobeNode)
+            {
+                if (!HasDependentSkills(skill))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    
+    private void ForceLockSkill(SkillNode skill)
+    {
+        if (!unlockedSkills.Contains(skill)) return;
+        
+        unlockedSkills.Remove(skill);
+        unlockOrder.Remove(skill);
+        
+        skill.RemoveEffect();
+        
+        OnSkillLocked?.Invoke(skill);
+        
+        Debug.Log($"✗ Lost skill due to enemy: {skill.skillName}");
+        
+        SaveProgress();
+    }
+    
     public void ResetAllSkills()
     {
-        // Refund all points
         foreach (var skill in unlockedSkills)
         {
             GameManager.instance.UpdateSkillPoints(skill.skillPointCost);
         }
 
-        // Clear everything
         unlockedSkills.Clear();
+        unlockOrder.Clear();
+        treeFullyProtected = false;
+        
         OnTreeReset?.Invoke();
 
         Debug.Log("All skills reset!");
 
         SaveProgress();
+    }
+    
+    public void PointsGained()
+    {
+        GainedPoints?.Invoke();
     }
 
     #region Save/Load
@@ -125,7 +276,9 @@ public class SkillTreeManager : MonoBehaviour
     {
         SaveData data = new SaveData
         {
-            unlockedSkillNames = unlockedSkills.Select(s => s.name).ToList()
+            unlockedSkillNames = unlockedSkills.Select(s => s.name).ToList(),
+            unlockOrderNames = unlockOrder.Select(s => s.name).ToList(),
+            treeProtected = treeFullyProtected
         };
 
         string json = JsonUtility.ToJson(data);
@@ -143,20 +296,18 @@ public class SkillTreeManager : MonoBehaviour
 
         foreach (string skillName in data.unlockedSkillNames)
         {
-            
             Debug.Log($"Loaded skill: {skillName}");
         }
-    }
-    public void PointsGained()
-    {
-        GainedPoints?.Invoke();
-
+        
+        treeFullyProtected = data.treeProtected;
     }
 
     [System.Serializable]
     private class SaveData
     {
         public List<string> unlockedSkillNames;
+        public List<string> unlockOrderNames;
+        public bool treeProtected;
     }
 
     #endregion

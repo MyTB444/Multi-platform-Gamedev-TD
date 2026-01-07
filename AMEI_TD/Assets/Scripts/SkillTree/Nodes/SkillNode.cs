@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using Microsoft.Unity.VisualStudio.Editor;
 using UnityEngine;
 
 public enum SwapType
@@ -43,7 +41,14 @@ public class SkillNode : ScriptableObject
     public SwapType swapType;
     public SpellEnableType spellEnableType;
     public bool noah;
+    
+    [Header("Skill Loss System")]
+    public ElementType skillElementType;
+    public bool isGlobeNode;
+    public bool isGuardianNode;
+    
     public event Action<SwapType> EventRaised;
+    
     public void ApplyEffect()
     {
         TowerUpgradeManager.instance.UnlockUpgrade(function);
@@ -57,12 +62,11 @@ public class SkillNode : ScriptableObject
             EnableSpell(spellEnableType);
         if(noah)
             EnableNoah();
-        
     }
     
     public void RemoveEffect()
     {
-       TowerUpgradeManager.instance.LockUpgrade(function);
+        TowerUpgradeManager.instance.LockUpgrade(function);
         if (function2 != TowerUpgradeType.Null)
         {
             TowerUpgradeManager.instance.LockUpgrade(function2);

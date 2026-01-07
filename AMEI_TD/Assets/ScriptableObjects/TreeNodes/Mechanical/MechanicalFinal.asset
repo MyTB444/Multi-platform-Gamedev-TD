@@ -23,8 +23,11 @@ MonoBehaviour:
   irreversible: 0
   skillPointCost: 0
   prerequisites: []
-  function: 19
-  function2: 23
+  function: 0
+  function2: 0
   swapType: 0
   spellEnableType: 0
   noah: 0
+  skillElementType: 2
+  isGlobeNode: 0
+  isGuardianNode: 0
