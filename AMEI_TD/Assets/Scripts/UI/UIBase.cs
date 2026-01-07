@@ -17,7 +17,10 @@ public class UIBase : MonoBehaviour
     [SerializeField] private GameObject treeUI;
     [SerializeField] private GameObject infoUI;
     [SerializeField] private TextMeshProUGUI pointsUI;
+    [SerializeField] private TextMeshProUGUI hpUI;
+
     [SerializeField] private GameObject spellNotActive;
+
 
     void Awake()
     {
@@ -71,6 +74,19 @@ public class UIBase : MonoBehaviour
             combatIcon.SetActive(true);
         }
     }
+    public void UpdateHpUi(float value)
+    {
+        if (value > 0)
+        {
+            hpUI.text = value.ToString("0");
+        }
+        else
+        {
+            hpUI.text = "0";
+            GameManager.instance.LevelFailed();
+        }
+    }
+
 
     // Shows win or lose UI based on game outcome
     public void GameWon(bool a)

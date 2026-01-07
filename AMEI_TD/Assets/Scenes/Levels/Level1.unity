@@ -86880,6 +86880,7 @@ MonoBehaviour:
   treeUI: {fileID: 1908666398}
   infoUI: {fileID: 847925883}
   pointsUI: {fileID: 153667699}
+  hpUI: {fileID: 5812542036432064410}
   spellNotActive: {fileID: 1817472924}
 --- !u!114 &2134071270
 MonoBehaviour:
@@ -88564,6 +88565,10 @@ PrefabInstance:
       propertyPath: manager
       value: 
       objectReference: {fileID: 2141222430}
+    - target: {fileID: 6202802850422665936, guid: 8457fa35112354befbc4d79744ae3848, type: 3}
+      propertyPath: m_Name
+      value: HealthPoints
+      objectReference: {fileID: 0}
     - target: {fileID: 6294106096932387473, guid: 8457fa35112354befbc4d79744ae3848, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -88605,6 +88610,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8457fa35112354befbc4d79744ae3848, type: 3}
+--- !u!114 &5812542036432064410 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1885230494166128718, guid: 8457fa35112354befbc4d79744ae3848, type: 3}
+  m_PrefabInstance: {fileID: 5812542036432064409}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &5907283176944657229
 Transform:
   m_ObjectHideFlags: 0
