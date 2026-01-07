@@ -18,7 +18,7 @@ public class SpellAbility : MonoBehaviour
     private Vector3 currentMousePosition;
     private Dictionary<Vector3, Vector3> mousePositionDictionary = new();
 
-    public enum SpellType { Physical, Magic, Mechanic, Imaginary }
+    public enum SpellType { Physical, Magic, Mechanic, Imaginary,None }
     private EnemyBase enemyBaseGameObjectRef;
     private Collider[] colliders = new Collider[800];
    
@@ -54,6 +54,7 @@ public class SpellAbility : MonoBehaviour
     private bool isHoveringOnPotentialPaths = false;    
     private void Awake()
     {
+        Debug.Log("done");
         instance = this;
     }
 
@@ -88,9 +89,14 @@ public class SpellAbility : MonoBehaviour
 
     private void OnEnable()
     {
+        Debug.Log("123");
         FireSpellActivated = false;
         MagicSpellActivated = false;
-
+        MechanicSpellActivated = false;
+        ImaginarySpellActivated = false;    
+        IsSpellActivated = false;
+        currenSpellType = SpellType.None;
+     
     }
 
     private void Update()
@@ -98,31 +104,26 @@ public class SpellAbility : MonoBehaviour
         //for testing only
 
         //disable this 
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            FireSpellActivated = false;
-            MagicSpellActivated = false;
-            MechanicSpellActivated = false;
-            CanSelectPaths = false;
-        }
+       
         if (Input.GetKeyDown(KeyCode.S))
         {
-            if (!FireSpellActivated && !IsSpellActivated)
-            {
-                
-                CanSelectPaths = true;
-                currenSpellType = SpellType.Physical;
-                stopFire = false;
-                if(vfxVisualVisualGameObject != null)
-                {
-                    ObjectPooling.instance.Return(vfxVisualVisualGameObject);
-                }
-                for (int i = 0; i < 1; i++)
-                {
-                    vfxVisualVisualGameObject = ObjectPooling.instance.Get(tinyFlamesVisualPrefab);
-                }
+            //if (!FireSpellActivated && !IsSpellActivated)
+            //{
 
-            }
+            //    CanSelectPaths = true;
+            //    currenSpellType = SpellType.Physical;
+            //    stopFire = false;
+            //    if(vfxVisualVisualGameObject != null)
+            //    {
+            //        ObjectPooling.instance.Return(vfxVisualVisualGameObject);
+            //    }
+            //    for (int i = 0; i < 1; i++)
+            //    {
+            //        vfxVisualVisualGameObject = ObjectPooling.instance.Get(tinyFlamesVisualPrefab);
+            //    }
+
+            //}
+            ActivateFireSpell();
         }
         if (Input.GetKeyDown(KeyCode.B))
         {
@@ -181,11 +182,11 @@ public class SpellAbility : MonoBehaviour
         if (currenSpellType == SpellType.Physical)
         {
 
-
+            Debug.Log("12");
 
             if (vfxVisualVisualGameObject != null)
             {
-                Debug.Log("hi");
+              
                 VisualiseSpellsPrerfab(vfxVisualVisualGameObject);
 
             }
@@ -613,8 +614,11 @@ public class SpellAbility : MonoBehaviour
 
     public void ActivateFireSpell()
     {
+        Debug.Log(IsSpellActivated);
+        Debug.Log(FireSpellActivated);
         if (!FireSpellActivated && !IsSpellActivated)
         {
+            Debug.Log("12345");
 
             CanSelectPaths = true;
             currenSpellType = SpellType.Physical;
@@ -683,10 +687,23 @@ public class SpellAbility : MonoBehaviour
         }
     }
 
-   
+
 
     #endregion
 
+    #region DeactivateSpells
+    public void DeactivateSpells()
+    {
+        if (IsSpellActivated)
+        {
+            FireSpellActivated = false;
+            MagicSpellActivated = false;
+            MechanicSpellActivated = false;
+            ImaginarySpellActivated = false;
+            IsSpellActivated = false;   
+        }
+    }
+    #endregion
     #region SelectedPath
 
     public void SelectedPathFromPlayer(SelectedPath path, Vector3 mousePosition)
