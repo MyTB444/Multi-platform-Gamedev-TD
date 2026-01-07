@@ -162,6 +162,9 @@ public class TowerBase : MonoBehaviour
 
     protected virtual void Awake()
     {
+        baseDamage = damage;
+        baseAttackCooldown = attackCooldown;
+        baseAttackRange = attackRange;
     }
 
     protected virtual void Start()
@@ -170,10 +173,6 @@ public class TowerBase : MonoBehaviour
         {
             ObjectPooling.instance.Register(projectilePrefab, projectilePoolAmount);
         }
-
-        baseDamage = damage;
-        baseAttackCooldown = attackCooldown;
-        baseAttackRange = attackRange;
 
         ApplyStatUpgrades();
         SaveOriginalColors();
@@ -211,6 +210,12 @@ public class TowerBase : MonoBehaviour
         ClearTargetOutOfRange();
         UpdateTarget();
         HandleRotation();
+
+        // DEBUG
+        if (Time.frameCount % 60 == 0)  // Every 60 frames
+        {
+            Debug.Log($"{gameObject.name} - Enemy: {currentEnemy != null}, CanAttack: {CanAttack()}, Range: {attackRange}, LayerMask: {whatIsEnemy.value}");
+        }
 
         if (CanAttack()) AttemptToAttack();
     }

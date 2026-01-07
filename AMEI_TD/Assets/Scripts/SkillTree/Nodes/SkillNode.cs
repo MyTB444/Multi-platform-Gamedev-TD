@@ -59,6 +59,7 @@ public class SkillNode : ScriptableObject
             EnableNoah();
         
     }
+    
     public void RemoveEffect()
     {
        TowerUpgradeManager.instance.LockUpgrade(function);
@@ -67,14 +68,19 @@ public class SkillNode : ScriptableObject
             TowerUpgradeManager.instance.LockUpgrade(function2);
         }
     }
+    
     public void Raise(SwapType type)
     {
-        EventRaised.Invoke(type);
+        Debug.Log($"Raise called with SwapType: {type}");
+        EventRaised?.Invoke(type);
+        TowerUpgradeManager.instance.SwapTowers(type);
     }
+    
     public void EnableSpell(SpellEnableType type)
     {
         SpellFunctionality.instance.EnableButton(type);
     }
+    
     public void EnableNoah()
     {
         PlayerCastle.instance.SpawnGuardianTower();
