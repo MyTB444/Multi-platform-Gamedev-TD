@@ -58,8 +58,8 @@ MonoBehaviour:
   tinyFlamesVFXPoolSize: 1
   magicVFXPoolSize: 1
   mechanicVFXPoolSize: 1
-  fireSpellCoolDown: 10
-  magicSpellCoolDown: 10
-  mechanicSpellCoolDown: 10
-  imaginarySpellCoolDown: 10
+  fireSpellCoolDown: 5
+  magicSpellCoolDown: 5
+  mechanicSpellCoolDown: 5
+  imaginarySpellCoolDown: 5
   imaginaryVFXCoolDown: 5
