@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 4235566955999968}
   - component: {fileID: 198714429152696258}
   - component: {fileID: 199604171885040012}
-  - component: {fileID: 8341444781433430922}
   m_Layer: 0
   m_Name: TinyFlamesVisual
   m_TagString: TinyFlames
@@ -4843,18 +4842,3 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
---- !u!114 &8341444781433430922
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1972207730512856}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 532a156e510334b4591b75e29ac6f87f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  tinyFlamesPrefab: {fileID: 1972207730512856}
-  magicDisableTime: 5
-  tinyFlamesDisableTime: 5
