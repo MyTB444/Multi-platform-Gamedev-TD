@@ -129,7 +129,7 @@ public class SpearProjectile : TowerProjectileBase
                 ObjectPooling.instance.GetVFX(impactEffectPrefab, impactPoint, Quaternion.identity, 2f);
             }
 
-            PlayImpactSound(impactPoint);
+            PlayImpactSound();
 
             if (damageable != null)
             {
@@ -155,7 +155,7 @@ public class SpearProjectile : TowerProjectileBase
         {
             hasHit = true;
             
-            PlayImpactSound(impactPoint);
+            PlayImpactSound();
             TriggerExplosion(impactPoint, impactPoint);
         }
         // Non-explosive spear hits ground - just destroy it

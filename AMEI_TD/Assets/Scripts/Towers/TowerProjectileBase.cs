@@ -18,13 +18,17 @@ public class TowerProjectileBase : MonoBehaviour
 
     [Header("Audio")]
     [SerializeField] protected AudioClip impactSound;
+    protected AudioSource audioSource;
     [SerializeField] [Range(0f, 1f)] protected float impactSoundVolume = 1f;
     
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
+        audioSource = GetComponent<AudioSource>();
+        audioSource.playOnAwake = false;
+        audioSource.spatialBlend = 1f;
     }
-    
+
     public void SetupProjectile(Vector3 targetPosition, IDamageable newDamageable, DamageInfo newDamageInfo, float newSpeed)
     {
         direction = (targetPosition - transform.position).normalized;
@@ -77,7 +81,7 @@ public class TowerProjectileBase : MonoBehaviour
             ObjectPooling.instance.GetVFX(impactEffectPrefab, impactPoint, Quaternion.identity, 2f);
         }
 
-        PlayImpactSound(impactPoint);
+        PlayImpactSound();
 
         if (other.GetComponent<EnemyBase>())
         {
@@ -85,11 +89,13 @@ public class TowerProjectileBase : MonoBehaviour
         }
     }
 
-    protected virtual void PlayImpactSound(Vector3 position)
+    protected virtual void PlayImpactSound()
     {
-        if (impactSound != null)
+        if (impactSound != null && audioSource != null)
         {
-            AudioSource.PlayClipAtPoint(impactSound, position, impactSoundVolume);
+            audioSource.clip = impactSound;
+            audioSource.volume = impactSoundVolume;
+            audioSource.Play();
         }
     }
 
@@ -98,7 +104,7 @@ public class TowerProjectileBase : MonoBehaviour
         if (!hasHit && impactEffectPrefab != null)
         {
             ObjectPooling.instance.GetVFX(impactEffectPrefab, transform.position, Quaternion.identity, 2f);
-            PlayImpactSound(transform.position);
+            PlayImpactSound();
         }
 
         isActive = false;

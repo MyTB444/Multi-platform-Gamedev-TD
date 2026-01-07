@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class GameManager : MonoBehaviour
 {
@@ -7,6 +8,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float healthPoints = 10f;
     public static GameManager instance;
     public WaveManager waveManager;
+
     private bool gameLost;
     public bool IsGameLost() => gameLost;
     
@@ -70,7 +72,6 @@ public class GameManager : MonoBehaviour
             spawner.CanCreateNewEnemies(false);
         }
     }
-
     public int GetPoints() => points;
     public float GetHealthPoints() => healthPoints;
     public void TakeDamageHealth(float damage)

@@ -75,7 +75,7 @@ public class RockProjectile : TowerProjectileBase
 
             if (isMeteor || Random.value <= impactSoundChance)
             {
-                PlayImpactSound(transform.position);
+                PlayImpactSound();
             }
 
             ObjectPooling.instance.Return(gameObject);
@@ -116,7 +116,7 @@ public class RockProjectile : TowerProjectileBase
 
             if (isMeteor || Random.value <= impactSoundChance)
             {
-                PlayImpactSound(transform.position);
+                PlayImpactSound();
             }
 
             ObjectPooling.instance.Return(gameObject);
@@ -147,7 +147,7 @@ public class RockProjectile : TowerProjectileBase
 
                 if (isMeteor || Random.value <= impactSoundChance)
                 {
-                    PlayImpactSound(transform.position);
+                    PlayImpactSound();
                 }
 
                 ObjectPooling.instance.Return(gameObject);

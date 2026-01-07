@@ -578,6 +578,7 @@ MonoBehaviour:
   - {fileID: 8700003570000022515}
   - {fileID: 2811092131225024937}
   loopPages: 1
+  audioMixer: {fileID: 24100000, guid: f7debeb0eec1f4083affcc55518dd62e, type: 2}
 --- !u!1 &549403078786995920
 GameObject:
   m_ObjectHideFlags: 0
@@ -7149,7 +7150,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7727661616588294212}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 133519638053468214}
+        m_TargetAssemblyTypeName: PageScroller, Assembly-CSharp
+        m_MethodName: SetVolume
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &4871308517104434460
 GameObject:
   m_ObjectHideFlags: 0
@@ -7234,9 +7247,9 @@ MonoBehaviour:
   m_HandleRect: {fileID: 6339701366162815107}
   m_Direction: 0
   m_MinValue: -80
-  m_MaxValue: 0
+  m_MaxValue: 20
   m_WholeNumbers: 0
-  m_Value: -41
+  m_Value: 20
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:
