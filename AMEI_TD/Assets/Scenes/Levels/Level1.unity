@@ -88491,17 +88491,9 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3855158055681530312, guid: 8457fa35112354befbc4d79744ae3848, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3855158055681530312, guid: 8457fa35112354befbc4d79744ae3848, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1929514978}
-    - target: {fileID: 3855158055681530312, guid: 8457fa35112354befbc4d79744ae3848, type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ActivateMagicSpell
-      objectReference: {fileID: 0}
     - target: {fileID: 3927298848150176011, guid: 8457fa35112354befbc4d79744ae3848, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
@@ -88530,10 +88522,6 @@ PrefabInstance:
       propertyPath: manager
       value: 
       objectReference: {fileID: 2141222430}
-    - target: {fileID: 6202802850422665936, guid: 8457fa35112354befbc4d79744ae3848, type: 3}
-      propertyPath: m_Name
-      value: HealthPoints
-      objectReference: {fileID: 0}
     - target: {fileID: 6294106096932387473, guid: 8457fa35112354befbc4d79744ae3848, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
