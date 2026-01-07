@@ -173,7 +173,7 @@ MonoBehaviour:
   curveStrength: 5
   gravityMultiplier: 2
   maxCurveDuration: 0.5
-  closeRangeGravityBoost: 4.5
+  closeRangeGravityBoost: 5.5
   closeRangeThreshold: 7.6
   vfxPoint: {fileID: 1219065220683405368}
 --- !u!135 &5166148121310787836
