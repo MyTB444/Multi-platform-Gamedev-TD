@@ -6423,6 +6423,7 @@ MonoBehaviour:
   attackSpeedBuffPercent: 0.15
   rangeBuffPercent: 0.1
   buffUpdateInterval: 1
+  buffGlowIntensity: 14
   lightningCooldown: 10
   lightningElementType: 3
   enemyLayerMask:

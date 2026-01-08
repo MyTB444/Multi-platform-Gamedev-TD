@@ -18898,7 +18898,7 @@ MonoBehaviour:
   fadeInDuration: 0.3
   fadeOutDuration: 0.5
   guardianBuffColor: {r: 1, g: 0.85, b: 0.3, a: 1}
-  guardianGlowIntensity: 0.3
+  guardianGlowIntensity: 1
   guardianPulseSpeed: 2
   bowController: {fileID: 4796576192046828227}
   arrowVisual: {fileID: 5029408247247093985}
