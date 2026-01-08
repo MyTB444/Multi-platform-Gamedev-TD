@@ -388,14 +388,14 @@ public class SpellAbility : MonoBehaviour
     {
         if (enemyBase.gameObject != null && enemyBase.gameObject.activeInHierarchy && enemyBaseGameObjectRef != null)
         {
-            enemyBase.enemyBaseRef = enemyBase;
-            enemyBase.LiftEffectFunction(true, true);
+            
+            enemyBase.LiftEffectFunction(true, true,enemyBase);
 
             Vector3 startPos = enemyBase.transform.position;
             Vector3 targetPos = Vector3.zero;
             if (!isExplosiveDamage)
             {
-                targetPos = new Vector3(startPos.x, startPos.y + 4, startPos.z);
+                targetPos = new Vector3(startPos.x, enemyBase.transform.position.y + 2, startPos.z);
             }
             else
             {
@@ -409,9 +409,9 @@ public class SpellAbility : MonoBehaviour
             {
                 elapsed += Time.deltaTime * 2.5f;
                 float t = elapsed / duration;
-
-                enemyBase.transform.position = Vector3.Lerp(startPos, targetPos, t);
-
+                
+                    enemyBase.transform.position = Vector3.Lerp(startPos, targetPos, t);
+                
                 yield return null;
             }
             enemyBase.transform.position = targetPos;
@@ -454,7 +454,7 @@ public class SpellAbility : MonoBehaviour
                     enemyBase.UpdateVisuals();
                    
                     
-                    enemyBase.LiftEffectFunction(false, false);
+                    enemyBase.LiftEffectFunction(false, false,enemyBase);
                 }
             }
         }
