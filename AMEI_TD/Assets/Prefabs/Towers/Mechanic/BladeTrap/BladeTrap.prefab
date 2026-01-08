@@ -9,6 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3083951562767141889}
+  - component: {fileID: 4942257306251602757}
   m_Layer: 0
   m_Name: BladeTrap
   m_TagString: Untagged
@@ -34,6 +35,42 @@ Transform:
   - {fileID: 300770220168150514}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4942257306251602757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1523811159564721809}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4d6f334924aba640b61c151e7382133, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bladeHolder: {fileID: 300770220168150514}
+  spinSpeed: 200
+  returnSpeed: 90
+  clockwise: 1
+  momentumStrength: 0.5
+  momentumOffset: 90
+  damageCooldown: 0.5
+  animationAnticipation: 0.5
+  hammerImpactPoint: {fileID: 0}
+  attackSpawnEffectPrefab: {fileID: 3153472991145048103, guid: 08437c187d5063347acd4ebd7d83f3b3, type: 3}
+  vfxDelay: 0.3
+  bladeHitSound: {fileID: 8300000, guid: f7617a7275da92048b101e960c24aff3, type: 3}
+  bladeHitSoundVolume: 1
+  extraBlades:
+  - {fileID: 4924546038431244488}
+  - {fileID: 6445703057395040900}
+  bladeVFXPoints:
+  - {fileID: 8105255741814273306}
+  - {fileID: 6324614445902624891}
+  - {fileID: 1065971651578662750}
+  allBlades:
+  - {fileID: 7734432876861916620}
+  - {fileID: 1580968789076872425}
+  - {fileID: 7128095616062991121}
 --- !u!1 &2017985969357799117
 GameObject:
   m_ObjectHideFlags: 0

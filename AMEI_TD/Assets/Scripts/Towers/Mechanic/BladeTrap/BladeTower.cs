@@ -1,334 +1,222 @@
 using UnityEngine;
-using System.Collections;
-using System.Collections.Generic;
 
 public class BladeTower : TowerBase
 {
-    [Header("Blade Setup")]
-    [SerializeField] private Transform bladeHolder;
-    
-    [Header("Spin Settings")]
-    [SerializeField] private float spinSpeed = 360f;
-    [SerializeField] private float returnSpeed = 180f;
-    [SerializeField] private bool clockwise = true;
-    [SerializeField] [Range(0f, 0.9f)] private float momentumStrength = 0.5f;
-    [SerializeField] private float momentumOffset = 90f;
-    
-    [Header("Damage Settings")]
-    [SerializeField] private float damageCooldown = 0.5f;
-    
-    [Header("Animation")]
-    [SerializeField] private float animationAnticipation = 0.5f;
+    [Header("Blade Spawning")]
+    [SerializeField] private GameObject bladeApparatusPrefab;
+    [SerializeField] private float raycastDistance = 10f;
+    [SerializeField] private LayerMask roadLayer;
+    [SerializeField] private float downwardAngle = 45f;
+    [SerializeField] private float baseSpinSpeed = 200f;
+    [SerializeField] private float apparatusRotationOffset = 90f;
+    [SerializeField] private float heightOffset = 1.42f;
+    [SerializeField] private float apparatusScale = 0.6666667f;
     
     [Header("VFX")]
     [SerializeField] private Transform hammerImpactPoint;
-    [SerializeField] private float vfxDelay = 0.3f;
-
-    [Header("Audio")]
-    [SerializeField] private AudioClip bladeHitSound;
-    [SerializeField] [Range(0f, 1f)] private float bladeHitSoundVolume = 1f;
+    
+    [Header("Road Centering")]
+    [SerializeField] private bool autoCenter = true;
+    [SerializeField] private bool debugDrawRays = false;
     
     [Header("Blade Upgrades")]
-    [SerializeField] [Range(0f, 0.5f)] private float spinSpeedBoostPercent = 0.25f;
+    [SerializeField] [Range(0f, 0.5f)] private float spinSpeedBoostPercent = 0.2f;
     [Space]
     [SerializeField] private bool bleedChance = false;
-    [SerializeField] [Range(0f, 1f)] private float bleedChancePercent = 0.3f;
-    [SerializeField] private float bleedDamage = 3f;
+    [SerializeField] [Range(0f, 1f)] private float bleedChancePercent = 0.45f;
+    [SerializeField] private float bleedDamage = 15f;
     [SerializeField] private float bleedDuration = 4f;
     [SerializeField] private GameObject bleedVFX;
     [Space]
     [SerializeField] private bool moreBlades = false;
-    [SerializeField] private GameObject[] extraBlades;
-    [SerializeField] private Transform[] bladeVFXPoints;
     [Space]
     [SerializeField] private bool extendedReach = false;
     [SerializeField] private float extendedBladeScale = 1.5f;
-    [SerializeField] private Transform[] allBlades;
-
-    private List<GameObject> activeBleedVFXList = new List<GameObject>();
-
-    private GameObject activeBleedVFX;
     
-    private Dictionary<EnemyBase, float> recentlyHitEnemies = new Dictionary<EnemyBase, float>();
-    private Quaternion startRotation;
-    private bool isActive = false;
-    private float baseSpinSpeed;
+    private BladeApparatus bladeApparatus;
     private bool spinSpeedBoosted = false;
-    private bool isReturning = false;
-    private float currentAngle = 0f;
-    private bool hasTriggeredAnimation = false;
     
     protected override void Awake()
     {
         base.Awake();
-        baseSpinSpeed = spinSpeed;
-    }
-
-    protected override void Start()
-    {
-        base.Start();
-
-        if (bladeHolder != null)
-        {
-            startRotation = bladeHolder.rotation;
-        }
-
-        ApplyUpgrades();
+        SpawnBladeOnRoad();
     }
     
-    public override void SetUpgrade(TowerUpgradeType upgradeType, bool enabled)
+    private void SpawnBladeOnRoad()
     {
-        base.SetUpgrade(upgradeType, enabled);
-    
-        switch (upgradeType)
-        {
-            case TowerUpgradeType.BladeSpinSpeed:
-                spinSpeedBoosted = enabled;
-                if (enabled)
-                {
-                    spinSpeed = baseSpinSpeed * (1f + spinSpeedBoostPercent);
-                }
-                else
-                {
-                    spinSpeed = baseSpinSpeed;
-                }
-                break;
-            case TowerUpgradeType.BleedChance:
-                bleedChance = enabled;
-                ClearBleedVFX();
-                ApplyUpgrades();
-                break;
-            case TowerUpgradeType.MoreBlades:
-                moreBlades = enabled;
-                ClearBleedVFX();
-                ApplyUpgrades();
-                break;
-            case TowerUpgradeType.ExtendedReach:
-                extendedReach = enabled;
-                ApplyUpgrades();
-                break;
-        }
-    }
-
-    private void ClearBleedVFX()
-    {
-        foreach (GameObject vfx in activeBleedVFXList)
-        {
-            if (vfx != null)
-            {
-                ObjectPooling.instance.Return(vfx);
-            }
-        }
-        activeBleedVFXList.Clear();
-    }
-
-    private void ApplyUpgrades()
-    {
-        // Enable extra blades
-        if (extraBlades != null)
-        {
-            foreach (GameObject blade in extraBlades)
-            {
-                if (blade != null)
-                {
-                    blade.SetActive(moreBlades);
-                }
-            }
-        }
-    
-        // Spawn bleed VFX on blades
-        if (bleedChance && bleedVFX != null && bladeVFXPoints != null)
-        {
-            foreach (Transform point in bladeVFXPoints)
-            {
-                // Skip VFX on extra blades if not enabled
-                if (!moreBlades && point.parent != null && !point.parent.gameObject.activeSelf)
-                {
-                    continue;
-                }
-
-                GameObject vfx = ObjectPooling.instance.GetVFXWithParent(bleedVFX, point, -1f);
-                vfx.transform.localPosition = Vector3.zero;
-                activeBleedVFXList.Add(vfx);
-            }
-        }
+        Vector3 rayDirection = Quaternion.AngleAxis(downwardAngle, transform.right) * transform.forward;
         
-        // Extended reach - scale blade Y to 1.5
-        if (extendedReach && allBlades != null)
+        if (Physics.Raycast(transform.position, rayDirection, out RaycastHit hit, raycastDistance, roadLayer))
         {
-            foreach (Transform blade in allBlades)
-            {
-                Vector3 currentScale = blade.localScale;
-                blade.localScale = new Vector3(currentScale.x, extendedBladeScale, currentScale.z);
-            }
-        }
-    }
-    
-    protected override void FixedUpdate()
-    {
-        UpdateDebuffs();
-        UpdateDisabledVisual();
-        
-        if (isDisabled) return;
-    
-        CheckForEnemies();
-    
-        if (isActive)
-        {
-            isReturning = false;
-            RotateBlades();
-        }
-        else if (isReturning || !IsAtStartRotation())
-        {
-            isReturning = true;
-            ReturnToStart();
-        }
-    
-        CleanupHitList();
-    }
-    
-    private void CheckForEnemies()
-    {
-        Collider[] enemies = Physics.OverlapSphere(transform.position, attackRange, whatIsEnemy);
-        isActive = enemies.Length > 0;
-    }
-    
-    private bool IsAtStartRotation()
-    {
-        return Quaternion.Angle(bladeHolder.rotation, startRotation) < 1f;
-    }
-    
-    private void RotateBlades()
-    {
-        if (bladeHolder == null) return;
-    
-        float adjustedAngle = currentAngle + momentumOffset;
-        float momentumMultiplier = 1f + (Mathf.Sin(adjustedAngle * Mathf.Deg2Rad) * momentumStrength);
-        
-        float currentSpeed = spinSpeed * momentumMultiplier * slowMultiplier;
-        float rotationThisFrame = currentSpeed * Time.fixedDeltaTime;
-        
-        currentAngle += rotationThisFrame;
-        
-        float triggerAngle = 360f - (spinSpeed * animationAnticipation);
-        
-        if (!hasTriggeredAnimation && currentAngle >= triggerAngle)
-        {
-            hasTriggeredAnimation = true;
+            Vector3 spawnPosition;
             
-            if (characterAnimator != null)
+            if (autoCenter)
             {
-                characterAnimator.SetTrigger(attackAnimationTrigger);
+                spawnPosition = GetTileCenterPosition(hit.point, hit.collider);
+            }
+            else
+            {
+                spawnPosition = hit.point;
             }
             
-            StartCoroutine(DelayedHammerVFX());
+            Quaternion spawnRotation = GetBladeRotation();
+            
+            GameObject apparatus = Instantiate(bladeApparatusPrefab, spawnPosition, spawnRotation);
+            Vector3 originalScale = apparatus.transform.localScale;
+
+            bladeApparatus = apparatus.GetComponent<BladeApparatus>();
+            bladeApparatus.Setup(CreateDamageInfo(), attackRange, whatIsEnemy, this, characterAnimator, attackAnimationTrigger);
+            
+            // Apply current upgrades
+            if (spinSpeedBoosted)
+            {
+                bladeApparatus.SetSpinSpeed(baseSpinSpeed * (1f + spinSpeedBoostPercent));
+            }
+            
+            if (bleedChance)
+            {
+                bladeApparatus.SetBleedEffect(bleedChancePercent, bleedDamage, bleedDuration, elementType, bleedVFX);
+            }
+            
+            if (moreBlades)
+            {
+                bladeApparatus.SetMoreBlades(true);
+            }
+            
+            if (extendedReach)
+            {
+                bladeApparatus.SetExtendedReach(true, extendedBladeScale);
+            }
+            
+            apparatus.transform.SetParent(transform);
+            apparatus.transform.localScale = originalScale;
         }
-        
-        if (currentAngle >= 360f)
+        else
         {
-            currentAngle -= 360f;
-            hasTriggeredAnimation = false;
+            Debug.LogWarning("BladeTower: No road found!");
         }
-        
-        Vector3 axis = clockwise ? Vector3.right : Vector3.left;
-        bladeHolder.Rotate(axis, rotationThisFrame);
     }
     
-    private IEnumerator DelayedHammerVFX()
-    {
-        yield return new WaitForSeconds(vfxDelay);
-        
-        SpawnHammerImpactVFX();
-    }
-    
-    public void SpawnHammerImpactVFX()
+    public void PlayHammerEffect()
     {
         PlayAttackSound();
+    
         if (attackSpawnEffectPrefab != null && hammerImpactPoint != null)
         {
             ObjectPooling.instance.GetVFX(attackSpawnEffectPrefab, hammerImpactPoint.position, Quaternion.identity, 2f);
         }
     }
     
-    private void ReturnToStart()
+    private Vector3 GetTileCenterPosition(Vector3 hitPoint, Collider roadCollider)
     {
-        if (bladeHolder == null) return;
-        
-        Vector3 axis = clockwise ? Vector3.right : Vector3.left;
-        bladeHolder.Rotate(axis, returnSpeed * Time.fixedDeltaTime);
-        
-        if (IsAtStartRotation())
+        Vector3 tileCenter = roadCollider.transform.position;
+    
+        Vector3 forward = transform.forward;
+        forward.y = 0;
+        forward.Normalize();
+    
+        Vector3 spawnPosition;
+    
+        if (Mathf.Abs(forward.z) > Mathf.Abs(forward.x))
         {
-            bladeHolder.rotation = startRotation;
-            isReturning = false;
-            currentAngle = 0f;
-            hasTriggeredAnimation = false;
+            spawnPosition = new Vector3(hitPoint.x, hitPoint.y + heightOffset, tileCenter.z);
+        }
+        else
+        {
+            spawnPosition = new Vector3(tileCenter.x, hitPoint.y + heightOffset, hitPoint.z);
+        }
+    
+        return spawnPosition;
+    }
+    
+    private Quaternion GetBladeRotation()
+    {
+        Vector3 roadDirection = transform.forward;
+        roadDirection.y = 0;
+        roadDirection.Normalize();
+    
+        Quaternion baseRotation = Quaternion.LookRotation(roadDirection, Vector3.up);
+        return baseRotation * Quaternion.Euler(0f, apparatusRotationOffset, 0f);
+    }
+    
+    public override void SetUpgrade(TowerUpgradeType upgradeType, bool enabled)
+    {
+        base.SetUpgrade(upgradeType, enabled);
+        
+        switch (upgradeType)
+        {
+            case TowerUpgradeType.BladeSpinSpeed:
+                spinSpeedBoosted = enabled;
+                if (bladeApparatus != null)
+                {
+                    float newSpeed = enabled ? baseSpinSpeed * (1f + spinSpeedBoostPercent) : baseSpinSpeed;
+                    bladeApparatus.SetSpinSpeed(newSpeed);
+                }
+                break;
+                
+            case TowerUpgradeType.BleedChance:
+                bleedChance = enabled;
+                if (bladeApparatus != null)
+                {
+                    if (enabled)
+                    {
+                        bladeApparatus.SetBleedEffect(bleedChancePercent, bleedDamage, bleedDuration, elementType, bleedVFX);
+                    }
+                    else
+                    {
+                        bladeApparatus.ClearBleedEffect();
+                    }
+                }
+                break;
+                
+            case TowerUpgradeType.MoreBlades:
+                moreBlades = enabled;
+                if (bladeApparatus != null)
+                {
+                    bladeApparatus.SetMoreBlades(enabled);
+                }
+                break;
+                
+            case TowerUpgradeType.ExtendedReach:
+                extendedReach = enabled;
+                if (bladeApparatus != null)
+                {
+                    bladeApparatus.SetExtendedReach(enabled, extendedBladeScale);
+                }
+                break;
         }
     }
     
-    private void CleanupHitList()
+    public void PlayAttackSoundFromApparatus()
     {
-        List<EnemyBase> toRemove = new List<EnemyBase>();
-        
-        foreach (var kvp in recentlyHitEnemies)
-        {
-            if (kvp.Key == null || !kvp.Key.gameObject.activeSelf || Time.time >= kvp.Value)
-            {
-                toRemove.Add(kvp.Key);
-            }
-        }
-        
-        foreach (var enemy in toRemove)
-        {
-            recentlyHitEnemies.Remove(enemy);
-        }
+        PlayAttackSound();
     }
     
-    public void OnBladeHit(EnemyBase enemy)
-    {
-        if (enemy == null) return;
-
-        if (recentlyHitEnemies.ContainsKey(enemy))
-        {
-            return;
-        }
-
-        IDamageable damageable = enemy.GetComponent<IDamageable>();
-        if (damageable != null)
-        {
-            damageable.TakeDamage(CreateDamageInfo());
-        }
-
-        // Play blade hit sound
-        PlayBladeHitSound();
-
-        // Bleed chance
-        if (bleedChance && Random.value <= bleedChancePercent)
-        {
-            DamageInfo bleedDamageInfo = new DamageInfo(bleedDamage, elementType, true);
-            enemy.ApplyDoT(bleedDamageInfo, bleedDuration, 0.5f, false, 0f, default, DebuffType.Bleed);
-        }
-
-        recentlyHitEnemies[enemy] = Time.time + damageCooldown;
-    }
-
-    private void PlayBladeHitSound()
-    {
-        if (bladeHitSound != null && audioSource != null)
-        {
-            audioSource.clip = bladeHitSound;
-            audioSource.volume = bladeHitSoundVolume;
-            audioSource.Play();
-        }
-    }
-
     protected override void HandleRotation() { }
     protected override void Attack() { }
     protected override bool CanAttack() { return false; }
     
     protected override void OnDrawGizmos()
     {
+        // Draw range from apparatus position if it exists, otherwise from tower
+        Vector3 rangeCenter = (bladeApparatus != null) ? bladeApparatus.transform.position : transform.position;
+        bool isActive = bladeApparatus != null && bladeApparatus.IsActive();
+    
         Gizmos.color = isActive ? Color.red : Color.yellow;
-        Gizmos.DrawWireSphere(transform.position, attackRange);
+        Gizmos.DrawWireSphere(rangeCenter, attackRange);
+    
+        // Draw raycast
+        Vector3 rayDirection = Quaternion.AngleAxis(downwardAngle, transform.right) * transform.forward;
+        Gizmos.color = Color.red;
+        Gizmos.DrawRay(transform.position, rayDirection * raycastDistance);
+    
+        if (debugDrawRays && Physics.Raycast(transform.position, rayDirection, out RaycastHit hit, raycastDistance, roadLayer))
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawSphere(hit.point, 0.2f);
+        
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawSphere(GetTileCenterPosition(hit.point, hit.collider), 0.35f);
+        }
     }
 }
