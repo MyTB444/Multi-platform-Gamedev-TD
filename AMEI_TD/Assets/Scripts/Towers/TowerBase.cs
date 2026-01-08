@@ -202,11 +202,6 @@ public class TowerBase : MonoBehaviour
 
         hasSavedColors = true;
     }
-    
-    protected virtual void Update()
-    {
-        UpdateGuardianBuffVisual();
-    }
 
     protected virtual void FixedUpdate()
     {

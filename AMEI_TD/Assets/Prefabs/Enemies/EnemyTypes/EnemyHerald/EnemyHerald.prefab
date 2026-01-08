@@ -793,9 +793,9 @@ MonoBehaviour:
   animationSpeedMultiplier: 1
   useSpawnGrace: 1
   spawnGracePeriod: 0.5
-  pathOffsetRange: 1.2
+  pathOffsetRange: 0
   speedVariationPercent: 0.1
-  isHighPriority: 0
+  isHighPriority: 1
   waypointReachThreshold: 0.3
   cornerCutVariation: 0.8
   pathDriftAmount: 0.15
@@ -830,7 +830,7 @@ NavMeshAgent:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5196595418094556024}
   m_Enabled: 1
-  m_AgentTypeID: 0
+  m_AgentTypeID: 658490984
   m_Radius: 0.75
   m_Speed: 1.5
   m_Acceleration: 8
@@ -841,7 +841,7 @@ NavMeshAgent:
   m_AutoBraking: 1
   m_AutoRepath: 1
   m_Height: 2
-  m_BaseOffset: 0
+  m_BaseOffset: 0.1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!136 &6632742390895393255
