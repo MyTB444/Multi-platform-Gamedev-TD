@@ -20,7 +20,6 @@ public class VFXDamage : MonoBehaviour
 
     private List<EnemyBase> enemiesList = new();
 
-
     [Header("VFX Prefabs")]
     [SerializeField] private GameObject tinyFlamesPrefab;
 
@@ -29,14 +28,7 @@ public class VFXDamage : MonoBehaviour
     [SerializeField] private float tinyFlamesDisableTime = 5f;
     [SerializeField] private float DamageMultiplier = 2f;
 
-    private void Start()
-    {
-        if (tinyFlamesPrefab != null)
-        {
-            ObjectPooling.instance.Register(tinyFlamesPrefab, 20);
-        }
-       
-    }
+    
     
 
 

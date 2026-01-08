@@ -30,6 +30,7 @@ public class SpellAbility : MonoBehaviour
     [SerializeField] private GameObject tinyFlamesVisualPrefab;
     [SerializeField] private GameObject magicVisualPrefab;
     [SerializeField] private GameObject mechanicVisualPrefab;
+    [SerializeField] private GameObject tinyFlamesPrefab;
 
     [Header("Pool Settings")]
     [SerializeField] private int flamesPoolSize = 20;
@@ -84,6 +85,10 @@ public class SpellAbility : MonoBehaviour
         if (magicVisualPrefab != null)
         {
             ObjectPooling.instance.Register(magicVisualPrefab, magicVFXPoolSize);
+        }
+        if (tinyFlamesPrefab != null)
+        {
+            ObjectPooling.instance.Register(tinyFlamesPrefab, 20);
         }
     }
 
