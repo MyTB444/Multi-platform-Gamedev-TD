@@ -76,7 +76,11 @@ public class ArrowProjectile : TowerProjectileBase
 
         if (distance < closeRangeThreshold)
         {
-            gravityMultiplier += closeRangeGravityBoost;
+            gravityMultiplier = 3f + closeRangeGravityBoost;
+        }
+        else
+        {
+            gravityMultiplier = 1.5f;
         }
 
         rb.useGravity = false;
