@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: ImagineryBiggerMore
   m_EditorClassIdentifier: 
   skillName: Improved Imagination
-  skillCost: 0
+  skillCost: 50
   description: 'Rocks are 30% larger and deal 30% more damage.
 
 
@@ -23,7 +23,7 @@ MonoBehaviour:
 '
   icon: {fileID: 21300000, guid: 0ad2337320c1b5841ba3ceb24de6e91a, type: 3}
   irreversible: 0
-  skillPointCost: 0
+  skillPointCost: 50
   prerequisites:
   - {fileID: 11400000, guid: 961616388dd2242628348134abeb879c, type: 2}
   function: 25
@@ -31,6 +31,10 @@ MonoBehaviour:
   swapType: 0
   spellEnableType: 0
   noah: 0
+  disablesUpgrade: 0
+  restoresUpgrade: 0
+  disablesUpgrade2: 0
+  restoresUpgrade2: 0
   skillElementType: 3
   isGlobeNode: 0
   isGuardianNode: 0

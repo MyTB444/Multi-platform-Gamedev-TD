@@ -7974,9 +7974,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 133519638053468214}
-        m_TargetAssemblyTypeName: PageScroller, Assembly-CSharp
-        m_MethodName: SetVolume
+      - m_Target: {fileID: 194051729640075398}
+        m_TargetAssemblyTypeName: AudioSLider, Assembly-CSharp
+        m_MethodName: SetAllToZero
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

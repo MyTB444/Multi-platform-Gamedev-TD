@@ -189,11 +189,9 @@ public class EnemyHerald : EnemyBase
     {
         base.ResetEnemy();
 
-        // Reset to allow casting after cooldown
-        lastCastTime = -castCooldown;
+        lastCastTime = Time.time;
         isCasting = false;
 
-        // Cleanup any active magic circle VFX
         if (activeMagicCircle != null)
         {
             ObjectPooling.instance.Return(activeMagicCircle);
@@ -205,5 +203,17 @@ public class EnemyHerald : EnemyBase
     {
         Gizmos.color = Color.green;
         Gizmos.DrawWireSphere(transform.position, castRadius);
+    }
+    
+    private void OnDisable()
+    {
+        if (activeMagicCircle != null)
+        {
+            ObjectPooling.instance.Return(activeMagicCircle);
+            activeMagicCircle = null;
+        }
+    
+        isCasting = false;
+        canMove = true;
     }
 }

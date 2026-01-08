@@ -65,18 +65,19 @@ public class EnemySplitter : EnemyBase
 
     private void SpawnSplitEnemy(int index)
     {
-        if (splitterPrefab == null)
-        {
-            Debug.LogError("[EnemySplitter] splitterPrefab is not assigned! Cannot spawn splits.");
-            return;
-        }
+        if (splitterPrefab == null) return;
 
-        Vector3 spawnOffset = new Vector3(
-            Random.Range(-0.5f, 0.5f),
-            0,
-            Random.Range(-0.5f, 0.5f)
-        );
+        Vector3 spawnOffset = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f));
         Vector3 spawnPosition = transform.position + spawnOffset;
+
+        if (UnityEngine.AI.NavMesh.SamplePosition(spawnPosition, out UnityEngine.AI.NavMeshHit hit, 3f, UnityEngine.AI.NavMesh.AllAreas))
+        {
+            spawnPosition = hit.position;
+        }
+        else
+        {
+            spawnPosition = transform.position;
+        }
 
         GameObject newEnemy = ObjectPooling.instance.Get(splitterPrefab);
         if (newEnemy == null) return;
@@ -84,36 +85,36 @@ public class EnemySplitter : EnemyBase
         newEnemy.transform.position = spawnPosition;
         newEnemy.transform.rotation = transform.rotation;
         newEnemy.SetActive(true);
-    
-        // Get remaining waypoints
+
         Vector3[] remainingWaypoints = GetRemainingWaypoints();
     
         EnemySplitter splitterScript = newEnemy.GetComponent<EnemySplitter>();
-    
-        // Call SetupEnemy first (this resets everything)
+
         if (splitterScript != null && remainingWaypoints.Length > 0)
         {
-            splitterScript.SetupEnemy(mySpawner, remainingWaypoints);
-        
-            // Set split level AFTER SetupEnemy (since ResetEnemy resets it to 0)
+            splitterScript.SetupEnemyNoGrace(remainingWaypoints);  // Use NoGrace version
+            splitterScript.mySpawner = mySpawner;
+
             splitterScript.currentSplitLevel = currentSplitLevel + 1;
-        
-            // Set stats AFTER SetupEnemy
+
             float newMaxHp = enemyMaxHp * healthMultiplierPerSplit;
             float newScale = originalScale.x * Mathf.Pow(scaleMultiplierPerSplit, currentSplitLevel + 1);
-        
+
             splitterScript.enemyMaxHp = newMaxHp;
             splitterScript.enemyCurrentHp = newMaxHp;
             newEnemy.transform.localScale = Vector3.one * newScale;
+
+            UnityEngine.AI.NavMeshAgent agent = newEnemy.GetComponent<UnityEngine.AI.NavMeshAgent>();
+            if (agent != null)
+            {
+                agent.radius = 2.5f * Mathf.Pow(scaleMultiplierPerSplit, currentSplitLevel + 1);
+            }
         }
 
-        // Add to spawner's active enemies list
         if (mySpawner != null)
         {
             mySpawner.GetActiveEnemies().Add(newEnemy);
         }
-
-        Debug.Log($"[EnemySplitter] Spawned split at level {currentSplitLevel + 1}, maxSplitLevel is {maxSplitLevel}");
     }
     
     private Vector3[] GetRemainingWaypoints()

@@ -1405,8 +1405,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eeb89e081fd09cc4a994570388b62161, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mySpawner: {fileID: 0}
   enemyType: 5
-  enemySpeed: 2
+  enemySpeed: 1.5
   damage: 0
   reward: 12
   enemyMaxHp: 160
@@ -1457,7 +1458,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 8624495124000836869}
   m_Enabled: 1
   m_AgentTypeID: 658490984
-  m_Radius: 0.8
+  m_Radius: 0.7
   m_Speed: 1.5
   m_Acceleration: 8
   avoidancePriority: 50

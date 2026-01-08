@@ -81,13 +81,24 @@ public class EnemySpawner : MonoBehaviour
 
         if (spawnTimer <= 0 && enemiesToCreate.Count > 0)
         {
-            // Faster spawns during mega wave
             float cooldown = spawnCooldown;
-            if (myWaveManager != null && myWaveManager.IsMegaWaveActive())
-            {
-                cooldown /= myWaveManager.GetMegaWaveSpawnRateMultiplier();
-            }
         
+            if (myWaveManager != null)
+            {
+                if (myWaveManager.IsMegaWaveActive())
+                {
+                    cooldown /= myWaveManager.GetMegaWaveSpawnRateMultiplier();
+                }
+                else
+                {
+                    float tierMultiplier = myWaveManager.GetCurrentSpawnRateMultiplier();
+                    if (tierMultiplier > 0)
+                    {
+                        cooldown /= tierMultiplier;
+                    }
+                }
+            }
+    
             spawnTimer = cooldown;
             return true;
         }
