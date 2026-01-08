@@ -219,4 +219,15 @@ public class EnemySummoner : EnemyBase
         yield return new WaitForSeconds(delay);
         ObjectPooling.instance.Return(obj);
     }
+    private void OnDisable()
+    {
+        if (activeMagicCircle != null)
+        {
+            ObjectPooling.instance.Return(activeMagicCircle);
+            activeMagicCircle = null;
+        }
+    
+        isSummoning = false;
+        canMove = true;
+    }
 }

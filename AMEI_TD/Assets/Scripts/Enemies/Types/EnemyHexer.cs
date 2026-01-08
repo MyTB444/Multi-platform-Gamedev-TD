@@ -198,12 +198,10 @@ public class EnemyHexer : EnemyBase
     {
         base.ResetEnemy();
 
-        // Reset to allow immediate casting after cooldown
-        lastAttackTime = -attackCooldown;
+        lastAttackTime = Time.time;
         isCasting = false;
         currentTarget = null;
 
-        // Cleanup any active magic circle VFX
         if (activeMagicCircle != null)
         {
             ObjectPooling.instance.Return(activeMagicCircle);
@@ -221,5 +219,18 @@ public class EnemyHexer : EnemyBase
     {
         Gizmos.color = Color.magenta;
         Gizmos.DrawWireSphere(transform.position, detectionRadius);
+    }
+    
+    private void OnDisable()
+    {
+        if (activeMagicCircle != null)
+        {
+            ObjectPooling.instance.Return(activeMagicCircle);
+            activeMagicCircle = null;
+        }
+    
+        isCasting = false;
+        canMove = true;
+        currentTarget = null;
     }
 }
