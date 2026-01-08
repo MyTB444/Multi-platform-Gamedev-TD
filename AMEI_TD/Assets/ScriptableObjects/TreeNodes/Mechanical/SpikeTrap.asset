@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: SpikeTrap
   m_EditorClassIdentifier: 
   skillName: Spike Trapper
-  skillCost: 0
+  skillCost: 90
   description: 'Spike Traps are enhanced and have a chance to apply Bleed.
 
 
     UNLEASH!'
   icon: {fileID: 21300000, guid: 7184252199212cf4a9288a2a2d70dee1, type: 3}
   irreversible: 1
-  skillPointCost: 0
+  skillPointCost: 90
   prerequisites:
   - {fileID: 11400000, guid: fa3b443a4bb9f438da90fabced2c9a5e, type: 2}
   function: 18

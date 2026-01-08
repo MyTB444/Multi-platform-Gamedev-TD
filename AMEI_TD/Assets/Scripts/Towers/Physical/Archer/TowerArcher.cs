@@ -68,6 +68,7 @@ public class TowerArcher : TowerBase
         base.Start();
         baseAttackCooldownForArrow = attackCooldown;
         UpdateArrowVisualVFX();
+        UpdateAnimationSpeed();
     }
     
     protected override void FixedUpdate()
@@ -245,24 +246,36 @@ public class TowerArcher : TowerBase
 
     public void OnReleaseBow()
     {
-        float cooldownRatio = attackCooldown / baseAttackCooldown;  // Use inherited variable
-    
+        float cooldownRatio = attackCooldown / baseAttackCooldown;
+
         if (bowController != null)
         {
             bowController.ReleaseBow(cooldownRatio);
         }
-    
-        PlayAttackSound();
-        FireArrow();
-    
+
+        // Reacquire target if locked target died
+        if (lockedTarget == null || !lockedTarget.gameObject.activeSelf)
+        {
+            if (currentEnemy != null && currentEnemy.gameObject.activeSelf)
+            {
+                lockedTarget = currentEnemy;
+            }
+        }
+
+        if (lockedTarget != null && lockedTarget.gameObject.activeSelf)
+        {
+            PlayAttackSound();
+            FireArrow();
+        }
+
         if (arrowVisual != null)
         {
             arrowVisual.SetActive(false);
         }
-    
+
         isAttacking = false;
         ClearLockedTarget();
-    
+
         float dynamicRespawnDelay = 0.9f * cooldownRatio;
         Invoke("OnArrowReady", dynamicRespawnDelay);
     }

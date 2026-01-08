@@ -89,6 +89,11 @@ public class BladeApparatus : MonoBehaviour
         }
     }
     
+    public void UpdateDamageInfo(DamageInfo newDamageInfo)
+    {
+        damageInfo = newDamageInfo;
+    }
+    
     private void Update()
     {
         if (tower != null && tower.IsDisabled()) return;

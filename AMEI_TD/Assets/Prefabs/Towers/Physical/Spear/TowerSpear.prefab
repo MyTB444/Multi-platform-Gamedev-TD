@@ -17037,8 +17037,8 @@ MonoBehaviour:
   projectileSpeed: 20
   elementType: 0
   projectilePoolAmount: 20
-  buyPrice: 65
-  sellPrice: 32
+  buyPrice: 75
+  sellPrice: 35
   damageBoost: 0
   damageBoostPercent: 0.25
   attackSpeedBoost: 0
@@ -17078,12 +17078,12 @@ MonoBehaviour:
   forwardSpawnOffset: 0.5
   spearVisualVFXPoint: {fileID: 633823812887529683}
   bleedSpear: 0
-  bleedDamage: 15
+  bleedDamage: 10
   bleedDuration: 2
   bleedSpearVFX: {fileID: 3538601806443498961, guid: ae8be53a4ea8c18479183ebb3a59bf7c, type: 3}
   explosiveTip: 0
   explosionRadius: 3
-  explosionDamage: 35
+  explosionDamage: 30
   explosionVFX: {fileID: 1985299232585352030, guid: 90d2d7df4e04d4943a4c42d5dcf56669, type: 3}
 --- !u!65 &3789444799523090871
 BoxCollider:

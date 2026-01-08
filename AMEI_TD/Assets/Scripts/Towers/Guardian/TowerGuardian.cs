@@ -16,6 +16,7 @@ public class TowerGuardian : MonoBehaviour
     [SerializeField] private float attackSpeedBuffPercent = 0.15f;
     [SerializeField] private float rangeBuffPercent = 0.10f;
     [SerializeField] private float buffUpdateInterval = 1f;
+    [SerializeField] private float buffGlowIntensity = 0.7f;  // ADD THIS
 
     [Header("Lightning Strike")]
     [SerializeField] private float lightningCooldown = 15f;
@@ -66,7 +67,6 @@ public class TowerGuardian : MonoBehaviour
             guardianAnimator.Play(idleAnimationState);
         }
 
-        // Register VFX prefabs with pool
         if (lightningEffectPrefab != null)
         {
             ObjectPooling.instance.Register(lightningEffectPrefab, 3);
@@ -89,7 +89,6 @@ public class TowerGuardian : MonoBehaviour
         HandleBuffUpdate();
     }
 
-    // Called by Animation Event
     public void OnLightningStrikeEvent()
     {
         if (pendingLightningTarget == null) return;
@@ -100,7 +99,6 @@ public class TowerGuardian : MonoBehaviour
 
     public void ActivateGuardian()
     {
-        // Spawn VFX first
         if (spawnEffectPrefab != null)
         {
             GameObject spawnVFX = ObjectPooling.instance.Get(spawnEffectPrefab);
@@ -108,7 +106,6 @@ public class TowerGuardian : MonoBehaviour
             spawnVFX.transform.rotation = Quaternion.identity;
             spawnVFX.SetActive(true);
 
-            // Restart particles
             ParticleSystem[] particles = spawnVFX.GetComponentsInChildren<ParticleSystem>();
             foreach (var ps in particles)
             {
@@ -119,26 +116,21 @@ public class TowerGuardian : MonoBehaviour
             StartCoroutine(ReturnToPoolAfterDelay(spawnVFX, spawnEffectDuration));
         }
 
-        // Delay the tower activation
         StartCoroutine(DelayedActivation());
     }
 
     private IEnumerator DelayedActivation()
     {
-        // Hide the tower initially
         transform.localScale = Vector3.zero;
 
         yield return new WaitForSeconds(towerAppearDelay);
 
-        // Scale in the tower
         yield return StartCoroutine(ScaleTowerIn());
 
-        // Now activate everything
         isActive = true;
         lastLightningTime = Time.time;
         lastBuffUpdateTime = Time.time;
 
-        // Start playing idle animation
         if (guardianAnimator != null)
         {
             guardianAnimator.Play(idleAnimationState);
@@ -162,10 +154,7 @@ public class TowerGuardian : MonoBehaviour
         {
             timer += Time.deltaTime;
             float t = Mathf.Clamp01(timer / towerScaleInDuration);
-            
-            // Ease out for a nice pop effect
             t = 1f - (1f - t) * (1f - t);
-            
             transform.localScale = originalScale * t;
             yield return null;
         }
@@ -195,10 +184,10 @@ public class TowerGuardian : MonoBehaviour
                 buffedTowers.Add(tower);
             }
 
-            tower.ApplyGuardianBuff(damageBuffPercent, attackSpeedBuffPercent, rangeBuffPercent);
+            // CHANGED: Now passing glow intensity
+            tower.ApplyGuardianBuff(damageBuffPercent, attackSpeedBuffPercent, rangeBuffPercent, buffGlowIntensity);
         }
 
-        // Clean up destroyed towers
         buffedTowers.RemoveAll(t => t == null);
     }
 
@@ -219,7 +208,6 @@ public class TowerGuardian : MonoBehaviour
 
         if (enemies.Length == 0) return null;
 
-        // Target the enemy with the most HP
         EnemyBase bestTarget = null;
         float highestHp = 0f;
 
@@ -241,17 +229,14 @@ public class TowerGuardian : MonoBehaviour
 
     private void ExecuteLightningStrike(EnemyBase target)
     {
-        // Store target for animation event
         pendingLightningTarget = target;
 
-        // Play animation - VFX will spawn when animation event fires
         if (guardianAnimator != null)
         {
             guardianAnimator.SetTrigger(lightningAnimationTrigger);
         }
         else
         {
-            // No animator, fire immediately
             SpawnLightningVFX(target);
             pendingLightningTarget = null;
         }
@@ -265,7 +250,6 @@ public class TowerGuardian : MonoBehaviour
         Vector3 bottomPos = target.GetBottomPoint() != null ? target.GetBottomPoint().position : target.transform.position;
         Vector3 spawnPos = bottomPos + Vector3.up * lightningSpawnHeight;
 
-        // Spawn lightning VFX from pool
         if (lightningEffectPrefab != null)
         {
             GameObject lightningVFX = ObjectPooling.instance.Get(lightningEffectPrefab);
@@ -274,7 +258,6 @@ public class TowerGuardian : MonoBehaviour
             lightningVFX.transform.localScale = Vector3.one * lightningScale;
             lightningVFX.SetActive(true);
 
-            // Restart particle systems
             ParticleSystem[] particles = lightningVFX.GetComponentsInChildren<ParticleSystem>();
             foreach (var ps in particles)
             {
@@ -284,11 +267,9 @@ public class TowerGuardian : MonoBehaviour
                 ps.Play();
             }
 
-            // Return to pool after duration
             StartCoroutine(ReturnToPoolAfterDelay(lightningVFX, lightningEffectDuration * 2f));
         }
 
-        // Spawn impact VFX from pool
         if (lightningImpactPrefab != null)
         {
             GameObject impact = ObjectPooling.instance.Get(lightningImpactPrefab);
@@ -296,7 +277,6 @@ public class TowerGuardian : MonoBehaviour
             impact.transform.rotation = Quaternion.identity;
             impact.SetActive(true);
 
-            // Restart particle systems
             ParticleSystem[] particles = impact.GetComponentsInChildren<ParticleSystem>();
             foreach (var ps in particles)
             {
@@ -307,10 +287,8 @@ public class TowerGuardian : MonoBehaviour
             StartCoroutine(ReturnToPoolAfterDelay(impact, lightningEffectDuration));
         }
 
-        // Play lightning strike sound
         PlayLightningStrikeSound(bottomPos);
 
-        // Insta-kill the target
         float overkillDamage = target.enemyMaxHp * 999f;
         DamageInfo lightningDamage = new DamageInfo(overkillDamage, lightningElementType);
         target.TakeDamage(lightningDamage);
@@ -350,7 +328,6 @@ public class TowerGuardian : MonoBehaviour
             instance = null;
         }
 
-        // Remove buffs from all towers
         foreach (TowerBase tower in buffedTowers)
         {
             if (tower != null)

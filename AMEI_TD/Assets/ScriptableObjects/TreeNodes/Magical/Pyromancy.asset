@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Pyromancy
   m_EditorClassIdentifier: 
   skillName: Pyromancy
-  skillCost: 0
+  skillCost: 75
   description: 'Pyromancers are empowered; their fireballs are larger and hit a wider
     area.
 
@@ -21,7 +21,7 @@ MonoBehaviour:
     UNLEASH!'
   icon: {fileID: 21300000, guid: dd3885098198d104888439be4c590aba, type: 3}
   irreversible: 1
-  skillPointCost: 0
+  skillPointCost: 75
   prerequisites:
   - {fileID: 11400000, guid: 74ee795e952bb4e178b3ba72e974c096, type: 2}
   function: 10

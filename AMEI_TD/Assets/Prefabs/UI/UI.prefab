@@ -9935,7 +9935,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51f656498e6eb4abfabdb0167efcded4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldown: 10
+  cooldown: 30
   button: {fileID: 0}
   icon: {fileID: 8707801099757550886}
   activeColor: {r: 1, g: 1, b: 1, a: 1}
@@ -12377,7 +12377,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51f656498e6eb4abfabdb0167efcded4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldown: 10
+  cooldown: 50
   button: {fileID: 0}
   icon: {fileID: 6546064361784842172}
   activeColor: {r: 1, g: 1, b: 1, a: 1}
@@ -14958,7 +14958,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51f656498e6eb4abfabdb0167efcded4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldown: 10
+  cooldown: 30
   button: {fileID: 0}
   icon: {fileID: 6108527162744513798}
   activeColor: {r: 1, g: 1, b: 1, a: 1}
@@ -15123,7 +15123,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 51f656498e6eb4abfabdb0167efcded4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cooldown: 10
+  cooldown: 20
   button: {fileID: 0}
   icon: {fileID: 8483702266342382568}
   activeColor: {r: 1, g: 1, b: 1, a: 1}

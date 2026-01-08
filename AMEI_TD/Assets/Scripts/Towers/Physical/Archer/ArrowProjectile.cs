@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ArrowProjectile : TowerProjectileBase
@@ -39,7 +41,7 @@ public class ArrowProjectile : TowerProjectileBase
         curving = true;
         applyPoison = false;
         applyFire = false;
-    
+
         if (vfxPoint != null)
         {
             foreach (Transform child in vfxPoint)
@@ -47,13 +49,13 @@ public class ArrowProjectile : TowerProjectileBase
                 ObjectPooling.instance.Return(child.gameObject);
             }
         }
-    
+
         if (rb != null)
         {
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
         }
-    
+
         if (trail != null)
         {
             trail.Clear();
@@ -68,23 +70,28 @@ public class ArrowProjectile : TowerProjectileBase
         launchTime = Time.time;
         targetPosition = targetPos;
         initialForward = transform.forward;
-    
+
         arrowSpeed = newSpeed + (distance * 0.5f);
         maxCurveDuration = 0.3f + (distance * 0.05f);
-    
+
         if (distance < closeRangeThreshold)
         {
             gravityMultiplier = 3f + closeRangeGravityBoost;
         }
         else
         {
-            gravityMultiplier = 3f;
+            gravityMultiplier = 1.5f;
         }
-    
+
         rb.useGravity = false;
         rb.velocity = initialForward * arrowSpeed;
         launched = true;
         curving = true;
+
+        if (trail != null)
+        {
+            trail.Clear();
+        }
     }
     
     protected override void Update()

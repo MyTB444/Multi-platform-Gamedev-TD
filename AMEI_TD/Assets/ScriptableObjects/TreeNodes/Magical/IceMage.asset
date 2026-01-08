@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: IceMage
   m_EditorClassIdentifier: 
   skillName: Ice Mage
-  skillCost: 0
+  skillCost: 100
   description: 'Pyromancers are replaced with Ice Mages; their attacks apply Frostbite.
 
 
     UNLEASH!'
   icon: {fileID: 21300000, guid: f5ab3f534c1138f4786f23cd74103223, type: 3}
   irreversible: 1
-  skillPointCost: 0
+  skillPointCost: 100
   prerequisites:
   - {fileID: 11400000, guid: 74ee795e952bb4e178b3ba72e974c096, type: 2}
   function: 14
@@ -28,6 +28,10 @@ MonoBehaviour:
   swapType: 3
   spellEnableType: 2
   noah: 0
+  disablesUpgrade: 0
+  restoresUpgrade: 0
+  disablesUpgrade2: 0
+  restoresUpgrade2: 0
   skillElementType: 1
   isGlobeNode: 1
   isGuardianNode: 0

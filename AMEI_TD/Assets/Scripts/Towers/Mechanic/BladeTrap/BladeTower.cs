@@ -152,6 +152,12 @@ public class BladeTower : TowerBase
         
         switch (upgradeType)
         {
+            case TowerUpgradeType.DamageBoost:
+                if (bladeApparatus != null)
+                {
+                    bladeApparatus.UpdateDamageInfo(CreateDamageInfo());
+                }
+                break;
             case TowerUpgradeType.BladeSpinSpeed:
                 spinSpeedBoosted = enabled;
                 if (bladeApparatus != null)

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: MagicalFinal
   m_EditorClassIdentifier: 
   skillName: Grand Magus
-  skillCost: 0
+  skillCost: 125
   description: 'Pyromancer Burns spread, igniting nearby enemies.
 
 
@@ -21,13 +21,17 @@ MonoBehaviour:
     gain a chance to Freeze enemies, fully stunning them.'
   icon: {fileID: 21300000, guid: 2456dd2824f5ec540830760922f5bac6, type: 3}
   irreversible: 0
-  skillPointCost: 0
+  skillPointCost: 125
   prerequisites: []
   function: 11
   function2: 15
   swapType: 0
   spellEnableType: 0
   noah: 0
+  disablesUpgrade: 0
+  restoresUpgrade: 0
+  disablesUpgrade2: 0
+  restoresUpgrade2: 0
   skillElementType: 1
   isGlobeNode: 0
   isGuardianNode: 0

@@ -207,7 +207,6 @@ public class TowerBase : MonoBehaviour
     {
         UpdateDebuffs();
         UpdateDisabledVisual();
-        UpdateGuardianBuffVisual();
 
         if (isDisabled) return;
 
@@ -284,16 +283,33 @@ public class TowerBase : MonoBehaviour
     protected void UpdateGuardianBuffVisual()
     {
         if (!hasSavedColors || isDisabled) return;
-        if (!hasGuardianBuff) return;
+        if (!hasGuardianBuff)
+        {
+            return;
+        }
 
         float pulse = (Mathf.Sin(Time.time * guardianPulseSpeed) + 1f) / 2f;
-        float lerpAmount = guardianGlowIntensity * pulse;
+        float lerpAmount = Mathf.Lerp(0.4f, 1f, pulse);  // Pulse between 40% and 100%
 
         for (int i = 0; i < towerRenderers.Length; i++)
         {
-            if (towerRenderers[i] != null && towerRenderers[i].material.HasProperty("_Color"))
+            if (towerRenderers[i] == null) continue;
+        
+            Material mat = towerRenderers[i].material;
+        
+            // Apply color tint
+            if (mat.HasProperty("_Color"))
             {
-                towerRenderers[i].material.color = Color.Lerp(originalColors[i], guardianBuffColor, lerpAmount);
+                Color tintedColor = Color.Lerp(originalColors[i], guardianBuffColor, lerpAmount);
+                mat.color = tintedColor;
+            }
+        
+            // Apply emission for actual glow (this is what makes it bright)
+            if (mat.HasProperty("_EmissionColor"))
+            {
+                mat.EnableKeyword("_EMISSION");
+                Color emissionColor = guardianBuffColor * guardianGlowIntensity * lerpAmount;
+                mat.SetColor("_EmissionColor", emissionColor);
             }
         }
     }
@@ -616,12 +632,13 @@ public class TowerBase : MonoBehaviour
         Gizmos.DrawWireSphere(transform.position, attackRange);
     }
 
-    public void ApplyGuardianBuff(float damagePercent, float attackSpeedPercent, float rangePercent)
+    public void ApplyGuardianBuff(float damagePercent, float attackSpeedPercent, float rangePercent, float glowIntensity = 0.7f)
     {
         hasGuardianBuff = true;
         guardianDamageBuffPercent = damagePercent;
         guardianAttackSpeedBuffPercent = attackSpeedPercent;
         guardianRangeBuffPercent = rangePercent;
+        guardianGlowIntensity = glowIntensity;
         ApplyStatUpgrades();
     }
 
@@ -632,6 +649,19 @@ public class TowerBase : MonoBehaviour
         guardianAttackSpeedBuffPercent = 0f;
         guardianRangeBuffPercent = 0f;
         ApplyStatUpgrades();
+        RestoreOriginalColors();
+    
+        // Turn off emission
+        if (towerRenderers != null)
+        {
+            for (int i = 0; i < towerRenderers.Length; i++)
+            {
+                if (towerRenderers[i] != null && towerRenderers[i].material.HasProperty("_EmissionColor"))
+                {
+                    towerRenderers[i].material.SetColor("_EmissionColor", Color.black);
+                }
+            }
+        }
     }
 
     public bool HasGuardianBuff() => hasGuardianBuff;
