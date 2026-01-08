@@ -13,9 +13,9 @@ public class AudioSLider : MonoBehaviour
 
     public static AudioSLider instance;
 
-    private float savedMusicVolume;
-    private float savedEffectVolume;
-    private float savedMaster;
+    private float savedMusicVolume = 20;
+    private float savedEffectVolume = 20;
+    private float savedMaster = 20;
     private const float minVolume = -80f;
 
     void Awake()
@@ -23,9 +23,6 @@ public class AudioSLider : MonoBehaviour
         instance = this;
 
         // Load saved volumes or default to full (0 dB)
-        savedMaster = PlayerPrefs.GetFloat("MasterVolume", 20f);
-        savedMusicVolume = PlayerPrefs.GetFloat("MusicVolume", 20f);
-        savedEffectVolume = PlayerPrefs.GetFloat("EffectVolume", 20f);
         if (masterSlider != null)
             masterSlider.value = savedMaster;
         if (musicSlider != null)
@@ -41,7 +38,6 @@ public class AudioSLider : MonoBehaviour
     public void SetMasterVolume(float volume)
     {
         audioMixer.SetFloat("MasterVolume", volume);
-        PlayerPrefs.SetFloat("MasterVolume", volume);
 
         // When master is at minimum, mute others visually and audibly
         if (volume <= minVolume)
@@ -75,14 +71,12 @@ public class AudioSLider : MonoBehaviour
     public void SetMusicVolume(float volume)
     {
         audioMixer.SetFloat("MusicVolume", volume);
-        PlayerPrefs.SetFloat("MusicVolume", volume);
         savedMusicVolume = volume;
     }
 
     public void SetEffectVolume(float volume)
     {
         audioMixer.SetFloat("EffectVolume", volume);
-        PlayerPrefs.SetFloat("EffectVolume", volume);
         savedEffectVolume = volume;
     }
 
