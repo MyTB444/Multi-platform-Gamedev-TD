@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class BladeDamage : MonoBehaviour
 {
-    private BladeTower tower;
+    private BladeApparatus apparatus;
     
     [Header("VFX")]
     [SerializeField] private GameObject hitEffectPrefab;
@@ -16,16 +16,16 @@ public class BladeDamage : MonoBehaviour
     
     private void Start()
     {
-        tower = GetComponentInParent<BladeTower>();
+        apparatus = GetComponentInParent<BladeApparatus>();
     }
     
     private void OnTriggerEnter(Collider other)
     {
         EnemyBase enemy = other.GetComponent<EnemyBase>();
         
-        if (enemy != null && tower != null)
+        if (enemy != null && apparatus != null)
         {
-            tower.OnBladeHit(enemy);
+            apparatus.OnBladeHit(enemy);
             
             if (hitEffectPrefab != null && hitPoint != null)
             {

@@ -6406,6 +6406,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   downwardAngle: 37.5
+  autoCenter: 1
+  debugDrawRays: 1
   hammerImpactPoint: {fileID: 885937671795851817}
   spikeTrapAttackSpeedPercent: 0.2
   poisonSpikes: 0

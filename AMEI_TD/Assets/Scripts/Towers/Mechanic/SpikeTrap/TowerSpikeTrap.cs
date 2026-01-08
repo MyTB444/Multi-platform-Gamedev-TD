@@ -8,6 +8,10 @@ public class TowerSpikeTrap : TowerBase
     [SerializeField] private LayerMask roadLayer;
     [SerializeField] private float downwardAngle = 45f;
     
+    [Header("Road Centering")]
+    [SerializeField] private bool autoCenter = true;
+    [SerializeField] private bool debugDrawRays = false;
+    
     [Header("VFX")]
     [SerializeField] private Transform hammerImpactPoint;
     
@@ -100,7 +104,21 @@ public class TowerSpikeTrap : TowerBase
     
         if (Physics.Raycast(transform.position, rayDirection, out RaycastHit hit, raycastDistance, roadLayer))
         {
-            GameObject trap = Instantiate(spikeTrapPrefab, hit.point, Quaternion.identity);
+            Vector3 spawnPosition;
+            
+            if (autoCenter)
+            {
+                spawnPosition = GetTileCenterPosition(hit.point, hit.collider);
+            }
+            else
+            {
+                spawnPosition = hit.point;
+            }
+            
+            // Get rotation to face along road
+            Quaternion spawnRotation = GetTrapRotation();
+            
+            GameObject trap = Instantiate(spikeTrapPrefab, spawnPosition, spawnRotation);
             spikeTrap = trap.GetComponent<SpikeTrapDamage>();
         
             spikeTrap.Setup(CreateDamageInfo(), whatIsEnemy, attackCooldown, this);
@@ -126,6 +144,48 @@ public class TowerSpikeTrap : TowerBase
         {
             Debug.LogWarning("SpikeTrap: No road found!");
         }
+    }
+    
+    private Vector3 GetTileCenterPosition(Vector3 hitPoint, Collider roadCollider)
+    {
+        Vector3 tileCenter = roadCollider.transform.position;
+    
+        Vector3 forward = transform.forward;
+        forward.y = 0;
+        forward.Normalize();
+    
+        Vector3 spawnPosition;
+    
+        // If tower faces mostly along Z, width is Z (keep green Z), path is X (use yellow X)
+        // If tower faces mostly along X, width is X (keep green X), path is Z (use yellow Z)
+        if (Mathf.Abs(forward.z) > Mathf.Abs(forward.x))
+        {
+            // Tower faces along Z - width is X, path is Z... wait no
+            // Looking at screenshot: need yellow's X, green's Z
+            spawnPosition = new Vector3(hitPoint.x, hitPoint.y, tileCenter.z);
+        }
+        else
+        {
+            // Tower faces along X
+            spawnPosition = new Vector3(tileCenter.x, hitPoint.y, hitPoint.z);
+        }
+    
+        if (debugDrawRays)
+        {
+            Debug.Log($"SpikeTrap - Hit: {hitPoint}, TileCenter: {tileCenter}, Final: {spawnPosition}");
+        }
+    
+        return spawnPosition;
+    }
+    
+    private Quaternion GetTrapRotation()
+    {
+        // Trap should align with road direction
+        Vector3 roadDirection = transform.forward;
+        roadDirection.y = 0;
+        roadDirection.Normalize();
+        
+        return Quaternion.LookRotation(roadDirection, Vector3.up);
     }
     
     public void PlayHammerAnimation()
@@ -154,5 +214,21 @@ public class TowerSpikeTrap : TowerBase
         Vector3 rayDirection = Quaternion.AngleAxis(downwardAngle, transform.right) * transform.forward;
         Gizmos.color = Color.red;
         Gizmos.DrawRay(transform.position, rayDirection * raycastDistance);
+    
+        if (debugDrawRays && Physics.Raycast(transform.position, rayDirection, out RaycastHit hit, raycastDistance, roadLayer))
+        {
+            // Show hit point (yellow)
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawSphere(hit.point, 0.2f);
+        
+            // Show tile center (green)
+            Gizmos.color = Color.green;
+            Vector3 tileCenter = hit.collider.transform.position;
+            Gizmos.DrawSphere(new Vector3(tileCenter.x, hit.point.y, tileCenter.z), 0.3f);
+        
+            // Show final spawn position (cyan)
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawSphere(GetTileCenterPosition(hit.point, hit.collider), 0.35f);
+        }
     }
 }
