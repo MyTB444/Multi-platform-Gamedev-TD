@@ -18,7 +18,8 @@ public class VFXDamage : MonoBehaviour
     private List<SkinnedMeshRenderer> skinnedMeshRenderer = new();
     private ParticleSystem ps;
 
-    public List<EnemyBase> enemies { get; set; } = new();
+    private List<EnemyBase> enemiesList = new();
+
 
     [Header("VFX Prefabs")]
     [SerializeField] private GameObject tinyFlamesPrefab;
@@ -49,7 +50,7 @@ public class VFXDamage : MonoBehaviour
         stopFlames = false;
         ps = gameObject.GetComponent<ParticleSystem>();
 
-        if (spellType == SpellType.Magic)
+        if (gameObject.CompareTag("MagicVfx"))
         {
             StartCoroutine(DisableVFXGameObject(magicDisableTime));
         }
@@ -197,12 +198,12 @@ public class VFXDamage : MonoBehaviour
     {
         if (enemyBase.gameObject != null && enemyBase.gameObject.activeInHierarchy && enemyBase != null)
         {
-            enemyBase.enemyBaseRef = enemyBase;
-            enemyBase.LiftEffectFunction(true, false);
-            enemies.Add(enemyBaseGameObjectRef);
+           
+            enemyBase.LiftEffectFunction(true, false,enemyBase);
+            enemiesList.Add(enemyBaseGameObjectRef);
 
             Vector3 startPos = enemyBase.transform.position;
-            Vector3 targetPos = new Vector3(startPos.x, startPos.y + 2, startPos.z);
+            Vector3 targetPos = new Vector3(startPos.x, enemyBase.transform.position.y + 2, startPos.z);
         
             float duration = 1f;
             float elapsed = 0f;
@@ -211,14 +212,21 @@ public class VFXDamage : MonoBehaviour
             {
                 elapsed += Time.deltaTime;
                 float t = elapsed / duration;
-                enemyBase.transform.position = Vector3.Lerp(startPos, targetPos, t);
-                yield return null; 
+                if (enemyBase.transform.position.y <= targetPos.y)
+                {
+                    enemyBase.transform.position = Vector3.Lerp(startPos, targetPos, t);
+                }
+                else
+                {
+                    break;
+                }
+                    yield return null; 
             }
             enemyBase.transform.position = targetPos;
             duration = 2f;
             elapsed = 0f;
             
-            if (enemyBase.transform.position != startPos)
+            if (enemyBase.transform.position.y >= targetPos.y)
             {
                 while (elapsed < duration)
                 {
@@ -234,7 +242,7 @@ public class VFXDamage : MonoBehaviour
                     if (enemyBase.isDeadProperty)
                     { 
                         enemyBase = null;
-                        enemies.Remove(enemyBase);
+                        enemiesList.Remove(enemyBase);
                         break;
                     }
                     yield return null;  
@@ -251,12 +259,12 @@ public class VFXDamage : MonoBehaviour
         yield return new WaitForSeconds(disableTime);
         if (gameObject != null && gameObject.activeInHierarchy)
         {
-            foreach (EnemyBase o in enemies)
+            foreach (EnemyBase o in enemiesList)
             {
                 StopCoroutine(EnableLiftDamage(o));
-                o.LiftEffectFunction(false, false);
+                o.LiftEffectFunction(false, false,o);
             }
-            enemies.Clear();
+            enemiesList.Clear();
            
             ObjectPooling.instance.Return(gameObject);
         }
@@ -265,5 +273,6 @@ public class VFXDamage : MonoBehaviour
 
     #region Getters
     public float GetDamageMultilpier() => DamageMultiplier;
+    public List<EnemyBase> GetAffectedEnemyList() => enemiesList;
     #endregion
 }

@@ -200,13 +200,10 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
             NavAgent.enabled = false;
         }
         
-        if (enemyBaseRef == null)
-        {
-            enemyBaseRef = this;
-        }
+        
         if(vfxDamageScriptRef != null)
         {
-            vfxDamageScriptRef.enemies.Remove(this);
+            vfxDamageScriptRef.GetAffectedEnemyList().Remove(this);
         }
         
         enemyHealthDisplayCanvas.enabled = false;
@@ -261,13 +258,9 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
     protected virtual void Update()
     {
         UpdateStatusEffects();
-        if (enemyBaseRef != null)
-        {
-            if (!enemyBaseRef.spellsActivated)
-            {
-                FollowPath();
-            }
-        }
+           
+        FollowPath();           
+       
         PlayAnimations();
     }
 
@@ -635,68 +628,71 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
 
     private void FollowPath()
     {
+        
         if (myWaypoints == null || currentWaypointIndex >= myWaypoints.Length) return;
 
         if (NavAgent == null || !NavAgent.isActiveAndEnabled) return;
 
         if (!NavAgent.isOnNavMesh) return;
-
-        if (isStunned || !canMove)
+        if (NavAgent.enabled)
         {
-            NavAgent.isStopped = true;
-            return;
-        }
+            if (isStunned || !canMove)
+            {
+                NavAgent.isStopped = true;
+                return;
+            }
 
-        NavAgent.isStopped = false;
-        NavAgent.speed = enemySpeed * mySpeedMultiplier;
+            NavAgent.isStopped = false;
+            NavAgent.speed = enemySpeed * mySpeedMultiplier;
 
-        HandleStuckDetection();
+            HandleStuckDetection();
 
-        // Skip waypoints we've already passed
-        while (currentWaypointIndex < myWaypoints.Length && HasPassedWaypoint(currentWaypointIndex))
-        {
-            float dist = Vector3.Distance(transform.position, myWaypoints[currentWaypointIndex]);
-            if (dist > 3f) break;
+            // Skip waypoints we've already passed
+            while (currentWaypointIndex < myWaypoints.Length && HasPassedWaypoint(currentWaypointIndex))
+            {
+                float dist = Vector3.Distance(transform.position, myWaypoints[currentWaypointIndex]);
+                if (dist > 3f) break;
 
-            currentWaypointIndex++;
-        }
+                currentWaypointIndex++;
+            }
 
-        if (currentWaypointIndex >= myWaypoints.Length) return;
+            if (currentWaypointIndex >= myWaypoints.Length) return;
 
-        Vector3 targetWaypoint = myWaypoints[currentWaypointIndex];
+            Vector3 targetWaypoint = myWaypoints[currentWaypointIndex];
 
-        // Apply path offset for variation
-        if (currentWaypointIndex < myWaypoints.Length - 1)
-        {
-            Vector3 nextWaypoint = myWaypoints[currentWaypointIndex + 1];
-            Vector3 pathDirection = (nextWaypoint - targetWaypoint).normalized;
-            Vector3 offsetDirection = Vector3.Cross(pathDirection, Vector3.up);
+            // Apply path offset for variation
+            if (currentWaypointIndex < myWaypoints.Length - 1)
+            {
+                Vector3 nextWaypoint = myWaypoints[currentWaypointIndex + 1];
+                Vector3 pathDirection = (nextWaypoint - targetWaypoint).normalized;
+                Vector3 offsetDirection = Vector3.Cross(pathDirection, Vector3.up);
 
-            float waypointOffset = myPathOffset + (myPathDrift * currentWaypointIndex);
-            waypointOffset = Mathf.Clamp(waypointOffset, -pathOffsetRange, pathOffsetRange);
+                float waypointOffset = myPathOffset + (myPathDrift * currentWaypointIndex);
+                waypointOffset = Mathf.Clamp(waypointOffset, -pathOffsetRange, pathOffsetRange);
 
-            targetWaypoint += offsetDirection * waypointOffset;
-        }
+                targetWaypoint += offsetDirection * waypointOffset;
+            }
 
-        NavAgent.SetDestination(targetWaypoint);
+            NavAgent.SetDestination(targetWaypoint);
 
-        // Simple rotation towards movement direction
-        Vector3 currentDirection = NavAgent.steeringTarget - transform.position;
-        currentDirection.y = 0;
+            // Simple rotation towards movement direction
+            Vector3 currentDirection = NavAgent.steeringTarget - transform.position;
+            currentDirection.y = 0;
 
-        if (currentDirection.sqrMagnitude > 0.01f)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(currentDirection.normalized);
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
-        }
+            if (currentDirection.sqrMagnitude > 0.01f)
+            {
+                Quaternion targetRotation = Quaternion.LookRotation(currentDirection.normalized);
+                transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * rotationSpeed);
+            }
 
-        // Check if reached waypoint
-        float dynamicThreshold = waypointReachThreshold * myCornerCutMultiplier;
+            // Check if reached waypoint
+            float dynamicThreshold = waypointReachThreshold * myCornerCutMultiplier;
 
-        if (!NavAgent.pathPending && NavAgent.remainingDistance <= dynamicThreshold)
-        {
-            currentWaypointIndex++;
-            stuckDuration = 0f;
+            if (!NavAgent.pathPending && NavAgent.remainingDistance <= dynamicThreshold)
+            {
+                currentWaypointIndex++;
+                stuckDuration = 0f;
+            }
         }
     }
     
@@ -962,7 +958,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
             GameManager.instance.UpdateSkillPoints(reward);
         }
         RemoveEnemy();
-        enemyBaseRef = null;
+      
         ObjectPooling.instance.Return(gameObject);
     }
     
@@ -1046,7 +1042,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
         UpdateVisuals();
     }
     
-    public void LiftEffectFunction(bool status, bool isMechanicSpellDamage)
+    public void LiftEffectFunction(bool status, bool isMechanicSpellDamage,EnemyBase enemyBaseRef)
     {
         if (gameObject.activeInHierarchy && gameObject != null)
         {
@@ -1054,7 +1050,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
             if (!status)
             {
                 myBody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationZ;
-                StartCoroutine(EnableNavMesh());
+                StartCoroutine(EnableNavMesh(enemyBaseRef));
             }
             else
             {
@@ -1074,7 +1070,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
         }
     }
     
-    private IEnumerator EnableNavMesh()
+    private IEnumerator EnableNavMesh(EnemyBase enemyBaseRef)
     {
         if (gameObject.activeInHierarchy && gameObject != null)
         {
@@ -1178,7 +1174,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
     public float GetBleedDurationNormalized(float maxDuration = 4f) => hasBleed ? Mathf.Clamp01((bleedEndTime - Time.time) / maxDuration) : 0f;
     public float GetFrostbiteDurationNormalized(float maxDuration = 3f) => hasFrostbite ? Mathf.Clamp01((frostbiteEndTime - Time.time) / maxDuration) : 0f;
     public EnemyVFXPool vfxContainer { get; set; }
-    public EnemyBase enemyBaseRef { get; set; }
+    //public EnemyBase enemyBaseRef { get; set; }
     public bool isDeadProperty => isDead;
     
     public float GetDistanceToNextWaypoint()
