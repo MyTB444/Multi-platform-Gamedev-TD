@@ -32,6 +32,7 @@ public class TileButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     public void OnPointerEnter(PointerEventData eventData)
     {
         mrMat.color = Color.magenta;
+        StopAllCoroutines();
         if (inputHandler != null)
             inputHandler.SelectedTower(this);
     }
@@ -41,8 +42,7 @@ public class TileButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         mrMat.color = originalColour;
         if (buttonControl)
         {
-            buttonControl = false;
-            DeactivateButtons();
+            StartCoroutine(DeActivationDelay());
         }
     }
 
@@ -86,6 +86,12 @@ public class TileButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
         {
             destroyButton.SetActive(false);
         }
+    }
+    private IEnumerator DeActivationDelay()
+    {
+        yield return new WaitForSeconds(1.5f);
+        buttonControl = false;
+        DeactivateButtons();
     }
 
     public void DeactivateButtons()
