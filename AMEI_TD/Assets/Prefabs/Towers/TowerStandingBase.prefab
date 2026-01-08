@@ -873,6 +873,7 @@ MonoBehaviour:
   defaultBuyPrice: 0
   swappedBuyPrice: 0
   difficultyEvent: {fileID: 11400000, guid: 42803575146b04babbfd879ed7e9cb7b, type: 2}
+  elementType: 3
 --- !u!65 &7795144709417302845
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -13985,6 +13986,7 @@ MonoBehaviour:
   defaultBuyPrice: 0
   swappedBuyPrice: 0
   difficultyEvent: {fileID: 11400000, guid: 61902e556626143eb9e68d16a880481e, type: 2}
+  elementType: 1
 --- !u!65 &2645054823476558843
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -15058,6 +15060,7 @@ MonoBehaviour:
   defaultBuyPrice: 0
   swappedBuyPrice: 0
   difficultyEvent: {fileID: 11400000, guid: c4b83dd757c4c496eb5527494cd4ebf7, type: 2}
+  elementType: 0
 --- !u!65 &1508757215515180108
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -31939,7 +31942,7 @@ MonoBehaviour:
   m_PreserveMeshAssetOnDestroy: 0
   assetGuid: 
   m_Mesh: {fileID: 0}
-  m_VersionIndex: 4304
+  m_VersionIndex: 4307
   m_IsSelectable: 1
   m_SelectedFaces: 
   m_SelectedEdges: []
@@ -32049,6 +32052,7 @@ MonoBehaviour:
   defaultBuyPrice: 0
   swappedBuyPrice: 0
   difficultyEvent: {fileID: 11400000, guid: e7a3d30e573c943c39dfb92c0a69911a, type: 2}
+  elementType: 2
 --- !u!65 &2114125021785018099
 BoxCollider:
   m_ObjectHideFlags: 0

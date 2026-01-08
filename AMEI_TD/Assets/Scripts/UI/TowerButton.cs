@@ -21,6 +21,9 @@ public class TowerButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public int swappedBuyPrice;
     public SkillNode difficultyEvent;
 
+    [Header("Element Type")]
+    [SerializeField] private ElementType elementType;
+
     private void Awake()
     {
         towerSwapped = false;
@@ -131,5 +134,10 @@ public class TowerButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHand
     public bool GetActive()
     {
         return this.gameObject.activeSelf;
+    }
+
+    public ElementType GetElementType()
+    {
+        return elementType;
     }
 }

@@ -59575,7 +59575,6 @@ Transform:
   m_Children:
   - {fileID: 385562550}
   - {fileID: 2134071271}
-  - {fileID: 266661775}
   - {fileID: 885404799}
   - {fileID: 842544928}
   m_Father: {fileID: 0}
@@ -69680,6 +69679,7 @@ Transform:
   - {fileID: 1381641595}
   - {fileID: 2141222429}
   - {fileID: 1240477242}
+  - {fileID: 266661775}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1745139451
@@ -88126,7 +88126,7 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1501382634}
+    m_TransformParent: {fileID: 1739840205}
     m_Modifications:
     - target: {fileID: 2379833100791306736, guid: 376eed7625db6cb4b8fef6cd5ede8f07, type: 3}
       propertyPath: m_LocalPosition.x
@@ -88180,6 +88180,10 @@ PrefabInstance:
       propertyPath: waveManager
       value: 
       objectReference: {fileID: 977922881}
+    - target: {fileID: 6576796619599666300, guid: 376eed7625db6cb4b8fef6cd5ede8f07, type: 3}
+      propertyPath: availableElements.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

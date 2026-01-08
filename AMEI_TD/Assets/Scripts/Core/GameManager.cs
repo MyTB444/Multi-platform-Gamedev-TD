@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -14,6 +15,9 @@ public class GameManager : MonoBehaviour
     
     [Header("Damage System")]
     [SerializeField] private TypeMatchupDatabase typeMatchupDatabase;
+
+    [Header("Level Element Availability")]
+    [SerializeField] private List<ElementType> availableElements = new List<ElementType>();
 
     private void Awake()
     {
@@ -72,8 +76,10 @@ public class GameManager : MonoBehaviour
             spawner.CanCreateNewEnemies(false);
         }
     }
+
     public int GetPoints() => points;
     public float GetHealthPoints() => healthPoints;
+
     public void TakeDamageHealth(float damage)
     {
         healthPoints -= damage;
@@ -84,5 +90,17 @@ public class GameManager : MonoBehaviour
             healthPoints = 0;
             LevelFailed();
         }
+    }
+
+    // Get available elements for current level
+    public List<ElementType> GetAvailableElements()
+    {
+        return availableElements;
+    }
+
+    // Optional: Set available elements at runtime
+    public void SetAvailableElements(List<ElementType> elements)
+    {
+        availableElements = elements;
     }
 }

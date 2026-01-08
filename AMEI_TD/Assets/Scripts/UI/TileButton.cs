@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -16,29 +17,28 @@ public class TileButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     [SerializeField] private int sellPrice;
     private GameManager gameManager;
     private InputHandler inputHandler;
+
     void Start()
     {
         mr = GetComponent<MeshRenderer>();
         mrMat = mr.material;
         originalColour = mrMat.color;
         anim = GetComponent<Animator>();
-        towerButtons = GetComponentsInChildren<TowerButton>();
+        towerButtons = GetComponentsInChildren<TowerButton>(true);
         gameManager = GameManager.instance;
         inputHandler = InputHandler.instance;
     }
 
-
     public void OnPointerEnter(PointerEventData eventData)
     {
-            mrMat.color = Color.magenta;
+        mrMat.color = Color.magenta;
         if (inputHandler != null)
             inputHandler.SelectedTower(this);
-
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
-            mrMat.color = originalColour;
+        mrMat.color = originalColour;
         if (buttonControl)
         {
             buttonControl = false;
@@ -53,8 +53,8 @@ public class TileButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             if (buttonControl == false)
             {
                 buttonControl = true;
-                ActivateButtons();
                 ActivateTileButtons(true);
+                ActivateButtons();
             }
             else if (buttonControl)
             {
@@ -78,6 +78,7 @@ public class TileButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
             }
         }
     }
+
     private IEnumerator DestroyButtonDisabler()
     {
         yield return new WaitForSeconds(5.0f);
@@ -99,10 +100,23 @@ public class TileButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
 
     private void ActivateButtons()
     {
+        // Hide ALL first
         for (int i = 0; i < towerButtons.Length; i++)
         {
-            if (towerButtons[i].GetActive() == false)
+            towerButtons[i].gameObject.SetActive(false);
+        }
+    
+        List<ElementType> availableElements = gameManager.GetAvailableElements();
+    
+        // Only show available ones
+        for (int i = 0; i < towerButtons.Length; i++)
+        {
+            ElementType buttonElement = towerButtons[i].GetElementType();
+        
+            if (availableElements.Contains(buttonElement))
+            {
                 towerButtons[i].Activate();
+            }
         }
     }
 
@@ -110,6 +124,7 @@ public class TileButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     {
         anim.SetBool("TowerButtonPopup", a);
     }
+
     public void DestoryTower()
     {
         TowerBase towerBase = spawnedUnit.GetComponent<TowerBase>();
@@ -127,6 +142,7 @@ public class TileButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandl
     {
         towerBuilt = a;
     }
+
     public void SetUnit(GameObject a)
     {
         spawnedUnit = a;
