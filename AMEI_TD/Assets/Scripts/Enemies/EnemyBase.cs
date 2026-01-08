@@ -565,6 +565,11 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
     {
         currentWaypointIndex = 0;
         
+        if (myBody != null)
+        {
+            myBody.isKinematic = true;
+        }
+        
         lastStuckCheckPosition = transform.position;
         lastStuckCheckTime = Time.time;
         stuckDuration = 0f;
@@ -1046,6 +1051,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
     {
         if (gameObject.activeInHierarchy && gameObject != null)
         {
+            enemyBaseRef.myBody.isKinematic = !status;
             enemyBaseRef.myBody.useGravity = !status;
             if (!status)
             {
@@ -1085,6 +1091,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
         NavAgent.enabled = false;
         EnemyAnimator.enabled = false;
         spellsActivated = true;
+        myBody.isKinematic = false;
         myBody.constraints = RigidbodyConstraints.None;
        
         myBody.useGravity = true;
@@ -1098,24 +1105,14 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
 
     public void UpdateVisuals()
     {
+        if (!isInvisible) return;
+    
         Renderer r = GetComponentInChildren<Renderer>();
-        if (r == null)
-        {
-            Debug.LogWarning($"[{gameObject.name}] No Renderer found on root object!");
-            return;
-        }
+        if (r == null) return;
 
-        Color finalColor = enemyColor;
-
-        if (isInvisible)
-        {
-            finalColor.a = 0.3f;
-        }
-        else
-        {
-            finalColor.a = 1f;
-        }
-        r.material.color = finalColor;
+        Color currentColor = r.material.color;
+        currentColor.a = 0.3f;
+        r.material.color = currentColor;
     }
     
     public void ApplyShield(float shieldAmount, GameObject shieldEffectPrefab)
