@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: PhantomKnight
   m_EditorClassIdentifier: 
   skillName: Phantom Knights
-  skillCost: 0
+  skillCost: 110
   description: 'Rock Shower is replaced with a Phantom Knight tower that summons
     powerful units. Knights slow enemies hit by 30% for 2 seconds.
 
@@ -21,7 +21,7 @@ MonoBehaviour:
     UNLEASH!'
   icon: {fileID: 21300000, guid: b066c869b51f9384fa8ac9cce36b4648, type: 3}
   irreversible: 1
-  skillPointCost: 0
+  skillPointCost: 110
   prerequisites:
   - {fileID: 11400000, guid: f5fc283c1d1df4ccba20e6e1bdb60bdb, type: 2}
   function: 30
@@ -29,6 +29,10 @@ MonoBehaviour:
   swapType: 2
   spellEnableType: 4
   noah: 0
+  disablesUpgrade: 0
+  restoresUpgrade: 0
+  disablesUpgrade2: 0
+  restoresUpgrade2: 0
   skillElementType: 3
   isGlobeNode: 1
   isGuardianNode: 0
