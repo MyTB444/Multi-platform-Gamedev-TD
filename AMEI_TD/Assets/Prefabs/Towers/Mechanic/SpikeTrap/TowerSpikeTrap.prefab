@@ -6350,7 +6350,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 97c18fa6e6e749d44a8d463d52353ba0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 30
+  damage: 20
   attackCooldown: 0.6
   towerBody: {fileID: 0}
   towerHead: {fileID: 0}

@@ -23,13 +23,13 @@ public class AudioSLider : MonoBehaviour
         instance = this;
 
         // Load saved volumes or default to full (0 dB)
-        savedMaster = PlayerPrefs.GetFloat("MasterVolume", 0f);
-        savedMusicVolume = PlayerPrefs.GetFloat("MusicVolume", 0f);
-        savedEffectVolume = PlayerPrefs.GetFloat("EffectVolume", 0f);
+        savedMaster = PlayerPrefs.GetFloat("MasterVolume", 20f);
+        savedMusicVolume = PlayerPrefs.GetFloat("MusicVolume", 20f);
+        savedEffectVolume = PlayerPrefs.GetFloat("EffectVolume", 20f);
         if (masterSlider != null)
             masterSlider.value = savedMaster;
         if (musicSlider != null)
-            musicSlider.value = savedMusicVolume;
+            musicSlider.value =  savedMusicVolume;
         if (effectSlider != null)
             effectSlider.value = savedEffectVolume;
 

@@ -121,10 +121,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spikesTransform: {fileID: 2729295628045480}
   raisedHeight: 2
-  raiseSpeed: 8
+  raiseSpeed: 14
   lowerSpeed: 5
-  trapActiveDuration: 1
-  spikeDelay: 0.33
+  trapActiveDuration: 0.7
+  spikeDelay: 0
   damageDelay: 0.1
   spikeImpactSound: {fileID: 8300000, guid: f7617a7275da92048b101e960c24aff3, type: 3}
   spikeImpactVolume: 0.225

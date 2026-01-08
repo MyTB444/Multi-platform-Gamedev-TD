@@ -24,7 +24,7 @@ MonoBehaviour:
 '
   icon: {fileID: 21300000, guid: aeb31def086466745b570d082197ee1f, type: 3}
   irreversible: 0
-  skillPointCost: 0
+  skillPointCost: 60
   prerequisites:
   - {fileID: 11400000, guid: 38f340fe322a64fa0aceb85c873f9eae, type: 2}
   function: 16
@@ -32,6 +32,10 @@ MonoBehaviour:
   swapType: 0
   spellEnableType: 0
   noah: 0
+  disablesUpgrade: 0
+  restoresUpgrade: 0
+  disablesUpgrade2: 0
+  restoresUpgrade2: 0
   skillElementType: 2
   isGlobeNode: 0
   isGuardianNode: 0

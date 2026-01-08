@@ -21,7 +21,7 @@ MonoBehaviour:
     UNLEASH!'
   icon: {fileID: 21300000, guid: 912f2333824ee3946814a450e92ab11a, type: 3}
   irreversible: 1
-  skillPointCost: 0
+  skillPointCost: 120
   prerequisites:
   - {fileID: 11400000, guid: fa3b443a4bb9f438da90fabced2c9a5e, type: 2}
   function: 0
