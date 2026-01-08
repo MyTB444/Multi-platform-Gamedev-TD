@@ -139,6 +139,7 @@ public class SpikeTrapDamage : MonoBehaviour
             StartCoroutine(TrapCycle());
         }
     }
+    
     private bool HasEnemiesInRange()
     {
         int enemyCount = Physics.OverlapBoxNonAlloc(
@@ -153,7 +154,11 @@ public class SpikeTrapDamage : MonoBehaviour
         {
             if (detectedEnemies[i] != null && detectedEnemies[i].gameObject.activeSelf)
             {
-                return true;
+                EnemyBase enemy = detectedEnemies[i].GetComponent<EnemyBase>();
+                if (enemy != null && enemy.IsTargetable())
+                {
+                    return true;
+                }
             }
         }
         
