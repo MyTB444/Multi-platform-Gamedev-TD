@@ -37,23 +37,10 @@ public class ArrowProjectile : TowerProjectileBase
     protected override void OnEnable()
     {
         base.OnEnable();
-        
-        Debug.Log($"Arrow children: {transform.childCount}");
-        foreach (Transform child in transform)
-        {
-            Debug.Log($"Child: {child.name}");
-        }
-        
         launched = false;
         curving = true;
         applyPoison = false;
         applyFire = false;
-
-        // Re-acquire trail reference in case it was lost
-        if (trail == null)
-        {
-            trail = GetComponentInChildren<TrailRenderer>();
-        }
 
         if (vfxPoint != null)
         {
@@ -71,16 +58,6 @@ public class ArrowProjectile : TowerProjectileBase
 
         if (trail != null)
         {
-            trail.emitting = false;
-            trail.Clear();
-        }
-    }
-    
-    protected void OnDisable()
-    {
-        if (trail != null)
-        {
-            trail.emitting = false;
             trail.Clear();
         }
     }
@@ -113,14 +90,7 @@ public class ArrowProjectile : TowerProjectileBase
 
         if (trail != null)
         {
-            Debug.Log("Trail exists");
-            trail.enabled = true;
             trail.Clear();
-            trail.emitting = true;
-        }
-        else
-        {
-            Debug.LogError("Trail is NULL!");
         }
     }
     
