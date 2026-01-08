@@ -18,15 +18,11 @@ public class TowerProjectileBase : MonoBehaviour
 
     [Header("Audio")]
     [SerializeField] protected AudioClip impactSound;
-    protected AudioSource audioSource;
     [SerializeField] [Range(0f, 1f)] protected float impactSoundVolume = 1f;
     
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        audioSource = GetComponent<AudioSource>();
-        audioSource.playOnAwake = false;
-        audioSource.spatialBlend = 1f;
     }
 
     public void SetupProjectile(Vector3 targetPosition, IDamageable newDamageable, DamageInfo newDamageInfo, float newSpeed)
@@ -91,11 +87,9 @@ public class TowerProjectileBase : MonoBehaviour
 
     protected virtual void PlayImpactSound()
     {
-        if (impactSound != null && audioSource != null)
+        if (impactSound != null && SFXPlayer.instance != null)
         {
-            audioSource.clip = impactSound;
-            audioSource.volume = impactSoundVolume;
-            audioSource.Play();
+            SFXPlayer.instance.Play(impactSound, transform.position, impactSoundVolume);
         }
     }
 
