@@ -35,7 +35,7 @@ public enum DebuffType
 
 public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPointerExitHandler
 {
-    protected EnemySpawner mySpawner;
+    public EnemySpawner mySpawner;
 
     [Header("Enemy Stats")]
     [SerializeField] private EnemyType enemyType;
@@ -635,6 +635,12 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
     {
         
         if (myWaypoints == null || currentWaypointIndex >= myWaypoints.Length) return;
+        
+        if (this is EnemySplitter)
+        {
+            Debug.Log($"[{gameObject.name}] Index: {currentWaypointIndex}, Total waypoints: {myWaypoints.Length}, Target: {myWaypoints[currentWaypointIndex]}, MyPos: {transform.position}");
+        }
+
 
         if (NavAgent == null || !NavAgent.isActiveAndEnabled) return;
 
@@ -679,6 +685,11 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
             }
 
             NavAgent.SetDestination(targetWaypoint);
+            
+            if (this is EnemySplitter)
+            {
+                Debug.Log($"[{gameObject.name}] SetDest: {targetWaypoint}, NavAgent.dest: {NavAgent.destination}, pathStatus: {NavAgent.pathStatus}");
+            }
 
             // Simple rotation towards movement direction
             Vector3 currentDirection = NavAgent.steeringTarget - transform.position;
@@ -697,6 +708,12 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
             {
                 currentWaypointIndex++;
                 stuckDuration = 0f;
+    
+                // Debug
+                if (currentWaypointIndex < myWaypoints.Length)
+                {
+                    Debug.Log($"[{gameObject.name}] Reached waypoint {currentWaypointIndex - 1}, now heading to {currentWaypointIndex}: {myWaypoints[currentWaypointIndex]}");
+                }
             }
         }
     }
