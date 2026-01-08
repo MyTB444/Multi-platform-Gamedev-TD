@@ -2440,6 +2440,7 @@ MonoBehaviour:
   baseSpinSpeed: 200
   apparatusRotationOffset: 90
   heightOffset: 2.5
+  forwardOffset: 0.2
   apparatusScale: 0.6666667
   hammerImpactPoint: {fileID: 3133988239432917995}
   autoCenter: 1

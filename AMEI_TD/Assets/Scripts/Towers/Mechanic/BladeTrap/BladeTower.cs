@@ -10,6 +10,7 @@ public class BladeTower : TowerBase
     [SerializeField] private float baseSpinSpeed = 200f;
     [SerializeField] private float apparatusRotationOffset = 90f;
     [SerializeField] private float heightOffset = 1.42f;
+    [SerializeField] private float forwardOffset = 0.5f;
     [SerializeField] private float apparatusScale = 0.6666667f;
     
     [Header("VFX")]
@@ -58,6 +59,12 @@ public class BladeTower : TowerBase
             {
                 spawnPosition = hit.point;
             }
+            
+            // Apply forward offset to center the apparatus on the tile
+            Vector3 forwardDir = transform.forward;
+            forwardDir.y = 0;
+            forwardDir.Normalize();
+            spawnPosition += forwardDir * forwardOffset;
             
             Quaternion spawnRotation = GetBladeRotation();
             
