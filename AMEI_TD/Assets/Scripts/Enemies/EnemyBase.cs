@@ -188,7 +188,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
 
     [SerializeField] private EnemyVFXPool enemyVFXPoolScriptRef;
     private bool spellsActivated = false;
-    
+    private Canvas enemyDebuffDisplayCanvas;
     protected virtual void OnEnable()
     {
         UpdateVisuals();
@@ -245,7 +245,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
         
         if (GetComponent<EnemyDebuffDisplay>() == null)
         {
-            gameObject.AddComponent<EnemyDebuffDisplay>();
+          enemyDebuffDisplayCanvas =   gameObject.AddComponent<EnemyDebuffDisplay>().GetComponent<Canvas>();
         }
     }
     
@@ -262,6 +262,21 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
         FollowPath();           
        
         PlayAnimations();
+
+        if(enemyHealthDisplayCanvas != null)
+        {
+            if(healthBar.enabled)
+            {
+                healthBar.transform.LookAt(Camera.main.transform.position);
+            }
+        }
+        if(enemyDebuffDisplayCanvas)
+        {
+            if(enemyDebuffDisplayCanvas.enabled)
+            {
+                enemyDebuffDisplayCanvas.transform.LookAt(Camera.main.transform.position);
+            }
+        }
     }
 
     private void UpdateStatusEffects()
