@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ArrowProjectile : TowerProjectileBase
@@ -35,11 +37,24 @@ public class ArrowProjectile : TowerProjectileBase
     protected override void OnEnable()
     {
         base.OnEnable();
+        
+        Debug.Log($"Arrow children: {transform.childCount}");
+        foreach (Transform child in transform)
+        {
+            Debug.Log($"Child: {child.name}");
+        }
+        
         launched = false;
         curving = true;
         applyPoison = false;
         applyFire = false;
-    
+
+        // Re-acquire trail reference in case it was lost
+        if (trail == null)
+        {
+            trail = GetComponentInChildren<TrailRenderer>();
+        }
+
         if (vfxPoint != null)
         {
             foreach (Transform child in vfxPoint)
@@ -47,15 +62,25 @@ public class ArrowProjectile : TowerProjectileBase
                 ObjectPooling.instance.Return(child.gameObject);
             }
         }
-    
+
         if (rb != null)
         {
             rb.velocity = Vector3.zero;
             rb.angularVelocity = Vector3.zero;
         }
-    
+
         if (trail != null)
         {
+            trail.emitting = false;
+            trail.Clear();
+        }
+    }
+    
+    protected void OnDisable()
+    {
+        if (trail != null)
+        {
+            trail.emitting = false;
             trail.Clear();
         }
     }
@@ -68,10 +93,10 @@ public class ArrowProjectile : TowerProjectileBase
         launchTime = Time.time;
         targetPosition = targetPos;
         initialForward = transform.forward;
-    
+
         arrowSpeed = newSpeed + (distance * 0.5f);
         maxCurveDuration = 0.3f + (distance * 0.05f);
-    
+
         if (distance < closeRangeThreshold)
         {
             gravityMultiplier = 3f + closeRangeGravityBoost;
@@ -80,11 +105,23 @@ public class ArrowProjectile : TowerProjectileBase
         {
             gravityMultiplier = 3f;
         }
-    
+
         rb.useGravity = false;
         rb.velocity = initialForward * arrowSpeed;
         launched = true;
         curving = true;
+
+        if (trail != null)
+        {
+            Debug.Log("Trail exists");
+            trail.enabled = true;
+            trail.Clear();
+            trail.emitting = true;
+        }
+        else
+        {
+            Debug.LogError("Trail is NULL!");
+        }
     }
     
     protected override void Update()
