@@ -13,12 +13,12 @@ MonoBehaviour:
   m_Name: MagicalDurationBurn
   m_EditorClassIdentifier: 
   skillName: Arcane Arts
-  skillCost: 0
+  skillCost: 50
   description: "Pyromancers gain a chance to Burn enemies.\n\nIce Mages\u2019 slow
     duration is increased by 1 second."
   icon: {fileID: 21300000, guid: 4029a9cfeb86f134c9c5af05993eaac8, type: 3}
   irreversible: 0
-  skillPointCost: 0
+  skillPointCost: 50
   prerequisites:
   - {fileID: 11400000, guid: c9a67a2259744486a82b6a3ae0aab918, type: 2}
   function: 9
@@ -26,6 +26,10 @@ MonoBehaviour:
   swapType: 0
   spellEnableType: 0
   noah: 0
+  disablesUpgrade: 0
+  restoresUpgrade: 0
+  disablesUpgrade2: 0
+  restoresUpgrade2: 0
   skillElementType: 1
   isGlobeNode: 0
   isGuardianNode: 0
