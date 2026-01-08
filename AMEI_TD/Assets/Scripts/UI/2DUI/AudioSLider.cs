@@ -26,7 +26,7 @@ public class AudioSLider : MonoBehaviour
         if (masterSlider != null)
             masterSlider.value = savedMaster;
         if (musicSlider != null)
-            musicSlider.value =  savedMusicVolume;
+            musicSlider.value = savedMusicVolume;
         if (effectSlider != null)
             effectSlider.value = savedEffectVolume;
 
@@ -40,29 +40,33 @@ public class AudioSLider : MonoBehaviour
         audioMixer.SetFloat("MasterVolume", volume);
 
         // When master is at minimum, mute others visually and audibly
-        if (volume <= minVolume)
+        if (musicSlider != null && effectSlider != null)
         {
-            // Save current values before muting
-            if (musicSlider.value > minVolume)
-                savedMusicVolume = musicSlider.value;
-            if (effectSlider.value > minVolume)
-                savedEffectVolume = effectSlider.value;
-
-            musicSlider.value = minVolume;
-            effectSlider.value = minVolume;
-            musicSlider.interactable = false;
-            effectSlider.interactable = false;
-        }
-        else
-        {
-            if (musicSlider != null)
+            if (volume <= minVolume)
             {
-                if (!musicSlider.interactable)
+
+                if (musicSlider.value > minVolume)
+                    savedMusicVolume = musicSlider.value;
+                if (effectSlider.value > minVolume)
+                    savedEffectVolume = effectSlider.value;
+
+
+                musicSlider.value = minVolume;
+                effectSlider.value = minVolume;
+                musicSlider.interactable = false;
+                effectSlider.interactable = false;
+            }
+            else
+            {
+                if (musicSlider != null)
                 {
-                    musicSlider.interactable = true;
-                    effectSlider.interactable = true;
-                    musicSlider.value = savedMusicVolume;
-                    effectSlider.value = savedEffectVolume;
+                    if (!musicSlider.interactable)
+                    {
+                        musicSlider.interactable = true;
+                        effectSlider.interactable = true;
+                        musicSlider.value = savedMusicVolume;
+                        effectSlider.value = savedEffectVolume;
+                    }
                 }
             }
         }
