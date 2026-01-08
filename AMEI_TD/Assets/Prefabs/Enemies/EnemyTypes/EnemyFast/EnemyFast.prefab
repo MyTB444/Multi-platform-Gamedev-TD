@@ -594,6 +594,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2378603422ff63a4993ba08dc3b02e83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mySpawner: {fileID: 0}
   enemyType: 1
   enemySpeed: 3.5
   damage: 1
@@ -611,17 +612,17 @@ MonoBehaviour:
   animationSpeedMultiplier: 1.5
   useSpawnGrace: 1
   spawnGracePeriod: 0.5
-  pathOffsetRange: 1.5
+  pathOffsetRange: 0.05
   speedVariationPercent: 0.1
-  isHighPriority: 0
+  isHighPriority: 1
   waypointReachThreshold: 0.5
   cornerCutVariation: 0.8
   pathDriftAmount: 0.15
   frozenColor: {r: 0.5, g: 0.8, b: 1, a: 1}
   originalColors: []
-  stuckCheckInterval: 0.5
-  stuckDistanceThreshold: 0.2
-  stuckSkipDistance: 2
+  stuckCheckInterval: 0.2
+  stuckDistanceThreshold: 0.1
+  stuckSkipDistance: 0.5
   enemyCurrentHp: 0
   myBody: {fileID: 0}
   enemyHealthDisplayCanvas: {fileID: 8274155651369890593}
@@ -682,7 +683,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 1812659917213882}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.91
+  m_Radius: 0.6
   m_Speed: 2
   m_Acceleration: 1
   avoidancePriority: 50

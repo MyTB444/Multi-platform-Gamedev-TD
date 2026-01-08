@@ -594,7 +594,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
             NavAgent.enabled = true;
             
             NavMeshHit hit;
-            if (NavMesh.SamplePosition(transform.position, out hit, 5f, NavMesh.AllAreas))
+            if (NavMesh.SamplePosition(transform.position, out hit, 1f, NavMesh.AllAreas))
             {
                 NavAgent.Warp(hit.position);
             }
@@ -755,7 +755,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
                 else if (stuckDuration >= 2f)
                 {
                     NavMeshHit hit;
-                    Vector3 randomOffset = Random.insideUnitSphere * 0.5f;
+                    Vector3 randomOffset = Random.insideUnitSphere * 0.1f;
                     randomOffset.y = 0;
                 
                     if (NavMesh.SamplePosition(transform.position + randomOffset, out hit, 1f, NavMesh.AllAreas))
