@@ -48,6 +48,12 @@ public class TowerSpikeTrap : TowerBase
     
         switch (upgradeType)
         {
+            case TowerUpgradeType.DamageBoost:
+                if (spikeTrap != null)
+                {
+                    spikeTrap.UpdateDamageInfo(CreateDamageInfo());
+                }
+                break;
             case TowerUpgradeType.SpikeTrapAttackSpeed:
                 attackSpeedBoost = enabled;
                 attackSpeedBoostPercent = spikeTrapAttackSpeedPercent;

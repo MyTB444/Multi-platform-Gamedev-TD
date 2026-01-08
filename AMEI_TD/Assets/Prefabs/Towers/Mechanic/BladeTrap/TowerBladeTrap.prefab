@@ -2448,8 +2448,8 @@ MonoBehaviour:
   spinSpeedBoostPercent: 0.2
   bleedChance: 0
   bleedChancePercent: 0.45
-  bleedDamage: 15
-  bleedDuration: 4
+  bleedDamage: 10
+  bleedDuration: 3
   bleedVFX: {fileID: 3538601806443498961, guid: ae8be53a4ea8c18479183ebb3a59bf7c, type: 3}
   moreBlades: 0
   extendedReach: 0

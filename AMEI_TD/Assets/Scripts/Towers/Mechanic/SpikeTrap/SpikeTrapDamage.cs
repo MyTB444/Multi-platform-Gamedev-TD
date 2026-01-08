@@ -74,6 +74,11 @@ public class SpikeTrapDamage : MonoBehaviour
         }
     }
     
+    public void UpdateDamageInfo(DamageInfo newDamageInfo)
+    {
+        damageInfo = newDamageInfo;
+    }
+    
     public void SetPoisonEffect(float damage, float duration, ElementType elementType, GameObject vfx = null)
     {
         applyPoison = true;
