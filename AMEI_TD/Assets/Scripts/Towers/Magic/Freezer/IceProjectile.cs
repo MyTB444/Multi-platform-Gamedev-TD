@@ -1,31 +1,40 @@
 using UnityEngine;
 
+/// <summary>
+/// Homing projectile that applies slow, DoT, and optional freeze effects in an area.
+/// Used by TowerIceMage. Retargets if original target dies.
+/// </summary>
 public class IceProjectile : TowerProjectileBase
 {
+    // ==================== HOMING SETTINGS ====================
     [Header("Homing Settings")]
-    [SerializeField] private float rotationSpeed = 200f;
-    [SerializeField] private float retargetRange = 5f;
+    [SerializeField] private float rotationSpeed = 200f;   // Degrees per second for turning
+    [SerializeField] private float retargetRange = 5f;     // Search radius for new targets
     
+    // ==================== TRACKING STATE ====================
     private Transform target;
-    private bool isHoming = true;
+    private bool isHoming = true;              // Currently tracking a target
     private LayerMask enemyLayer;
-    private Quaternion rotationOffset;
-    private Vector3 lastKnownTargetPos;
-    private bool targetLost = false;
+    private Quaternion rotationOffset;         // Visual rotation offset for projectile model
+    private Vector3 lastKnownTargetPos;        // Continue to this pos if target dies
+    private bool targetLost = false;           // Target died, flying to last known pos
     
-    // Ice settings passed from tower
+    // ==================== ICE EFFECTS (from tower) ====================
     private float slowPercent;
     private float slowDuration;
-    private float effectRadius;
+    private float effectRadius;                // AOE radius for slow/DoT
     private DamageInfo dotDamageInfo;
     private float dotDuration;
     private float dotTickInterval;
     
-    // Freeze settings
+    // ==================== FREEZE UPGRADE ====================
     private bool canFreeze = false;
     private float freezeChance;
     private float freezeDuration;
     
+    /// <summary>
+    /// Reset state when retrieved from pool.
+    /// </summary>
     protected override void OnEnable()
     {
         base.OnEnable();
@@ -34,6 +43,7 @@ public class IceProjectile : TowerProjectileBase
         targetLost = false;
         canFreeze = false;
         
+        // Reset physics
         if (rb != null)
         {
             rb.velocity = Vector3.zero;
@@ -41,6 +51,10 @@ public class IceProjectile : TowerProjectileBase
         }
     }
     
+    /// <summary>
+    /// Configures the ice projectile with all necessary parameters.
+    /// Called by TowerIceMage when spawning.
+    /// </summary>
     public void SetupIceProjectile(
         Transform enemyTarget, 
         IDamageable newDamageable, 
@@ -65,14 +79,16 @@ public class IceProjectile : TowerProjectileBase
         enemyLayer = whatIsEnemy;
         targetLost = false;
         
+        // Store ice effect parameters
         slowPercent = newSlowPercent;
         slowDuration = newSlowDuration;
         effectRadius = newEffectRadius;
-        dotDamageInfo = new DamageInfo(newDotDamage, newDamageInfo.elementType, true);
+        dotDamageInfo = new DamageInfo(newDotDamage, newDamageInfo.elementType, true);  // isDoT = true
         dotDuration = newDotDuration;
         dotTickInterval = newDotTickInterval;
         rotationOffset = Quaternion.Euler(visualRotationOffset);
         
+        // Cache initial target position for fallback
         if (target != null)
         {
             EnemyBase enemy = target.GetComponent<EnemyBase>();
@@ -80,6 +96,9 @@ public class IceProjectile : TowerProjectileBase
         }
     }
     
+    /// <summary>
+    /// Enables freeze effect (Freeze Solid upgrade).
+    /// </summary>
     public void SetFreezeEffect(float chance, float duration)
     {
         canFreeze = true;
@@ -87,12 +106,15 @@ public class IceProjectile : TowerProjectileBase
         freezeDuration = duration;
     }
     
+    /// <summary>
+    /// Handles homing movement, retargeting, and destination arrival.
+    /// </summary>
     protected override void MoveProjectile()
     {
-        // Check if target is dead
+        // ===== CHECK TARGET VALIDITY =====
         if (target == null || !target.gameObject.activeSelf)
         {
-            // Try to find new target
+            // Try to find new target within range
             Transform newTarget = FindNewTarget();
             
             if (newTarget != null)
@@ -103,19 +125,20 @@ public class IceProjectile : TowerProjectileBase
             }
             else
             {
-                // No target - fly to last known position
+                // No target available - fly to last known position
                 isHoming = false;
                 targetLost = true;
             }
         }
         
-        // Update last known position if we have a target
+        // ===== UPDATE LAST KNOWN POSITION =====
         if (target != null && target.gameObject.activeSelf)
         {
             EnemyBase enemy = target.GetComponent<EnemyBase>();
             lastKnownTargetPos = enemy != null ? enemy.GetCenterPoint() : target.position;
         }
         
+        // ===== DETERMINE TARGET POSITION =====
         Vector3 targetPos;
         
         if (isHoming && target != null)
@@ -128,8 +151,10 @@ public class IceProjectile : TowerProjectileBase
             targetPos = lastKnownTargetPos;
         }
         
+        // ===== ROTATE AND MOVE =====
         Vector3 direction = (targetPos - transform.position).normalized;
         
+        // Apply visual rotation offset to model
         Quaternion flightRotation = Quaternion.LookRotation(direction);
         Quaternion targetRotation = flightRotation * rotationOffset;
         
@@ -137,13 +162,13 @@ public class IceProjectile : TowerProjectileBase
         
         transform.position += direction * (speed * Time.deltaTime);
         
-        // If target lost, check if we reached the destination
+        // ===== CHECK DESTINATION ARRIVAL (when target lost) =====
         if (targetLost)
         {
             float distToTarget = Vector3.Distance(transform.position, lastKnownTargetPos);
             if (distToTarget < 0.5f)
             {
-                // Reached destination - apply AoE and destroy
+                // Reached destination - apply AOE effects even without hitting enemy
                 ApplyEffectsInRadius();
 
                 DestroyProjectile();
@@ -151,6 +176,9 @@ public class IceProjectile : TowerProjectileBase
         }
     }
     
+    /// <summary>
+    /// Searches for closest enemy within retarget range.
+    /// </summary>
     private Transform FindNewTarget()
     {
         Collider[] enemies = Physics.OverlapSphere(transform.position, retargetRange, enemyLayer);
@@ -175,6 +203,9 @@ public class IceProjectile : TowerProjectileBase
         return closest;
     }
     
+    /// <summary>
+    /// Handles collision with enemy. Applies freeze to direct hit, AOE effects to all nearby.
+    /// </summary>
     protected override void OnHit(Collider other)
     {
         if (hasHit) return;
@@ -182,12 +213,13 @@ public class IceProjectile : TowerProjectileBase
         EnemyBase enemy = other.GetComponent<EnemyBase>();
         if (enemy == null) return;
     
-        // Freeze only the direct hit enemy
+        // Freeze only affects the directly hit enemy (not AOE)
         if (canFreeze && Random.value <= freezeChance)
         {
             enemy.ApplyStun(freezeDuration);
         }
     
+        // Slow and DoT affect all enemies in radius
         ApplyEffectsInRadius();
     
         isHoming = false;
@@ -195,6 +227,9 @@ public class IceProjectile : TowerProjectileBase
         base.OnHit(other);
     }
 
+    /// <summary>
+    /// Applies slow and DoT to all enemies within effect radius.
+    /// </summary>
     private void ApplyEffectsInRadius()
     {
         Collider[] enemies = Physics.OverlapSphere(transform.position, effectRadius, enemyLayer);
@@ -204,7 +239,7 @@ public class IceProjectile : TowerProjectileBase
             EnemyBase enemy = col.GetComponent<EnemyBase>();
             if (enemy != null)
             {
-                enemy.ApplySlow(slowPercent, slowDuration, true);
+                enemy.ApplySlow(slowPercent, slowDuration, true);  // true = stacking slow
                 enemy.ApplyDoT(dotDamageInfo, dotDuration, dotTickInterval);
             }
         }
