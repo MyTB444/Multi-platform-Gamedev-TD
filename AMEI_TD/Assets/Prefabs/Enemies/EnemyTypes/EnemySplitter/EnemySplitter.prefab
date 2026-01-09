@@ -154,7 +154,7 @@ MonoBehaviour:
   bottomPoint: {fileID: 4898646047909035515}
   rotationSpeed: 12
   acceleration: 8
-  angularSpeed: 360
+  angularSpeed: 120
   animationSpeedMultiplier: 1
   useSpawnGrace: 1
   spawnGracePeriod: 0.5
@@ -162,13 +162,13 @@ MonoBehaviour:
   speedVariationPercent: 0.1
   isHighPriority: 1
   waypointReachThreshold: 0.1
-  cornerCutVariation: 0.8
-  pathDriftAmount: 0.3
+  cornerCutVariation: 0.3
+  pathDriftAmount: 0.15
   frozenColor: {r: 0.5, g: 0.8, b: 1, a: 1}
   originalColors: []
-  stuckCheckInterval: 0.5
+  stuckCheckInterval: 0.1
   stuckDistanceThreshold: 0.2
-  stuckSkipDistance: 2
+  stuckSkipDistance: 0.1
   enemyCurrentHp: 0
   myBody: {fileID: 0}
   enemyHealthDisplayCanvas: {fileID: 2305095053398547535}
@@ -221,12 +221,12 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 0
+  m_StoppingDistance: 0.1
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 3.7
-  m_BaseOffset: -0.3
+  m_Height: 2.5
+  m_BaseOffset: -0.1
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!54 &5141666175177649048
