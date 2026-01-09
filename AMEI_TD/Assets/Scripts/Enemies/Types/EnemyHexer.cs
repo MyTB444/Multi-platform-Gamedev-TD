@@ -1,6 +1,9 @@
 using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// Enemy that debuffs nearby towers with slow effects and has a chance to disable them.
+/// </summary>
 public class EnemyHexer : EnemyBase
 {
     [Header("Hexer Settings")]

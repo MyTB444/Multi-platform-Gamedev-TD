@@ -2,6 +2,10 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Special tower that buffs all other towers and periodically insta-kills the highest HP enemy.
+/// Spawning this triggers the Mega Wave.
+/// </summary>
 public class TowerGuardian : MonoBehaviour
 {
     public static TowerGuardian instance;

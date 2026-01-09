@@ -3,6 +3,10 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.Events;
 
+/// <summary>
+/// Manages skill tree progression - unlocking/locking skills, skill loss on enemy reaching castle,
+/// and saving/loading progress. Globe nodes protect skills below them from being lost.
+/// </summary>
 public class SkillTreeManager : MonoBehaviour
 {
     [Header("Events")]

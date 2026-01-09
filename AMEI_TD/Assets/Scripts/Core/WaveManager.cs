@@ -396,6 +396,7 @@ public class WaveManager : MonoBehaviour
         return null;
     }
 
+    // Fisher-Yates shuffle for random enemy spawn order
     private void ShuffleList<T>(List<T> list)
     {
         for (int i = list.Count - 1; i > 0; i--)

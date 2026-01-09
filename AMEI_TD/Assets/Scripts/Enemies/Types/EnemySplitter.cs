@@ -1,6 +1,9 @@
 using System.Collections;
 using UnityEngine;
 
+/// <summary>
+/// Enemy that splits into smaller copies when killed, up to a max split level.
+/// </summary>
 public class EnemySplitter : EnemyBase
 {
     [Header("Split Settings")]

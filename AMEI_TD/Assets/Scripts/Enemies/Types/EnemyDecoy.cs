@@ -1,6 +1,9 @@
 using UnityEngine;
 using System.Collections;
 
+/// <summary>
+/// Enemy that periodically spawns decoy copies to distract towers. Decoys die in one hit.
+/// </summary>
 public class EnemyDecoy : EnemyBase
 {
     [Header("Decoy Settings")]

@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Generic object pooling system for reusing GameObjects (enemies, projectiles, VFX) to reduce GC.
+/// </summary>
 public class ObjectPooling : MonoBehaviour
 {
     public static ObjectPooling instance;

@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Video;
 
+/// <summary>
+/// Central UI manager for HUD elements, pause menu, win/lose screens, and skill tree display.
+/// </summary>
 public class UIBase : MonoBehaviour
 {
     private bool isPaused;

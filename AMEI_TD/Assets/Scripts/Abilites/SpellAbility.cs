@@ -5,6 +5,10 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+/// <summary>
+/// Handles player spell abilities - Fire (path burning), Magic (area damage), Mechanic (bomb),
+/// and Imaginary (reveals invisible enemies). Each spell type has its own cooldown and VFX.
+/// </summary>
 public class SpellAbility : MonoBehaviour
 {
     private SelectedPath selectedPath;

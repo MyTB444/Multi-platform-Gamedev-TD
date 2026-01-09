@@ -20,6 +20,10 @@ public enum SpellEnableType
     Imaginary
 }
 
+/// <summary>
+/// ScriptableObject representing a skill tree node. Contains unlock cost, prerequisites,
+/// and effects to apply (tower upgrades, tower swaps, spell unlocks, etc.)
+/// </summary>
 [CreateAssetMenu(fileName = "NewSkill", menuName = "Skill Tree/Skill Node")]
 public class SkillNode : ScriptableObject
 {

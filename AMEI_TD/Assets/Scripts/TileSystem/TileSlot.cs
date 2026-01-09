@@ -1,6 +1,9 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
+/// <summary>
+/// Represents a single tile in the grid. Handles tile swapping, prop placement, and collider updates.
+/// </summary>
 public class TileSlot : MonoBehaviour
 {
     private int originalLayerIndex;

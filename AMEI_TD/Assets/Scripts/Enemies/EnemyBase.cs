@@ -33,6 +33,9 @@ public enum DebuffType
     Frostbite 
 }
 
+/// <summary>
+/// Base class for all enemy types. Handles movement, HP, status effects (slow, stun, DoT), and path following.
+/// </summary>
 public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPointerExitHandler
 {
     public EnemySpawner mySpawner;
@@ -733,6 +736,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
         }
     }
     
+    // Detects when enemy is stuck and skips waypoints or nudges position to unstick
     private void HandleStuckDetection()
     {
         if (Time.time < lastStuckCheckTime + stuckCheckInterval) return;
@@ -775,10 +779,11 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
         lastStuckCheckTime = Time.time;
     }
 
+    // Checks if enemy has moved past a waypoint using dot product with path direction
     private bool HasPassedWaypoint(int waypointIndex)
     {
         if (waypointIndex >= myWaypoints.Length) return false;
-        
+
         Vector3 waypoint = myWaypoints[waypointIndex];
         
         Vector3 pathDirection;

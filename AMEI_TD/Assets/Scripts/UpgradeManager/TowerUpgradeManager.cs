@@ -2,6 +2,10 @@ using System.Collections;
 using UnityEngine;
 using System.Collections.Generic;
 
+/// <summary>
+/// Manages tower upgrades unlocked through the skill tree. Applies upgrades to all existing and new towers.
+/// Also handles tower type swaps (e.g., Archer to Spear, Pyromancer to Ice Mage).
+/// </summary>
 public class TowerUpgradeManager : MonoBehaviour
 {
     public static TowerUpgradeManager instance;

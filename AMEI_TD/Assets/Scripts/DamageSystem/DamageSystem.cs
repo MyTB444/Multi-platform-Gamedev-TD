@@ -24,6 +24,9 @@ public struct DamageInfo
     }
 }
 
+/// <summary>
+/// Calculates damage with element type effectiveness (super effective, not very effective, immune).
+/// </summary>
 public static class DamageCalculator
 {
     private static TypeMatchupDatabase _database;

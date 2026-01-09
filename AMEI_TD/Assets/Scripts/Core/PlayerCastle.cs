@@ -18,6 +18,7 @@ public class PlayerCastle : MonoBehaviour
         instance = this;
     }
 
+    // Called when enemy reaches the castle - deals damage and triggers skill loss
     private void OnTriggerEnter(Collider other)
     {
         if (((1 << other.gameObject.layer) & enemyLayer) != 0)

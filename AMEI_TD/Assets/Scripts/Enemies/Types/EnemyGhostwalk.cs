@@ -1,4 +1,7 @@
-﻿public class EnemyGhostwalk : EnemyBase
+/// <summary>
+/// Enemy immune to slow effects - always moves at base speed.
+/// </summary>
+public class EnemyGhostwalk : EnemyBase
 {
     private float ghostBaseSpeed;
 

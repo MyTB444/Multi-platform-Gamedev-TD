@@ -4,6 +4,9 @@ using System.Reflection;
 using UnityEngine;
 using UnityEngine.AI;
 
+/// <summary>
+/// Enemy that adapts its element type to match incoming damage, becoming resistant to repeated damage types.
+/// </summary>
 public class EnemyAdaptive : EnemyBase
 {
     [Header("Adaptation Settings")]

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
+/// <summary>
+/// Enemy that periodically summons minion enemies that follow the same path.
+/// </summary>
 public class EnemySummoner : EnemyBase
 {
     [Header("Summoner Settings")]

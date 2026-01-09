@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+/// <summary>
+/// Interactive tile for tower placement. Shows available tower options based on unlocked elements.
+/// Handles tower building and selling.
+/// </summary>
 public class TileButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
     [SerializeField] private TowerButton[] towerButtons;

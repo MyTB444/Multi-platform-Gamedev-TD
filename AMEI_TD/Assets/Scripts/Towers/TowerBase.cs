@@ -56,6 +56,9 @@ public enum TowerUpgradeType
     DoubleSlash
 }
 
+/// <summary>
+/// Base class for all tower types. Handles targeting, rotation, attacks, debuffs, and upgrades.
+/// </summary>
 public class TowerBase : MonoBehaviour
 {
     protected EnemyBase currentEnemy;
@@ -364,6 +367,7 @@ public class TowerBase : MonoBehaviour
         }
     }
 
+    // Finds best target: prioritizes decoys, then priority element, then uses HP/distance targeting
     protected virtual EnemyBase FindEnemyWithinRange()
     {
         List<EnemyBase> decoyTargets = new List<EnemyBase>();

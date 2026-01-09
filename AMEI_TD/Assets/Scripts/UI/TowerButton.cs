@@ -2,6 +2,9 @@ using System;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
+/// <summary>
+/// Button for building towers on tiles. Swaps to alternate tower type when skill tree unlocks swap.
+/// </summary>
 public class TowerButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
     [SerializeField] private GameObject towerPrefab;

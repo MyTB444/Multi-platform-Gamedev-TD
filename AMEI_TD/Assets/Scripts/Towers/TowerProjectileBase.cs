@@ -1,5 +1,8 @@
 using UnityEngine;
 
+/// <summary>
+/// Base class for tower projectiles. Handles movement, collision, damage dealing, and pooling.
+/// </summary>
 public class TowerProjectileBase : MonoBehaviour
 {
     protected Vector3 direction;
