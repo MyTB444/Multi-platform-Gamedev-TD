@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEditor.SearchService;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -13,20 +14,55 @@ public class Menu : MonoBehaviour
     public Color[] colors;
     public GameObject[] texts;
     public GameObject infoUI;
+    public bool buttonsActive;
+    public bool onBlack;
     void Start()
     {
         instance = this;
+        buttonsActive = false;
+        onBlack = false;
+    }
+    void Update()
+    {
+        ColorChecker();
     }
 
     public void EnableLevelButton()
     {
-        for (int i = 0; i < levelButtons.Length; i++)
+
+        if (buttonsActive == false)
         {
-            if (!levelButtons[i].activeSelf)
+            buttonsActive = true;
+            for (int i = 0; i < levelButtons.Length; i++)
+            {
                 levelButtons[i].SetActive(true);
-            else
+            }
+        }
+        else
+        {
+            buttonsActive = false;
+            for (int i = 0; i < levelButtons.Length; i++)
             {
                 levelButtons[i].SetActive(false);
+            }
+        }
+    }
+    private void ColorChecker()
+    {
+        if (buttonsActive)
+        {
+            if (onBlack)
+            {
+                levelButtons[2].SetActive(false);
+                levelButtons[1].SetActive(false);
+            }
+            else
+            {
+                for (int i = 0; i < levelButtons.Length; i++)
+                {
+                    if(!levelButtons[i].activeSelf)
+                    levelButtons[i].SetActive(true);
+                }
             }
         }
     }
@@ -98,15 +134,19 @@ public class Menu : MonoBehaviour
         {
             case 0:
                 ColorLoop(colors[0]);
+                onBlack = false;
                 break;
             case 1:
                 ColorLoop(colors[1]);
+                onBlack = false;
                 break;
             case 2:
                 ColorLoop(colors[2]);
+                onBlack = false;
                 break;
             case 3:
                 ColorLoop(colors[3]);
+                onBlack = true;
                 break;
         }
     }
@@ -126,8 +166,8 @@ public class Menu : MonoBehaviour
     }
     public void InfoUI()
     {
-        if(!infoUI.activeSelf)
-        infoUI.SetActive(true);
+        if (!infoUI.activeSelf)
+            infoUI.SetActive(true);
         else
         {
             infoUI.SetActive(false);

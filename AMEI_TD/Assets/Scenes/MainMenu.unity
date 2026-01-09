@@ -4549,6 +4549,8 @@ MonoBehaviour:
   - {fileID: 705695735}
   - {fileID: 445655894}
   infoUI: {fileID: 1413104592}
+  buttonsActive: 0
+  onBlack: 0
 --- !u!114 &998033320
 MonoBehaviour:
   m_ObjectHideFlags: 0
