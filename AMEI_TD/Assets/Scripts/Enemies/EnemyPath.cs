@@ -14,10 +14,20 @@ public class EnemyPath : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// Returns the array of waypoint transforms that define this path.
+    /// </summary>
     public Transform[] GetWaypoints() => waypoints;
+
+    /// <summary>
+    /// Returns the total number of waypoints in this path.
+    /// </summary>
     public int GetWaypointCount() => waypoints.Length;
 
-    // Visualizes the path in the Unity editor with colored lines and spheres
+    /// <summary>
+    /// Visualizes the path in the Unity editor with colored lines and spheres.
+    /// Green sphere = start, Yellow spheres = intermediate waypoints, Red sphere = end.
+    /// </summary>
     void OnDrawGizmos()
     {
         // Collect waypoints for gizmo drawing

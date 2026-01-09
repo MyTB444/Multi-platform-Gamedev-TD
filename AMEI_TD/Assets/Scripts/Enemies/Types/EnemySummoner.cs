@@ -87,10 +87,14 @@ public class EnemySummoner : EnemyBase
         }
     }
     
+    /// <summary>
+    /// Called by animation event at the peak of the summon animation.
+    /// Spawns the minions and stops the magic circle VFX.
+    /// </summary>
     public void OnSummonAnimationEvent()
     {
         SpawnMinions();
-    
+
         if (activeMagicCircle != null)
         {
             ParticleSystem ps = activeMagicCircle.GetComponent<ParticleSystem>();
@@ -106,7 +110,11 @@ public class EnemySummoner : EnemyBase
             activeMagicCircle = null;
         }
     }
-    
+
+    /// <summary>
+    /// Called by animation event when the summon animation completes.
+    /// Re-enables movement and resets summon state.
+    /// </summary>
     public void OnSummonAnimationEnd()
     {
         FinishSummoning();
@@ -119,6 +127,10 @@ public class EnemySummoner : EnemyBase
         isSummoning = false;
     }
 
+    /// <summary>
+    /// Spawns minions in a circular pattern around the summoner.
+    /// Respects the maximum active minion limit and spawns in a delayed sequence.
+    /// </summary>
     private void SpawnMinions()
     {
         int minionsToSpawn = Mathf.Min(minionsPerSummon, maxActiveMinions - activeMinions.Count);
@@ -179,6 +191,10 @@ public class EnemySummoner : EnemyBase
         }
     }
 
+    /// <summary>
+    /// Returns the remaining waypoints from the summoner's current position to the end.
+    /// Minions will continue from where the summoner is, following the same path.
+    /// </summary>
     private Vector3[] GetRemainingWaypoints()
     {
         // Copy remaining waypoints from current position so minions follow same path
@@ -196,6 +212,10 @@ public class EnemySummoner : EnemyBase
         return remainingWaypoints;
     }
 
+    /// <summary>
+    /// Removes dead or inactive minions from the active minions list.
+    /// Called every frame to keep the list synchronized.
+    /// </summary>
     private void CleanupDeadMinions()
     {
         activeMinions.RemoveAll(minion => minion == null || !minion.activeInHierarchy);

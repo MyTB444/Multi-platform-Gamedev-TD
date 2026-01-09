@@ -49,6 +49,16 @@ public class EnemyDebuffDisplay : MonoBehaviour
         public Image ringFill;
     }
     
+    /// <summary>
+    /// Loads all debuff sprites into the static registry. Called once at startup by DebuffSpriteLoader.
+    /// Also generates the circular ring sprite used for timer visualization.
+    /// </summary>
+    /// <param name="slow">Sprite for slow debuff icon</param>
+    /// <param name="freeze">Sprite for freeze debuff icon</param>
+    /// <param name="burn">Sprite for burn debuff icon</param>
+    /// <param name="poison">Sprite for poison debuff icon</param>
+    /// <param name="bleed">Sprite for bleed debuff icon</param>
+    /// <param name="frostbite">Sprite for frostbite debuff icon</param>
     public static void LoadSprites(Sprite slow, Sprite freeze, Sprite burn, Sprite poison, Sprite bleed, Sprite frostbite)
     {
         slowSprite = slow;
@@ -57,10 +67,10 @@ public class EnemyDebuffDisplay : MonoBehaviour
         poisonSprite = poison;
         bleedSprite = bleed;
         frostbiteSprite = frostbite;
-        
+
         // Create ring sprite programmatically
         ringSprite = CreateRingSprite();
-        
+
         spritesLoaded = true;
     }
     
@@ -119,6 +129,10 @@ public class EnemyDebuffDisplay : MonoBehaviour
         CreateUI();
     }
     
+    /// <summary>
+    /// Creates a world-space canvas above the enemy to display debuff icons.
+    /// The canvas billboards toward the camera and contains an icon container for horizontal layout.
+    /// </summary>
     private void CreateUI()
     {
         // Create world-space canvas above enemy to display debuff icons
@@ -163,17 +177,21 @@ public class EnemyDebuffDisplay : MonoBehaviour
         UpdateRingFill();
     }
     
+    /// <summary>
+    /// Updates which debuff icons should be active based on the enemy's current status effects.
+    /// Creates or destroys icons as needed and repositions them.
+    /// </summary>
     private void UpdateIcons()
     {
         if (!spritesLoaded) return;
-        
+
         SetIconActive(ref slowIcon, slowSprite, slowColor, enemy.HasIceSlow() && !enemy.IsFrozen());
         SetIconActive(ref freezeIcon, freezeSprite, freezeColor, enemy.IsFrozen());
         SetIconActive(ref burnIcon, burnSprite, burnColor, enemy.HasBurn());
         SetIconActive(ref poisonIcon, poisonSprite, poisonColor, enemy.HasPoison());
         SetIconActive(ref bleedIcon, bleedSprite, bleedColor, enemy.HasBleed());
         SetIconActive(ref frostbiteIcon, frostbiteSprite, frostbiteColor, enemy.HasFrostbite());
-        
+
         RepositionIcons();
     }
     
@@ -187,6 +205,14 @@ public class EnemyDebuffDisplay : MonoBehaviour
         if (frostbiteIcon != null) frostbiteIcon.ringFill.fillAmount = enemy.GetFrostbiteDurationNormalized();
     }
     
+    /// <summary>
+    /// Activates or deactivates a debuff icon based on status.
+    /// Creates the icon if it doesn't exist and should be active, or destroys it if it should be inactive.
+    /// </summary>
+    /// <param name="icon">Reference to the icon to modify</param>
+    /// <param name="sprite">Sprite to use for the icon</param>
+    /// <param name="color">Color tint for the icon</param>
+    /// <param name="active">Whether the icon should be shown</param>
     private void SetIconActive(ref DebuffIcon icon, Sprite sprite, Color color, bool active)
     {
         if (active && icon == null && sprite != null)
@@ -200,10 +226,16 @@ public class EnemyDebuffDisplay : MonoBehaviour
         }
     }
     
+    /// <summary>
+    /// Creates a complete debuff icon with ring background, ring fill timer, and center icon image.
+    /// The ring fill drains clockwise to show remaining debuff duration.
+    /// </summary>
+    /// <param name="sprite">Sprite to display in the center of the icon</param>
+    /// <param name="color">Color for both the icon and ring fill</param>
     private DebuffIcon CreateIcon(Sprite sprite, Color color)
     {
         DebuffIcon icon = new DebuffIcon();
-        
+
         // Root object
         icon.root = new GameObject("DebuffIcon");
         icon.root.transform.SetParent(iconContainer);
@@ -270,6 +302,10 @@ public class EnemyDebuffDisplay : MonoBehaviour
         return icon;
     }
     
+    /// <summary>
+    /// Repositions all active debuff icons to be horizontally centered with consistent spacing.
+    /// Icons are arranged left-to-right in order: slow, freeze, burn, poison, bleed, frostbite.
+    /// </summary>
     private void RepositionIcons()
     {
         // Center and space active debuff icons horizontally
@@ -307,6 +343,10 @@ public class EnemyDebuffDisplay : MonoBehaviour
         ClearAllIcons();
     }
     
+    /// <summary>
+    /// Destroys all active debuff icons and clears their references.
+    /// Called when the enemy is disabled or returned to the object pool.
+    /// </summary>
     public void ClearAllIcons()
     {
         if (slowIcon != null) { Destroy(slowIcon.root); slowIcon = null; }

@@ -52,6 +52,10 @@ public class EnemySplitter : EnemyBase
         }
     }
 
+    /// <summary>
+    /// Spawns the configured number of split enemies when this enemy dies.
+    /// Plays split VFX at the death location.
+    /// </summary>
     private void SpawnSplits()
     {
         if (splitVFXPrefab != null)
@@ -67,6 +71,11 @@ public class EnemySplitter : EnemyBase
         Debug.Log($"[EnemySplitter] Spawned {splitCount} splits at level {currentSplitLevel + 1}");
     }
 
+    /// <summary>
+    /// Spawns a single split enemy with reduced stats and increased split level.
+    /// The split is smaller, faster, and weaker than the parent, and continues from the same path.
+    /// </summary>
+    /// <param name="index">Index of this split (used for offset calculation)</param>
     private void SpawnSplitEnemy(int index)
     {
         // Create smaller, faster copy with reduced HP at next split level
@@ -122,10 +131,14 @@ public class EnemySplitter : EnemyBase
         }
     }
     
+    /// <summary>
+    /// Returns the remaining waypoints from the current position to the end of the path.
+    /// Splits continue from where the parent died, following the same route.
+    /// </summary>
     private Vector3[] GetRemainingWaypoints()
     {
         if (myWaypoints == null) return new Vector3[0];
-    
+
         int remaining = myWaypoints.Length - currentWaypointIndex;
         if (remaining <= 0) return new Vector3[0];
 
