@@ -28155,7 +28155,7 @@ MonoBehaviour:
   rockSizeMax: 1.5
   rockSpeedMin: 8
   rockSpeedMax: 15
-  predictionMultiplier: 7
+  predictionMultiplier: 3
   rockPoolAmount: 30
   moreRocks: 0
   bonusRocks: 5

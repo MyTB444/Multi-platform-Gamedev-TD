@@ -128,7 +128,7 @@ public class InputHandler : MonoBehaviour
             if (spellButtons[3].IsButtonActive())
             {
                 spellButtons[3].CooldownStart();
-                SpellAbility.instance.ActivateFireSpell();
+                SpellAbility.instance.ActivateImaginarySpell();
             }
             else
             {
