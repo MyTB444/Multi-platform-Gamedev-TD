@@ -1,15 +1,8 @@
 # Guide
 
-To play the game load up them MainMenu scene and press play to enter the game. You need to play on 1280x720 resolution.
-
+The game is pretty straightforward, and the info tabs should explain everything you need.
 # Controls
-
-LeftCLick on the tile to bring tower building menu
-LeftClick again to buy it
-SpaceBar - Pause
-R - Restart
-D - Hover over the tower and press D to sell it
-
+Fully explained in the in-game info tab.
 # Build link
 https://github.com/ilvlsn/qmul-td-game
 
