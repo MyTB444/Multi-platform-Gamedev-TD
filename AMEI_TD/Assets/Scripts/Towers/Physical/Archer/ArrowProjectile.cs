@@ -2,20 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Physics-based arrow projectile with arc trajectory and DoT effects.
+/// Uses rigidbody velocity with initial curve toward target then gravity falloff.
+/// </summary>
 public class ArrowProjectile : TowerProjectileBase
 {
+    // ==================== Arc Trajectory Settings ====================
     [Header("Arrow Settings")]
     [SerializeField] private TrailRenderer trail;
-    [SerializeField] private float curveDelay = 0.05f;
-    [SerializeField] private float curveStrength = 8f;
-    [SerializeField] private float gravityMultiplier = 3f;
-    [SerializeField] private float maxCurveDuration = 0.5f;
-    [SerializeField] private float closeRangeGravityBoost = 3f;
-    [SerializeField] private float closeRangeThreshold = 6f;
+    [SerializeField] private float curveDelay = 0.05f;           // Time before homing kicks in
+    [SerializeField] private float curveStrength = 8f;           // How aggressively arrow curves toward target
+    [SerializeField] private float gravityMultiplier = 3f;       // Gravity strength after curve phase
+    [SerializeField] private float maxCurveDuration = 0.5f;      // How long the homing phase lasts
+    [SerializeField] private float closeRangeGravityBoost = 3f;  // Extra gravity for close targets (steeper arc)
+    [SerializeField] private float closeRangeThreshold = 6f;     // Distance below which close range gravity applies
     
     [Header("VFX")]
-    [SerializeField] private Transform vfxPoint;
+    [SerializeField] private Transform vfxPoint;  // Attach point for DoT effect visuals on the arrow
     
+    // ==================== Damage Over Time Effects ====================
     [Header("DoT Effects")]
     private bool applyPoison = false;
     private float poisonDamage;
@@ -27,8 +33,9 @@ public class ArrowProjectile : TowerProjectileBase
     private float fireDuration;
     private DamageInfo fireDamageInfo;
     
+    // ==================== Flight State ====================
     private bool launched = false;
-    private bool curving = true;
+    private bool curving = true;          // True while arrow is homing toward target
     private float launchTime;
     private Vector3 targetPosition;
     private Vector3 initialForward;
@@ -37,11 +44,14 @@ public class ArrowProjectile : TowerProjectileBase
     protected override void OnEnable()
     {
         base.OnEnable();
+        
+        // Reset flight state
         launched = false;
         curving = true;
         applyPoison = false;
         applyFire = false;
 
+        // Clean up any attached VFX from previous use
         if (vfxPoint != null)
         {
             foreach (Transform child in vfxPoint)
@@ -62,6 +72,15 @@ public class ArrowProjectile : TowerProjectileBase
         }
     }
     
+    /// <summary>
+    /// Initializes arrow with arc trajectory parameters.
+    /// Speed and curve duration scale with distance for consistent flight feel.
+    /// </summary>
+    /// <param name="targetPos">Predicted impact position</param>
+    /// <param name="newDamageable">Target to damage on hit</param>
+    /// <param name="newDamageInfo">Damage amount and element type</param>
+    /// <param name="newSpeed">Base arrow speed</param>
+    /// <param name="distance">Distance to target (affects arc parameters)</param>
     public void SetupArcProjectile(Vector3 targetPos, IDamageable newDamageable, DamageInfo newDamageInfo, float newSpeed, float distance)
     {
         damageInfo = newDamageInfo;
@@ -71,9 +90,11 @@ public class ArrowProjectile : TowerProjectileBase
         targetPosition = targetPos;
         initialForward = transform.forward;
 
+        // Scale speed and curve duration based on distance
         arrowSpeed = newSpeed + (distance * 0.5f);
         maxCurveDuration = 0.3f + (distance * 0.05f);
 
+        // Close range shots need steeper arcs to not overshoot
         if (distance < closeRangeThreshold)
         {
             gravityMultiplier = 3f + closeRangeGravityBoost;
@@ -83,7 +104,8 @@ public class ArrowProjectile : TowerProjectileBase
             gravityMultiplier = 1.5f;
         }
 
-        rb.useGravity = false;
+        // Launch using physics velocity
+        rb.useGravity = false;  // We apply custom gravity
         rb.velocity = initialForward * arrowSpeed;
         launched = true;
         curving = true;
@@ -98,6 +120,7 @@ public class ArrowProjectile : TowerProjectileBase
     {
         if (!launched || !isActive) return;
         
+        // Safety cleanup for arrows that miss
         if (Time.time - spawnTime > maxLifeTime)
         {
             DestroyProjectile();
@@ -106,31 +129,40 @@ public class ArrowProjectile : TowerProjectileBase
         
         float timeSinceLaunch = Time.time - launchTime;
         
+        // Homing phase: arrow curves toward predicted target position
         if (timeSinceLaunch > curveDelay && curving)
         {
             if (timeSinceLaunch > curveDelay + maxCurveDuration)
             {
+                // Stop homing, let gravity take over
                 curving = false;
             }
             else
             {
+                // Lerp velocity toward target direction
                 Vector3 toTarget = (targetPosition - transform.position).normalized;
                 Vector3 desiredVelocity = toTarget * arrowSpeed;
                 rb.velocity = Vector3.Lerp(rb.velocity, desiredVelocity, curveStrength * Time.deltaTime);
             }
         }
         
+        // Apply gravity after initial curve delay
         if (timeSinceLaunch > curveDelay)
         {
             rb.velocity += Physics.gravity * gravityMultiplier * Time.deltaTime;
         }
         
+        // Rotate arrow to face movement direction
         if (rb.velocity.sqrMagnitude > 0.1f)
         {
             transform.rotation = Quaternion.LookRotation(rb.velocity);
         }
     }
     
+    /// <summary>
+    /// Configures arrow to apply poison DoT on hit.
+    /// Optionally attaches a visual effect to the arrow.
+    /// </summary>
     public void SetPoisonEffect(float damage, float duration, ElementType elementType, GameObject arrowVFX = null)
     {
         applyPoison = true;
@@ -146,6 +178,10 @@ public class ArrowProjectile : TowerProjectileBase
         }
     }
 
+    /// <summary>
+    /// Configures arrow to apply fire DoT on hit.
+    /// Optionally attaches a visual effect to the arrow.
+    /// </summary>
     public void SetFireEffect(float damage, float duration, ElementType elementType, GameObject arrowVFX = null)
     {
         applyFire = true;
@@ -180,6 +216,7 @@ public class ArrowProjectile : TowerProjectileBase
         {
             damageable?.TakeDamage(damageInfo);
         
+            // Fire takes priority over poison (can't have both)
             if (applyFire)
             {
                 enemy.ApplyDoT(fireDamageInfo, fireDuration, 0.5f, false, 0f, default, DebuffType.Burn);
@@ -191,8 +228,12 @@ public class ArrowProjectile : TowerProjectileBase
         }
     }
     
+    /// <summary>
+    /// Disabled - arrow uses rigidbody physics instead of transform movement.
+    /// </summary>
     protected override void MoveProjectile()
     {
+        // Movement handled by rigidbody velocity in Update()
     }
     
     protected override void DestroyProjectile()

@@ -144,28 +144,34 @@ public class TowerArcher : TowerBase
         predictedPosition = GetPathAwarePrediction(targetToPredict, predictionTime);
     }
     
+    /// <summary>
+    /// Calculates where the enemy will be after a given time, accounting for waypoint paths.
+    /// Handles prediction across waypoint turns for accurate arrow targeting.
+    /// </summary>
+    /// <param name="target">Enemy to predict position for</param>
+    /// <param name="predictionTime">How far into the future to predict in seconds</param>
     private Vector3 GetPathAwarePrediction(EnemyBase target, float predictionTime)
     {
         if (target == null) return Vector3.zero;
-    
+
         Vector3 currentPos = target.transform.position;
         float speed = enemyVelocity.magnitude;
-    
+
         if (speed < 0.1f) return currentPos;
-    
+
         float travelDistance = speed * predictionTime;
         float distanceToWaypoint = target.GetDistanceToNextWaypoint();
-    
+
         if (distanceToWaypoint <= 0 || travelDistance < distanceToWaypoint)
         {
             return currentPos + (enemyVelocity * predictionTime);
         }
-    
+
         float timeToWaypoint = distanceToWaypoint / speed;
         Vector3 waypointPos = target.GetNextWaypointPosition();
         float remainingTime = predictionTime - timeToWaypoint;
         Vector3 directionAfterTurn = target.GetDirectionAfterNextWaypoint();
-    
+
         return waypointPos + (directionAfterTurn * speed * remainingTime);
     }
     
@@ -231,19 +237,27 @@ public class TowerArcher : TowerBase
         }
     }
     
+    /// <summary>
+    /// Called by animation event when the archer begins drawing the bow.
+    /// Activates the arrow visual on the bow.
+    /// </summary>
     public void OnDrawBow()
     {
         if (bowController != null)
         {
             bowController.DrawBow();
         }
-        
+
         if (arrowVisual != null)
         {
             arrowVisual.SetActive(true);
         }
     }
 
+    /// <summary>
+    /// Called by animation event when the archer releases the arrow.
+    /// Fires the arrow projectile and hides the visual arrow from the bow.
+    /// </summary>
     public void OnReleaseBow()
     {
         float cooldownRatio = attackCooldown / baseAttackCooldown;
@@ -279,7 +293,11 @@ public class TowerArcher : TowerBase
         float dynamicRespawnDelay = 0.9f * cooldownRatio;
         Invoke("OnArrowReady", dynamicRespawnDelay);
     }
-    
+
+    /// <summary>
+    /// Called after a delay to show the arrow is ready on the bow again.
+    /// Reactivates the arrow visual.
+    /// </summary>
     public void OnArrowReady()
     {
         if (arrowVisual != null)
