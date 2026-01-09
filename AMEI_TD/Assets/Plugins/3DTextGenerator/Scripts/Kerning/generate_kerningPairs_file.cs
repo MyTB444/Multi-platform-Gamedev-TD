@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 
 public class generate_kerningPairs_file : MonoBehaviour {
 
@@ -167,6 +169,7 @@ public class generate_kerningPairs_file : MonoBehaviour {
     }
 }
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(generate_kerningPairs_file))]
 public class KP_JSON_FILE_GENERATOR : Editor {
     public override void OnInspectorGUI() {
@@ -177,3 +180,4 @@ public class KP_JSON_FILE_GENERATOR : Editor {
         }
     }
 }
+#endif
