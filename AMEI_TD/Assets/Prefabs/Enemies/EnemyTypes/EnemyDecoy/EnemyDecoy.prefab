@@ -1847,6 +1847,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cb44b4d5212242cfbf6d1bbe453a2866, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mySpawner: {fileID: 0}
   enemyType: 12
   enemySpeed: 2.5
   damage: 1
@@ -1908,9 +1909,9 @@ CapsuleCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.29336548
-  m_Height: 1.4334633
+  m_Height: 1.5963844
   m_Direction: 1
-  m_Center: {x: 0, y: 0.7067317, z: -0.20663452}
+  m_Center: {x: 0, y: 0.6252709, z: -0.20663454}
 --- !u!195 &2794576192632957625
 NavMeshAgent:
   m_ObjectHideFlags: 0
@@ -1929,7 +1930,7 @@ NavMeshAgent:
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 2
+  m_Height: 1.4
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
