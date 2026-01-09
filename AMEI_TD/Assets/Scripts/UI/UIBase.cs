@@ -121,6 +121,8 @@ public class UIBase : MonoBehaviour
     }
     public void BackToMenu()
     {
+        Time.timeScale = 1;
+        isPaused = false;
         SceneManager.LoadScene("MainMenu");
     }
 }
