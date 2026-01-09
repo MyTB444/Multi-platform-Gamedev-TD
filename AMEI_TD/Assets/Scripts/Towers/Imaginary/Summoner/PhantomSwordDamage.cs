@@ -121,11 +121,11 @@ public class PhantomSwordDamage : MonoBehaviour
 
     private void PlaySlashSound()
     {
-        if (slashSound != null && audioSource != null)
         {
-            audioSource.clip = slashSound;
-            audioSource.volume = slashSoundVolume;
-            audioSource.Play();
+            if (slashSound != null && SFXPlayer.instance != null)
+            {
+                SFXPlayer.instance.Play(slashSound, transform.position, slashSoundVolume);
+            }
         }
     }
 }

@@ -255,11 +255,9 @@ public class BladeApparatus : MonoBehaviour
     
     private void PlayBladeHitSound()
     {
-        if (bladeHitSound != null && audioSource != null)
+        if (bladeHitSound != null && SFXPlayer.instance != null)
         {
-            audioSource.clip = bladeHitSound;
-            audioSource.volume = bladeHitSoundVolume;
-            audioSource.Play();
+            SFXPlayer.instance.Play(bladeHitSound, transform.position, bladeHitSoundVolume);
         }
     }
     

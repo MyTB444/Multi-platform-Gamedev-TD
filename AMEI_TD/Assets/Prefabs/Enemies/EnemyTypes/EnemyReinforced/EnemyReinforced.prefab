@@ -1225,6 +1225,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d81c8409f0af4ca2b2542b4b39eb1b0e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mySpawner: {fileID: 0}
   enemyType: 4
   enemySpeed: 1
   damage: 2
@@ -1281,7 +1282,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 6753617674297473082}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.7
+  m_Radius: 0.6
   m_Speed: 3.5
   m_Acceleration: 1
   avoidancePriority: 50

@@ -356,12 +356,12 @@ MonoBehaviour:
   animationSpeedMultiplier: 1.5
   useSpawnGrace: 1
   spawnGracePeriod: 0.5
-  pathOffsetRange: 1.2
+  pathOffsetRange: 0.02
   speedVariationPercent: 0.1
   isHighPriority: 0
-  waypointReachThreshold: 0.3
+  waypointReachThreshold: 0.7
   cornerCutVariation: 0.8
-  pathDriftAmount: 0.15
+  pathDriftAmount: 0.2
   frozenColor: {r: 0.5, g: 0.8, b: 1, a: 1}
   originalColors: []
   stuckCheckInterval: 0.5
@@ -382,17 +382,17 @@ NavMeshAgent:
   m_GameObject: {fileID: 6586906181002933634}
   m_Enabled: 1
   m_AgentTypeID: 0
-  m_Radius: 0.5
+  m_Radius: 0.3
   m_Speed: 2
-  m_Acceleration: 8
+  m_Acceleration: 2
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 0
+  m_StoppingDistance: 0.01
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 2
-  m_BaseOffset: 0
+  m_Height: 1.67
+  m_BaseOffset: -0.02
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
 --- !u!136 &6222801267229813228
@@ -414,10 +414,10 @@ CapsuleCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.42
-  m_Height: 2.28
+  m_Radius: 0.29959297
+  m_Height: 1.7321274
   m_Direction: 1
-  m_Center: {x: 0, y: 1, z: 0}
+  m_Center: {x: 0.0044765472, y: 0.8333777, z: -0.0024414062}
 --- !u!54 &-5289608340531083517
 Rigidbody:
   m_ObjectHideFlags: 0

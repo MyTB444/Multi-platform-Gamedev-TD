@@ -21496,7 +21496,7 @@ MonoBehaviour:
   horizontalSpacing: 1.5
   depthStagger: 0.5
   phantomSpeed: 4
-  phantomDamage: 55
+  phantomDamage: 100
   attackRadius: 2
   stoppingDistance: 0.45
   fadeOutTime: 0.5
