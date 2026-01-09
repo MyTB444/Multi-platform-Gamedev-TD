@@ -253,6 +253,11 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
         }
     }
     
+    /// <summary>
+    /// Stores a reference to the VFXDamage script and configures it for this enemy.
+    /// Used when spell abilities with VFX damage effects target this enemy.
+    /// </summary>
+    /// <param name="vfxDamageScriptRef">Reference to the VFXDamage script instance</param>
     public void GetRefOfVfxDamageScript(VFXDamage vfxDamageScriptRef)
     {
         this.vfxDamageScriptRef = vfxDamageScriptRef;
@@ -392,6 +397,12 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
         }
     }
 
+    /// <summary>
+    /// Reduces enemy movement speed by a percentage for the specified duration.
+    /// </summary>
+    /// <param name="slowPercent">Percentage to reduce speed (0.0 to 0.9)</param>
+    /// <param name="duration">How long the slow lasts in seconds</param>
+    /// <param name="fromIce">Whether this slow came from ice damage (for visual effects)</param>
     public void ApplySlow(float slowPercent, float duration, bool fromIce = false)
     {
         // Reduce enemy speed by percentage for duration
@@ -410,6 +421,11 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
         enemySpeed = baseSpeed;
     }
 
+    /// <summary>
+    /// Increases enemy movement speed by a multiplier for the specified duration.
+    /// </summary>
+    /// <param name="speedMultiplier">Multiplier for speed (1.0 to 3.0)</param>
+    /// <param name="duration">How long the speed buff lasts in seconds</param>
     public void ApplySpeedBuff(float speedMultiplier, float duration)
     {
         isSpeedBuffed = true;
@@ -425,6 +441,12 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
         enemySpeed = baseSpeed;
     }
 
+    /// <summary>
+    /// Applies a healing over time (HoT) effect that restores HP in ticks over the duration.
+    /// </summary>
+    /// <param name="percentOfMaxHp">Total healing as percentage of max HP (e.g., 0.4 = 40%)</param>
+    /// <param name="duration">Total duration of the HoT effect in seconds</param>
+    /// <param name="tickInterval">Seconds between each healing tick (default 0.5s)</param>
     public void ApplyHoT(float percentOfMaxHp, float duration, float tickInterval = 0.5f)
     {
         hasHoT = true;
@@ -448,11 +470,16 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
         healthBar.value = enemyCurrentHp / enemyMaxHp;
     }
 
+    /// <summary>
+    /// Freezes the enemy in place for the specified duration, preventing all movement.
+    /// Applies a frozen color tint to the enemy's materials.
+    /// </summary>
+    /// <param name="duration">How long the stun lasts in seconds</param>
     public void ApplyStun(float duration)
     {
         isStunned = true;
         stunEndTime = Time.time + duration;
-    
+
         if (hasSavedColors)
         {
             foreach (Renderer r in enemyRenderers)
@@ -488,6 +515,17 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
         hasSavedColors = true;
     }
 
+    /// <summary>
+    /// Applies a damage-over-time effect (Burn, Poison, Bleed, or Frostbite) to the enemy.
+    /// Damage is dealt in ticks at regular intervals over the duration.
+    /// </summary>
+    /// <param name="damagePerTick">Damage dealt each tick</param>
+    /// <param name="duration">Total duration of the DoT effect in seconds</param>
+    /// <param name="tickInterval">Seconds between each damage tick (default 0.5s)</param>
+    /// <param name="canSpread">Whether this DoT can spread to nearby enemies (Burn only)</param>
+    /// <param name="spreadRadius">Radius for spreading effect</param>
+    /// <param name="spreadLayer">LayerMask for detecting spreadable targets</param>
+    /// <param name="dotType">Type of DoT effect (Burn, Poison, Bleed, Frostbite)</param>
     public void ApplyDoT(DamageInfo damagePerTick, float duration, float tickInterval = 0.5f, bool canSpread = false, float spreadRadius = 0f, LayerMask spreadLayer = default, DebuffType dotType = DebuffType.None)
     {
         DamageCalculator.DamageResult testResult = DamageCalculator.Calculate(damagePerTick, elementType);
@@ -538,6 +576,12 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
         }
     }
 
+    /// <summary>
+    /// Initializes the enemy with a spawner reference and path, applies random movement variations,
+    /// and starts pathfinding with a spawn grace period.
+    /// </summary>
+    /// <param name="myNewSpawner">The spawner that created this enemy</param>
+    /// <param name="pathWaypoints">Array of Vector3 positions defining the path to follow</param>
     public void SetupEnemy(EnemySpawner myNewSpawner, Vector3[] pathWaypoints)
     {
         // Initialize enemy with spawner reference and path, apply random movement variations
@@ -554,7 +598,12 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
         ResetEnemy();
         BeginMovement();
     }
-    
+
+    /// <summary>
+    /// Sets up the enemy without a spawn grace period. Used for summoned or split enemies
+    /// that should be immediately targetable.
+    /// </summary>
+    /// <param name="pathWaypoints">Array of Vector3 positions defining the path to follow</param>
     public void SetupEnemyNoGrace(Vector3[] pathWaypoints)
     {
         // Setup enemy without spawn grace period (used for summoned/split enemies)
@@ -571,6 +620,10 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
         BeginMovement();
     }
     
+    /// <summary>
+    /// Returns whether this enemy can be targeted by towers.
+    /// Enemies with spawn grace are untargetable until the grace period expires.
+    /// </summary>
     public bool IsTargetable()
     {
         if (!useSpawnGrace) return true;
@@ -845,6 +898,10 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
         }
     }
 
+    /// <summary>
+    /// Calculates the total remaining distance to the end of the path.
+    /// Includes distance to current waypoint plus all subsequent waypoint segments.
+    /// </summary>
     public float GetRemainingDistance()
     {
         if (myWaypoints == null || currentWaypointIndex >= myWaypoints.Length) return 0;
@@ -864,6 +921,13 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
         Destroy(gameObject);
     }
 
+    /// <summary>
+    /// Applies damage to the enemy, considering element matchups and shield absorption.
+    /// Spawns damage numbers and handles death if HP reaches zero.
+    /// </summary>
+    /// <param name="damageInfo">Damage amount and element type</param>
+    /// <param name="vfxDamage">Additional VFX-based damage (used for spell effects)</param>
+    /// <param name="spellDamageEnabled">Whether this damage came from a spell ability</param>
     public virtual void TakeDamage(DamageInfo damageInfo, float vfxDamage = 0, bool spellDamageEnabled = false)
     {
         // Calculate damage with element matchups and apply to HP (shield absorbs first)
@@ -1003,6 +1067,10 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
         enemyHealthDisplayCanvas.enabled = false;
     }
 
+    /// <summary>
+    /// Handles enemy death by granting skill point rewards, removing from active list,
+    /// and returning the enemy GameObject to the object pool for reuse.
+    /// </summary>
     public void Die()
     {
         // Give reward points and return enemy to pool
@@ -1015,6 +1083,10 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
         ObjectPooling.instance.Return(gameObject);
     }
 
+    /// <summary>
+    /// Removes this enemy from the spawner's active enemy list.
+    /// Notifies the wave manager to check for wave completion.
+    /// </summary>
     public void RemoveEnemy()
     {
         // Unregister from spawner's active enemy list
@@ -1097,6 +1169,13 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
         UpdateVisuals();
     }
     
+    /// <summary>
+    /// Applies or removes the lift effect on an enemy, making them float in the air.
+    /// Used by spell abilities to lift enemies and disable their movement temporarily.
+    /// </summary>
+    /// <param name="status">True to apply lift effect, false to remove it</param>
+    /// <param name="isMechanicSpellDamage">Whether this is a mechanic-type spell (affects physics behavior)</param>
+    /// <param name="enemyBaseRef">Reference to the enemy to apply the effect to</param>
     public void LiftEffectFunction(bool status, bool isMechanicSpellDamage,EnemyBase enemyBaseRef)
     {
         if (gameObject.activeInHierarchy && gameObject != null)
@@ -1136,6 +1215,12 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
         }
     }
   
+    /// <summary>
+    /// Applies an explosive force to launch the enemy away from a point, then kills it after a delay.
+    /// Used by spell abilities with explosive effects.
+    /// </summary>
+    /// <param name="currentMousePosition">Origin point of the explosion</param>
+    /// <param name="affectedEnemy">The enemy to explode (unused parameter)</param>
     public IEnumerator ExplodeEnemy(Vector3 currentMousePosition, EnemyBase affectedEnemy)
     {
         NavAgent.enabled = false;
@@ -1143,20 +1228,24 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
         spellsActivated = true;
         myBody.isKinematic = false;
         myBody.constraints = RigidbodyConstraints.None;
-       
+
         myBody.useGravity = true;
 
         myBody.AddExplosionForce(0.5f, currentMousePosition, 5, 2, ForceMode.Force);
 
         yield return new WaitForSeconds(2f);
-        
+
         Die();
     }
 
+    /// <summary>
+    /// Updates the visual appearance of the enemy based on invisibility state.
+    /// Adjusts material color transparency for invisible enemies.
+    /// </summary>
     public void UpdateVisuals()
     {
         if (!isInvisible) return;
-    
+
         Renderer r = GetComponentInChildren<Renderer>();
         if (r == null) return;
 
@@ -1165,6 +1254,12 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
         r.material.color = currentColor;
     }
     
+    /// <summary>
+    /// Applies a shield to the enemy that absorbs damage before HP is affected.
+    /// Spawns a shield visual effect that follows the enemy.
+    /// </summary>
+    /// <param name="shieldAmount">Amount of damage the shield can absorb</param>
+    /// <param name="shieldEffectPrefab">VFX prefab to display while shield is active</param>
     public void ApplyShield(float shieldAmount, GameObject shieldEffectPrefab)
     {
         hasShield = true;
@@ -1193,58 +1288,123 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
     }
 
     // Getters
+    /// <summary>Returns the center point position of the enemy (used for targeting and effects).</summary>
     public Vector3 GetCenterPoint() => centerPoint.position;
+
+    /// <summary>Returns the enemy's type (Basic, Tank, Fast, etc.).</summary>
     public EnemyType GetEnemyType() => enemyType;
+
+    /// <summary>Returns the enemy's current HP.</summary>
     public float GetEnemyHp() => enemyCurrentHp;
+
+    /// <summary>Returns the bottom point transform (used for ground-level VFX).</summary>
     public Transform GetBottomPoint() => bottomPoint;
+
+    /// <summary>Returns whether this enemy is invisible (only targetable by Imaginary towers).</summary>
     public bool IsInvisible() => isInvisible;
+
+    /// <summary>Returns whether this enemy is reinforced (can apply shields to allies).</summary>
     public bool IsReinforced() => isReinforced;
+
+    /// <summary>Returns the damage this enemy deals when reaching the castle.</summary>
     public int GetDamage() => damage;
+
+    /// <summary>Returns whether this enemy is currently slowed.</summary>
     public bool IsSlowed() => isSlowed;
+
+    /// <summary>Returns whether this enemy is currently stunned (frozen).</summary>
     public bool IsStunned() => isStunned;
+
+    /// <summary>Returns whether this enemy has a speed buff active.</summary>
     public bool IsSpeedBuffed() => isSpeedBuffed;
+
+    /// <summary>Returns whether this enemy has a healing over time effect active.</summary>
     public bool HasHoT() => hasHoT;
+
+    /// <summary>Returns the enemy's element type for damage calculations.</summary>
     public ElementType GetElementType() => elementType;
+
+    /// <summary>Returns whether this enemy is frozen (same as IsStunned).</summary>
     public bool IsFrozen() => isStunned;
+
+    /// <summary>Returns whether this enemy has an ice-based slow effect.</summary>
     public bool HasIceSlow() => isSlowed && isIceSlow;
+
+    /// <summary>Returns whether this enemy is burning.</summary>
     public bool HasBurn() => hasBurn;
+
+    /// <summary>Returns whether this enemy is poisoned.</summary>
     public bool HasPoison() => hasPoison;
+
+    /// <summary>Returns whether this enemy is bleeding.</summary>
     public bool HasBleed() => hasBleed;
+
+    /// <summary>Returns whether this enemy has frostbite.</summary>
     public bool HasFrostbite() => hasFrostbite;
+
+    /// <summary>Returns whether this enemy has any damage over time effect active.</summary>
     public bool HasDoT() => hasBurn || hasPoison || hasBleed || hasFrostbite;
+
+    /// <summary>Returns whether this enemy has an active shield with remaining HP.</summary>
     public bool HasShield() => hasShield && shieldHealth > 0;
+
+    /// <summary>Returns the remaining shield HP.</summary>
     public float GetShieldHealth() => shieldHealth;
+
+    /// <summary>Returns slow duration as 0-1 value for UI display.</summary>
+    /// <param name="maxDuration">Maximum duration to normalize against</param>
     public float GetSlowDurationNormalized(float maxDuration = 3f) => isSlowed ? Mathf.Clamp01((slowEndTime - Time.time) / maxDuration) : 0f;
+
+    /// <summary>Returns freeze duration as 0-1 value for UI display.</summary>
+    /// <param name="maxDuration">Maximum duration to normalize against</param>
     public float GetFreezeDurationNormalized(float maxDuration = 2f) => isStunned ? Mathf.Clamp01((stunEndTime - Time.time) / maxDuration) : 0f;
+
+    /// <summary>Returns burn duration as 0-1 value for UI display.</summary>
+    /// <param name="maxDuration">Maximum duration to normalize against</param>
     public float GetBurnDurationNormalized(float maxDuration = 4f) => hasBurn ? Mathf.Clamp01((burnEndTime - Time.time) / maxDuration) : 0f;
+
+    /// <summary>Returns poison duration as 0-1 value for UI display.</summary>
+    /// <param name="maxDuration">Maximum duration to normalize against</param>
     public float GetPoisonDurationNormalized(float maxDuration = 4f) => hasPoison ? Mathf.Clamp01((poisonEndTime - Time.time) / maxDuration) : 0f;
+
+    /// <summary>Returns bleed duration as 0-1 value for UI display.</summary>
+    /// <param name="maxDuration">Maximum duration to normalize against</param>
     public float GetBleedDurationNormalized(float maxDuration = 4f) => hasBleed ? Mathf.Clamp01((bleedEndTime - Time.time) / maxDuration) : 0f;
+
+    /// <summary>Returns frostbite duration as 0-1 value for UI display.</summary>
+    /// <param name="maxDuration">Maximum duration to normalize against</param>
     public float GetFrostbiteDurationNormalized(float maxDuration = 3f) => hasFrostbite ? Mathf.Clamp01((frostbiteEndTime - Time.time) / maxDuration) : 0f;
     public EnemyVFXPool vfxContainer { get; set; }
     //public EnemyBase enemyBaseRef { get; set; }
     public bool isDeadProperty => isDead;
     
+    /// <summary>Returns the distance from this enemy to the next waypoint on the path.</summary>
     public float GetDistanceToNextWaypoint()
     {
         if (myWaypoints == null || currentWaypointIndex >= myWaypoints.Length) return 0f;
         return Vector3.Distance(transform.position, myWaypoints[currentWaypointIndex]);
     }
 
+    /// <summary>Returns the position of the next waypoint the enemy is moving towards.</summary>
     public Vector3 GetNextWaypointPosition()
     {
         if (myWaypoints == null || currentWaypointIndex >= myWaypoints.Length) return transform.position;
         return myWaypoints[currentWaypointIndex];
     }
 
+    /// <summary>
+    /// Returns the normalized direction vector from the current waypoint to the next waypoint.
+    /// Used for predictive tower targeting.
+    /// </summary>
     public Vector3 GetDirectionAfterNextWaypoint()
     {
         if (myWaypoints == null) return transform.forward;
-    
+
         if (currentWaypointIndex + 1 >= myWaypoints.Length) return transform.forward;
-    
+
         Vector3 currentWaypoint = myWaypoints[currentWaypointIndex];
         Vector3 nextWaypoint = myWaypoints[currentWaypointIndex + 1];
-    
+
         return (nextWaypoint - currentWaypoint).normalized;
     }
 

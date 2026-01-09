@@ -195,11 +195,33 @@ public class EnemySpawner : MonoBehaviour
         return allPathWaypoints[randomIndex];
     }
 
+    /// <summary>
+    /// Adds an enemy prefab to the spawn queue for this wave.
+    /// </summary>
+    /// <param name="enemyToAdd">Enemy prefab to spawn</param>
     public void AddEnemy(GameObject enemyToAdd) => enemiesToCreate.Add(enemyToAdd);
+
+    /// <summary>
+    /// Returns the list of all currently active enemies in the scene.
+    /// </summary>
     public List<GameObject> GetActiveEnemies() => activeEnemies;
+
+    /// <summary>
+    /// Checks if there are still enemies waiting to be spawned.
+    /// </summary>
     public bool HasEnemiesToSpawn() => enemiesToCreate.Count > 0;
+
+    /// <summary>
+    /// Enables or disables enemy spawning.
+    /// </summary>
+    /// <param name="canCreate">True to enable spawning, false to disable</param>
     public void CanCreateNewEnemies(bool canCreate) => canCreateEnemies = canCreate;
 
+    /// <summary>
+    /// Removes an enemy from the active list and notifies the wave manager to check for wave completion.
+    /// Called when an enemy dies or reaches the end of the path.
+    /// </summary>
+    /// <param name="enemyToRemove">The enemy GameObject to remove</param>
     public void RemoveActiveEnemy(GameObject enemyToRemove)
     {
         // Remove from active list and notify wave manager to check completion

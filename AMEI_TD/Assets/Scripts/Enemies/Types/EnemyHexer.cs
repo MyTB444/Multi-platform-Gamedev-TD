@@ -64,6 +64,10 @@ public class EnemyHexer : EnemyBase
         }
     }
 
+    /// <summary>
+    /// Finds the closest tower within detection radius that is not already disabled.
+    /// Returns null if no valid targets are found.
+    /// </summary>
     private TowerBase FindTowerInRange()
     {
         // Find closest non-disabled tower within detection radius
@@ -96,6 +100,11 @@ public class EnemyHexer : EnemyBase
         return bestTarget;
     }
 
+    /// <summary>
+    /// Initiates a debuff attack on the target tower.
+    /// Stops movement, spawns magic circle VFX, and plays the casting animation.
+    /// </summary>
+    /// <param name="target">The tower to attack with debuffs</param>
     private void AttackTower(TowerBase target)
     {
         isCasting = true;
@@ -127,7 +136,10 @@ public class EnemyHexer : EnemyBase
         }
     }
 
-    // Called by animation event
+    /// <summary>
+    /// Called by animation event at the peak of the cast animation.
+    /// Applies debuff effects to the target tower and stops the magic circle VFX.
+    /// </summary>
     public void OnCastAnimationEvent()
     {
         if (currentTarget != null)
@@ -152,12 +164,20 @@ public class EnemyHexer : EnemyBase
         }
     }
 
-    // Called by animation event
+    /// <summary>
+    /// Called by animation event when the cast animation completes.
+    /// Re-enables movement and resets casting state.
+    /// </summary>
     public void OnCastAnimationEnd()
     {
         FinishCasting();
     }
 
+    /// <summary>
+    /// Applies slow and potentially disable effects to the target tower.
+    /// Slow is always applied, disable has a percentage chance.
+    /// </summary>
+    /// <param name="target">The tower to apply effects to</param>
     private void ApplyEffectToTower(TowerBase target)
     {
         // Always apply slow
@@ -178,6 +198,10 @@ public class EnemyHexer : EnemyBase
         }
     }
 
+    /// <summary>
+    /// Completes the casting sequence, re-enables movement, and cleans up VFX.
+    /// Resets the attack cooldown timer.
+    /// </summary>
     private void FinishCasting()
     {
         isCasting = false;

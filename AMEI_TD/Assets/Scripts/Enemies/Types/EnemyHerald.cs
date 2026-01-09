@@ -55,6 +55,10 @@ public class EnemyHerald : EnemyBase
         }
     }
 
+    /// <summary>
+    /// Checks if there are any nearby allies that need healing.
+    /// Returns true if any enemy within range doesn't have an active HoT effect.
+    /// </summary>
     private bool HasEnemiesInRange()
     {
         // Check if any nearby allies need healing (don't have HoT active)
@@ -77,6 +81,10 @@ public class EnemyHerald : EnemyBase
         return false;
     }
 
+    /// <summary>
+    /// Initiates the healing cast sequence.
+    /// Stops movement, spawns magic circle VFX, and plays the summon animation.
+    /// </summary>
     private void StartCasting()
     {
         isCasting = true;
@@ -105,7 +113,10 @@ public class EnemyHerald : EnemyBase
         }
     }
 
-    // Called by animation event
+    /// <summary>
+    /// Called by animation event at the peak of the summon animation.
+    /// Applies healing over time to nearby allies and stops the magic circle VFX.
+    /// </summary>
     public void OnSummonAnimationEvent()
     {
         ApplyHealToEnemies();
@@ -132,12 +143,20 @@ public class EnemyHerald : EnemyBase
         ObjectPooling.instance.Return(obj);
     }
 
-    // Called by animation event
+    /// <summary>
+    /// Called by animation event when the summon animation completes.
+    /// Re-enables movement and resets casting state.
+    /// </summary>
     public void OnSummonAnimationEnd()
     {
         FinishCasting();
     }
 
+    /// <summary>
+    /// Applies healing over time to all nearby allies within the cast radius.
+    /// Only affects enemies that don't already have an active HoT effect.
+    /// Spawns healing VFX on each healed enemy.
+    /// </summary>
     private void ApplyHealToEnemies()
     {
         int enemyCount = Physics.OverlapSphereNonAlloc(transform.position, castRadius, detectedEnemies, enemyLayer);
@@ -168,6 +187,10 @@ public class EnemyHerald : EnemyBase
         }
     }
 
+    /// <summary>
+    /// Completes the healing cast, re-enables movement, and cleans up VFX.
+    /// Resets the cast cooldown timer.
+    /// </summary>
     private void FinishCasting()
     {
         isCasting = false;

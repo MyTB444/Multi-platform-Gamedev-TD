@@ -113,6 +113,10 @@ public class EnemyReinforced : EnemyBase
         }
     }
 
+    /// <summary>
+    /// Periodically applies shields to this enemy and all nearby allies within the shield radius.
+    /// Only applies shields to enemies that don't already have an active shield.
+    /// </summary>
     private void TryApplyShieldToNearbyEnemies()
     {
         // Periodically shield self and nearby allies within radius
