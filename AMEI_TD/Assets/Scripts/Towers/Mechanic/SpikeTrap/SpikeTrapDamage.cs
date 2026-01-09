@@ -268,9 +268,9 @@ public class SpikeTrapDamage : MonoBehaviour
             }
         }
         
-        if (hitAnyEnemy && spikeImpactSound != null)
+        if (hitAnyEnemy && spikeImpactSound != null && SFXPlayer.instance != null)
         {
-            AudioSource.PlayClipAtPoint(spikeImpactSound, transform.position, spikeImpactVolume);
+            SFXPlayer.instance.Play(spikeImpactSound, transform.position, spikeImpactVolume);
         }
     }
     
