@@ -613,20 +613,20 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
             NavAgent.isStopped = false;
             NavAgent.updateRotation = false;
 
-            if (isHighPriority)
-            {
-                NavAgent.avoidancePriority = 1;
-                NavAgent.obstacleAvoidanceType = ObstacleAvoidanceType.LowQualityObstacleAvoidance;
-            }
-            else if (enemySpeed > 2.5f)
-            {
-                NavAgent.avoidancePriority = 80;
-                NavAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
-            }
-            else
-            {
-                NavAgent.avoidancePriority = Random.Range(30, 70);
-            }
+            //if (isHighPriority)
+            //{
+            //    NavAgent.avoidancePriority = 1;
+            //    NavAgent.obstacleAvoidanceType = ObstacleAvoidanceType.LowQualityObstacleAvoidance;
+            //}
+            //else if (enemySpeed > 2.5f)
+            //{
+            //    NavAgent.avoidancePriority = 80;
+            //    NavAgent.obstacleAvoidanceType = ObstacleAvoidanceType.HighQualityObstacleAvoidance;
+            //}
+            //else
+            //{
+            //    NavAgent.avoidancePriority = Random.Range(30, 70);
+            //}
 
             if (myWaypoints != null && myWaypoints.Length > 0)
             {
