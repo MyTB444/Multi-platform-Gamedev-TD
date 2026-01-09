@@ -35,6 +35,7 @@ public class EnemyReinforced : EnemyBase
 
     private IEnumerator InitializeAfterFrame()
     {
+        // Save original material properties before applying armored effect
         yield return null;
 
         if (targetRenderer == null)
@@ -114,6 +115,7 @@ public class EnemyReinforced : EnemyBase
 
     private void TryApplyShieldToNearbyEnemies()
     {
+        // Periodically shield self and nearby allies within radius
         if (Time.time < nextShieldTime) return;
 
         // Always try to shield self
@@ -128,7 +130,7 @@ public class EnemyReinforced : EnemyBase
         foreach (Collider col in nearbyColliders)
         {
             if (col.gameObject == gameObject) continue;
-        
+
             EnemyBase enemy = col.GetComponent<EnemyBase>();
             if (enemy != null && !enemy.HasShield())
             {

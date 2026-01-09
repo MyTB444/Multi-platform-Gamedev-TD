@@ -29,6 +29,7 @@ public class EnemyInvisible : EnemyBase
 
     private IEnumerator InitializeAfterFrame()
     {
+        // Wait one frame to ensure renderer is fully initialized before setting up transparency
         yield return null;
 
         if (targetRenderer == null)
@@ -46,6 +47,7 @@ public class EnemyInvisible : EnemyBase
 
     private void SetupTransparentMaterial(Material mat)
     {
+        // Configure material for transparent rendering mode
         mat.SetFloat("_Mode", 3);
         mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
         mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
@@ -64,6 +66,7 @@ public class EnemyInvisible : EnemyBase
 
     private void ApplyFlickerEffect()
     {
+        // Animate alpha between min and max using sine wave for subtle pulsing
         if (enemyMaterial == null) return;
         if (isInvisible)
         {

@@ -25,6 +25,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void Start()
     {
+        // Initialize waypoint paths and wave manager reference
         CollectAllWaypoints();
         myWaveManager = FindFirstObjectByType<WaveManager>();
     }
@@ -36,11 +37,12 @@ public class EnemySpawner : MonoBehaviour
     
     private bool IsSpawnAreaBlocked()
     {
+        // Check if spawn area is blocked by big enemies to prevent overlap
         if (!waitingForAreaClear) return false;
-    
+
         Vector3 checkCenter = spawnLocation.position;
         Quaternion checkRotation = spawnLocation.rotation;
-    
+
         if (allPathWaypoints.Count > 0 && allPathWaypoints[0].Length > 0)
         {
             Vector3 roadDirection = (allPathWaypoints[0][0] - spawnLocation.position).normalized;
@@ -77,12 +79,13 @@ public class EnemySpawner : MonoBehaviour
 
     private bool CanMakeNewEnemy()
     {
+        // Check if spawn timer is ready and apply wave difficulty multipliers
         spawnTimer -= Time.deltaTime;
 
         if (spawnTimer <= 0 && enemiesToCreate.Count > 0)
         {
             float cooldown = spawnCooldown;
-        
+
             if (myWaveManager != null)
             {
                 if (myWaveManager.IsMegaWaveActive())
@@ -98,7 +101,7 @@ public class EnemySpawner : MonoBehaviour
                     }
                 }
             }
-    
+
             spawnTimer = cooldown;
             return true;
         }
@@ -108,9 +111,10 @@ public class EnemySpawner : MonoBehaviour
 
     private void CreateEnemy()
     {
+        // Spawn enemy from pool, orient toward path, and setup with random waypoint path
         if (!canCreateEnemies) return;
         if (enemiesToCreate.Count == 0) return;
-    
+
         // Wait if spawn area is blocked by big enemy
         if (IsSpawnAreaBlocked()) return;
 
@@ -138,7 +142,7 @@ public class EnemySpawner : MonoBehaviour
             enemyScript.SetupEnemy(this, randomPath);
 
             activeEnemies.Add(newEnemy);
-        
+
             // If big enemy just spawned, enable area check
             if (enemyScript != null && bigEnemyTypes.Contains(enemyScript.GetEnemyType()))
             {
@@ -161,6 +165,7 @@ public class EnemySpawner : MonoBehaviour
 
     private void CollectAllWaypoints()
     {
+        // Convert all EnemyPath transforms to Vector3 arrays for pathfinding
         allPathWaypoints.Clear();
 
         foreach (EnemyPath path in myPaths)
@@ -197,6 +202,7 @@ public class EnemySpawner : MonoBehaviour
 
     public void RemoveActiveEnemy(GameObject enemyToRemove)
     {
+        // Remove from active list and notify wave manager to check completion
         if (activeEnemies != null && activeEnemies.Contains(enemyToRemove))
         {
             activeEnemies.Remove(enemyToRemove);

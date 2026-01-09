@@ -66,13 +66,14 @@ public class EnemyDebuffDisplay : MonoBehaviour
     
     private static Sprite CreateRingSprite()
     {
+        // Procedurally generate circular ring texture for debuff timer display
         int size = 64;
         int thickness = 6;
         Texture2D tex = new Texture2D(size, size, TextureFormat.RGBA32, false);
-        
+
         Color transparent = new Color(0, 0, 0, 0);
         Color white = Color.white;
-        
+
         // Fill with transparent
         for (int x = 0; x < size; x++)
         {
@@ -81,7 +82,7 @@ public class EnemyDebuffDisplay : MonoBehaviour
                 tex.SetPixel(x, y, transparent);
             }
         }
-        
+
         // Draw ring
         float center = size / 2f;
         float outerRadius = size / 2f - 1;
@@ -120,23 +121,24 @@ public class EnemyDebuffDisplay : MonoBehaviour
     
     private void CreateUI()
     {
+        // Create world-space canvas above enemy to display debuff icons
         GameObject canvasObj = new GameObject("DebuffCanvas");
         canvasObj.transform.SetParent(transform);
         canvasObj.transform.localPosition = new Vector3(0, heightOffset, 0);
         canvasObj.transform.localScale = new Vector3(0.01f, 0.01f, 0.01f);
-        
+
         canvas = canvasObj.AddComponent<Canvas>();
         canvas.renderMode = RenderMode.WorldSpace;
         canvas.sortingOrder = 100;
-        
+
         RectTransform canvasRect = canvasObj.GetComponent<RectTransform>();
         canvasRect.sizeDelta = new Vector2(200, 50);
-        
+
         GameObject containerObj = new GameObject("IconContainer");
         containerObj.transform.SetParent(canvasObj.transform);
         containerObj.transform.localPosition = Vector3.zero;
         containerObj.transform.localScale = Vector3.one;
-        
+
         iconContainer = containerObj.AddComponent<RectTransform>();
         iconContainer.sizeDelta = new Vector2(200, 50);
         iconContainer.anchoredPosition = Vector2.zero;
@@ -144,8 +146,9 @@ public class EnemyDebuffDisplay : MonoBehaviour
     
     private void LateUpdate()
     {
+        // Billboard canvas toward camera and update debuff icon states
         if (enemy == null) return;
-        
+
         if (mainCamera != null && canvas != null)
         {
             Vector3 lookDir = mainCamera.transform.forward;
@@ -155,7 +158,7 @@ public class EnemyDebuffDisplay : MonoBehaviour
                 canvas.transform.forward = lookDir;
             }
         }
-        
+
         UpdateIcons();
         UpdateRingFill();
     }
@@ -269,19 +272,20 @@ public class EnemyDebuffDisplay : MonoBehaviour
     
     private void RepositionIcons()
     {
+        // Center and space active debuff icons horizontally
         DebuffIcon[] icons = new DebuffIcon[] { slowIcon, freezeIcon, burnIcon, poisonIcon, bleedIcon, frostbiteIcon };
-        
+
         int activeCount = 0;
         foreach (var icon in icons)
         {
             if (icon != null) activeCount++;
         }
-        
+
         if (activeCount == 0) return;
-        
+
         float totalWidth = (activeCount * ringSize) + ((activeCount - 1) * iconSpacing);
         float startX = -totalWidth / 2f + ringSize / 2f;
-        
+
         int index = 0;
         foreach (var icon in icons)
         {

@@ -6,6 +6,7 @@ public class EnemyPath : MonoBehaviour
 
     void Awake()
     {
+        // Collect all child transforms as waypoints
         waypoints = new Transform[transform.childCount];
         for (int i = 0; i < transform.childCount; i++)
         {
@@ -19,6 +20,7 @@ public class EnemyPath : MonoBehaviour
     // Visualizes the path in the Unity editor with colored lines and spheres
     void OnDrawGizmos()
     {
+        // Collect waypoints for gizmo drawing
         Transform[] points = new Transform[transform.childCount];
         for (int i = 0; i < transform.childCount; i++)
         {

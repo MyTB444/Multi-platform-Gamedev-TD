@@ -66,6 +66,7 @@ public class EnemyHexer : EnemyBase
 
     private TowerBase FindTowerInRange()
     {
+        // Find closest non-disabled tower within detection radius
         int towerCount = Physics.OverlapSphereNonAlloc(transform.position, detectionRadius, detectedTowers, towerLayer);
         if (towerCount == 0) return null;
 

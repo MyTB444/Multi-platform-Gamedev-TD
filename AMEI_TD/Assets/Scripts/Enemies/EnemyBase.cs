@@ -194,10 +194,11 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
     private Canvas enemyDebuffDisplayCanvas;
     protected virtual void OnEnable()
     {
+        // Initialize components and reset state when pooled enemy is reactivated
         UpdateVisuals();
         NavAgent = GetComponent<NavMeshAgent>();
         EnemyAnimator = GetComponentInChildren<Animator>();
-    
+
         if (NavAgent != null)
         {
             NavAgent.enabled = false;
@@ -284,11 +285,12 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
 
     private void UpdateStatusEffects()
     {
+        // Check and remove expired status effects
         if (isStunned && Time.time >= stunEndTime)
         {
             RemoveStun();
         }
-    
+
         if (isSlowed && Time.time >= slowEndTime)
         {
             RemoveSlow();
@@ -324,6 +326,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
                 lastBurnTick = Time.time;
                 TakeDamage(burnDamageInfo);
 
+                // Spread burn to nearby enemies if enabled
                 if (burnCanSpread)
                 {
                     SpreadBurn();
@@ -373,13 +376,14 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
     
     private void SpreadBurn()
     {
+        // Find and apply burn to nearby enemies within spread radius
         Vector3 spreadCenter = centerPoint != null ? centerPoint.position : transform.position;
         Collider[] nearbyEnemies = Physics.OverlapSphere(spreadCenter, burnSpreadRadius, burnSpreadLayer);
 
         foreach (Collider col in nearbyEnemies)
         {
             if (col.gameObject == gameObject) continue;
-    
+
             EnemyBase enemy = col.GetComponent<EnemyBase>();
             if (enemy != null && !enemy.HasBurn())
             {
@@ -390,6 +394,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
 
     public void ApplySlow(float slowPercent, float duration, bool fromIce = false)
     {
+        // Reduce enemy speed by percentage for duration
         isSlowed = true;
         slowEndTime = Time.time + duration;
         isIceSlow = fromIce;
@@ -535,6 +540,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
 
     public void SetupEnemy(EnemySpawner myNewSpawner, Vector3[] pathWaypoints)
     {
+        // Initialize enemy with spawner reference and path, apply random movement variations
         mySpawner = myNewSpawner;
         spawnTime = Time.time;
 
@@ -551,13 +557,14 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
     
     public void SetupEnemyNoGrace(Vector3[] pathWaypoints)
     {
+        // Setup enemy without spawn grace period (used for summoned/split enemies)
         spawnTime = -spawnGracePeriod;
-    
+
         myPathOffset = Random.Range(-pathOffsetRange, pathOffsetRange);
         mySpeedMultiplier = Random.Range(1f - speedVariationPercent, 1f + speedVariationPercent);
         myCornerCutMultiplier = Random.Range(1f - cornerCutVariation, 1f + cornerCutVariation);
         myPathDrift = Random.Range(-pathDriftAmount, pathDriftAmount);
-    
+
         UpdateWaypoints(pathWaypoints);
         CollectTotalDistance();
         ResetEnemy();
@@ -581,13 +588,14 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
 
     private void BeginMovement()
     {
+        // Initialize NavMeshAgent and start pathfinding to first waypoint
         currentWaypointIndex = 0;
-        
+
         if (myBody != null)
         {
             myBody.isKinematic = true;
         }
-        
+
         lastStuckCheckPosition = transform.position;
         lastStuckCheckTime = Time.time;
         stuckDuration = 0f;
@@ -858,6 +866,7 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
 
     public virtual void TakeDamage(DamageInfo damageInfo, float vfxDamage = 0, bool spellDamageEnabled = false)
     {
+        // Calculate damage with element matchups and apply to HP (shield absorbs first)
         DamageCalculator.DamageResult result = DamageCalculator.Calculate(damageInfo, elementType);
 
         if (DamageNumberSpawner.instance != null)
@@ -915,7 +924,8 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
         else
         {
             float damageToApply = result.finalDamage;
-        
+
+            // Shield absorbs damage before HP
             if (hasShield && shieldHealth > 0)
             {
                 if (shieldHealth >= damageToApply)
@@ -995,24 +1005,27 @@ public class EnemyBase : MonoBehaviour, IDamageable, IPointerEnterHandler, IPoin
 
     public void Die()
     {
+        // Give reward points and return enemy to pool
         if (GameManager.instance != null)
         {
             GameManager.instance.UpdateSkillPoints(reward);
         }
         RemoveEnemy();
-      
+
         ObjectPooling.instance.Return(gameObject);
     }
-    
+
     public void RemoveEnemy()
     {
+        // Unregister from spawner's active enemy list
         if (mySpawner != null) mySpawner.RemoveActiveEnemy(gameObject);
     }
 
     protected virtual void ResetEnemy()
     {
+        // Reset all stats and status effects to default values for object pooling
         gameObject.layer = originalLayerIndex;
-    
+
         float healthMultiplier = 1f;
         if (WaveManager.instance != null && WaveManager.instance.IsMegaWaveActive())
         {

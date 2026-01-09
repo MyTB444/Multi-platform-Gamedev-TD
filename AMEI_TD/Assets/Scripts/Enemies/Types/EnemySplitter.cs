@@ -37,6 +37,7 @@ public class EnemySplitter : EnemyBase
 
     public override void TakeDamage(DamageInfo damageInfo,float vfxDamage = 0,bool spellDamageEnabled = false)
     {
+        // Check if death will trigger split before applying damage
         float hpBeforeDamage = enemyCurrentHp;
         bool wasAlive = !isDead;
         bool canSplit = currentSplitLevel < maxSplitLevel;
@@ -68,6 +69,7 @@ public class EnemySplitter : EnemyBase
 
     private void SpawnSplitEnemy(int index)
     {
+        // Create smaller, faster copy with reduced HP at next split level
         if (splitterPrefab == null) return;
 
         Vector3 spawnOffset = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f));
@@ -90,7 +92,7 @@ public class EnemySplitter : EnemyBase
         newEnemy.SetActive(true);
 
         Vector3[] remainingWaypoints = GetRemainingWaypoints();
-    
+
         EnemySplitter splitterScript = newEnemy.GetComponent<EnemySplitter>();
 
         if (splitterScript != null && remainingWaypoints.Length > 0)

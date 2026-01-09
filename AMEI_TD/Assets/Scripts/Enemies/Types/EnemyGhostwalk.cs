@@ -19,6 +19,7 @@ public class EnemyGhostwalk : EnemyBase
 
     private void ForceBaseSpeed()
     {
+        // Reset speed to base value every frame to ignore all slow effects
         var field = typeof(EnemyBase).GetField("enemySpeed", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
         if (field != null)
         {

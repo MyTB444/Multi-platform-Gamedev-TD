@@ -12,6 +12,7 @@ public class DebuffSpriteLoader : MonoBehaviour
     
     private void Awake()
     {
+        // Load all debuff sprites into static registry for UI display
         EnemyDebuffDisplay.LoadSprites(slowSprite, freezeSprite, burnSprite, poisonSprite, bleedSprite, frostbiteSprite);
     }
 }

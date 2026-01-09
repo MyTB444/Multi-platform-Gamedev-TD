@@ -57,6 +57,7 @@ public class EnemyHerald : EnemyBase
 
     private bool HasEnemiesInRange()
     {
+        // Check if any nearby allies need healing (don't have HoT active)
         int enemyCount = Physics.OverlapSphereNonAlloc(transform.position, castRadius, detectedEnemies, enemyLayer);
 
         for (int i = 0; i < enemyCount; i++)

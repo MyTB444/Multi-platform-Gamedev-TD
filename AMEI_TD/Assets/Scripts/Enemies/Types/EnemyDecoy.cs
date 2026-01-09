@@ -75,6 +75,7 @@ public class EnemyDecoy : EnemyBase
 
     private IEnumerator SpawnDecoysWithDelay()
     {
+        // Play spawn VFX then create two decoy copies
         if (decoySpawnEffectPrefab != null)
         {
             Transform spawnPoint = GetBottomPoint() != null ? GetBottomPoint() : transform;
@@ -158,10 +159,8 @@ public class EnemyDecoy : EnemyBase
             decoy.SetupEnemyNoGrace(waypoints);
         }
 
-        // CRITICAL: Set isDecoy flag AFTER SetupEnemyNoGrace (which calls ResetEnemy and sets it to false)
         decoy.isDecoy = true;
 
-        // CRITICAL: Prevent decoys from spawning more decoys (AFTER SetupEnemyNoGrace which resets this)
         decoy.lastDecoySpawnTime = float.MaxValue;
 
         // Copy current waypoint index so decoy continues from same point in path

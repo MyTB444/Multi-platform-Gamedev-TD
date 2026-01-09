@@ -60,6 +60,7 @@ public class EnemySummoner : EnemyBase
 
     private void StartSummoning()
     {
+        // Stop movement, play VFX, and trigger summon animation
         isSummoning = true;
         canMove = false;
 
@@ -131,22 +132,23 @@ public class EnemySummoner : EnemyBase
 
     private IEnumerator SpawnMinionWithDelay(float angle)
     {
+        // Spawn minion in circle pattern around summoner with smoke VFX
         float radians = angle * Mathf.Deg2Rad;
         Vector3 desiredPos = transform.position + new Vector3(Mathf.Cos(radians) * spawnRadius, 0, Mathf.Sin(radians) * spawnRadius);
-        
+
         Vector3 spawnPos = transform.position;
         if (NavMesh.SamplePosition(desiredPos, out NavMeshHit hit, spawnRadius * 2f, NavMesh.AllAreas))
         {
             spawnPos = hit.position;
         }
-        
+
         if (smokeSpawnPrefab != null)
         {
             ObjectPooling.instance.GetVFX(smokeSpawnPrefab, spawnPos, Quaternion.identity, 2f);
         }
-        
+
         yield return new WaitForSeconds(smokeDelay);
-        
+
         GameObject newMinion = ObjectPooling.instance.Get(minionPrefab);
 
         if (newMinion != null)
@@ -179,12 +181,13 @@ public class EnemySummoner : EnemyBase
 
     private Vector3[] GetRemainingWaypoints()
     {
+        // Copy remaining waypoints from current position so minions follow same path
         int remaining = myWaypoints.Length - currentWaypointIndex;
-        
+
         if (remaining <= 0) return new Vector3[0];
 
         Vector3[] remainingWaypoints = new Vector3[remaining];
-        
+
         for (int i = 0; i < remaining; i++)
         {
             remainingWaypoints[i] = myWaypoints[currentWaypointIndex + i];

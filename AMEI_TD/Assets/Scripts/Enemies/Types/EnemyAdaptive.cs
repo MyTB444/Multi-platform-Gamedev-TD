@@ -74,6 +74,7 @@ public class EnemyAdaptive : EnemyBase
 
     private void AdaptToElement(ElementType incomingElement)
     {
+        // Change element type to match incoming damage, making it resistant
         bool isNewAdaptation = currentAdaptation != incomingElement;
 
         if (isNewAdaptation)
