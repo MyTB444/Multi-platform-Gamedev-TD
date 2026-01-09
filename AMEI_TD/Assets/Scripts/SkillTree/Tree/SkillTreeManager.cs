@@ -36,6 +36,7 @@ public class SkillTreeManager : MonoBehaviour
     private void Start()
     {
         instance = this;
+        PlayerPrefs.DeleteKey("SkillTreeSave");
         LoadProgress();
     }
     
